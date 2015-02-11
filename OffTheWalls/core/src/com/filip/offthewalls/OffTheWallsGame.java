@@ -4,8 +4,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.filip.offthewalls.game.StageLoader;
 import com.filip.offthewalls.game.WorldController;
 import com.filip.offthewalls.game.WorldRenderer;
+import com.filip.offthewalls.util.Constants;
 
 public class OffTheWallsGame extends ApplicationAdapter
 {
@@ -21,8 +23,11 @@ public class OffTheWallsGame extends ApplicationAdapter
         // Set Libgdx log level to DEBUG
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+        // Initialize stage loader
+        StageLoader.init();
+
         // Initialize controller and renderer
-        worldController = new WorldController();
+        worldController = new WorldController(0, 0, 0);
         worldRenderer = new WorldRenderer(worldController);
 
         // Game world is active on start
@@ -37,11 +42,10 @@ public class OffTheWallsGame extends ApplicationAdapter
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(Gdx.graphics.getDeltaTime());
-
         }
 
         // Sets the clear screen color to Blue
-        Gdx.gl.glClearColor(0x00/255.0f, 0xa0/255.0f, 0xda/255.0f, 0xff/255.0f);
+        Gdx.gl.glClearColor(Constants.BLUE.r, Constants.BLUE.g, Constants.BLUE.b, Constants.BLUE.a);
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Render game world to screen

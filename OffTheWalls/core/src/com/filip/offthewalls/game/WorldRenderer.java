@@ -38,18 +38,18 @@ public class WorldRenderer implements Disposable
         Vector2 last = worldController.getLastPoint();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.WHITE);
 
         // Draw only first and last circles
+        shapeRenderer.setColor(Constants.GREY);
         shapeRenderer.circle(first.x, first.y, Constants.END_CIRCLE_RADIUS * worldController.getLevelMultiplier());
+        shapeRenderer.setColor(Constants.TURQUOISE);
         shapeRenderer.circle(last.x, last.y, Constants.END_CIRCLE_RADIUS * worldController.getLevelMultiplier());
 
-        // Draw inside circles
-        for(int i = 1; i < worldController.getNumberOfPoints() - 1; ++i)
-        {
-            Vector2 p = worldController.getPoint(i);
-            shapeRenderer.circle(p.x, p.y, Constants.INSIDE_CIRCLE_RADIUS * worldController.getLevelMultiplier());
-        }
+        shapeRenderer.setColor(Constants.WHITE);
+        shapeRenderer.circle(first.x, first.y, Constants.END_CIRCLE_OUTLINE_RADIUS * worldController.getLevelMultiplier());
+        shapeRenderer.circle(last.x, last.y, Constants.END_CIRCLE_OUTLINE_RADIUS * worldController.getLevelMultiplier());
+
+
 
         // Draw rectangles
         for(int i = 0; i < worldController.getNumberOfPoints() - 1; ++i)
@@ -59,23 +59,16 @@ public class WorldRenderer implements Disposable
             shapeRenderer.rectLine(p1, p2, Constants.RECTANGLE_WIDTH * worldController.getLevelMultiplier());
         }
 
+        // Draw inside circles
+        for(int i = 1; i < worldController.getNumberOfPoints() - 1; ++i)
+        {
+            Vector2 p = worldController.getPoint(i);
+            shapeRenderer.circle(p.x, p.y, Constants.INSIDE_CIRCLE_RADIUS * worldController.getLevelMultiplier());
+        }
+
         // Draw ball
-        shapeRenderer.setColor(Color.LIGHT_GRAY);
-        shapeRenderer.circle(first.x, first.y, Constants.BALL_RADIUS);
-
-
-        shapeRenderer.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        // Draw Start outline
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.circle(first.x, first.y, Constants.END_CIRCLE_OUTLINE_RADIUS * worldController.getLevelMultiplier());
-
-
-        // Draw End outline
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.circle(last.x, last.y, Constants.END_CIRCLE_OUTLINE_RADIUS * worldController.getLevelMultiplier());
+        shapeRenderer.setColor(Constants.BLACK);
+        shapeRenderer.circle(worldController.getBall().getX(), worldController.getBall().getY(), Constants.BALL_RADIUS);
 
         shapeRenderer.end();
     }

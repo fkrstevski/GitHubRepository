@@ -1,20 +1,3 @@
-/*******************************************************************************
- * Copyright 2013 Andreas Oehlke
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package come.filip.templategame.game.objects;
 
 import com.badlogic.gdx.Gdx;
@@ -25,13 +8,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import come.filip.templategame.game.Assets;
 import come.filip.templategame.util.AudioManager;
-import come.filip.templategame.util.CharacterSkin;
 import come.filip.templategame.util.Constants;
 import come.filip.templategame.util.GamePreferences;
 
-public class BunnyHead extends AbstractGameObject {
+public class Ball extends AbstractGameObject {
 
-	public static final String TAG = BunnyHead.class.getName();
+	public static final String TAG = Ball.class.getName();
 
 	private final float JUMP_TIME_MAX = 0.3f;
 	private final float JUMP_TIME_MIN = 0.1f;
@@ -60,7 +42,7 @@ public class BunnyHead extends AbstractGameObject {
 
 	public ParticleEffect dustParticles = new ParticleEffect();
 
-	public BunnyHead () {
+	public Ball() {
 		init();
 	}
 
@@ -181,9 +163,6 @@ public class BunnyHead extends AbstractGameObject {
 
 		// Draw Particles
 		dustParticles.draw(batch);
-
-		// Apply Skin Color
-		batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin].getColor());
 
 		float dimCorrectionX = 0;
 		float dimCorrectionY = 0;

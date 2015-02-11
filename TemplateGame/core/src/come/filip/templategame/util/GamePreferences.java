@@ -1,20 +1,3 @@
-/*******************************************************************************
- * Copyright 2013 Andreas Oehlke
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package come.filip.templategame.util;
 
 import com.badlogic.gdx.Gdx;
@@ -31,7 +14,6 @@ public class GamePreferences {
 	public boolean music;
 	public float volSound;
 	public float volMusic;
-	public int charSkin;
 	public boolean showFpsCounter;
 	public boolean useMonochromeShader;
 
@@ -47,7 +29,6 @@ public class GamePreferences {
 		music = prefs.getBoolean("music", true);
 		volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
 		volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
-		charSkin = MathUtils.clamp(prefs.getInteger("charSkin", 0), 0, 2);
 		showFpsCounter = prefs.getBoolean("showFpsCounter", false);
 		useMonochromeShader = prefs.getBoolean("useMonochromeShader", false);
 	}
@@ -57,7 +38,6 @@ public class GamePreferences {
 		prefs.putBoolean("music", music);
 		prefs.putFloat("volSound", volSound);
 		prefs.putFloat("volMusic", volMusic);
-		prefs.putInteger("charSkin", charSkin);
 		prefs.putBoolean("showFpsCounter", showFpsCounter);
 		prefs.putBoolean("useMonochromeShader", useMonochromeShader);
 		prefs.flush();

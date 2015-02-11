@@ -17,19 +17,9 @@
 
 package come.filip.templategame.util;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Constants {
-
-	// Visible game world is 5 meters wide
-	public static final float VIEWPORT_WIDTH = 5.0f;
-
-	// Visible game world is 5 meters tall
-	public static final float VIEWPORT_HEIGHT = 5.0f;
-
-	// GUI Width
-	public static final float VIEWPORT_GUI_WIDTH = 800.0f;
-
-	// GUI Height
-	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
 
 	// Location of description file for texture atlas
 	public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack";
@@ -37,23 +27,14 @@ public class Constants {
 	public static final String TEXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
 
 	// Location of description file for skins
-	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
 	public static final String SKIN_CANYONBUNNY_UI = "images/canyonbunny-ui.json";
 
 	// Location of image file for level 01
 	public static final String LEVEL_01 = "levels/level-01.png";
 
-	// Amount of extra lives at level start
-	public static final int LIVES_START = 3;
 
 	// Duration of feather power-up in seconds
 	public static final float ITEM_FEATHER_POWERUP_DURATION = 9;
-
-	// Number of carrots to spawn
-	public static final int CARROTS_SPAWN_MAX = 100;
-
-	// Spawn radius for carrots
-	public static final float CARROTS_SPAWN_RADIUS = 3.5f;
 
 	// Delay after game over
 	public static final float TIME_DELAY_GAME_OVER = 3;
@@ -73,5 +54,17 @@ public class Constants {
 
 	// Max angle of rotation needed to gain maximum movement velocity
 	public static final float ACCEL_MAX_ANGLE_MAX_MOVEMENT = 20.0f;
+
+    public static final Color BLUE = new Color(0x00/255.0f, 0xa0/255.0f, 0xda/255.0f, 0xff/255.0f);
+    public static final Color GREEN = new Color(20/255.0f, 201/255.0f, 113/255.0f, 0xff/255.0f);
+    public static final Color YELLOW = new Color(244/255.0f, 206/255.0f, 58/255.0f, 0xff/255.0f);
+    public static final Color WHITE = new Color(240/255.0f, 244/255.0f, 244/255.0f, 0xff/255.0f);
+    public static final Color ORANGE = new Color(233/255.0f, 127/255.0f, 24/255.0f, 0xff/255.0f);
+    public static final Color PURPLE = new Color(178/255.0f, 127/255.0f, 198/255.0f, 0xff/255.0f);
+    public static final Color GREY = new Color(150/255.0f, 166/255.0f, 167/255.0f, 0xff/255.0f);
+    public static final Color TURQUOISE = new Color(61/255.0f, 200/255.0f, 177/255.0f, 0xff/255.0f);
+    public static final Color RED = new Color(238/255.0f, 115/255.0f, 98/255.0f, 0xff/255.0f);
+    public static final Color BLACK = new Color(47/255.0f, 72/255.0f, 94/255.0f, 0xff/255.0f);
+
 
 }

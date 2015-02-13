@@ -55,6 +55,14 @@ public class Constants {
 	// Max angle of rotation needed to gain maximum movement velocity
 	public static final float ACCEL_MAX_ANGLE_MAX_MOVEMENT = 20.0f;
 
+    public static final int BALL_RADIUS = 20;
+    public static final int END_CIRCLE_RADIUS = 50;
+    public static final int INSIDE_CIRCLE_RADIUS = 25;
+    public static final int RECTANGLE_WIDTH = 50;
+    public static final int END_CIRCLE_OUTLINE_RADIUS = 35;
+    public static final int MAX_LEVELS = 3;
+    public static final float[] LEVEL_MULTIPLIERS = {2, 1.5f, 1};
+
     public static final Color BLUE = new Color(0x00/255.0f, 0xa0/255.0f, 0xda/255.0f, 0xff/255.0f);
     public static final Color GREEN = new Color(20/255.0f, 201/255.0f, 113/255.0f, 0xff/255.0f);
     public static final Color YELLOW = new Color(244/255.0f, 206/255.0f, 58/255.0f, 0xff/255.0f);

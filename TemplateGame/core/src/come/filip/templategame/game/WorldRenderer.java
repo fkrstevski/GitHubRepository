@@ -26,6 +26,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import come.filip.templategame.screens.objects.PlayButton;
 import come.filip.templategame.util.Constants;
 import come.filip.templategame.util.GamePreferences;
 
@@ -39,7 +41,8 @@ public class WorldRenderer implements Disposable {
 	private OrthographicCamera cameraGUI;
 	private SpriteBatch batch;
 	private WorldController worldController;
-	private Box2DDebugRenderer b2debugRenderer;
+	//private Box2DDebugRenderer b2debugRenderer;
+    //private PlayButton playBtn;
 
 	private ShaderProgram shaderMonochrome;
 
@@ -50,14 +53,15 @@ public class WorldRenderer implements Disposable {
 
 	private void init () {
 		batch = new SpriteBatch();
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(0, 0, 0);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+        camera.setToOrtho(true); // flip y-axis
 		camera.update();
 		cameraGUI = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cameraGUI.position.set(0, 0, 0);
 		cameraGUI.setToOrtho(true); // flip y-axis
 		cameraGUI.update();
-		b2debugRenderer = new Box2DDebugRenderer();
+		//b2debugRenderer = new Box2DDebugRenderer();
 		shaderMonochrome = new ShaderProgram(Gdx.files.internal(Constants.shaderMonochromeVertex),
 			Gdx.files.internal(Constants.shaderMonochromeFragment));
 		if (!shaderMonochrome.isCompiled()) {
@@ -75,16 +79,17 @@ public class WorldRenderer implements Disposable {
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		if (GamePreferences.instance.useMonochromeShader) {
-			batch.setShader(shaderMonochrome);
-			shaderMonochrome.setUniformf("u_amount", 1.0f);
-		}
+		//if (GamePreferences.instance.useMonochromeShader) {
+		//	batch.setShader(shaderMonochrome);
+		//	shaderMonochrome.setUniformf("u_amount", 1.0f);
+		//}
 		worldController.level.render(batch);
+
 		batch.setShader(null);
 		batch.end();
-		if (DEBUG_DRAW_BOX2D_WORLD) {
-			b2debugRenderer.render(worldController.b2world, camera.combined);
-		}
+		//if (DEBUG_DRAW_BOX2D_WORLD) {
+		//	b2debugRenderer.render(worldController.b2world, camera.combined);
+		//}
 	}
 
 	private void renderGui (SpriteBatch batch) {
@@ -93,7 +98,7 @@ public class WorldRenderer implements Disposable {
 
 		if (GamePreferences.instance.showFpsCounter) renderGuiFpsCounter(batch);
 		// draw game over text
-		renderGuiGameOverMessage(batch);
+		//renderGuiGameOverMessage(batch);
 
 		batch.end();
 	}
@@ -132,12 +137,12 @@ public class WorldRenderer implements Disposable {
 	public void resize (int width, int height) {
 
         // TODO: Look at viewport width
-		camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
+		/*camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
 		camera.update();
 		cameraGUI.viewportHeight = Gdx.graphics.getHeight();
 		cameraGUI.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
 		cameraGUI.position.set(cameraGUI.viewportWidth / 2, cameraGUI.viewportHeight / 2, 0);
-		cameraGUI.update();
+		cameraGUI.update();*/
 	}
 
 	@Override

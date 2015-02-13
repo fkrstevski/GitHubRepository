@@ -1,5 +1,6 @@
 package come.filip.templategame.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -9,16 +10,16 @@ public class CameraHelper {
 
 	private static final String TAG = CameraHelper.class.getName();
 
-	private final float MAX_ZOOM_IN = 0.25f;
-	private final float MAX_ZOOM_OUT = 10.0f;
-	private final float FOLLOW_SPEED = 4.0f;
+	private final float MAX_ZOOM_IN = 0.01f;
+	private final float MAX_ZOOM_OUT = 100.0f;
+	private final float FOLLOW_SPEED = 8.0f;
 
 	private Vector2 position;
 	private float zoom;
 	private AbstractGameObject target;
 
 	public CameraHelper () {
-		position = new Vector2();
+		position = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 		zoom = 1.0f;
 	}
 
@@ -28,7 +29,7 @@ public class CameraHelper {
 		position.lerp(target.position, FOLLOW_SPEED * deltaTime);
 		
 		// Prevent camera from moving down too far
-		position.y = Math.max(-1f, position.y);
+		//position.y = Math.max(-1f, position.y);
 	}
 
 	public void setPosition (float x, float y) {

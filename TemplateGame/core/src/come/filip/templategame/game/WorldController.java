@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import come.filip.templategame.game.objects.Carrot;
 import come.filip.templategame.screens.DirectedGame;
+import come.filip.templategame.screens.MainMenu;
 import come.filip.templategame.screens.MenuScreen;
 import come.filip.templategame.screens.transitions.ScreenTransition;
 import come.filip.templategame.screens.transitions.ScreenTransitionSlide;
@@ -80,7 +81,7 @@ public class WorldController extends InputAdapter implements Disposable {
         goalReached = false;
         gameOver = false;
         ballCollided = false;
-        level = new Level(Constants.LEVEL_01);
+        level = new Level(0, 0, 0);
         //cameraHelper.setTarget(level.ball);
         initPhysics();
     }
@@ -148,10 +149,10 @@ public class WorldController extends InputAdapter implements Disposable {
 
         // Test collision: Ball <-> Goal
         if (!goalReached) {
-            r2.set(level.goal.bounds);
-            r2.x += level.goal.position.x;
-            r2.y += level.goal.position.y;
-            if (r1.overlaps(r2)) onCollisionBallWithGoal();
+            //r2.set(level.goal.bounds);
+            //r2.x += level.goal.position.x;
+            //r2.y += level.goal.position.y;
+            //if (r1.overlaps(r2)) onCollisionBallWithGoal();
         }
     }
 
@@ -238,6 +239,10 @@ public class WorldController extends InputAdapter implements Disposable {
         else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
             backToMenu();
         }
+        else if (keycode == Keys.SPACE) {
+            level.next();
+        }
+
         return false;
     }
 
@@ -245,6 +250,18 @@ public class WorldController extends InputAdapter implements Disposable {
         // switch to menu screen
         ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
         game.setScreen(new MenuScreen(game), transition);
+    }
+
+    @Override
+    public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+
+        Gdx.app.debug(TAG, "Touch at screenX = " + screenX + " screenY = " + screenY);
+
+        if(level.backButton.isTouched(screenX, screenY))
+        {
+            backToMenu();
+        }
+        return false;
     }
 
     @Override

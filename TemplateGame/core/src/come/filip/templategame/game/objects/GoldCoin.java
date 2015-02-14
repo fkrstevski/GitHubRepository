@@ -35,7 +35,7 @@ public class GoldCoin extends AbstractGameObject {
 
 
 		// Set bounding box for collision detection
-		bounds.set(0, 0, dimension.x, dimension.y);
+	//	bounds.set(0, 0, dimension.x, dimension.y);
 
 		collected = false;
 	}

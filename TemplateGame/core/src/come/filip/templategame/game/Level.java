@@ -13,6 +13,7 @@ import come.filip.templategame.game.objects.Ball;
 import come.filip.templategame.game.objects.Clouds;
 import come.filip.templategame.game.objects.Goal;
 import come.filip.templategame.screens.objects.AbstractButtonObject;
+import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
 import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.objects.BackButton;
 import come.filip.templategame.screens.objects.MiddlePart;
@@ -25,7 +26,8 @@ public class Level {
 
 	public Ball ball;
     public BackButton backButton;
-    public ArrayList<AbstractButtonObject> shapes;
+    public ArrayList<AbstractCircleButtonObject> circleShapes;
+    public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
 
     private ArrayList<Vector2> points;
 
@@ -48,7 +50,8 @@ public class Level {
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        shapes = new ArrayList<AbstractButtonObject>();
+        circleShapes = new ArrayList<AbstractCircleButtonObject>();
+        rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
         ball = new Ball((int)(Constants.BALL_RADIUS * 2), this.getFirstPoint().x, this.getFirstPoint().y, Constants.PURPLE, Constants.WHITE);
         backButton = new BackButton((int) (width * 0.05f),   // size
@@ -58,7 +61,7 @@ public class Level {
                                     Constants.BLUE);      // inside color
 
         // Add Start Circle
-        shapes.add(
+        circleShapes.add(
                 /*new CircleShape( this.getFirstPoint(),
                         Constants.END_CIRCLE_RADIUS * this.getLevelMultiplier(),
                         CircleShape.CircleType.First)*/
@@ -67,7 +70,7 @@ public class Level {
                         );
 
         // Add End Circle
-        shapes.add(
+        circleShapes.add(
                 /*new CircleShape( this.getLastPoint(),
                         Constants.END_CIRCLE_RADIUS * this.getLevelMultiplier(),
                         CircleShape.CircleType.Last)*/
@@ -78,7 +81,7 @@ public class Level {
         // Add Middle Circles
         for(int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
-            shapes.add(
+            circleShapes.add(
                     /*new CircleShape(points.get(i),
                             Constants.INSIDE_CIRCLE_RADIUS * this.getLevelMultiplier(),
                             CircleShape.CircleType.Middle)*/
@@ -100,7 +103,7 @@ public class Level {
                                                                 midpoint.x, midpoint.y,
                                                                 Constants.WHITE, Constants.TURQUOISE);
             s.rotation = (float)angle;
-            shapes.add(s);
+            rectangleShapes.add(s);
         }
 	}
 
@@ -108,14 +111,27 @@ public class Level {
 		ball.update(deltaTime);
 
         this.collision = true;
-        for(int i = 0; i < this.shapes.size(); ++i)
+        for(int i = 0; i < this.circleShapes.size(); ++i)
         {
-            AbstractButtonObject s = shapes.get(i);
-            /*if(s.containsBall(ball, getLevelMultiplier()))
+            AbstractCircleButtonObject s = circleShapes.get(i);
+            if(s.bounds.contains(ball.position.x, ball.position.y))
             {
                 collision = false;
                 break;
-            }*/
+            }
+        }
+
+        if(collision == true)
+        {
+            for(int i = 0; i < this.rectangleShapes.size(); ++i)
+            {
+                AbstractRectangleButtonObject s = rectangleShapes.get(i);
+                if(s.bounds.contains(ball.position.x, ball.position.y))
+                {
+                    collision = false;
+                    break;
+                }
+            }
         }
 
         float distance = Vector2.dst(ball.position.x, ball.position.y, this.getLastPoint().x, this.getLastPoint().y );
@@ -133,9 +149,14 @@ public class Level {
 	public void render (SpriteBatch batch) {
 
 
-        for(int i = 0; i < shapes.size(); ++i)
+        for(int i = 0; i < circleShapes.size(); ++i)
         {
-            shapes.get(i).render(batch);
+            circleShapes.get(i).render(batch);
+        }
+
+        for(int i = 0; i < rectangleShapes.size(); ++i)
+        {
+            rectangleShapes.get(i).render(batch);
         }
         ball.render(batch);
         backButton.render(batch);

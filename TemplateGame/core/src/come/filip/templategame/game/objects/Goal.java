@@ -33,7 +33,7 @@ public class Goal extends AbstractGameObject {
 		regGoal = Assets.instance.levelDecoration.goal;
 
 		// Set bounding box for collision detection
-		bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
+	//	bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
 		origin.set(dimension.x / 2.0f, 0.0f);
 	}
 

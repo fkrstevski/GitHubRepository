@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -53,7 +54,6 @@ public class WorldController extends InputAdapter implements Disposable {
     private boolean goalReached;
     private boolean accelerometerAvailable;
     private boolean gameOver;
-    private boolean ballCollided;
 
     public CameraHelper cameraHelper;
 
@@ -80,7 +80,6 @@ public class WorldController extends InputAdapter implements Disposable {
     private void initLevel () {
         goalReached = false;
         gameOver = false;
-        ballCollided = false;
         level = new Level(0, 0, 0);
         //cameraHelper.setTarget(level.ball);
         initPhysics();
@@ -112,18 +111,13 @@ public class WorldController extends InputAdapter implements Disposable {
 
     public void update (float deltaTime) {
         handleDebugInput(deltaTime);
-        if (isGameOver() || goalReached) {
-            timeLeftGameOverDelay -= deltaTime;
-            if (timeLeftGameOverDelay < 0)
-                backToMenu();
-        } else {
+
             handleInputGame(deltaTime);
-        }
         level.update(deltaTime);
-        testCollisions();
+
         b2world.step(deltaTime, 8, 3);
         cameraHelper.update(deltaTime);
-        if (!isGameOver() && isBallCollided()) {
+        if (!isGameOver()) {
             AudioManager.instance.play(Assets.instance.sounds.liveLost);
             gameOver = true;
             //if (isGameOver())
@@ -138,23 +132,11 @@ public class WorldController extends InputAdapter implements Disposable {
         return gameOver;
     }
 
-    public boolean isBallCollided () {
-        return ballCollided;
+    public Color getBgColor()
+    {
+        return (level.collision ? Constants.RED : Constants.BLUE);
     }
 
-    private void testCollisions () {
-        r1.set(level.ball.position.x, level.ball.position.y, level.ball.bounds.width, level.ball.bounds.height);
-
-        // TODO: Test collisions with all shapes
-
-        // Test collision: Ball <-> Goal
-        if (!goalReached) {
-            //r2.set(level.goal.bounds);
-            //r2.x += level.goal.position.x;
-            //r2.y += level.goal.position.y;
-            //if (r1.overlaps(r2)) onCollisionBallWithGoal();
-        }
-    }
 
     private void onCollisionBallWithGoal() {
         goalReached = true;
@@ -260,6 +242,9 @@ public class WorldController extends InputAdapter implements Disposable {
         if(level.backButton.isTouched(screenX, screenY))
         {
             backToMenu();
+        }
+        else{
+            level.next();
         }
         return false;
     }

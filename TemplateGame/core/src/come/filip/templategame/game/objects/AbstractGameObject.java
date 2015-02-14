@@ -17,7 +17,7 @@ public abstract class AbstractGameObject {
     public Vector2 terminalVelocity;
     public Vector2 friction;
     public Vector2 acceleration;
-    public Rectangle bounds;
+    //public Rectangle bounds;
     public Body body;
 
     public AbstractGameObject () {
@@ -30,7 +30,7 @@ public abstract class AbstractGameObject {
         terminalVelocity = new Vector2(1, 1);
         friction = new Vector2();
         acceleration = new Vector2();
-        bounds = new Rectangle();
+        //bounds = new Rectangle();
     }
 
     public void update (float deltaTime) {

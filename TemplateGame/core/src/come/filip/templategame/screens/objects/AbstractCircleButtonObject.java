@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+
+import come.filip.templategame.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -15,17 +18,27 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
 
     private int radius;
 
+    public Circle bounds;
+
     public AbstractCircleButtonObject (int size, float x, float y, Color outsideColor, Color insideColor) {
         super(size, size, x, y, outsideColor, insideColor);
-        init(size, size, x, y, outsideColor, insideColor);
+
+        this.init(size, size, x, y, outsideColor, insideColor);
+
     }
 
     @Override
     protected void init (int width, int height, float x, float y, Color outsideColor, Color insideColor)
     {
         super.init(width, height, x, y, outsideColor, insideColor);
+
+
         // Make the radius slightly smaller than half the size (looks more like a circle)
         radius = width / 2 - 2;
+        bounds = new Circle();
+        bounds.set(position.x, position.y, radius - Constants.BALL_RADIUS);
+
+
     }
 
     @Override

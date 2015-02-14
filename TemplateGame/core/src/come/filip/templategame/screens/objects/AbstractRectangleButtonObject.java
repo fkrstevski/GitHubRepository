@@ -13,15 +13,22 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class AbstractRectangleButtonObject extends AbstractButtonObject {
     public static final String TAG = AbstractButtonObject.class.getName();
 
+    public Rectangle bounds;
+
     public AbstractRectangleButtonObject (int width, int height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
+
         init(width, height, x, y, outsideColor, insideColor);
+
     }
 
     @Override
     protected void init (int width, int height, float x, float y, Color outsideColor, Color insideColor)
     {
         super.init(width, height, x, y, outsideColor, insideColor);
+        bounds = new Rectangle();
+        bounds.set(position.x - origin.x, position.y - origin.y, dimension.x, dimension.y);
+
     }
 
     @Override

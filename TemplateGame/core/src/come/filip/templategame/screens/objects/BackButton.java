@@ -20,9 +20,9 @@ public class BackButton extends AbstractCircleButtonObject
                 size / 2 + size / 3, size / 2,
                 size / 2 - size / 5, size / 2 + size / 4
         );*/
-        buttonPixmap.fillTriangle(  size / 2 + size / 3, size / 2 - size / 4,
-                                    size / 2 + size / 3,size / 2 + size / 4,
-                size / 2 - size / 5,size / 2);
+        buttonPixmap.fillTriangle(  size / 2 + size / 5, size / 2 - size / 4,
+                                    size / 2 + size / 5,size / 2 + size / 4,
+                                    size / 2 - size / 3,size / 2);
 
     }
 }

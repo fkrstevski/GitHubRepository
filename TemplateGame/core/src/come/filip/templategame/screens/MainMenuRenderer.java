@@ -5,13 +5,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import come.filip.templategame.game.Assets;
-import come.filip.templategame.game.WorldController;
-import come.filip.templategame.screens.objects.PlayButton;
 import come.filip.templategame.util.Constants;
 import come.filip.templategame.util.GamePreferences;
 
@@ -25,13 +22,11 @@ public class MainMenuRenderer implements Disposable {
     private OrthographicCamera cameraGUI;
     private SpriteBatch batch;
     private MainMenuController worldController;
-    //private PlayButton playBtn;
 
     private ShaderProgram shaderMonochrome;
 
     public MainMenuRenderer (MainMenuController worldController) {
         this.worldController = worldController;
-        //playBtn = new PlayButton();
         init();
     }
 
@@ -68,7 +63,6 @@ public class MainMenuRenderer implements Disposable {
         //	shaderMonochrome.setUniformf("u_amount", 1.0f);
         //}
         worldController.mainMenu.render(batch);
-        //playBtn.render(batch);
         batch.setShader(null);
         batch.end();
     }

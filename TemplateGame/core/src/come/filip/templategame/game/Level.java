@@ -1,18 +1,12 @@
 package come.filip.templategame.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
 import come.filip.templategame.game.objects.Ball;
-import come.filip.templategame.game.objects.Clouds;
-import come.filip.templategame.game.objects.Goal;
-import come.filip.templategame.screens.objects.AbstractButtonObject;
 import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
 import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.objects.BackButton;
@@ -70,7 +64,6 @@ public class Level {
         StartTarget et = new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getLastPoint().x,
                 this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
         et.updateBoundsRadius(et.radius - Constants.BALL_RADIUS);
-
         circleShapes.add(et);
 
         // Add Middle Circles
@@ -126,21 +119,14 @@ public class Level {
             }
         }
 
-
-
-
         if (circleShapes.get(circleShapes.size()-1).bounds.contains(ball.position.x, ball.position.y))
         {
             // Inside
-            Gdx.app.debug(TAG, "Circle2 is inside Circle1");
-
             next();
-
         }
 	}
 
 	public void render (SpriteBatch batch) {
-
 
         for(int i = 0; i < circleShapes.size(); ++i)
         {

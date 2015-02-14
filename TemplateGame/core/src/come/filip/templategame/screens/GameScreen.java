@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+
 import come.filip.templategame.game.WorldController;
 import come.filip.templategame.game.WorldRenderer;
-import come.filip.templategame.util.Constants;
 import come.filip.templategame.util.GamePreferences;
 
 public class GameScreen extends AbstractGameScreen {

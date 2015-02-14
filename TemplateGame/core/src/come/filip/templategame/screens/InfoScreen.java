@@ -6,8 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 
-import come.filip.templategame.game.WorldController;
-import come.filip.templategame.game.WorldRenderer;
 import come.filip.templategame.screens.transitions.ScreenTransition;
 import come.filip.templategame.screens.transitions.ScreenTransitionSlide;
 import come.filip.templategame.util.Constants;

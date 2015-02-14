@@ -1,14 +1,8 @@
 package come.filip.templategame.screens.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-
-import come.filip.templategame.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -24,7 +18,6 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
         super(size, size, x, y, outsideColor, insideColor);
 
         this.init(size, size, x, y, outsideColor, insideColor);
-
     }
 
     @Override
@@ -32,13 +25,10 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     {
         super.init(width, height, x, y, outsideColor, insideColor);
 
-
         // Make the radius slightly smaller than half the size (looks more like a circle)
         radius = width / 2 - 2;
         bounds = new Circle();
         bounds.set(position.x, position.y, radius);
-
-
     }
 
     public void updateBoundsRadius(int radius)
@@ -62,10 +52,6 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     public boolean isTouched(int x, int y)
     {
         float distance = Vector2.dst(position.x, position.y, x, y);
-
-        Gdx.app.debug(TAG, "x = " + x + " y = " + y);
-        Gdx.app.debug(TAG, "position.x = " + position.x + " position.y = " + position.y);
-        Gdx.app.debug(TAG, "distance = " + distance + " radius = " + radius);
 
         if ((distance <= radius))
         {

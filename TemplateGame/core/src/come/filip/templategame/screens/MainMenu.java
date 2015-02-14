@@ -1,12 +1,8 @@
 package come.filip.templategame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import come.filip.templategame.game.objects.Ball;
-import come.filip.templategame.game.objects.Clouds;
-import come.filip.templategame.game.objects.Goal;
 import come.filip.templategame.screens.objects.InfoButton;
 import come.filip.templategame.screens.objects.PlayButton;
 import come.filip.templategame.util.Constants;
@@ -40,7 +36,6 @@ public class MainMenu {
 
         this.state = MainMenuState.Active;
 
-        // player character
         playButton = new PlayButton((int) (width * 0.25f),     // size
                                     width / 2,              // x
                                     height / 2,             // y

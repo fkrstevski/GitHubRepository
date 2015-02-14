@@ -4,12 +4,6 @@ package come.filip.templategame.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -90,51 +84,6 @@ public class StageLoader
         z3.AddStage(2, stage3PointsZone3);
 
         zones.add(z3);
-
-
-/*        BufferedReader br = null;
-
-        try
-        {
-            // Open the file
-            br = new BufferedReader(new FileReader(Gdx.files.internal(stageFile).file()));
-            for(String line; (line = br.readLine()) != null; )
-            {
-                if(line.startsWith("Zone"))
-                {
-                    int zoneID = Integer.parseInt(line.substring(5).trim());
-                    Zone z = new Zone(zoneID);
-                    ArrayList<Vector2> points = new ArrayList<>();
-
-                    for(int i = 0; i < zoneID + 1; ++i)
-                    {
-                        String[] point = br.readLine().split(",");
-                        points.add(new Vector2(Float.parseFloat(point[0].trim()), Float.parseFloat(point[1].trim())));
-                    }
-
-
-
-                    zones.add(z);
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                if (br != null)
-                    br.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        */
-
     }
 
     public static Zone getZone(int zoneID)

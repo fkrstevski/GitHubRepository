@@ -3,6 +3,7 @@ package come.filip.templategame.screens;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+
 import come.filip.templategame.game.Assets;
 
 public abstract class AbstractGameScreen implements Screen {

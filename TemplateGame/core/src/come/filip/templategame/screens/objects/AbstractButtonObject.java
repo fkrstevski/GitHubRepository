@@ -1,11 +1,9 @@
 package come.filip.templategame.screens.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import come.filip.templategame.game.objects.AbstractGameObject;
 
@@ -29,19 +27,12 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
         buttonPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
-
         fillPixmap(width, height, outsideColor, insideColor);
 
         this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA8888, false);
         pixmapTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-
         origin.set(dimension.x / 2, dimension.y / 2);
-
-
-        // Set bounding box for collision detection
-        //bounds.set(position.x - origin.x, position.y - origin.y, dimension.x, dimension.y);
-
     }
 
     public abstract void fillPixmap(int width, int height, Color outsideColor, Color insideColor);

@@ -2,10 +2,7 @@ package come.filip.templategame.screens.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -50,7 +47,6 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
         if (this.bounds.contains(x, y))
         {
-            Gdx.app.debug(TAG, "RECTANGLE IS TOUCHED");
             return  true;
         }
         return false;

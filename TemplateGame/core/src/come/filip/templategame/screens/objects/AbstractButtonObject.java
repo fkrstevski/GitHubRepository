@@ -33,9 +33,11 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
         fillPixmap(width, height, outsideColor, insideColor);
 
         this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA8888, false);
+        pixmapTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         // Set bounding box for collision detection
         bounds.set(1, Float.MIN_VALUE, 10, Float.MAX_VALUE);
+
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 

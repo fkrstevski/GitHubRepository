@@ -16,7 +16,7 @@ import come.filip.templategame.util.Constants;
 public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     public static final String TAG = AbstractButtonObject.class.getName();
 
-    private int radius;
+    public int radius;
 
     public Circle bounds;
 
@@ -36,9 +36,15 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
         // Make the radius slightly smaller than half the size (looks more like a circle)
         radius = width / 2 - 2;
         bounds = new Circle();
-        bounds.set(position.x, position.y, radius - Constants.BALL_RADIUS);
+        bounds.set(position.x, position.y, radius);
 
 
+    }
+
+    public void updateBoundsRadius(int radius)
+    {
+        this.radius = radius;
+        bounds.set(position, radius);
     }
 
     @Override

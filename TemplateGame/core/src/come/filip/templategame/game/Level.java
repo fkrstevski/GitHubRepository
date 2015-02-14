@@ -61,33 +61,25 @@ public class Level {
                                     Constants.BLUE);      // inside color
 
         // Add Start Circle
-        circleShapes.add(
-                /*new CircleShape( this.getFirstPoint(),
-                        Constants.END_CIRCLE_RADIUS * this.getLevelMultiplier(),
-                        CircleShape.CircleType.First)*/
-                new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.GREY, Constants.WHITE)
-                        );
+        StartTarget st = new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getFirstPoint().x,
+                this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
+        st.updateBoundsRadius(st.radius - Constants.BALL_RADIUS);
+        circleShapes.add(st);
 
         // Add End Circle
-        circleShapes.add(
-                /*new CircleShape( this.getLastPoint(),
-                        Constants.END_CIRCLE_RADIUS * this.getLevelMultiplier(),
-                        CircleShape.CircleType.Last)*/
-                new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getLastPoint().x,
-                        this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE)
-        );
+        StartTarget et = new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getLastPoint().x,
+                this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
+        et.updateBoundsRadius(et.radius - Constants.BALL_RADIUS);
+
+        circleShapes.add(et);
 
         // Add Middle Circles
         for(int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
-            circleShapes.add(
-                    /*new CircleShape(points.get(i),
-                            Constants.INSIDE_CIRCLE_RADIUS * this.getLevelMultiplier(),
-                            CircleShape.CircleType.Middle)*/
-                    new Ball((int)(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),
-                            points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE)
-            );
+            Ball m = new Ball((int)(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),
+                    points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
+            m.updateBoundsRadius(m.radius - Constants.BALL_RADIUS - (m.radius - Constants.END_CIRCLE_OUTLINE_RADIUS));
+            circleShapes.add(m);
         }
 
         // Add Rectangles
@@ -134,9 +126,10 @@ public class Level {
             }
         }
 
-        float distance = Vector2.dst(ball.position.x, ball.position.y, this.getLastPoint().x, this.getLastPoint().y );
 
-        if ((distance <= Math.abs(Constants.BALL_RADIUS)))
+
+
+        if (circleShapes.get(circleShapes.size()-1).bounds.contains(ball.position.x, ball.position.y))
         {
             // Inside
             Gdx.app.debug(TAG, "Circle2 is inside Circle1");

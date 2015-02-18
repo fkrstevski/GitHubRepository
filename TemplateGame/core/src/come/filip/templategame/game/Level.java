@@ -26,7 +26,6 @@ public class Level
     public ArrayList<AbstractCircleButtonObject> circleShapes;
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
     public AbstractCircleButtonObject endCircle;
-    public boolean collision;
     private ArrayList<Vector2> points;
     private int level;
     private int zone;
@@ -61,14 +60,11 @@ public class Level
         // Add Start Circle
         StartTarget st = new StartTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
-        //st.updateBoundsRadius(st.radius - Constants.BALL_RADIUS);
         circleShapes.add(st);
 
         // Add End Circle
         endCircle = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
-        //et.updateBoundsRadius(et.radius - Constants.BALL_RADIUS);
-        //circleShapes.add(et);
 
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
@@ -76,7 +72,6 @@ public class Level
 
             Ball m = new Ball((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
-            //m.updateBoundsRadius(m.radius - Constants.BALL_RADIUS - (m.radius - Constants.END_CIRCLE_OUTLINE_RADIUS));
             circleShapes.add(m);
         }
 
@@ -105,41 +100,10 @@ public class Level
     public void update(float deltaTime)
     {
         ball.update(deltaTime);
-
-        /*this.collision = true;
-        for(int i = 0; i < this.circleShapes.size(); ++i)
-        {
-            AbstractCircleButtonObject s = circleShapes.get(i);
-            if(s.bounds.contains(ball.position.x, ball.position.y))
-            {
-                collision = false;
-                break;
-            }
-        }
-
-        if(collision == true)
-        {
-            for(int i = 0; i < this.rectangleShapes.size(); ++i)
-            {
-                AbstractRectangleButtonObject s = rectangleShapes.get(i);
-                if(s.bounds.contains(ball.position.x, ball.position.y))
-                {
-                    collision = false;
-                    break;
-                }
-            }
-        }
-
-        if (circleShapes.get(circleShapes.size()-1).bounds.contains(ball.position.x, ball.position.y))
-        {
-            // Inside
-            next();
-        }*/
     }
 
     public void render(SpriteBatch batch)
     {
-
         for (int i = 0; i < circleShapes.size(); ++i)
         {
             circleShapes.get(i).render(batch);
@@ -154,28 +118,6 @@ public class Level
         ball.render(batch);
         backButton.render(batch);
 
-    }
-
-
-    public void next()
-    {
-        this.level++;
-        if (this.level > Constants.MAX_LEVELS - 1)
-        {
-            this.level = 0;
-            this.stage++;
-            if (this.stage > StageLoader.getZone(this.zone).getNumberOfStages() - 1)
-            {
-                this.stage = 0;
-                this.zone++;
-                if (this.zone > StageLoader.getNumberOfZones() - 1)
-                {
-                    this.zone = 0;
-                }
-            }
-        }
-        Gdx.app.debug(TAG, "Zone = " + this.zone + " Stage = " + this.stage + " Level = " + this.level);
-        this.init(zone, stage, level);
     }
 
     public float getLevelMultiplier()

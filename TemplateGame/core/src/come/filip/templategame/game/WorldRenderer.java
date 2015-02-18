@@ -34,8 +34,6 @@ public class WorldRenderer implements Disposable
 
     private static final String TAG = WorldRenderer.class.getName();
 
-    private static final boolean DEBUG_DRAW_BOX2D_WORLD = true;
-
     private OrthographicCamera camera;
     private OrthographicCamera cameraGUI;
     private SpriteBatch batch;

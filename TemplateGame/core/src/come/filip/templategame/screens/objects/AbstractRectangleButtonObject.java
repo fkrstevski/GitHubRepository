@@ -7,12 +7,14 @@ import com.badlogic.gdx.math.Rectangle;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public abstract class AbstractRectangleButtonObject extends AbstractButtonObject {
+public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
+{
     public static final String TAG = AbstractButtonObject.class.getName();
 
     public Rectangle bounds;
 
-    public AbstractRectangleButtonObject (int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public AbstractRectangleButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor)
+    {
         super(width, height, x, y, outsideColor, insideColor);
 
         init(width, height, x, y, outsideColor, insideColor);
@@ -20,7 +22,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     }
 
     @Override
-    protected void init (int width, int height, float x, float y, Color outsideColor, Color insideColor)
+    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor)
     {
         super.init(width, height, x, y, outsideColor, insideColor);
         bounds = new Rectangle();
@@ -47,7 +49,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
         if (this.bounds.contains(x, y))
         {
-            return  true;
+            return true;
         }
         return false;
     }

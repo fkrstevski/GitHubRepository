@@ -28,9 +28,6 @@ public class CameraHelper {
 		if (!hasTarget()) return;
 
 		position.lerp(target.position, FOLLOW_SPEED * deltaTime);
-		
-		// Prevent camera from moving down too far
-		//position.y = Math.max(-1f, position.y);
 	}
 
 	public void setPosition (float x, float y) {

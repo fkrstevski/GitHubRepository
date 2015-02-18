@@ -14,15 +14,18 @@ import come.filip.templategame.util.GamePreferences;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public class InfoScreen extends AbstractGameScreen {
+public class InfoScreen extends AbstractGameScreen
+{
     private static final String TAG = MenuScreen.class.getName();
 
-    public InfoScreen (DirectedGame game) {
+    public InfoScreen(DirectedGame game)
+    {
         super(game);
     }
 
     @Override
-    public void render (float deltaTime) {
+    public void render(float deltaTime)
+    {
         // Sets the clear screen color to: Cornflower Blue
         Gdx.gl.glClearColor(Constants.BLUE.r, Constants.BLUE.g, Constants.BLUE.b, Constants.BLUE.a);
         // Clears the screen
@@ -31,47 +34,57 @@ public class InfoScreen extends AbstractGameScreen {
     }
 
     @Override
-    public void resize (int width, int height) {
+    public void resize(int width, int height)
+    {
 
     }
 
     @Override
-    public void show () {
+    public void show()
+    {
         GamePreferences.instance.load();
 
         Gdx.input.setCatchBackKey(true);
     }
 
     @Override
-    public void hide () {
+    public void hide()
+    {
 
         Gdx.input.setCatchBackKey(false);
     }
 
     @Override
-    public void pause () {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume () {
+    public void resume()
+    {
         super.resume();
 
     }
 
     @Override
-    public InputProcessor getInputProcessor () {
+    public InputProcessor getInputProcessor()
+    {
 
-        InputProcessor ip = new InputProcessor() {
+        InputProcessor ip = new InputProcessor()
+        {
             @Override
-            public boolean keyDown(int keycode) {
+            public boolean keyDown(int keycode)
+            {
                 return false;
             }
 
             @Override
-            public boolean keyUp(int keycode) {
+            public boolean keyUp(int keycode)
+            {
 
-                if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+                if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK)
+                {
                     // switch to menu screen
                     ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
                     game.setScreen(new MenuScreen(game), transition);
@@ -80,32 +93,38 @@ public class InfoScreen extends AbstractGameScreen {
             }
 
             @Override
-            public boolean keyTyped(char character) {
+            public boolean keyTyped(char character)
+            {
                 return false;
             }
 
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            public boolean touchDown(int screenX, int screenY, int pointer, int button)
+            {
                 return false;
             }
 
             @Override
-            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            public boolean touchUp(int screenX, int screenY, int pointer, int button)
+            {
                 return false;
             }
 
             @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer) {
+            public boolean touchDragged(int screenX, int screenY, int pointer)
+            {
                 return false;
             }
 
             @Override
-            public boolean mouseMoved(int screenX, int screenY) {
+            public boolean mouseMoved(int screenX, int screenY)
+            {
                 return false;
             }
 
             @Override
-            public boolean scrolled(int amount) {
+            public boolean scrolled(int amount)
+            {
                 return false;
             }
         };

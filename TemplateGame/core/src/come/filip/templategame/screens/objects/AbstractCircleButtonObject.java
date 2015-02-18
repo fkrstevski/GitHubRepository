@@ -7,21 +7,23 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
+public abstract class AbstractCircleButtonObject extends AbstractButtonObject
+{
     public static final String TAG = AbstractButtonObject.class.getName();
 
     public int radius;
 
     public Circle bounds;
 
-    public AbstractCircleButtonObject (int size, float x, float y, Color outsideColor, Color insideColor) {
+    public AbstractCircleButtonObject(int size, float x, float y, Color outsideColor, Color insideColor)
+    {
         super(size, size, x, y, outsideColor, insideColor);
 
         this.init(size, size, x, y, outsideColor, insideColor);
     }
 
     @Override
-    protected void init (int width, int height, float x, float y, Color outsideColor, Color insideColor)
+    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor)
     {
         super.init(width, height, x, y, outsideColor, insideColor);
 
@@ -55,7 +57,7 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
 
         if ((distance <= radius))
         {
-            return  true;
+            return true;
         }
         return false;
     }

@@ -9,7 +9,8 @@ public class StartTarget extends AbstractCircleButtonObject
 {
     public static final String TAG = StartTarget.class.getName();
 
-    public StartTarget (int size, float x, float y, Color outsideColor, Color insideColor) {
+    public StartTarget(int size, float x, float y, Color outsideColor, Color insideColor)
+    {
         super(size, x, y, outsideColor, insideColor);
     }
 

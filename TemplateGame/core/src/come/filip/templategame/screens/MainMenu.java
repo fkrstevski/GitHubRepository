@@ -10,26 +10,20 @@ import come.filip.templategame.util.Constants;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public class MainMenu {
-    enum MainMenuState{
-        Active,
-        ZoomInToPlay,
-        ZoomInToInfo,
-        Done
-    }
-
+public class MainMenu
+{
     public static final String TAG = MainMenu.class.getName();
-
     public PlayButton playButton;
     public InfoButton infoButton;
-
     public MainMenuState state;
 
-    public MainMenu () {
+    public MainMenu()
+    {
         init();
     }
 
-    private void init () {
+    private void init()
+    {
 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
@@ -37,53 +31,66 @@ public class MainMenu {
         this.state = MainMenuState.Active;
 
         playButton = new PlayButton((int) (width * 0.25f),     // size
-                                    width / 2,              // x
-                                    height / 2,             // y
-                                    Constants.WHITE,       // outside color
-                                    Constants.BLUE);       // inside color
+                width / 2,              // x
+                height / 2,             // y
+                Constants.WHITE,       // outside color
+                Constants.BLUE);       // inside color
 
         infoButton = new InfoButton((int) (width * 0.05f),   // size
-                                    (int) (width * 0.03),    // x
-                                    height - (int) (width * 0.03),     // y
-                                    Constants.WHITE,         // outside color
-                                    Constants.BLUE);      // inside color
+                (int) (width * 0.03),    // x
+                height - (int) (width * 0.03),     // y
+                Constants.WHITE,         // outside color
+                Constants.BLUE);      // inside color
     }
 
-    public void update (float deltaTime) {
-
-        if(this.state == MainMenuState.Active) {
-            playButton.update(deltaTime);
-            infoButton.update(deltaTime);
-        }
-        else if(this.state == MainMenuState.ZoomInToInfo)
-        {
-            infoButton.update(deltaTime);
-        }
-        else if(this.state == MainMenuState.ZoomInToPlay)
-        {
-            playButton.update(deltaTime);
-        }
-        else{
-            Gdx.app.error(TAG, "INVALID MENU STATE");
-        }
-    }
-
-    public void render (SpriteBatch batch)
+    public void update(float deltaTime)
     {
-        if(this.state == MainMenuState.Active) {
-            playButton.render(batch);
-            infoButton.render(batch);
-        }
-        else if(this.state == MainMenuState.ZoomInToInfo)
+
+        if (this.state == MainMenuState.Active)
         {
-            infoButton.render(batch);
+            playButton.update(deltaTime);
+            infoButton.update(deltaTime);
         }
-        else if(this.state == MainMenuState.ZoomInToPlay)
+        else if (this.state == MainMenuState.ZoomInToInfo)
         {
-            playButton.render(batch);
+            infoButton.update(deltaTime);
         }
-        else{
+        else if (this.state == MainMenuState.ZoomInToPlay)
+        {
+            playButton.update(deltaTime);
+        }
+        else
+        {
             Gdx.app.error(TAG, "INVALID MENU STATE");
         }
+    }
+
+    public void render(SpriteBatch batch)
+    {
+        if (this.state == MainMenuState.Active)
+        {
+            playButton.render(batch);
+            infoButton.render(batch);
+        }
+        else if (this.state == MainMenuState.ZoomInToInfo)
+        {
+            infoButton.render(batch);
+        }
+        else if (this.state == MainMenuState.ZoomInToPlay)
+        {
+            playButton.render(batch);
+        }
+        else
+        {
+            Gdx.app.error(TAG, "INVALID MENU STATE");
+        }
+    }
+
+    enum MainMenuState
+    {
+        Active,
+        ZoomInToPlay,
+        ZoomInToInfo,
+        Done
     }
 }

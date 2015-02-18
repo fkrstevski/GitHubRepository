@@ -75,18 +75,22 @@ public class WorldRenderer implements Disposable {
 	private void renderWorld (SpriteBatch batch) {
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		//if (GamePreferences.instance.useMonochromeShader) {
-		//	batch.setShader(shaderMonochrome);
-		//	shaderMonochrome.setUniformf("u_amount", 1.0f);
-		//}
-		worldController.level.render(batch);
 
-		batch.setShader(null);
-		batch.end();
-		if (DEBUG_DRAW_BOX2D_WORLD) {
+		if (worldController.renderPhysics) {
 			b2debugRenderer.render(worldController.b2world, camera.combined);
 		}
+        else
+        {
+            batch.begin();
+            //if (GamePreferences.instance.useMonochromeShader) {
+            //	batch.setShader(shaderMonochrome);
+            //	shaderMonochrome.setUniformf("u_amount", 1.0f);
+            //}
+            worldController.level.render(batch);
+
+            batch.setShader(null);
+            batch.end();
+        }
 	}
 
 	private void renderGui (SpriteBatch batch) {

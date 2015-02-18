@@ -26,18 +26,35 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+
 
 import come.filip.templategame.screens.DirectedGame;
 import come.filip.templategame.screens.MenuScreen;
+import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
+import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.transitions.ScreenTransition;
 import come.filip.templategame.screens.transitions.ScreenTransitionSlide;
 import come.filip.templategame.util.AudioManager;
 import come.filip.templategame.util.CameraHelper;
 import come.filip.templategame.util.Constants;
 
-public class WorldController extends InputAdapter implements Disposable {
+public class WorldController extends InputAdapter implements Disposable, ContactListener {
 
     private static final String TAG = WorldController.class.getName();
 
@@ -46,6 +63,9 @@ public class WorldController extends InputAdapter implements Disposable {
     private boolean goalReached;
     private boolean accelerometerAvailable;
     private boolean gameOver;
+    public boolean renderPhysics;
+
+    public int numberOfContacts;
 
     public CameraHelper cameraHelper;
 
@@ -58,7 +78,9 @@ public class WorldController extends InputAdapter implements Disposable {
     public World b2world;
 
     public WorldController (DirectedGame game) {
+        Box2D.init();
         this.game = game;
+        this.renderPhysics = false;
         init();
     }
 
@@ -78,10 +100,75 @@ public class WorldController extends InputAdapter implements Disposable {
     }
 
     private void initPhysics () {
-        if (b2world != null) b2world.dispose();
-        b2world = new World(new Vector2(0, -9.81f), true);
 
-        // TODO: add physycs for all circles and rectangles in level
+
+        numberOfContacts = 0;
+
+        if (b2world != null)
+               b2world.dispose();
+        b2world = new World(new Vector2(0, -9.81f), true);
+        b2world.setContactListener(this);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DynamicBody;
+        bodyDef.position.set(level.ball.position);
+        Body body = b2world.createBody(bodyDef);
+        level.ball.body = body;
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(level.ball.radius);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef);
+        circleShape.dispose();
+
+        BodyDef bodyDef2 = new BodyDef();
+        bodyDef2.type = BodyType.StaticBody;
+        bodyDef2.position.set(level.endCircle.position);
+        Body body2 = b2world.createBody(bodyDef2);
+        level.endCircle.body = body2;
+        CircleShape circleShape2 = new CircleShape();
+        circleShape2.setRadius(level.endCircle.radius);
+        FixtureDef fixtureDef2 = new FixtureDef();
+        fixtureDef2.shape = circleShape2;
+        fixtureDef2.isSensor = true;
+        body2.createFixture(fixtureDef2);
+        circleShape2.dispose();
+
+
+        for (AbstractCircleButtonObject c : level.circleShapes)
+        {
+            BodyDef bodyDef1 = new BodyDef();
+            bodyDef1.type = BodyType.StaticBody;
+            bodyDef1.position.set(c.position);
+            Body body1 = b2world.createBody(bodyDef1);
+            c.body = body1;
+            CircleShape circleShape1 = new CircleShape();
+            circleShape1.setRadius(c.radius);
+            FixtureDef fixtureDef1 = new FixtureDef();
+            fixtureDef1.shape = circleShape1;
+            fixtureDef1.isSensor = true;
+            body1.createFixture(fixtureDef1);
+            circleShape1.dispose();
+        }
+
+        for (AbstractRectangleButtonObject c : level.rectangleShapes)
+        {
+            BodyDef bodyDef1 = new BodyDef();
+            bodyDef1.type = BodyType.StaticBody;
+            bodyDef1.position.set(c.position);
+            Body body1 = b2world.createBody(bodyDef1);
+            c.body = body1;
+            PolygonShape polygonShape = new PolygonShape();
+            Vector2 o = new Vector2(0, 0);
+            polygonShape.setAsBox(c.dimension.x / 2, c.dimension.y / 2, o, MathUtils.degreesToRadians * c.rotation);
+            FixtureDef fixtureDef1 = new FixtureDef();
+            fixtureDef1.shape = polygonShape;
+            fixtureDef1.isSensor = true;
+            body1.createFixture(fixtureDef1);
+            polygonShape.dispose();
+        }
+
         // Rocks
 		/*Vector2 origin = new Vector2();
 		for (Rock rock : level.rocks) {
@@ -126,7 +213,8 @@ public class WorldController extends InputAdapter implements Disposable {
 
     public Color getBgColor()
     {
-        return (level.collision ? Constants.RED : Constants.BLUE);
+        //return (level.collision ? Constants.RED : Constants.BLUE);
+        return (this.numberOfContacts > 0 ? Constants.BLUE : Constants.RED);
     }
 
 
@@ -206,15 +294,16 @@ public class WorldController extends InputAdapter implements Disposable {
         }
         // Toggle camera follow
         else if (keycode == Keys.ENTER) {
-            cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.ball);
-            Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+            level.next();
+            initPhysics();
         }
         // Back to Menu
         else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
             backToMenu();
         }
         else if (keycode == Keys.SPACE) {
-            level.next();
+            //
+            this.renderPhysics = !this.renderPhysics;
         }
 
         return false;
@@ -236,7 +325,8 @@ public class WorldController extends InputAdapter implements Disposable {
             backToMenu();
         }
         else{
-            level.next();
+            //level.next();
+            this.renderPhysics = !this.renderPhysics;
         }
         return false;
     }
@@ -246,4 +336,57 @@ public class WorldController extends InputAdapter implements Disposable {
         if (b2world != null) b2world.dispose();
     }
 
+    @Override
+    public void endContact(Contact contact) {
+
+        numberOfContacts--;
+        Gdx.app.debug(TAG, "endContact: " + numberOfContacts);
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+
+        numberOfContacts++;
+
+        if(contact.getFixtureB().getBody() == level.ball.body)
+        {
+            if(contact.getFixtureA().getBody() == level.endCircle.body)
+            {
+                Gdx.app.debug(TAG, "beginContact: B-> Ball A-> Last");
+                level.next();
+                initPhysics();
+            }
+            else
+            {
+                Gdx.app.debug(TAG, "beginContact: B-> Ball " + contact.getFixtureA().toString());
+            }
+        }
+        else
+        {
+            if(contact.getFixtureB().getBody() == level.endCircle.body)
+            {
+                Gdx.app.debug(TAG, "beginContact: A-> Ball B-> Last");
+                level.next();
+                initPhysics();
+            }
+            else
+            {
+                Gdx.app.debug(TAG, "beginContact: A-> Ball" + contact.getFixtureB().toString());
+            }
+        }
+
+        Gdx.app.debug(TAG, "beginContact: " + numberOfContacts);
+    }
+
+    @Override
+    public void preSolve (Contact contact, Manifold oldManifold)
+    {
+
+    }
+
+    @Override
+    public void postSolve (Contact contact, ContactImpulse impulse)
+    {
+
+    }
 }

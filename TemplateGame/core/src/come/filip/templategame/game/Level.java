@@ -2,6 +2,7 @@ package come.filip.templategame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.objects.BackButton;
 import come.filip.templategame.screens.objects.MiddlePart;
 import come.filip.templategame.screens.objects.StartTarget;
+import come.filip.templategame.screens.objects.EndTarget;
 import come.filip.templategame.util.Constants;
 
 public class Level {
@@ -22,6 +24,7 @@ public class Level {
     public BackButton backButton;
     public ArrayList<AbstractCircleButtonObject> circleShapes;
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
+    public AbstractCircleButtonObject endCircle;
 
     private ArrayList<Vector2> points;
 
@@ -57,21 +60,22 @@ public class Level {
         // Add Start Circle
         StartTarget st = new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
-        st.updateBoundsRadius(st.radius - Constants.BALL_RADIUS);
+        //st.updateBoundsRadius(st.radius - Constants.BALL_RADIUS);
         circleShapes.add(st);
 
         // Add End Circle
-        StartTarget et = new StartTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getLastPoint().x,
+        endCircle = new EndTarget((int)(Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),this.getLastPoint().x,
                 this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
-        et.updateBoundsRadius(et.radius - Constants.BALL_RADIUS);
-        circleShapes.add(et);
+        //et.updateBoundsRadius(et.radius - Constants.BALL_RADIUS);
+        //circleShapes.add(et);
 
         // Add Middle Circles
         for(int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
+
             Ball m = new Ball((int)(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
-            m.updateBoundsRadius(m.radius - Constants.BALL_RADIUS - (m.radius - Constants.END_CIRCLE_OUTLINE_RADIUS));
+            //m.updateBoundsRadius(m.radius - Constants.BALL_RADIUS - (m.radius - Constants.END_CIRCLE_OUTLINE_RADIUS));
             circleShapes.add(m);
         }
 
@@ -87,7 +91,11 @@ public class Level {
                                                                 (int)(Constants.RECTANGLE_WIDTH * this.getLevelMultiplier()),
                                                                 midpoint.x, midpoint.y,
                                                                 Constants.WHITE, Constants.TURQUOISE);
-            s.rotation = (float)angle;
+            s.rotation = angle;
+
+            Gdx.app.debug(TAG, "Angle = " + s.rotation);
+            Gdx.app.debug(TAG, "Rad Angle = " + MathUtils.degreesToRadians * s.rotation);
+
             rectangleShapes.add(s);
         }
 	}
@@ -95,7 +103,7 @@ public class Level {
 	public void update (float deltaTime) {
 		ball.update(deltaTime);
 
-        this.collision = true;
+        /*this.collision = true;
         for(int i = 0; i < this.circleShapes.size(); ++i)
         {
             AbstractCircleButtonObject s = circleShapes.get(i);
@@ -123,7 +131,7 @@ public class Level {
         {
             // Inside
             next();
-        }
+        }*/
 	}
 
 	public void render (SpriteBatch batch) {
@@ -132,6 +140,8 @@ public class Level {
         {
             circleShapes.get(i).render(batch);
         }
+
+        endCircle.render(batch);
 
         for(int i = 0; i < rectangleShapes.size(); ++i)
         {

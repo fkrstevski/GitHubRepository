@@ -24,25 +24,26 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.JointEdge;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 
+import java.util.Iterator;
 
 import come.filip.templategame.screens.DirectedGame;
 import come.filip.templategame.screens.MenuScreen;
@@ -54,10 +55,28 @@ import come.filip.templategame.util.AudioManager;
 import come.filip.templategame.util.CameraHelper;
 import come.filip.templategame.util.Constants;
 
+class MyBodyData
+{
+    public boolean isFlaggedForDelete;
+
+    MyBodyData()
+    {
+        isFlaggedForDelete = false;
+    }
+}
+
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
 
     private static final String TAG = WorldController.class.getName();
 
+    enum LevelState
+    {
+        Ready,
+        Play,
+        End
+    }
+
+    public LevelState state = LevelState.Ready;
     private DirectedGame game;
     public Level level;
     private boolean goalReached;
@@ -96,26 +115,49 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         gameOver = false;
         level = new Level(0, 0, 0);
         //cameraHelper.setTarget(level.ball);
+
+        if (b2world != null) {
+            b2world.setContactListener(null);
+            b2world.dispose();
+        }
+        b2world = new World(new Vector2(0, 0), true);
+        b2world.setContactListener(this);
+
         initPhysics();
+    }
+
+    public void removeBodySafely(Body body) {
+        //to prevent some obscure c assertion that happened randomly once in a blue moon
+        final Array<JointEdge> list = body.getJointList();
+        while (list.size > 0) {
+            b2world.destroyJoint(list.get(0).joint);
+        }
+        // actual remove
+        b2world.destroyBody(body);
     }
 
     private void initPhysics () {
 
-
         numberOfContacts = 0;
 
-        if (b2world != null)
-               b2world.dispose();
-        b2world = new World(new Vector2(0, -9.81f), true);
-        b2world.setContactListener(this);
+        if(b2world != null)
+        {
+            Array<Body> bodies = new Array<Body>();
+            b2world.getBodies(bodies);
+            for(int i = 0; i < b2world.getBodyCount(); ++i)
+            {
+                ((MyBodyData)bodies.get(i).getUserData()).isFlaggedForDelete = true;
+            }
+        }
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
-        bodyDef.position.set(level.ball.position);
+        bodyDef.position.set(new Vector2(level.ball.position.x / Constants.BOX2D_SCALE, level.ball.position.y / Constants.BOX2D_SCALE));
         Body body = b2world.createBody(bodyDef);
+        body.setUserData(new MyBodyData());
         level.ball.body = body;
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(level.ball.radius);
+        circleShape.setRadius(level.ball.radius / Constants.BOX2D_SCALE);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
         fixtureDef.isSensor = true;
@@ -124,11 +166,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         BodyDef bodyDef2 = new BodyDef();
         bodyDef2.type = BodyType.StaticBody;
-        bodyDef2.position.set(level.endCircle.position);
+        bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
         Body body2 = b2world.createBody(bodyDef2);
+        body2.setUserData(new MyBodyData());
         level.endCircle.body = body2;
         CircleShape circleShape2 = new CircleShape();
-        circleShape2.setRadius(level.endCircle.radius);
+        circleShape2.setRadius(level.endCircle.radius / Constants.BOX2D_SCALE);
         FixtureDef fixtureDef2 = new FixtureDef();
         fixtureDef2.shape = circleShape2;
         fixtureDef2.isSensor = true;
@@ -140,11 +183,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             BodyDef bodyDef1 = new BodyDef();
             bodyDef1.type = BodyType.StaticBody;
-            bodyDef1.position.set(c.position);
+            bodyDef1.position.set(new Vector2(c.position.x / Constants.BOX2D_SCALE, c.position.y / Constants.BOX2D_SCALE));
             Body body1 = b2world.createBody(bodyDef1);
+            body1.setUserData(new MyBodyData());
             c.body = body1;
             CircleShape circleShape1 = new CircleShape();
-            circleShape1.setRadius(c.radius);
+            circleShape1.setRadius(c.radius/ Constants.BOX2D_SCALE);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = circleShape1;
             fixtureDef1.isSensor = true;
@@ -156,12 +200,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             BodyDef bodyDef1 = new BodyDef();
             bodyDef1.type = BodyType.StaticBody;
-            bodyDef1.position.set(c.position);
+            bodyDef1.position.set(new Vector2(c.position.x / Constants.BOX2D_SCALE, c.position.y / Constants.BOX2D_SCALE));
             Body body1 = b2world.createBody(bodyDef1);
+            body1.setUserData(new MyBodyData());
             c.body = body1;
             PolygonShape polygonShape = new PolygonShape();
             Vector2 o = new Vector2(0, 0);
-            polygonShape.setAsBox(c.dimension.x / 2, c.dimension.y / 2, o, MathUtils.degreesToRadians * c.rotation);
+            polygonShape.setAsBox(c.dimension.x / 2 / Constants.BOX2D_SCALE, c.dimension.y / 2 / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * c.rotation);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = polygonShape;
             fixtureDef1.isSensor = true;
@@ -195,6 +240,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         level.update(deltaTime);
 
         b2world.step(deltaTime, 8, 3);
+
+        Array<Body> bodies = new Array<Body>();
+        b2world.getBodies(bodies);
+        Iterator<Body> i = bodies.iterator();
+        Body node=i.next();
+        while (i.hasNext()) {
+            Body oBj=node;
+            node=i.next();
+            MyBodyData data = (MyBodyData) oBj.getUserData();
+            if(data!=null &&  data.isFlaggedForDelete){
+                b2world.destroyBody(oBj);
+            }
+        }
+
         cameraHelper.update(deltaTime);
         if (!isGameOver()) {
             AudioManager.instance.play(Assets.instance.sounds.liveLost);
@@ -228,14 +287,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         if (!cameraHelper.hasTarget(level.ball)) {
             // Camera Controls (move)
-            float camMoveSpeed = 5 * deltaTime;
+            float ballMoveSpeed = 1000 * deltaTime;
             float camMoveSpeedAccelerationFactor = 5;
-            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) camMoveSpeed *= camMoveSpeedAccelerationFactor;
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) moveCamera(-camMoveSpeed, 0);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) moveCamera(camMoveSpeed, 0);
-            if (Gdx.input.isKeyPressed(Keys.UP)) moveCamera(0, camMoveSpeed);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) moveCamera(0, -camMoveSpeed);
-            if (Gdx.input.isKeyPressed(Keys.BACKSPACE)) cameraHelper.setPosition(0, 0);
+            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) ballMoveSpeed *= camMoveSpeedAccelerationFactor;
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) moveBall(-ballMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) moveBall(ballMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.UP)) moveBall(0, -ballMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) moveBall(0, ballMoveSpeed);
         }
 
         // Camera Controls (zoom)
@@ -279,10 +337,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
     }
 
-    private void moveCamera (float x, float y) {
-        x += cameraHelper.getPosition().x;
-        y += cameraHelper.getPosition().y;
-        cameraHelper.setPosition(x, y);
+    private void moveBall (float x, float y) {
+        level.ball.body.setLinearVelocity(x, y);
     }
 
     @Override

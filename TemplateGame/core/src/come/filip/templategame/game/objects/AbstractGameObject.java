@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import come.filip.templategame.util.Constants;
+
 public abstract class AbstractGameObject {
 
     public Vector2 position;
@@ -33,7 +35,7 @@ public abstract class AbstractGameObject {
 
     public void update (float deltaTime) {
         if(body != null) {
-            position.set(body.getPosition());
+            position.set(new Vector2(body.getPosition().x * Constants.BOX2D_SCALE, body.getPosition().y * Constants.BOX2D_SCALE));
             rotation = body.getAngle() * MathUtils.radiansToDegrees;
         }
     }

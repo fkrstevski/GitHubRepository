@@ -31,7 +31,7 @@ public class Ball extends AbstractCircleButtonObject {
 
         //this.body.applyForceToCenter(y * 70 * deltaTime, x * 70 * deltaTime, false);
         //this.body.applyLinearImpulse(y * 70 * deltaTime, x * 70 * deltaTime, this.origin.x, this.origin.y, false);
-        this.body.setLinearVelocity(y * 7000 * deltaTime, x * 7000 * deltaTime);
+        //this.body.setLinearVelocity(y * 700 * deltaTime, x * 700 * deltaTime);
         //this.body.setLinearVelocity(this.body.getLinearVelocity().x + y * 70 * deltaTime, this.body.getLinearVelocity().y + x * 70 * deltaTime);
     }
 }

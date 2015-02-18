@@ -77,7 +77,7 @@ public class WorldRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 
 		if (worldController.renderPhysics) {
-			b2debugRenderer.render(worldController.b2world, camera.combined);
+			b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));
 		}
         else
         {

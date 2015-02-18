@@ -63,7 +63,7 @@ public class Constants {
     public static final Color BLACK = new Color(47/255.0f, 72/255.0f, 94/255.0f, 0xff/255.0f);
 
 
-    public static float BOX2D_SCALE = 30;
+    public static float BOX2D_SCALE = 10;
 
 
 }

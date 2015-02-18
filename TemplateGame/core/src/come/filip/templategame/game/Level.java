@@ -11,9 +11,9 @@ import come.filip.templategame.game.objects.Ball;
 import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
 import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.objects.BackButton;
+import come.filip.templategame.screens.objects.EndTarget;
 import come.filip.templategame.screens.objects.MiddlePart;
 import come.filip.templategame.screens.objects.StartTarget;
-import come.filip.templategame.screens.objects.EndTarget;
 import come.filip.templategame.util.Constants;
 
 public class Level {

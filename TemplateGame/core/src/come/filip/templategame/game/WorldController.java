@@ -65,58 +65,51 @@ class MyBodyData
     }
 }
 
-public class WorldController extends InputAdapter implements Disposable, ContactListener {
+public class WorldController extends InputAdapter implements Disposable, ContactListener
+{
 
     private static final String TAG = WorldController.class.getName();
-
-    enum LevelState
-    {
-        Ready,
-        Play,
-        End
-    }
-
     public LevelState state = LevelState.Ready;
-    private DirectedGame game;
     public Level level;
+    public boolean renderPhysics;
+    public int numberOfContacts;
+    public CameraHelper cameraHelper;
+    public World b2world;
+    private DirectedGame game;
     private boolean goalReached;
     private boolean accelerometerAvailable;
     private boolean gameOver;
-    public boolean renderPhysics;
-
-    public int numberOfContacts;
-
-    public CameraHelper cameraHelper;
-
     // Rectangles for collision detection
     private Rectangle r1 = new Rectangle();
     private Rectangle r2 = new Rectangle();
 
     private float timeLeftGameOverDelay;
 
-    public World b2world;
-
-    public WorldController (DirectedGame game) {
+    public WorldController(DirectedGame game)
+    {
         Box2D.init();
         this.game = game;
         this.renderPhysics = false;
         init();
     }
 
-    private void init () {
+    private void init()
+    {
         accelerometerAvailable = Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer);
         cameraHelper = new CameraHelper();
         timeLeftGameOverDelay = 0;
         initLevel();
     }
 
-    private void initLevel () {
+    private void initLevel()
+    {
         goalReached = false;
         gameOver = false;
         level = new Level(0, 0, 0);
         //cameraHelper.setTarget(level.ball);
 
-        if (b2world != null) {
+        if (b2world != null)
+        {
             b2world.setContactListener(null);
             b2world.dispose();
         }
@@ -126,27 +119,30 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         initPhysics();
     }
 
-    public void removeBodySafely(Body body) {
+    public void removeBodySafely(Body body)
+    {
         //to prevent some obscure c assertion that happened randomly once in a blue moon
         final Array<JointEdge> list = body.getJointList();
-        while (list.size > 0) {
+        while (list.size > 0)
+        {
             b2world.destroyJoint(list.get(0).joint);
         }
         // actual remove
         b2world.destroyBody(body);
     }
 
-    private void initPhysics () {
+    private void initPhysics()
+    {
 
         numberOfContacts = 0;
 
-        if(b2world != null)
+        if (b2world != null)
         {
             Array<Body> bodies = new Array<Body>();
             b2world.getBodies(bodies);
-            for(int i = 0; i < b2world.getBodyCount(); ++i)
+            for (int i = 0; i < b2world.getBodyCount(); ++i)
             {
-                ((MyBodyData)bodies.get(i).getUserData()).isFlaggedForDelete = true;
+                ((MyBodyData) bodies.get(i).getUserData()).isFlaggedForDelete = true;
             }
         }
 
@@ -188,7 +184,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             body1.setUserData(new MyBodyData());
             c.body = body1;
             CircleShape circleShape1 = new CircleShape();
-            circleShape1.setRadius(c.radius/ Constants.BOX2D_SCALE);
+            circleShape1.setRadius(c.radius / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = circleShape1;
             fixtureDef1.isSensor = true;
@@ -215,8 +211,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // Rocks
-		/*Vector2 origin = new Vector2();
-		for (Rock rock : level.rocks) {
+        /*Vector2 origin = new Vector2();
+        for (Rock rock : level.rocks) {
 			BodyDef bodyDef = new BodyDef();
 			bodyDef.type = BodyType.KinematicBody;
 			bodyDef.position.set(rock.position);
@@ -233,10 +229,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		}*/
     }
 
-    public void update (float deltaTime) {
+    public void update(float deltaTime)
+    {
         handleDebugInput(deltaTime);
 
-            handleInputGame(deltaTime);
+        handleInputGame(deltaTime);
         level.update(deltaTime);
 
         b2world.step(deltaTime, 8, 3);
@@ -244,29 +241,33 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         Array<Body> bodies = new Array<Body>();
         b2world.getBodies(bodies);
         Iterator<Body> i = bodies.iterator();
-        Body node=i.next();
-        while (i.hasNext()) {
-            Body oBj=node;
-            node=i.next();
+        Body node = i.next();
+        while (i.hasNext())
+        {
+            Body oBj = node;
+            node = i.next();
             MyBodyData data = (MyBodyData) oBj.getUserData();
-            if(data!=null &&  data.isFlaggedForDelete){
+            if (data != null && data.isFlaggedForDelete)
+            {
                 b2world.destroyBody(oBj);
             }
         }
 
         cameraHelper.update(deltaTime);
-        if (!isGameOver()) {
+        if (!isGameOver())
+        {
             AudioManager.instance.play(Assets.instance.sounds.liveLost);
             gameOver = true;
             //if (isGameOver())
-                timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
+            timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
             //else
             //    initLevel();
         }
         //level.mountains.updateScrollPosition(cameraHelper.getPosition());
-     }
+    }
 
-    public boolean isGameOver () {
+    public boolean isGameOver()
+    {
         return gameOver;
     }
 
@@ -276,53 +277,96 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         return (this.numberOfContacts > 0 ? Constants.BLUE : Constants.RED);
     }
 
-
-    private void onCollisionBallWithGoal() {
+    private void onCollisionBallWithGoal()
+    {
         goalReached = true;
         timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
-}
+    }
 
-    private void handleDebugInput (float deltaTime) {
-        if (Gdx.app.getType() != ApplicationType.Desktop) return;
+    private void handleDebugInput(float deltaTime)
+    {
+        if (Gdx.app.getType() != ApplicationType.Desktop)
+        {
+            return;
+        }
 
-        if (!cameraHelper.hasTarget(level.ball)) {
+        if (!cameraHelper.hasTarget(level.ball))
+        {
             // Camera Controls (move)
             float ballMoveSpeed = 1000 * deltaTime;
             float camMoveSpeedAccelerationFactor = 5;
-            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) ballMoveSpeed *= camMoveSpeedAccelerationFactor;
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) moveBall(-ballMoveSpeed, 0);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) moveBall(ballMoveSpeed, 0);
-            if (Gdx.input.isKeyPressed(Keys.UP)) moveBall(0, -ballMoveSpeed);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) moveBall(0, ballMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+            {
+                ballMoveSpeed *= camMoveSpeedAccelerationFactor;
+            }
+            if (Gdx.input.isKeyPressed(Keys.LEFT))
+            {
+                moveBall(-ballMoveSpeed, 0);
+            }
+            if (Gdx.input.isKeyPressed(Keys.RIGHT))
+            {
+                moveBall(ballMoveSpeed, 0);
+            }
+            if (Gdx.input.isKeyPressed(Keys.UP))
+            {
+                moveBall(0, -ballMoveSpeed);
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN))
+            {
+                moveBall(0, ballMoveSpeed);
+            }
         }
 
         // Camera Controls (zoom)
         float camZoomSpeed = 1 * deltaTime;
         float camZoomSpeedAccelerationFactor = 5;
-        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) camZoomSpeed *= camZoomSpeedAccelerationFactor;
-        if (Gdx.input.isKeyPressed(Keys.COMMA)) cameraHelper.addZoom(camZoomSpeed);
-        if (Gdx.input.isKeyPressed(Keys.PERIOD)) cameraHelper.addZoom(-camZoomSpeed);
-        if (Gdx.input.isKeyPressed(Keys.SLASH)) cameraHelper.setZoom(1);
+        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+        {
+            camZoomSpeed *= camZoomSpeedAccelerationFactor;
+        }
+        if (Gdx.input.isKeyPressed(Keys.COMMA))
+        {
+            cameraHelper.addZoom(camZoomSpeed);
+        }
+        if (Gdx.input.isKeyPressed(Keys.PERIOD))
+        {
+            cameraHelper.addZoom(-camZoomSpeed);
+        }
+        if (Gdx.input.isKeyPressed(Keys.SLASH))
+        {
+            cameraHelper.setZoom(1);
+        }
     }
 
-    private void handleInputGame (float deltaTime) {
-        if (cameraHelper.hasTarget(level.ball)) {
+    private void handleInputGame(float deltaTime)
+    {
+        if (cameraHelper.hasTarget(level.ball))
+        {
             // Player Movement
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+            if (Gdx.input.isKeyPressed(Keys.LEFT))
+            {
                 level.ball.velocity.x = -level.ball.terminalVelocity.x;
-            } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+            }
+            else if (Gdx.input.isKeyPressed(Keys.RIGHT))
+            {
                 level.ball.velocity.x = level.ball.terminalVelocity.x;
-            } else {
+            }
+            else
+            {
                 // Use accelerometer for movement if available
-                if (accelerometerAvailable) {
+                if (accelerometerAvailable)
+                {
                     // normalize accelerometer values from [-10, 10] to [-1, 1]
                     // which translate to rotations of [-90, 90] degrees
                     float amount = Gdx.input.getAccelerometerY() / 10.0f;
                     amount *= 90.0f;
                     // is angle of rotation inside dead zone?
-                    if (Math.abs(amount) < Constants.ACCEL_ANGLE_DEAD_ZONE) {
+                    if (Math.abs(amount) < Constants.ACCEL_ANGLE_DEAD_ZONE)
+                    {
                         amount = 0;
-                    } else {
+                    }
+                    else
+                    {
                         // use the defined max angle of rotation instead of
                         // the full 90 degrees for maximum velocity
                         amount /= Constants.ACCEL_MAX_ANGLE_MAX_MOVEMENT;
@@ -330,34 +374,41 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     level.ball.velocity.x = level.ball.terminalVelocity.x * amount;
                 }
                 // Execute auto-forward movement on non-desktop platform
-                else if (Gdx.app.getType() != ApplicationType.Desktop) {
+                else if (Gdx.app.getType() != ApplicationType.Desktop)
+                {
                     level.ball.velocity.x = level.ball.terminalVelocity.x;
                 }
             }
         }
     }
 
-    private void moveBall (float x, float y) {
+    private void moveBall(float x, float y)
+    {
         level.ball.body.setLinearVelocity(x, y);
     }
 
     @Override
-    public boolean keyUp (int keycode) {
+    public boolean keyUp(int keycode)
+    {
         // Reset game world
-        if (keycode == Keys.R) {
+        if (keycode == Keys.R)
+        {
             init();
             Gdx.app.debug(TAG, "Game world resetted");
         }
         // Toggle camera follow
-        else if (keycode == Keys.ENTER) {
+        else if (keycode == Keys.ENTER)
+        {
             level.next();
             initPhysics();
         }
         // Back to Menu
-        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        {
             backToMenu();
         }
-        else if (keycode == Keys.SPACE) {
+        else if (keycode == Keys.SPACE)
+        {
             //
             this.renderPhysics = !this.renderPhysics;
         }
@@ -365,22 +416,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         return false;
     }
 
-    private void backToMenu () {
+    private void backToMenu()
+    {
         // switch to menu screen
         ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
         game.setScreen(new MenuScreen(game), transition);
     }
 
     @Override
-    public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button)
+    {
 
         Gdx.app.debug(TAG, "Touch at screenX = " + screenX + " screenY = " + screenY);
 
-        if(level.backButton.isTouched(screenX, screenY))
+        if (level.backButton.isTouched(screenX, screenY))
         {
             backToMenu();
         }
-        else{
+        else
+        {
             //level.next();
             this.renderPhysics = !this.renderPhysics;
         }
@@ -388,25 +442,31 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     @Override
-    public void dispose () {
-        if (b2world != null) b2world.dispose();
+    public void dispose()
+    {
+        if (b2world != null)
+        {
+            b2world.dispose();
+        }
     }
 
     @Override
-    public void endContact(Contact contact) {
+    public void endContact(Contact contact)
+    {
 
         numberOfContacts--;
         Gdx.app.debug(TAG, "endContact: " + numberOfContacts);
     }
 
     @Override
-    public void beginContact(Contact contact) {
+    public void beginContact(Contact contact)
+    {
 
         numberOfContacts++;
 
-        if(contact.getFixtureB().getBody() == level.ball.body)
+        if (contact.getFixtureB().getBody() == level.ball.body)
         {
-            if(contact.getFixtureA().getBody() == level.endCircle.body)
+            if (contact.getFixtureA().getBody() == level.endCircle.body)
             {
                 Gdx.app.debug(TAG, "beginContact: B-> Ball A-> Last");
                 level.next();
@@ -419,7 +479,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else
         {
-            if(contact.getFixtureB().getBody() == level.endCircle.body)
+            if (contact.getFixtureB().getBody() == level.endCircle.body)
             {
                 Gdx.app.debug(TAG, "beginContact: A-> Ball B-> Last");
                 level.next();
@@ -435,14 +495,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     @Override
-    public void preSolve (Contact contact, Manifold oldManifold)
+    public void preSolve(Contact contact, Manifold oldManifold)
     {
 
     }
 
     @Override
-    public void postSolve (Contact contact, ContactImpulse impulse)
+    public void postSolve(Contact contact, ContactImpulse impulse)
     {
 
+    }
+
+    enum LevelState
+    {
+        Ready,
+        Play,
+        End
     }
 }

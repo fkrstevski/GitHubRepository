@@ -11,10 +11,12 @@ import come.filip.templategame.screens.MenuScreen;
 import come.filip.templategame.util.AudioManager;
 import come.filip.templategame.util.GamePreferences;
 
-public class MyTemplateGame extends DirectedGame {
+public class MyTemplateGame extends DirectedGame
+{
 
     @Override
-    public void create () {
+    public void create()
+    {
         // Set Libgdx log level
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 

@@ -41,7 +41,7 @@ public class StageLoader
         zones.add(z1);
 
         Zone z2 = new Zone(1);
-        ArrayList<Vector2>  stage1PointsZone2 = new ArrayList<Vector2>();
+        ArrayList<Vector2> stage1PointsZone2 = new ArrayList<Vector2>();
         stage1PointsZone2.add(new Vector2(width * 0.15f, height * 0.85f));
         stage1PointsZone2.add(new Vector2(width * 0.15f, height * 0.15f));
         stage1PointsZone2.add(new Vector2(width * 0.85f, height * 0.15f));
@@ -62,7 +62,7 @@ public class StageLoader
         zones.add(z2);
 
         Zone z3 = new Zone(2);
-        ArrayList<Vector2>  stage1PointsZone3 = new ArrayList<Vector2>();
+        ArrayList<Vector2> stage1PointsZone3 = new ArrayList<Vector2>();
         stage1PointsZone3.add(new Vector2(width * 0.15f, height * 0.85f));
         stage1PointsZone3.add(new Vector2(width * 0.85f, height * 0.85f));
         stage1PointsZone3.add(new Vector2(width * 0.15f, height * 0.15f));

@@ -22,25 +22,8 @@ public class StageLoader
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        Zone z1 = new Zone(0);
-        ArrayList<Vector2> stage1PointsZone1 = new ArrayList<Vector2>();
-        stage1PointsZone1.add(new Vector2(width * 0.15f, height * 0.5f));
-        stage1PointsZone1.add(new Vector2(width * 0.85f, height * 0.5f));
-        z1.AddStage(0, stage1PointsZone1);
 
-        ArrayList<Vector2> stage2PointsZone1 = new ArrayList<Vector2>();
-        stage2PointsZone1.add(new Vector2(width * 0.15f, height * 0.85f));
-        stage2PointsZone1.add(new Vector2(width * 0.85f, height * 0.15f));
-        z1.AddStage(1, stage2PointsZone1);
-
-        ArrayList<Vector2> stage3Points = new ArrayList<Vector2>();
-        stage3Points.add(new Vector2(width * 0.15f, height * 0.15f));
-        stage3Points.add(new Vector2(width * 0.85f, height * 0.85f));
-        z1.AddStage(2, stage3Points);
-
-        zones.add(z1);
-
-        Zone z2 = new Zone(1);
+        Zone z2 = new Zone(0);
         ArrayList<Vector2> stage1PointsZone2 = new ArrayList<Vector2>();
         stage1PointsZone2.add(new Vector2(width * 0.15f, height * 0.85f));
         stage1PointsZone2.add(new Vector2(width * 0.15f, height * 0.15f));
@@ -61,7 +44,7 @@ public class StageLoader
 
         zones.add(z2);
 
-        Zone z3 = new Zone(2);
+        Zone z3 = new Zone(1);
         ArrayList<Vector2> stage1PointsZone3 = new ArrayList<Vector2>();
         stage1PointsZone3.add(new Vector2(width * 0.15f, height * 0.85f));
         stage1PointsZone3.add(new Vector2(width * 0.85f, height * 0.85f));

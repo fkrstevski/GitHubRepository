@@ -78,10 +78,7 @@ public class MainMenuRenderer implements Disposable
         batch.setProjectionMatrix(cameraGUI.combined);
         batch.begin();
 
-        if (GamePreferences.instance.showFpsCounter)
-        {
-            renderGuiFpsCounter(batch);
-        }
+        renderGuiFpsCounter(batch);
 
         batch.end();
     }

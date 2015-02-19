@@ -15,7 +15,6 @@ public class GamePreferences
     public boolean music;
     public float volSound;
     public float volMusic;
-    public boolean showFpsCounter;
     public boolean useMonochromeShader;
 
     private Preferences prefs;
@@ -32,7 +31,6 @@ public class GamePreferences
         music = prefs.getBoolean("music", true);
         volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
-        showFpsCounter = prefs.getBoolean("showFpsCounter", false);
         useMonochromeShader = prefs.getBoolean("useMonochromeShader", false);
     }
 
@@ -42,7 +40,6 @@ public class GamePreferences
         prefs.putBoolean("music", music);
         prefs.putFloat("volSound", volSound);
         prefs.putFloat("volMusic", volMusic);
-        prefs.putBoolean("showFpsCounter", showFpsCounter);
         prefs.putBoolean("useMonochromeShader", useMonochromeShader);
         prefs.flush();
     }

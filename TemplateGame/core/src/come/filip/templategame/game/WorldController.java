@@ -130,33 +130,37 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     {
         numberOfContacts = 0;
 
+        float extraScale = 0;//level.ball.radius * 2;
+
+        // Ball Physics Body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(level.ball.position.x / Constants.BOX2D_SCALE, level.ball.position.y / Constants.BOX2D_SCALE));
         Body body = b2world.createBody(bodyDef);
         level.ball.body = body;
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(level.ball.radius / Constants.BOX2D_SCALE);
+        circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
         circleShape.dispose();
 
+        // End Target Physics Body
         BodyDef bodyDef2 = new BodyDef();
         bodyDef2.type = BodyType.StaticBody;
         bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
         Body body2 = b2world.createBody(bodyDef2);
         level.endCircle.body = body2;
         CircleShape circleShape2 = new CircleShape();
-        circleShape2.setRadius(level.endCircle.radius / Constants.BOX2D_SCALE);
+        circleShape2.setRadius((level.endCircle.radius - extraScale) / Constants.BOX2D_SCALE);
         FixtureDef fixtureDef2 = new FixtureDef();
         fixtureDef2.shape = circleShape2;
         fixtureDef2.isSensor = true;
         body2.createFixture(fixtureDef2);
         circleShape2.dispose();
 
-
+        // Middle Circles Physics Bodies
         for (AbstractCircleButtonObject c : level.circleShapes)
         {
             BodyDef bodyDef1 = new BodyDef();
@@ -165,7 +169,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             Body body1 = b2world.createBody(bodyDef1);
             c.body = body1;
             CircleShape circleShape1 = new CircleShape();
-            circleShape1.setRadius(c.radius / Constants.BOX2D_SCALE);
+            circleShape1.setRadius((c.radius - extraScale) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = circleShape1;
             fixtureDef1.isSensor = true;
@@ -173,6 +177,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             circleShape1.dispose();
         }
 
+        // Rectangles Physics Bodies
         for (AbstractRectangleButtonObject c : level.rectangleShapes)
         {
             BodyDef bodyDef1 = new BodyDef();
@@ -182,7 +187,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             c.body = body1;
             PolygonShape polygonShape = new PolygonShape();
             Vector2 o = new Vector2(0, 0);
-            polygonShape.setAsBox(c.dimension.x / 2 / Constants.BOX2D_SCALE, c.dimension.y / 2 / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * c.rotation);
+            polygonShape.setAsBox((c.dimension.x / 2 ) / Constants.BOX2D_SCALE, (c.dimension.y / 2 - extraScale) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * c.rotation);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = polygonShape;
             fixtureDef1.isSensor = true;
@@ -217,6 +222,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         else if(state == LevelState.End)
         {
             this.endTime += deltaTime;
+
+            level.ball.scale.set(level.ball.scale.x * (1 - endTime / END_TIME), level.ball.scale.y * (1 - endTime / END_TIME));
             if(endTime > END_TIME)
             {
                 endTime = 0;
@@ -255,7 +262,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     {
         if(state == LevelState.Ready)
         {
-            return  Constants.WHITE;
+            return  Constants.BLUE;
         }
         else if(state == LevelState.Play)
         {

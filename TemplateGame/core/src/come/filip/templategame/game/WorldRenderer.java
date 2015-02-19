@@ -103,10 +103,8 @@ public class WorldRenderer implements Disposable
         batch.setProjectionMatrix(cameraGUI.combined);
         batch.begin();
 
-        if (GamePreferences.instance.showFpsCounter)
-        {
-            renderGuiFpsCounter(batch);
-        }
+        renderGuiFpsCounter(batch);
+
         // draw game over text
         //renderGuiGameOverMessage(batch);
 

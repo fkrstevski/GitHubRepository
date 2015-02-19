@@ -50,7 +50,7 @@ public class Level
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
-        ball = new Ball((int) (Constants.BALL_RADIUS * 2), this.getFirstPoint().x, this.getFirstPoint().y, Constants.PURPLE, Constants.WHITE);
+        ball = new Ball((int) (Constants.BALL_RADIUS * 2), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
         backButton = new BackButton((int) (width * 0.05f),   // size
                 (int) (width * 0.03),    // x
                 (int) (width * 0.03),     // y
@@ -58,13 +58,19 @@ public class Level
                 Constants.BLUE);      // inside color
 
         // Add Start Circle
-        StartTarget st = new StartTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()), this.getFirstPoint().x,
+        StartTarget st = new StartTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
         circleShapes.add(st);
 
-        // Add End Circle
-        endCircle = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()), this.getLastPoint().x,
+        // Add End Circle - for target collision
+        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * 0.25), this.getLastPoint().x,
+                this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
+
+        // Add End Circle - for boundary collision
+        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
+        circleShapes.add(et);
+
 
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
@@ -109,12 +115,13 @@ public class Level
             circleShapes.get(i).render(batch);
         }
 
-        endCircle.render(batch);
-
         for (int i = 0; i < rectangleShapes.size(); ++i)
         {
             rectangleShapes.get(i).render(batch);
         }
+
+        //endCircle.render(batch);
+
         ball.render(batch);
         backButton.render(batch);
 

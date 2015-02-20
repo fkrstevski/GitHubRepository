@@ -13,7 +13,6 @@ import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.objects.BackButton;
 import come.filip.templategame.screens.objects.EndTarget;
 import come.filip.templategame.screens.objects.MiddlePart;
-import come.filip.templategame.screens.objects.StartTarget;
 import come.filip.templategame.util.Constants;
 
 public class Level
@@ -30,6 +29,16 @@ public class Level
     private int level;
     private int zone;
     private int stage;
+
+    public EndTarget startCircleGreenIcon;
+    public EndTarget startCircleYellowIcon;
+    public EndTarget startCircleRedIcon;
+    public EndTarget finishCircleGreenIcon;
+    public EndTarget finishCircleYellowIcon;
+    public EndTarget finishCircleRedIcon;
+
+    public EndTarget startCircle;
+    public EndTarget finishCircle;
 
     public Level(int zone, int stage, int level)
     {
@@ -58,9 +67,18 @@ public class Level
                 Constants.BLUE);      // inside color
 
         // Add Start Circle
-        StartTarget st = new StartTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+        EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
         circleShapes.add(st);
+
+        startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+                this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
+        startCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+                this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE);
+        startCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+                this.getFirstPoint().y, Constants.RED, Constants.WHITE);
+
+        startCircle = startCircleRedIcon;
 
         // Add End Circle - for target collision
         endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * 0.25), this.getLastPoint().x,
@@ -68,8 +86,17 @@ public class Level
 
         // Add End Circle - for boundary collision
         EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
-                this.getLastPoint().y, Constants.TURQUOISE, Constants.WHITE);
+                this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
+
+        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+                this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
+        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+                this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
+        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+                this.getLastPoint().y, Constants.RED, Constants.WHITE);
+
+        finishCircle = finishCircleRedIcon;
 
 
         // Add Middle Circles
@@ -115,6 +142,16 @@ public class Level
             circleShapes.get(i).render(batch);
         }
 
+        if(this.startCircle != null)
+        {
+            startCircle.render(batch);
+        }
+
+        if(this.finishCircle != null)
+        {
+            finishCircle.render(batch);
+        }
+
         for (int i = 0; i < rectangleShapes.size(); ++i)
         {
             rectangleShapes.get(i).render(batch);
@@ -124,6 +161,8 @@ public class Level
 
         ball.render(batch);
         backButton.render(batch);
+
+
 
     }
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class EndTarget extends AbstractCircleButtonObject
 {
-    public static final String TAG = StartTarget.class.getName();
+    public static final String TAG = EndTarget.class.getName();
 
     public EndTarget(int size, float x, float y, Color outsideColor, Color insideColor)
     {

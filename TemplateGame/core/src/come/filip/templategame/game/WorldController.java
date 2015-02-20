@@ -55,9 +55,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private static final float READY_TIME = 2.0f;
     private static final float END_TIME = 2.0f;
+    private static final float GREEN_ICON_TIME = 0.75f;
 
     private float readyTime;
     private float endTime;
+    private float greenTime;
 
     enum LevelState
     {
@@ -79,8 +81,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.currentZone = 0;
         this.readyTime = 0;
         this.endTime = 0;
+        this.greenTime = 0;
         this.state = LevelState.Ready;
         init();
+
+        this.level.startCircle = this.level.startCircleRedIcon;
+        this.level.finishCircle = this.level.finishCircleRedIcon;
+        AudioManager.instance.play(Assets.instance.sounds.tickSound);
     }
 
     private void init()
@@ -203,11 +210,39 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         if(state == LevelState.Ready)
         {
             this.readyTime += deltaTime;
-            if(readyTime > READY_TIME)
+
+//            Gdx.app.debug(TAG, " --------------- ");
+//            Gdx.app.debug(TAG, " deltaTime = " + deltaTime + " readyTime = " + readyTime);
+//            Gdx.app.debug(TAG, " readyTime / READY_TIME = " + readyTime / READY_TIME + " 1.0f/2.0f = " + 1.0f/2.0f);
+
+            float ratio = readyTime / READY_TIME;
+
+            if(this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && ratio >= 0.0f && ratio < 0.5f)
             {
+                Gdx.app.debug(TAG, "RED");
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            }
+            else if(this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && ratio > 0.5f && ratio < 1f)
+            {
+                Gdx.app.debug(TAG, "YELLOW");
+                this.level.startCircle = this.level.startCircleYellowIcon;
+                this.level.finishCircle = this.level.finishCircleYellowIcon;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            }
+
+            if (readyTime > READY_TIME)
+            {
+                Gdx.app.debug(TAG, "GREEN");
                 readyTime = 0;
+                this.level.startCircle = this.level.startCircleGreenIcon;
+                this.level.finishCircle = this.level.finishCircleGreenIcon;
+                this.greenTime = 0;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Play;
             }
+
         }
         else if(state == LevelState.Next)
         {
@@ -216,6 +251,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             {
                 endTime = 0;
                 this.state = LevelState.Ready;
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
                 nextLevel();
             }
         }
@@ -228,29 +266,42 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             {
                 endTime = 0;
                 this.state = LevelState.Ready;
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
                 this.initLevel();
             }
         }
-
-        if(state == LevelState.Play)
+        else if(state == LevelState.Play)
         {
             level.update(deltaTime);
             handleInputGame(deltaTime);
             b2world.step(deltaTime, 8, 3);
 
+            this.greenTime += deltaTime;
+            if(this.greenTime > GREEN_ICON_TIME)
+            {
+                this.greenTime = 0;
+                this.level.finishCircle = null;
+                this.level.startCircle = null;
+            }
+
             if(this.numberOfContacts == 0)
             {
                 this.state = LevelState.End;
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
             }
 
         }
 
         cameraHelper.update(deltaTime);
-        if (!isGameOver())
+/*        if (!isGameOver())
         {
             AudioManager.instance.play(Assets.instance.sounds.liveLost);
             gameOver = true;
         }
+        */
     }
 
     public boolean isGameOver()
@@ -260,6 +311,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public Color getBgColor()
     {
+        return  Constants.BLUE;
+/*
         if(state == LevelState.Ready)
         {
             return  Constants.BLUE;
@@ -278,6 +331,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         return Constants.BLACK;
+        */
     }
 
     private void handleDebugInput(float deltaTime)
@@ -364,6 +418,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             //this.nextLevel();
             this.state = LevelState.Next;
+            this.level.startCircle = this.level.startCircleGreenIcon;
+            this.level.finishCircle = this.level.finishCircleGreenIcon;
         }
         // Back to Menu
         else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
@@ -433,6 +489,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Gdx.app.debug(TAG, "beginContact: B-> Ball A-> Last");
                 //this.nextLevel();
                 this.state = LevelState.Next;
+                this.level.startCircle = this.level.startCircleGreenIcon;
+                this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
             else
             {
@@ -446,6 +504,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Gdx.app.debug(TAG, "beginContact: A-> Ball B-> Last");
                 //this.nextLevel();
                 this.state = LevelState.Next;
+                this.level.startCircle = this.level.startCircleGreenIcon;
+                this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
             else
             {

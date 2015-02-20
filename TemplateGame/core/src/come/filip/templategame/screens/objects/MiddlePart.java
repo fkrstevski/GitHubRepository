@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class MiddlePart extends AbstractRectangleButtonObject
 {
-    public static final String TAG = StartTarget.class.getName();
+    public static final String TAG = MiddlePart.class.getName();
 
     public MiddlePart(int width, int height, float x, float y, Color outsideColor, Color insideColor)
     {

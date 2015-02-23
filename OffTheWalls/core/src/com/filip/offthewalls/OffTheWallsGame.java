@@ -27,7 +27,7 @@ public class OffTheWallsGame extends ApplicationAdapter
         StageLoader.init();
 
         // Initialize controller and renderer
-        worldController = new WorldController(0, 0, 0);
+        worldController = new WorldController(0, 1, 0);
         worldRenderer = new WorldRenderer(worldController);
 
         // Game world is active on start
@@ -42,12 +42,11 @@ public class OffTheWallsGame extends ApplicationAdapter
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(Gdx.graphics.getDeltaTime());
+
+            //Gdx.app.debug(TAG, "FPS: " + Gdx.graphics.getFramesPerSecond());
         }
 
-        // Sets the clear screen color to Blue
-        Gdx.gl.glClearColor(Constants.BLUE.r, Constants.BLUE.g, Constants.BLUE.b, Constants.BLUE.a);
-        // Clears the screen
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         // Render game world to screen
         worldRenderer.render();
     }

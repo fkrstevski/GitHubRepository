@@ -1,27 +1,59 @@
 package com.filip.theedge;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.filip.theedge.screen.LoadingScreen;
 
-public class TheEdge extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+public class TheEdge extends Game {
+    public AssetManager manager = new AssetManager();
+    public SpriteBatch batch;
+    public FPSLogger fpsLogger;
+    public OrthographicCamera camera;
+    public TextureAtlas atlas;
+    public Viewport viewport;
+    public static final int screenWidth=800;
+    public static final int screenHeight=480;
+    public BitmapFont font;
+    public boolean soundEnabled;
+    public float soundVolume;
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
+    public TheEdge() {
+        fpsLogger=new FPSLogger();
+        camera = new OrthographicCamera();
+        camera.position.set(screenWidth/2,screenHeight/2,0);
+        viewport = new FitViewport(screenWidth, screenHeight, camera);
+        soundEnabled=true;
+        soundVolume=1;
+    }
+
+    @Override
+    public void create() {
+        batch=new SpriteBatch();
+        setScreen(new LoadingScreen(this));
+    }
+
+    @Override
+    public void render(){
+        //fpsLogger.log();
+        super.render();
+    }
+
+    @Override
+    public void resize (int width, int height) {
+        viewport.update(width, height);
+    }
+    @Override
+    public void dispose () {
+        batch.dispose();
+        atlas.dispose();
+        manager.dispose();
+    }
+
 }

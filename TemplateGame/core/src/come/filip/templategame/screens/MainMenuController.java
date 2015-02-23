@@ -1,6 +1,7 @@
 package come.filip.templategame.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -83,6 +84,17 @@ public class MainMenuController extends InputAdapter implements Disposable
             Gdx.app.debug(TAG, "SET TARGET INFO BUTTON");
             Gdx.net.openURI("http://www.nba.com");
         }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode)
+    {
+        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK)
+        {
+            Gdx.app.exit();
+        }
+
         return false;
     }
 

@@ -4,15 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants
 {
+    public static final boolean DEBUG_BUILD = false;
 
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack";
-
-    // Delay after game over
-    public static final float TIME_DELAY_GAME_OVER = 3;
-
-    // Delay after game finished
-    public static final float TIME_DELAY_GAME_FINISHED = 6;
 
     // Game preferences file
     public static final String PREFERENCES = "canyonbunny.prefs";
@@ -21,11 +16,6 @@ public class Constants
     public static final String shaderMonochromeVertex = "shaders/monochrome.vs";
     public static final String shaderMonochromeFragment = "shaders/monochrome.fs";
 
-    // Angle of rotation for dead zone (no movement)
-    public static final float ACCEL_ANGLE_DEAD_ZONE = 5.0f;
-
-    // Max angle of rotation needed to gain maximum movement velocity
-    public static final float ACCEL_MAX_ANGLE_MAX_MOVEMENT = 20.0f;
 
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;

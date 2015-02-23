@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 import come.filip.templategame.game.WorldController;
 import come.filip.templategame.game.WorldRenderer;
+import come.filip.templategame.util.Constants;
 import come.filip.templategame.util.GamePreferences;
 
 public class GameScreen extends AbstractGameScreen
@@ -35,10 +36,8 @@ public class GameScreen extends AbstractGameScreen
             worldController.update(deltaTime);
         }
 
-        Color bgColor = worldController.getBgColor();
-
         // Sets the clear screen color to: Cornflower Blue
-        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
+        Gdx.gl.glClearColor(Constants.BLUE.r, Constants.BLUE.g, Constants.BLUE.b, Constants.BLUE.a);
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Render game world to screen

@@ -35,7 +35,6 @@ public class WorldRenderer implements Disposable
     private static final String TAG = WorldRenderer.class.getName();
 
     private OrthographicCamera camera;
-    private OrthographicCamera cameraGUI;
     private SpriteBatch batch;
     private WorldController worldController;
     private Box2DDebugRenderer b2debugRenderer;
@@ -55,10 +54,6 @@ public class WorldRenderer implements Disposable
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
         camera.update();
-        cameraGUI = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cameraGUI.position.set(0, 0, 0);
-        cameraGUI.setToOrtho(true); // flip y-axis
-        cameraGUI.update();
         b2debugRenderer = new Box2DDebugRenderer();
         shaderMonochrome = new ShaderProgram(Gdx.files.internal(Constants.shaderMonochromeVertex),
                 Gdx.files.internal(Constants.shaderMonochromeFragment));
@@ -72,13 +67,11 @@ public class WorldRenderer implements Disposable
     public void render()
     {
         renderWorld(batch);
-        renderGui(batch);
     }
 
     private void renderWorld(SpriteBatch batch)
     {
         worldController.cameraHelper.applyTo(camera);
-        batch.setProjectionMatrix(camera.combined);
 
         if (worldController.renderPhysics)
         {
@@ -86,35 +79,44 @@ public class WorldRenderer implements Disposable
         }
         else
         {
+            batch.setProjectionMatrix(camera.combined);
             batch.begin();
             //if (GamePreferences.instance.useMonochromeShader) {
             //	batch.setShader(shaderMonochrome);
             //	shaderMonochrome.setUniformf("u_amount", 1.0f);
             //}
-            worldController.level.render(batch);
+
+            if(worldController.state == WorldController.LevelState.GameOver)
+            {
+                renderGuiGameOver(batch);
+            }
+            else if(worldController.state == WorldController.LevelState.GameBeat)
+            {
+                renderGuiGameBeat(batch);
+            }
+            else
+            {
+                worldController.level.render(batch);
+                renderGuiScore(batch);
+            }
+
+            worldController.level.renderBackButton(batch);
+
+            if(Constants.DEBUG_BUILD)
+            {
+                renderGuiLevel(batch);
+                renderGuiFpsCounter(batch);
+            }
 
             batch.setShader(null);
             batch.end();
         }
     }
 
-    private void renderGui(SpriteBatch batch)
-    {
-        batch.setProjectionMatrix(cameraGUI.combined);
-        batch.begin();
-
-        renderGuiFpsCounter(batch);
-
-        // draw game over text
-        //renderGuiGameOverMessage(batch);
-
-        batch.end();
-    }
-
     private void renderGuiFpsCounter(SpriteBatch batch)
     {
-        float x = cameraGUI.viewportWidth - 55;
-        float y = cameraGUI.viewportHeight - 15;
+        float x = camera.viewportWidth - 55;
+        float y = camera.viewportHeight - 15;
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultNormal;
         if (fps >= 45)
@@ -137,29 +139,55 @@ public class WorldRenderer implements Disposable
         fpsFont.setColor(1, 1, 1, 1); // white
     }
 
-    private void renderGuiGameOverMessage(SpriteBatch batch)
+    private void renderGuiLevel(SpriteBatch batch)
     {
-        float x = cameraGUI.viewportWidth / 2;
-        float y = cameraGUI.viewportHeight / 2;
-        if (worldController.isGameOver())
-        {
-            BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
-            fontGameOver.setColor(1, 0.75f, 0.25f, 1);
-            fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 1, BitmapFont.HAlignment.CENTER);
-            fontGameOver.setColor(1, 1, 1, 1);
-        }
+        float x = camera.viewportWidth / 2;
+        float y = camera.viewportHeight - 30;
+        String level = "Level: " + GamePreferences.instance.zone + "-" +
+                       GamePreferences.instance.stage + "-" +
+                       GamePreferences.instance.level;
+
+        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
+        fontGameOver.setColor(Constants.WHITE);
+        fontGameOver.drawMultiLine(batch, level, x, y, 1, BitmapFont.HAlignment.CENTER);
+    }
+
+    private void renderGuiGameOver(SpriteBatch batch)
+    {
+        float x = camera.viewportWidth / 2;
+        float y = camera.viewportHeight / 2;
+
+        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
+        fontGameOver.setColor(Constants.RED);
+        fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 1, BitmapFont.HAlignment.CENTER);
+    }
+
+    private void renderGuiGameBeat(SpriteBatch batch)
+    {
+        float x = camera.viewportWidth / 2;
+        float y = camera.viewportHeight / 2;
+
+        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
+        fontGameOver.setColor(Constants.GREEN);
+        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + (int)GamePreferences.instance.score, x, y, 1, BitmapFont.HAlignment.CENTER);
+    }
+
+    private void renderGuiScore(SpriteBatch batch)
+    {
+        float x = camera.viewportWidth / 2;
+        float y = 0;
+        String level = "" + (int)GamePreferences.instance.score;
+
+        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
+        fontGameOver.setColor(Constants.WHITE);
+        fontGameOver.drawMultiLine(batch, level, x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
     public void resize(int width, int height)
     {
-
         // TODO: Look at viewport width
         /*camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
-        camera.update();
-		cameraGUI.viewportHeight = Gdx.graphics.getHeight();
-		cameraGUI.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
-		cameraGUI.position.set(cameraGUI.viewportWidth / 2, cameraGUI.viewportHeight / 2, 0);
-		cameraGUI.update();*/
+        camera.update();*/
     }
 
     @Override

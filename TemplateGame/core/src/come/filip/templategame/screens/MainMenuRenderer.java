@@ -1,5 +1,6 @@
 package come.filip.templategame.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -63,6 +64,7 @@ public class MainMenuRenderer implements Disposable
     {
         worldController.cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         //if (GamePreferences.instance.useMonochromeShader) {
         //	batch.setShader(shaderMonochrome);
@@ -78,7 +80,10 @@ public class MainMenuRenderer implements Disposable
         batch.setProjectionMatrix(cameraGUI.combined);
         batch.begin();
 
-        renderGuiFpsCounter(batch);
+        if(Constants.DEBUG_BUILD)
+        {
+            renderGuiFpsCounter(batch);
+        }
 
         batch.end();
     }

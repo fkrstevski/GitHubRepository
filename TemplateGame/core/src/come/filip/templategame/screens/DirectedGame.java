@@ -13,12 +13,7 @@ public abstract class DirectedGame implements ApplicationListener
 
     private boolean init;
     private AbstractGameScreen currScreen;
-    private AbstractGameScreen nextScreen;
-    private FrameBuffer currFbo;
-    private FrameBuffer nextFbo;
     private SpriteBatch batch;
-    private float t;
-    private ScreenTransition screenTransition;
 
     public void setScreen(AbstractGameScreen screen)
     {
@@ -27,28 +22,19 @@ public abstract class DirectedGame implements ApplicationListener
 
     public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition)
     {
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
         if (!init)
         {
-            currFbo = new FrameBuffer(Format.RGB888, w, h, false);
-            nextFbo = new FrameBuffer(Format.RGB888, w, h, false);
+
             batch = new SpriteBatch();
             init = true;
         }
-        // start new transition
-        nextScreen = screen;
-        nextScreen.show(); // activate next screen
-        nextScreen.resize(w, h);
-        nextScreen.render(0); // let next screen update() once
-        if (currScreen != null)
-        {
-            currScreen.pause();
+        if (this.currScreen != null) this.currScreen.hide();
+        this.currScreen = screen;
+        if (this.currScreen != null) {
+            this.currScreen.show();
+            this.currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
-        nextScreen.pause();
-        Gdx.input.setInputProcessor(null); // disable input
-        this.screenTransition = screenTransition;
-        t = 0;
+        Gdx.input.setInputProcessor(currScreen.getInputProcessor());
     }
 
     @Override
@@ -56,55 +42,12 @@ public abstract class DirectedGame implements ApplicationListener
     {
         // get delta time and ensure an upper limit of one 60th second
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
-        if (nextScreen == null)
-        {
+
             // no ongoing transition
             if (currScreen != null)
             {
                 currScreen.render(deltaTime);
             }
-        }
-        else
-        {
-            // ongoing transition
-            float duration = 0;
-            if (screenTransition != null)
-            {
-                duration = screenTransition.getDuration();
-            }
-            t = Math.min(t + deltaTime, duration);
-            if (screenTransition == null || t >= duration)
-            {
-                // no transition effect set or transition has just finished
-                if (currScreen != null)
-                {
-                    currScreen.hide();
-                }
-                nextScreen.resume();
-                // enable input for next screen
-                Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
-                // switch screens
-                currScreen = nextScreen;
-                nextScreen = null;
-                screenTransition = null;
-            }
-            else
-            {
-                // render screens to FBOs
-                currFbo.begin();
-                if (currScreen != null)
-                {
-                    currScreen.render(deltaTime);
-                }
-                currFbo.end();
-                nextFbo.begin();
-                nextScreen.render(deltaTime);
-                nextFbo.end();
-                // render transition effect to screen
-                float alpha = t / duration;
-                screenTransition.render(batch, currFbo.getColorBufferTexture(), nextFbo.getColorBufferTexture(), alpha);
-            }
-        }
     }
 
     @Override
@@ -114,10 +57,7 @@ public abstract class DirectedGame implements ApplicationListener
         {
             currScreen.resize(width, height);
         }
-        if (nextScreen != null)
-        {
-            nextScreen.resize(width, height);
-        }
+
     }
 
     @Override
@@ -145,16 +85,9 @@ public abstract class DirectedGame implements ApplicationListener
         {
             currScreen.hide();
         }
-        if (nextScreen != null)
-        {
-            nextScreen.hide();
-        }
         if (init)
         {
-            currFbo.dispose();
             currScreen = null;
-            nextFbo.dispose();
-            nextScreen = null;
             batch.dispose();
             init = false;
         }

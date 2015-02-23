@@ -15,6 +15,10 @@ public class GamePreferences
     public boolean music;
     public float volSound;
     public float volMusic;
+    public float score;
+    public int level;
+    public int stage;
+    public int zone;
     public boolean useMonochromeShader;
 
     private Preferences prefs;
@@ -32,6 +36,10 @@ public class GamePreferences
         volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
         useMonochromeShader = prefs.getBoolean("useMonochromeShader", false);
+        level = prefs.getInteger("level", 0);
+        stage = prefs.getInteger("stage", 0);
+        zone = prefs.getInteger("zone", 0);
+        score = prefs.getFloat("score", 1000000);
     }
 
     public void save()
@@ -41,6 +49,10 @@ public class GamePreferences
         prefs.putFloat("volSound", volSound);
         prefs.putFloat("volMusic", volMusic);
         prefs.putBoolean("useMonochromeShader", useMonochromeShader);
+        prefs.putInteger("level", level);
+        prefs.putInteger("stage", stage);
+        prefs.putInteger("zone", zone);
+        prefs.putFloat("score", score);
         prefs.flush();
     }
 

@@ -3,12 +3,10 @@ package come.filip.templategame.game;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -19,24 +17,22 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-
-import java.util.Iterator;
 
 import come.filip.templategame.screens.DirectedGame;
 import come.filip.templategame.screens.MenuScreen;
 import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
 import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
 import come.filip.templategame.screens.transitions.ScreenTransition;
+import come.filip.templategame.screens.transitions.ScreenTransitionFade;
 import come.filip.templategame.screens.transitions.ScreenTransitionSlide;
 import come.filip.templategame.util.AudioManager;
 import come.filip.templategame.util.CameraHelper;
 import come.filip.templategame.util.Constants;
+import come.filip.templategame.util.GamePreferences;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener
 {
@@ -47,11 +43,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     public CameraHelper cameraHelper;
     public World b2world;
     private DirectedGame game;
-    private boolean gameOver;
-
-    private int currentLevel;
-    private int currentZone;
-    private int currentStage;
 
     private static final float READY_TIME = 2.0f;
     private static final float END_TIME = 2.0f;
@@ -61,12 +52,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float endTime;
     private float greenTime;
 
-    enum LevelState
+    public enum LevelState
     {
-        Ready,
-        Play,
-        Next,
-        End
+        Countdown,
+        Gameplay,
+        LevelComplete,
+        OffTheEdge,
+        GameOver,
+        GameBeat
     }
 
     public LevelState state;
@@ -76,13 +69,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         Box2D.init();
         this.game = game;
         this.renderPhysics = false;
-        this.currentLevel = 0;
-        this.currentStage = 0;
-        this.currentZone = 0;
         this.readyTime = 0;
         this.endTime = 0;
         this.greenTime = 0;
-        this.state = LevelState.Ready;
+        this.state = LevelState.Countdown;
         init();
 
         this.level.startCircle = this.level.startCircleRedIcon;
@@ -98,29 +88,29 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public void nextLevel()
     {
-        this.currentLevel++;
-        if (this.currentLevel > Constants.MAX_LEVELS - 1)
+        GamePreferences.instance.level++;
+        if (GamePreferences.instance.level > Constants.MAX_LEVELS - 1)
         {
-            this.currentLevel = 0;
-            this.currentStage++;
-            if (this.currentStage > StageLoader.getZone(this.currentZone).getNumberOfStages() - 1)
+            GamePreferences.instance.level = 0;
+            GamePreferences.instance.stage++;
+            if (GamePreferences.instance.stage > StageLoader.getZone(GamePreferences.instance.zone).getNumberOfStages() - 1)
             {
-                this.currentStage = 0;
-                this.currentZone++;
-                if (this.currentZone > StageLoader.getNumberOfZones() - 1)
+                GamePreferences.instance.stage = 0;
+                GamePreferences.instance.zone++;
+                if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1)
                 {
-                    this.currentZone = 0;
+                    state = LevelState.GameBeat;
+                    GamePreferences.instance.zone = 0;
                 }
             }
         }
-        Gdx.app.debug(TAG, "Zone = " + this.currentZone + " Stage = " + this.currentStage + " Level = " + this.currentLevel);
+        Gdx.app.debug(TAG, "Zone = " + GamePreferences.instance.zone + " Stage = " + GamePreferences.instance.stage + " Level = " + GamePreferences.instance.level);
         initLevel();
     }
 
     private void initLevel()
     {
-        gameOver = false;
-        level = new Level(this.currentZone, this.currentStage, this.currentLevel);
+        level = new Level();
 
         if (b2world != null)
         {
@@ -153,7 +143,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         body.createFixture(fixtureDef);
         circleShape.dispose();
 
-        // End Target Physics Body
+        // EndTarget Physics Body
         BodyDef bodyDef2 = new BodyDef();
         bodyDef2.type = BodyType.StaticBody;
         bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
@@ -207,13 +197,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     {
         handleDebugInput(deltaTime);
 
-        if(state == LevelState.Ready)
+        if(state == LevelState.Countdown)
         {
             this.readyTime += deltaTime;
-
-//            Gdx.app.debug(TAG, " --------------- ");
-//            Gdx.app.debug(TAG, " deltaTime = " + deltaTime + " readyTime = " + readyTime);
-//            Gdx.app.debug(TAG, " readyTime / READY_TIME = " + readyTime / READY_TIME + " 1.0f/2.0f = " + 1.0f/2.0f);
 
             float ratio = readyTime / READY_TIME;
 
@@ -240,24 +226,24 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
                 this.greenTime = 0;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
-                this.state = LevelState.Play;
+                this.state = LevelState.Gameplay;
             }
 
         }
-        else if(state == LevelState.Next)
+        else if(state == LevelState.LevelComplete)
         {
             this.endTime += deltaTime;
             if(endTime > END_TIME)
             {
                 endTime = 0;
-                this.state = LevelState.Ready;
+                this.state = LevelState.Countdown;
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
                 nextLevel();
             }
         }
-        else if(state == LevelState.End)
+        else if(state == LevelState.OffTheEdge)
         {
             this.endTime += deltaTime;
 
@@ -265,73 +251,56 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if(endTime > END_TIME)
             {
                 endTime = 0;
-                this.state = LevelState.Ready;
-                this.level.startCircle = this.level.startCircleRedIcon;
-                this.level.finishCircle = this.level.finishCircleRedIcon;
-                AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                this.initLevel();
+                GamePreferences.instance.score -= 100;
+                if(GamePreferences.instance.score <= 0)
+                {
+                    GamePreferences.instance.score = 0;
+                    state = LevelState.GameOver;
+                    AudioManager.instance.play(Assets.instance.sounds.liveLost);
+                }
+                else
+                {
+                    this.state = LevelState.Countdown;
+                    this.level.startCircle = this.level.startCircleRedIcon;
+                    this.level.finishCircle = this.level.finishCircleRedIcon;
+                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
+                    this.initLevel();
+                }
             }
         }
-        else if(state == LevelState.Play)
+        else if(state == LevelState.Gameplay)
         {
-            level.update(deltaTime);
-            handleInputGame(deltaTime);
-            b2world.step(deltaTime, 8, 3);
-
-            this.greenTime += deltaTime;
-            if(this.greenTime > GREEN_ICON_TIME)
+            GamePreferences.instance.score -= deltaTime * 10;
+            if(GamePreferences.instance.score <= 0)
             {
-                this.greenTime = 0;
-                this.level.finishCircle = null;
-                this.level.startCircle = null;
+                GamePreferences.instance.score = 0;
+                state = LevelState.GameOver;
+                AudioManager.instance.play(Assets.instance.sounds.liveLost);
             }
-
-            if(this.numberOfContacts == 0)
+            else
             {
-                this.state = LevelState.End;
-                this.level.startCircle = this.level.startCircleRedIcon;
-                this.level.finishCircle = this.level.finishCircleRedIcon;
-            }
+                level.update(deltaTime);
+                handleInputGame(deltaTime);
+                b2world.step(deltaTime, 8, 3);
 
+                this.greenTime += deltaTime;
+                if(this.greenTime > GREEN_ICON_TIME)
+                {
+                    this.greenTime = 0;
+                    this.level.finishCircle = null;
+                    this.level.startCircle = null;
+                }
+
+                if(this.numberOfContacts == 0)
+                {
+                    this.state = LevelState.OffTheEdge;
+                    this.level.startCircle = this.level.startCircleRedIcon;
+                    this.level.finishCircle = this.level.finishCircleRedIcon;
+                }
+            }
         }
 
         cameraHelper.update(deltaTime);
-/*        if (!isGameOver())
-        {
-            AudioManager.instance.play(Assets.instance.sounds.liveLost);
-            gameOver = true;
-        }
-        */
-    }
-
-    public boolean isGameOver()
-    {
-        return gameOver;
-    }
-
-    public Color getBgColor()
-    {
-        return  Constants.BLUE;
-/*
-        if(state == LevelState.Ready)
-        {
-            return  Constants.BLUE;
-        }
-        else if(state == LevelState.Play)
-        {
-            return  Constants.BLUE;
-        }
-        else if(state == LevelState.End)
-        {
-            return  Constants.RED;
-        }
-        else if(state == LevelState.Next)
-        {
-            return  Constants.GREEN;
-        }
-
-        return Constants.BLACK;
-        */
     }
 
     private void handleDebugInput(float deltaTime)
@@ -417,7 +386,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         else if (keycode == Keys.ENTER)
         {
             //this.nextLevel();
-            this.state = LevelState.Next;
+            this.state = LevelState.LevelComplete;
             this.level.startCircle = this.level.startCircleGreenIcon;
             this.level.finishCircle = this.level.finishCircleGreenIcon;
         }
@@ -438,7 +407,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void backToMenu()
     {
         // switch to menu screen
-        ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+        //ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+        ScreenTransition transition = ScreenTransitionFade.init(0.25f);
         game.setScreen(new MenuScreen(game), transition);
     }
 
@@ -454,8 +424,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else
         {
-            //level.next();
-            this.renderPhysics = !this.renderPhysics;
+            if(Constants.DEBUG_BUILD)
+            {
+                this.renderPhysics = !this.renderPhysics;
+            }
         }
         return false;
     }
@@ -487,8 +459,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (contact.getFixtureA().getBody() == level.endCircle.body)
             {
                 Gdx.app.debug(TAG, "beginContact: B-> Ball A-> Last");
-                //this.nextLevel();
-                this.state = LevelState.Next;
+                this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
@@ -502,8 +473,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (contact.getFixtureB().getBody() == level.endCircle.body)
             {
                 Gdx.app.debug(TAG, "beginContact: A-> Ball B-> Last");
-                //this.nextLevel();
-                this.state = LevelState.Next;
+                this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             }

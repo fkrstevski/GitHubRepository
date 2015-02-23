@@ -14,6 +14,7 @@ import come.filip.templategame.screens.objects.BackButton;
 import come.filip.templategame.screens.objects.EndTarget;
 import come.filip.templategame.screens.objects.MiddlePart;
 import come.filip.templategame.util.Constants;
+import come.filip.templategame.util.GamePreferences;
 
 public class Level
 {
@@ -26,9 +27,6 @@ public class Level
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
     public AbstractCircleButtonObject endCircle;
     private ArrayList<Vector2> points;
-    private int level;
-    private int zone;
-    private int stage;
 
     public EndTarget startCircleGreenIcon;
     public EndTarget startCircleYellowIcon;
@@ -40,18 +38,14 @@ public class Level
     public EndTarget startCircle;
     public EndTarget finishCircle;
 
-    public Level(int zone, int stage, int level)
+    public Level()
     {
-        init(zone, stage, level);
+        init();
     }
 
-    private void init(int zone, int stage, int level)
+    private void init()
     {
-
-        this.level = level;
-        this.zone = zone;
-        this.stage = stage;
-        this.points = StageLoader.getPoints(this.zone, this.stage);
+        this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
@@ -80,11 +74,11 @@ public class Level
 
         startCircle = startCircleRedIcon;
 
-        // Add End Circle - for target collision
+        // Add EndCircle - for target collision
         endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * 0.25), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
-        // Add End Circle - for boundary collision
+        // Add EndCircle - for boundary collision
         EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
@@ -160,15 +154,17 @@ public class Level
         //endCircle.render(batch);
 
         ball.render(batch);
+
+    }
+
+    public void renderBackButton(SpriteBatch batch)
+    {
         backButton.render(batch);
-
-
-
     }
 
     public float getLevelMultiplier()
     {
-        return Constants.LEVEL_MULTIPLIERS[level];
+        return Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level];
     }
 
     public Vector2 getPoint(int index)

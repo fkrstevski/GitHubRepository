@@ -6,16 +6,12 @@ public class Constants
 {
     public static final boolean DEBUG_BUILD = false;
 
-    // Location of description file for texture atlas
-    public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack";
-
     // Game preferences file
-    public static final String PREFERENCES = "canyonbunny.prefs";
+    public static final String PREFERENCES = "theedge.prefs";
 
     // Shader
     public static final String shaderMonochromeVertex = "shaders/monochrome.vs";
     public static final String shaderMonochromeFragment = "shaders/monochrome.fs";
-
 
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
@@ -38,6 +34,4 @@ public class Constants
 
 
     public static float BOX2D_SCALE = 10;
-
-
 }

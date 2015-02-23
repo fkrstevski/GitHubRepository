@@ -2,11 +2,7 @@ package come.filip.templategame.screens;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
-import come.filip.templategame.screens.transitions.ScreenTransition;
 
 public abstract class DirectedGame implements ApplicationListener
 {
@@ -17,20 +13,19 @@ public abstract class DirectedGame implements ApplicationListener
 
     public void setScreen(AbstractGameScreen screen)
     {
-        setScreen(screen, null);
-    }
-
-    public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition)
-    {
         if (!init)
         {
 
             batch = new SpriteBatch();
             init = true;
         }
-        if (this.currScreen != null) this.currScreen.hide();
+        if (this.currScreen != null)
+        {
+            this.currScreen.hide();
+        }
         this.currScreen = screen;
-        if (this.currScreen != null) {
+        if (this.currScreen != null)
+        {
             this.currScreen.show();
             this.currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
@@ -43,11 +38,11 @@ public abstract class DirectedGame implements ApplicationListener
         // get delta time and ensure an upper limit of one 60th second
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
 
-            // no ongoing transition
-            if (currScreen != null)
-            {
-                currScreen.render(deltaTime);
-            }
+        // no ongoing transition
+        if (currScreen != null)
+        {
+            currScreen.render(deltaTime);
+        }
     }
 
     @Override

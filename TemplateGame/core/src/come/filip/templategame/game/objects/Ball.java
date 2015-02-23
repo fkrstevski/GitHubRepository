@@ -1,6 +1,5 @@
 package come.filip.templategame.game.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 import come.filip.templategame.screens.objects.AbstractCircleButtonObject;

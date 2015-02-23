@@ -86,11 +86,11 @@ public class WorldRenderer implements Disposable
             //	shaderMonochrome.setUniformf("u_amount", 1.0f);
             //}
 
-            if(worldController.state == WorldController.LevelState.GameOver)
+            if (worldController.state == WorldController.LevelState.GameOver)
             {
                 renderGuiGameOver(batch);
             }
-            else if(worldController.state == WorldController.LevelState.GameBeat)
+            else if (worldController.state == WorldController.LevelState.GameBeat)
             {
                 renderGuiGameBeat(batch);
             }
@@ -102,7 +102,7 @@ public class WorldRenderer implements Disposable
 
             worldController.level.renderBackButton(batch);
 
-            if(Constants.DEBUG_BUILD)
+            if (Constants.DEBUG_BUILD)
             {
                 renderGuiLevel(batch);
                 renderGuiFpsCounter(batch);
@@ -144,8 +144,8 @@ public class WorldRenderer implements Disposable
         float x = camera.viewportWidth / 2;
         float y = camera.viewportHeight - 30;
         String level = "Level: " + GamePreferences.instance.zone + "-" +
-                       GamePreferences.instance.stage + "-" +
-                       GamePreferences.instance.level;
+                GamePreferences.instance.stage + "-" +
+                GamePreferences.instance.level;
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.WHITE);
@@ -169,14 +169,14 @@ public class WorldRenderer implements Disposable
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.GREEN);
-        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + (int)GamePreferences.instance.score, x, y, 1, BitmapFont.HAlignment.CENTER);
+        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + (int) GamePreferences.instance.score, x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
     private void renderGuiScore(SpriteBatch batch)
     {
         float x = camera.viewportWidth / 2;
         float y = 0;
-        String level = "" + (int)GamePreferences.instance.score;
+        String level = "" + (int) GamePreferences.instance.score;
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.WHITE);

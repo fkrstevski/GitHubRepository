@@ -2,12 +2,8 @@ package come.filip.templategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Disposable;
 
-import come.filip.templategame.screens.transitions.ScreenTransition;
-import come.filip.templategame.screens.transitions.ScreenTransitionFade;
-import come.filip.templategame.screens.transitions.ScreenTransitionSlide;
 import come.filip.templategame.util.CameraHelper;
 
 public class MainMenuController extends InputAdapter implements Disposable
@@ -62,11 +58,7 @@ public class MainMenuController extends InputAdapter implements Disposable
             if (zoomTime > MAX_ZOOM_TIME)
             {
                 this.mainMenu.state = MainMenu.MainMenuState.Done;
-                Gdx.app.debug(TAG, "before new GameScreen(game)");
-                //ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
-                ScreenTransition transition = ScreenTransitionFade.init(0.75f);
-                game.setScreen(new GameScreen(game), transition);
-                Gdx.app.debug(TAG, "after new GameScreen(game)");
+                game.setScreen(new GameScreen(game));
             }
         }
         else

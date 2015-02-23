@@ -26,17 +26,15 @@ public class Level
     public ArrayList<AbstractCircleButtonObject> circleShapes;
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
     public AbstractCircleButtonObject endCircle;
-    private ArrayList<Vector2> points;
-
     public EndTarget startCircleGreenIcon;
     public EndTarget startCircleYellowIcon;
     public EndTarget startCircleRedIcon;
     public EndTarget finishCircleGreenIcon;
     public EndTarget finishCircleYellowIcon;
     public EndTarget finishCircleRedIcon;
-
     public EndTarget startCircle;
     public EndTarget finishCircle;
+    private ArrayList<Vector2> points;
 
     public Level()
     {
@@ -79,15 +77,15 @@ public class Level
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision
-        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
 
-        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
-        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
-        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 ), this.getLastPoint().x,
+        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.RED, Constants.WHITE);
 
         finishCircle = finishCircleRedIcon;
@@ -136,12 +134,12 @@ public class Level
             circleShapes.get(i).render(batch);
         }
 
-        if(this.startCircle != null)
+        if (this.startCircle != null)
         {
             startCircle.render(batch);
         }
 
-        if(this.finishCircle != null)
+        if (this.finishCircle != null)
         {
             finishCircle.render(batch);
         }

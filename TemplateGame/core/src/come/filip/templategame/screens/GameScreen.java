@@ -2,7 +2,6 @@ package come.filip.templategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
 import come.filip.templategame.game.WorldController;

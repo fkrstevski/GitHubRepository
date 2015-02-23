@@ -1,6 +1,5 @@
 package come.filip.templategame.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import come.filip.templategame.game.Assets;
 import come.filip.templategame.util.Constants;
-import come.filip.templategame.util.GamePreferences;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -80,7 +78,7 @@ public class MainMenuRenderer implements Disposable
         batch.setProjectionMatrix(cameraGUI.combined);
         batch.begin();
 
-        if(Constants.DEBUG_BUILD)
+        if (Constants.DEBUG_BUILD)
         {
             renderGuiFpsCounter(batch);
         }

@@ -78,7 +78,7 @@ public class StageLoader
             {
                 for(int currentStage = 0; currentStage < numberOfStages; ++currentStage)
                 {
-                    String filename = "levels/Zone" + currentZone + "/" + "Stage" + currentStage + "/level.png";
+                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage +".png";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     assert (fileHandle != null);
 

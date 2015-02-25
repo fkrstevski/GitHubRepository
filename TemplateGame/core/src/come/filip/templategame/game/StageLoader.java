@@ -7,8 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -19,35 +17,6 @@ import java.util.ArrayList;
 public class StageLoader
 {
     private static final String TAG = StageLoader.class.getName();
-
-    public enum BLOCK_TYPE {
-        START(255, 0, 0),       // RED
-        FINISH(0, 255, 0),      // GREEN
-        POINT1(255, 127, 0),    // ORANGE
-        POINT2(255, 255, 0),    // YELLOW
-        POINT3(0, 127, 255),    // BLUEISH
-        POINT4(0, 255, 255),    // TURQUOISE
-        POINT5(0, 0, 255),      // BLUE
-        POINT6(127, 0, 255),    // PURPLE
-        POINT7(255, 0, 255),    // PINK
-        EMPTY(0, 0, 0),         // BLACK
-        BORDER(255, 255, 255);  // WHITE
-
-        private int color;
-
-        private BLOCK_TYPE (int r, int g, int b) {
-            color = r << 24 | g << 16 | b << 8 | 0xff;
-        }
-
-        public boolean sameColor (int color) {
-            return this.color == color;
-        }
-
-        public int getColor () {
-            return color;
-        }
-    }
-
     private static ArrayList<Zone> zones;
 
     public static void init()
@@ -67,7 +36,7 @@ public class StageLoader
 
         String nl = System.getProperty("line.separator");
 
-        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop)
         {
             Vector2 startPos = new Vector2();
             Vector2 finishPos = new Vector2();
@@ -75,11 +44,11 @@ public class StageLoader
 
             StringBuffer sb = new StringBuffer();
 
-            for(int currentZone = 0; currentZone < numberOfZones; ++currentZone)
+            for (int currentZone = 0; currentZone < numberOfZones; ++currentZone)
             {
-                for(int currentStage = 0; currentStage < numberOfStages; ++currentStage)
+                for (int currentStage = 0; currentStage < numberOfStages; ++currentStage)
                 {
-                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage +".png";
+                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage + ".png";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     assert (fileHandle != null);
 
@@ -105,47 +74,58 @@ public class StageLoader
                             // a match
 
                             // empty space
-                            if (BLOCK_TYPE.EMPTY.sameColor(currentPixel) || BLOCK_TYPE.BORDER.sameColor(currentPixel)) {
+                            if (BLOCK_TYPE.EMPTY.sameColor(currentPixel) || BLOCK_TYPE.BORDER.sameColor(currentPixel))
+                            {
                                 // do nothing
                             }
                             // START
-                            else if (BLOCK_TYPE.START.sameColor(currentPixel)) {
-                                startPos.set((float)pixelX/pixmapWidth*width, (float)pixelY/pixmapHeight * height);
+                            else if (BLOCK_TYPE.START.sameColor(currentPixel))
+                            {
+                                startPos.set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // FINISH
-                            else if (BLOCK_TYPE.FINISH.sameColor(currentPixel)) {
-                                finishPos.set((float)pixelX/pixmapWidth*width, (float)pixelY/pixmapHeight * height);
+                            else if (BLOCK_TYPE.FINISH.sameColor(currentPixel))
+                            {
+                                finishPos.set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 1
-                            else if (BLOCK_TYPE.POINT1.sameColor(currentPixel)) {
-                                points[0].set((float)pixelX/pixmapWidth*width, (float)pixelY/pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT1.sameColor(currentPixel))
+                            {
+                                points[0].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 2
-                            else if (BLOCK_TYPE.POINT2.sameColor(currentPixel)) {
-                                points[1].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT2.sameColor(currentPixel))
+                            {
+                                points[1].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 3
-                            else if (BLOCK_TYPE.POINT3.sameColor(currentPixel)) {
-                                points[2].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT3.sameColor(currentPixel))
+                            {
+                                points[2].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 4
-                            else if (BLOCK_TYPE.POINT4.sameColor(currentPixel)) {
-                                points[3].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT4.sameColor(currentPixel))
+                            {
+                                points[3].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 5
-                            else if (BLOCK_TYPE.POINT5.sameColor(currentPixel)) {
-                                points[4].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT5.sameColor(currentPixel))
+                            {
+                                points[4].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 6
-                            else if (BLOCK_TYPE.POINT6.sameColor(currentPixel)) {
-                                points[5].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT6.sameColor(currentPixel))
+                            {
+                                points[5].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // Point 7
-                            else if (BLOCK_TYPE.POINT7.sameColor(currentPixel)) {
-                                points[6].set((float)pixelX / pixmapWidth * width, (float)pixelY / pixmapHeight * height);
+                            else if (BLOCK_TYPE.POINT7.sameColor(currentPixel))
+                            {
+                                points[6].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
                             }
                             // unknown object/pixel color
-                            else {
+                            else
+                            {
                                 // red color channel
                                 int r = 0xff & (currentPixel >>> 24);
                                 // green color channel
@@ -162,22 +142,22 @@ public class StageLoader
                     }
 
                     // reset vectors
-                    sb.append(startPos.x + "," + startPos.y+";");
-                    startPos.set(0,0);
+                    sb.append(startPos.x + "," + startPos.y + ";");
+                    startPos.set(0, 0);
                     for (int i = 0; i < maxPoints; i++)
                     {
-                        if(!points[i].isZero())
+                        if (!points[i].isZero())
                         {
-                            sb.append(points[i].x + "," + points[i].y+";");
-                            points[i].set(0,0);
+                            sb.append(points[i].x + "," + points[i].y + ";");
+                            points[i].set(0, 0);
                         }
                         else
                         {
                             break;
                         }
                     }
-                    sb.append(finishPos.x + "," + finishPos.y+"");
-                    finishPos.set(0,0);
+                    sb.append(finishPos.x + "," + finishPos.y + "");
+                    finishPos.set(0, 0);
                     sb.append(nl);
 
 
@@ -208,7 +188,7 @@ public class StageLoader
                 {
                     os.close();
                 }
-                catch(IOException e)
+                catch (IOException e)
                 {
                     Gdx.app.error(TAG, "Failed to close output file!!!!!!", e);
                 }
@@ -233,8 +213,8 @@ public class StageLoader
             currentZone = i / numberOfStages;
             currentStage = i % numberOfStages;
 
-            Gdx.app.debug(TAG,"Zone = " + currentZone);
-            Gdx.app.debug(TAG,"Stage = " +  currentStage);
+            Gdx.app.debug(TAG, "Zone = " + currentZone);
+            Gdx.app.debug(TAG, "Stage = " + currentStage);
             String line = linesInFile[i];
             Gdx.app.debug(TAG, "line = " + line);
             String[] pointsInLine = line.split(";");
@@ -321,5 +301,37 @@ public class StageLoader
     public static ArrayList<Vector2> getPoints(int zone, int stage)
     {
         return zones.get(zone).getStage(stage).getPoints();
+    }
+
+    public enum BLOCK_TYPE
+    {
+        START(255, 0, 0),       // RED
+        FINISH(0, 255, 0),      // GREEN
+        POINT1(255, 127, 0),    // ORANGE
+        POINT2(255, 255, 0),    // YELLOW
+        POINT3(0, 127, 255),    // BLUEISH
+        POINT4(0, 255, 255),    // TURQUOISE
+        POINT5(0, 0, 255),      // BLUE
+        POINT6(127, 0, 255),    // PURPLE
+        POINT7(255, 0, 255),    // PINK
+        EMPTY(0, 0, 0),         // BLACK
+        BORDER(255, 255, 255);  // WHITE
+
+        private int color;
+
+        private BLOCK_TYPE(int r, int g, int b)
+        {
+            color = r << 24 | g << 16 | b << 8 | 0xff;
+        }
+
+        public boolean sameColor(int color)
+        {
+            return this.color == color;
+        }
+
+        public int getColor()
+        {
+            return color;
+        }
     }
 }

@@ -30,7 +30,8 @@ public class StageLoader
         POINT5(0, 0, 255),      // BLUE
         POINT6(127, 0, 255),    // PURPLE
         POINT7(255, 0, 255),    // PINK
-        EMPTY(0, 0, 0);         // BLACK
+        EMPTY(0, 0, 0),         // BLACK
+        BORDER(255, 255, 255);  // WHITE
 
         private int color;
 
@@ -54,8 +55,8 @@ public class StageLoader
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        int numberOfStages = 2;
-        int numberOfZones = 2;
+        int numberOfStages = 4;
+        int numberOfZones = 3;
         int maxPoints = 7;
 
         Vector2[] points = new Vector2[maxPoints];
@@ -104,7 +105,7 @@ public class StageLoader
                             // a match
 
                             // empty space
-                            if (BLOCK_TYPE.EMPTY.sameColor(currentPixel)) {
+                            if (BLOCK_TYPE.EMPTY.sameColor(currentPixel) || BLOCK_TYPE.BORDER.sameColor(currentPixel)) {
                                 // do nothing
                             }
                             // START
@@ -229,7 +230,7 @@ public class StageLoader
 
         for (int i = 0; i < linesInFile.length; i++)
         {
-            currentZone = i / numberOfZones;
+            currentZone = i / numberOfStages;
             currentStage = i % numberOfStages;
 
             Gdx.app.debug(TAG,"Zone = " + currentZone);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants
 {
-    public static final boolean DEBUG_BUILD = false;
+    public static final boolean DEBUG_BUILD = true;
 
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";
@@ -17,7 +17,7 @@ public class Constants
     public static final int END_CIRCLE_RADIUS = 100;
     public static final int INSIDE_CIRCLE_RADIUS = 27;
     public static final int RECTANGLE_WIDTH = 50;
-    public static final int END_CIRCLE_OUTLINE_RADIUS = 35;
+    public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 2;
     public static final float[] LEVEL_MULTIPLIERS = {1.5f, 0.75f};
 

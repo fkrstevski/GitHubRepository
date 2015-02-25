@@ -215,6 +215,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         else if (state == LevelState.LevelComplete)
         {
             this.endTime += deltaTime;
+
+            this.level.ball.position.lerp(this.level.getLastPoint(), endTime / END_TIME);
+
             if (endTime > END_TIME)
             {
                 endTime = 0;

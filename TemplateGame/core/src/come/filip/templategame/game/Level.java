@@ -73,7 +73,7 @@ public class Level
         startCircle = startCircleRedIcon;
 
         // Add EndCircle - for target collision
-        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * 0.25), this.getLastPoint().x,
+        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision

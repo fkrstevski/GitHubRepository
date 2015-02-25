@@ -2,6 +2,8 @@ package come.filip.templategame.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
 
+import come.filip.templategame.util.Constants;
+
 /**
  * Created by fkrstevski on 2015-02-12.
  */
@@ -17,6 +19,6 @@ public class EndTarget extends AbstractCircleButtonObject
     @Override
     public void fillInside(int size)
     {
-        buttonPixmap.fillCircle(size / 2, size / 2, (int) (size / 2 * 0.7));
+        buttonPixmap.fillCircle(size / 2, size / 2, (int) (size / 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER));
     }
 }

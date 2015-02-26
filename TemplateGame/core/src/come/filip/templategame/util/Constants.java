@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants
 {
-    public static final boolean DEBUG_BUILD = true;
+    public static final boolean DEBUG_BUILD = false;
 
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";
+
+    // iOS Leaderboard
+    public static final String IOS_LEADERBOARD_ID = "1212";
 
     // Shader
     public static final String shaderMonochromeVertex = "shaders/monochrome.vs";

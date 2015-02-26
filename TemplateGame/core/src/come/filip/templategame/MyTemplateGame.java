@@ -10,9 +10,14 @@ import come.filip.templategame.screens.DirectedGame;
 import come.filip.templategame.screens.MenuScreen;
 import come.filip.templategame.util.AudioManager;
 import come.filip.templategame.util.GamePreferences;
+import come.filip.templategame.util.IActivityRequestHandler;
 
 public class MyTemplateGame extends DirectedGame
 {
+    public MyTemplateGame(IActivityRequestHandler activityRequestHandler)
+    {
+        super(activityRequestHandler);
+    }
 
     @Override
     public void create()
@@ -29,6 +34,11 @@ public class MyTemplateGame extends DirectedGame
         // Load preferences for audio settings and start playing music
         GamePreferences.instance.load();
         AudioManager.instance.play(Assets.instance.music.song01);
+
+        if (this.activityRequestHandler != null)
+        {
+            this.activityRequestHandler.login();
+        }
 
         // Start game at menu screen
         setScreen(new MenuScreen(this));

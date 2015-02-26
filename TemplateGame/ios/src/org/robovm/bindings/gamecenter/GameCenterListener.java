@@ -1,41 +1,43 @@
-
 package org.robovm.bindings.gamecenter;
-
-import java.util.ArrayList;
 
 import org.robovm.apple.foundation.NSError;
 import org.robovm.apple.gamekit.GKAchievement;
 import org.robovm.apple.gamekit.GKLeaderboard;
 
-/** Listener for GameCenter events */
-public interface GameCenterListener {
+import java.util.ArrayList;
 
-    public void playerLoginCompleted ();
+/**
+ * Listener for GameCenter events
+ */
+public interface GameCenterListener
+{
 
-    public void playerLoginFailed (NSError error);
+    public void playerLoginCompleted();
 
-    public void achievementReportCompleted ();
+    public void playerLoginFailed(NSError error);
 
-    public void achievementReportFailed (NSError error);
+    public void achievementReportCompleted();
 
-    public void achievementsLoadCompleted (ArrayList<GKAchievement> achievements);
+    public void achievementReportFailed(NSError error);
 
-    public void achievementsLoadFailed (NSError error);
+    public void achievementsLoadCompleted(ArrayList<GKAchievement> achievements);
 
-    public void achievementsResetCompleted ();
+    public void achievementsLoadFailed(NSError error);
 
-    public void achievementsResetFailed (NSError error);
+    public void achievementsResetCompleted();
 
-    public void scoreReportCompleted ();
+    public void achievementsResetFailed(NSError error);
 
-    public void scoreReportFailed (NSError error);
+    public void scoreReportCompleted();
 
-    public void leaderboardsLoadCompleted (ArrayList<GKLeaderboard> scores);
+    public void scoreReportFailed(NSError error);
 
-    public void leaderboardsLoadFailed (NSError error);
+    public void leaderboardsLoadCompleted(ArrayList<GKLeaderboard> scores);
 
-    public void leaderboardViewDismissed ();
+    public void leaderboardsLoadFailed(NSError error);
 
-    public void achievementViewDismissed ();
+    public void leaderboardViewDismissed();
+
+    public void achievementViewDismissed();
 
 }

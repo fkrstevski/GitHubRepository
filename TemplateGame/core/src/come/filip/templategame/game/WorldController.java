@@ -82,6 +82,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1)
                 {
                     state = LevelState.GameBeat;
+                    this.game.submitScore((int) GamePreferences.instance.score);
                     GamePreferences.instance.zone = 0;
                 }
             }

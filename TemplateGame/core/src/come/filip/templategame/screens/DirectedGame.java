@@ -4,12 +4,20 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import come.filip.templategame.util.IActivityRequestHandler;
+
 public abstract class DirectedGame implements ApplicationListener
 {
 
+    protected IActivityRequestHandler activityRequestHandler;
     private boolean init;
     private AbstractGameScreen currScreen;
     private SpriteBatch batch;
+
+    public DirectedGame(IActivityRequestHandler activityRequestHandler)
+    {
+        this.activityRequestHandler = activityRequestHandler;
+    }
 
     public void setScreen(AbstractGameScreen screen)
     {
@@ -30,6 +38,14 @@ public abstract class DirectedGame implements ApplicationListener
             this.currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         Gdx.input.setInputProcessor(currScreen.getInputProcessor());
+    }
+
+    public void submitScore(int score)
+    {
+        if (this.activityRequestHandler != null)
+        {
+            this.activityRequestHandler.submitScore(score);
+        }
     }
 
     @Override

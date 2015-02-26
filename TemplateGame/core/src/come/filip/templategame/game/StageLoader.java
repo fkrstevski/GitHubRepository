@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import come.filip.templategame.util.Constants;
+
 /**
  * Created by fkrstevski on 2015-02-09.
  */
@@ -26,6 +28,13 @@ public class StageLoader
 
         int numberOfStages = 4;
         int numberOfZones = 3;
+
+        if (Constants.DEBUG_BUILD)
+        {
+            numberOfStages = 1;
+            numberOfZones = 1;
+
+        }
         int maxPoints = 7;
 
         Vector2[] points = new Vector2[maxPoints];

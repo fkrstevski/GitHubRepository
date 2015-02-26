@@ -82,7 +82,11 @@ public class MainMenuController extends InputAdapter implements Disposable
         else if (mainMenu.infoButton.isTouched(screenX, screenY))
         {
             Gdx.app.debug(TAG, "SET TARGET INFO BUTTON");
-            Gdx.net.openURI("http://www.nba.com");
+            //Gdx.net.openURI("http://www.nba.com");
+            if (this.game.activityRequestHandler != null)
+            {
+                this.game.activityRequestHandler.showScores();
+            }
         }
         return false;
     }

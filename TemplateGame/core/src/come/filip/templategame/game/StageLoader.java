@@ -23,9 +23,6 @@ public class StageLoader
 
     public static void init()
     {
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-
         int numberOfStages = 4;
         int numberOfZones = 3;
 
@@ -49,7 +46,6 @@ public class StageLoader
         {
             Vector2 startPos = new Vector2();
             Vector2 finishPos = new Vector2();
-
 
             StringBuffer sb = new StringBuffer();
 
@@ -90,47 +86,47 @@ public class StageLoader
                             // START
                             else if (BLOCK_TYPE.START.sameColor(currentPixel))
                             {
-                                startPos.set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                startPos.set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // FINISH
                             else if (BLOCK_TYPE.FINISH.sameColor(currentPixel))
                             {
-                                finishPos.set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                finishPos.set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 1
                             else if (BLOCK_TYPE.POINT1.sameColor(currentPixel))
                             {
-                                points[0].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[0].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 2
                             else if (BLOCK_TYPE.POINT2.sameColor(currentPixel))
                             {
-                                points[1].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[1].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 3
                             else if (BLOCK_TYPE.POINT3.sameColor(currentPixel))
                             {
-                                points[2].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[2].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 4
                             else if (BLOCK_TYPE.POINT4.sameColor(currentPixel))
                             {
-                                points[3].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[3].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 5
                             else if (BLOCK_TYPE.POINT5.sameColor(currentPixel))
                             {
-                                points[4].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[4].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 6
                             else if (BLOCK_TYPE.POINT6.sameColor(currentPixel))
                             {
-                                points[5].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[5].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // Point 7
                             else if (BLOCK_TYPE.POINT7.sameColor(currentPixel))
                             {
-                                points[6].set((float) pixelX / pixmapWidth * width, (float) pixelY / pixmapHeight * height);
+                                points[6].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
                             }
                             // unknown object/pixel color
                             else
@@ -217,6 +213,9 @@ public class StageLoader
         int currentZone = 0;
         int currentStage = 0;
 
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+
         for (int i = 0; i < linesInFile.length; i++)
         {
             currentZone = i / numberOfStages;
@@ -236,10 +235,9 @@ public class StageLoader
 
                 Gdx.app.debug(TAG, "Point = x:" + xANDy[0] + " y:" + xANDy[1]);
 
-                stagePoints.add(new Vector2(Float.parseFloat(xANDy[0]), Float.parseFloat(xANDy[1])));
+                stagePoints.add(new Vector2(Float.parseFloat(xANDy[0]) * width, Float.parseFloat(xANDy[1]) * height));
             }
             zones.get(currentZone).AddStage(currentStage, stagePoints);
-
         }
     }
 

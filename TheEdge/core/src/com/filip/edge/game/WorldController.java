@@ -82,11 +82,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1)
                 {
                     state = LevelState.GameBeat;
-                    this.game.submitScore((int) GamePreferences.instance.score);
+                    GamePreferences.instance.highestScore = GamePreferences.instance.currentScore;
+                    // Make sure we save the highest score ASAP
+                    GamePreferences.instance.save();
+                    this.game.submitScore(GamePreferences.instance.highestScore);
                     GamePreferences.instance.zone = 0;
+
+                    // Early out
+                    return;
                 }
             }
         }
+
+        // Save the scores
+        GamePreferences.instance.save();
+
         Gdx.app.debug(TAG, "Zone = " + GamePreferences.instance.zone + " Stage = " + GamePreferences.instance.stage + " Level = " + GamePreferences.instance.level);
         initLevel();
     }
@@ -237,10 +247,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (endTime > END_TIME)
             {
                 endTime = 0;
-                GamePreferences.instance.score -= 100;
-                if (GamePreferences.instance.score <= 0)
+                GamePreferences.instance.currentScore -= 100;
+                if (GamePreferences.instance.currentScore <= 0)
                 {
-                    GamePreferences.instance.score = 0;
+                    GamePreferences.instance.currentScore = 0;
                     state = LevelState.GameOver;
                     AudioManager.instance.play(Assets.instance.sounds.liveLost);
                 }
@@ -256,10 +266,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else if (state == LevelState.Gameplay)
         {
-            GamePreferences.instance.score -= deltaTime * 10;
-            if (GamePreferences.instance.score <= 0)
+            GamePreferences.instance.currentScore -= deltaTime * 10;
+            if (GamePreferences.instance.currentScore <= 0)
             {
-                GamePreferences.instance.score = 0;
+                GamePreferences.instance.currentScore = 0;
                 state = LevelState.GameOver;
                 AudioManager.instance.play(Assets.instance.sounds.liveLost);
             }

@@ -169,14 +169,14 @@ public class WorldRenderer implements Disposable
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.GREEN);
-        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + (int) GamePreferences.instance.score, x, y, 1, BitmapFont.HAlignment.CENTER);
+        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + GamePreferences.instance.highestScore, x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
     private void renderGuiScore(SpriteBatch batch)
     {
         float x = camera.viewportWidth / 2;
         float y = 0;
-        String level = "" + (int) GamePreferences.instance.score;
+        String level = "" + (int) GamePreferences.instance.currentScore;
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.WHITE);

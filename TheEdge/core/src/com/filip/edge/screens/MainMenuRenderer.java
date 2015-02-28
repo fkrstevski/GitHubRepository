@@ -1,4 +1,4 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import come.filip.templategame.game.Assets;
-import come.filip.templategame.util.Constants;
+import com.filip.edge.game.Assets;
+import com.filip.edge.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.

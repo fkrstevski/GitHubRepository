@@ -1,4 +1,4 @@
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 
 import com.badlogic.gdx.Application;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import come.filip.templategame.util.Constants;
+import com.filip.edge.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-09.

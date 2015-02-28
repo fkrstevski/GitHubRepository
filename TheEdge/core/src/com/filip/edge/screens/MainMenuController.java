@@ -1,11 +1,11 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 
-import come.filip.templategame.util.CameraHelper;
+import com.filip.edge.util.CameraHelper;
 
 public class MainMenuController extends InputAdapter implements Disposable
 {

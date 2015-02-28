@@ -1,13 +1,13 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 
-import come.filip.templategame.game.WorldController;
-import come.filip.templategame.game.WorldRenderer;
-import come.filip.templategame.util.Constants;
-import come.filip.templategame.util.GamePreferences;
+import com.filip.edge.game.WorldController;
+import com.filip.edge.game.WorldRenderer;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 
 public class GameScreen extends AbstractGameScreen
 {

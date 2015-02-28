@@ -1,11 +1,11 @@
-package come.filip.templategame.game.objects;
+package com.filip.edge.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import come.filip.templategame.util.Constants;
+import com.filip.edge.util.Constants;
 
 public abstract class AbstractGameObject
 {

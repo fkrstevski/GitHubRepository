@@ -1,10 +1,10 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 
-import come.filip.templategame.game.Assets;
+import com.filip.edge.game.Assets;
 
 public abstract class AbstractGameScreen implements Screen
 {

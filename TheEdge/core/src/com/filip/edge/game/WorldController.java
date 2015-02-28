@@ -1,4 +1,4 @@
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -20,14 +20,14 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
-import come.filip.templategame.screens.DirectedGame;
-import come.filip.templategame.screens.MenuScreen;
-import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
-import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
-import come.filip.templategame.util.AudioManager;
-import come.filip.templategame.util.CameraHelper;
-import come.filip.templategame.util.Constants;
-import come.filip.templategame.util.GamePreferences;
+import com.filip.edge.screens.DirectedGame;
+import com.filip.edge.screens.MenuScreen;
+import com.filip.edge.screens.objects.AbstractCircleButtonObject;
+import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.util.AudioManager;
+import com.filip.edge.util.CameraHelper;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener
 {

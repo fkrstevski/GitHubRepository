@@ -1,20 +1,20 @@
-package come.filip.templategame;
+package com.filip.edge;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
-import come.filip.templategame.game.Assets;
-import come.filip.templategame.game.StageLoader;
-import come.filip.templategame.screens.DirectedGame;
-import come.filip.templategame.screens.MenuScreen;
-import come.filip.templategame.util.AudioManager;
-import come.filip.templategame.util.GamePreferences;
-import come.filip.templategame.util.IActivityRequestHandler;
+import com.filip.edge.game.Assets;
+import com.filip.edge.game.StageLoader;
+import com.filip.edge.screens.DirectedGame;
+import com.filip.edge.screens.MenuScreen;
+import com.filip.edge.util.AudioManager;
+import com.filip.edge.util.GamePreferences;
+import com.filip.edge.util.IActivityRequestHandler;
 
-public class MyTemplateGame extends DirectedGame
+public class EdgeGame extends DirectedGame
 {
-    public MyTemplateGame(IActivityRequestHandler activityRequestHandler)
+    public EdgeGame(IActivityRequestHandler activityRequestHandler)
     {
         super(activityRequestHandler);
     }

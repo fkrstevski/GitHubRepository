@@ -1,11 +1,11 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import come.filip.templategame.screens.objects.InfoButton;
-import come.filip.templategame.screens.objects.PlayButton;
-import come.filip.templategame.util.Constants;
+import com.filip.edge.screens.objects.InfoButton;
+import com.filip.edge.screens.objects.PlayButton;
+import com.filip.edge.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.

@@ -1,10 +1,10 @@
-package come.filip.templategame.screens;
+package com.filip.edge.screens;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import come.filip.templategame.util.IActivityRequestHandler;
+import com.filip.edge.util.IActivityRequestHandler;
 
 public abstract class DirectedGame implements ApplicationListener
 {

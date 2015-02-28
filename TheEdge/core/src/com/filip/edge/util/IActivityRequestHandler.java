@@ -1,4 +1,4 @@
-package come.filip.templategame.util;
+package com.filip.edge.util;
 
 public interface IActivityRequestHandler
 {

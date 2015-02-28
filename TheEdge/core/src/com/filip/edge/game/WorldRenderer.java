@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,8 +26,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import come.filip.templategame.util.Constants;
-import come.filip.templategame.util.GamePreferences;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 
 public class WorldRenderer implements Disposable
 {

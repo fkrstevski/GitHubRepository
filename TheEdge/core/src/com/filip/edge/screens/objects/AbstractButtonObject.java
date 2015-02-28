@@ -1,11 +1,11 @@
-package come.filip.templategame.screens.objects;
+package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import come.filip.templategame.game.objects.AbstractGameObject;
+import com.filip.edge.game.objects.AbstractGameObject;
 
 /**
  * Created by fkrstevski on 2015-02-12.

@@ -1,4 +1,4 @@
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,14 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
-import come.filip.templategame.game.objects.Ball;
-import come.filip.templategame.screens.objects.AbstractCircleButtonObject;
-import come.filip.templategame.screens.objects.AbstractRectangleButtonObject;
-import come.filip.templategame.screens.objects.BackButton;
-import come.filip.templategame.screens.objects.EndTarget;
-import come.filip.templategame.screens.objects.MiddlePart;
-import come.filip.templategame.util.Constants;
-import come.filip.templategame.util.GamePreferences;
+import com.filip.edge.game.objects.Ball;
+import com.filip.edge.screens.objects.AbstractCircleButtonObject;
+import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.screens.objects.BackButton;
+import com.filip.edge.screens.objects.EndTarget;
+import com.filip.edge.screens.objects.MiddlePart;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 
 public class Level
 {

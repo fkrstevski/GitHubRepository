@@ -1,8 +1,8 @@
-package come.filip.templategame.screens.objects;
+package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
 
-import come.filip.templategame.util.Constants;
+import com.filip.edge.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.

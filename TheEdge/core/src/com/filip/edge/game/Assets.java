@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;

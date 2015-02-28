@@ -1,4 +1,4 @@
-package come.filip.templategame.screens.objects;
+package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;

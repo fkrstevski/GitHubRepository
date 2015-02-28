@@ -1,4 +1,4 @@
-package come.filip.templategame.game;
+package com.filip.edge.game;
 
 import com.badlogic.gdx.math.Vector2;
 

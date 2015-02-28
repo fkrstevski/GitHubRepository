@@ -1,4 +1,4 @@
-package come.filip.templategame.util;
+package com.filip.edge.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;

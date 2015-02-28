@@ -33,7 +33,6 @@ public class MainMenuController extends InputAdapter implements Disposable
     private void initMenu()
     {
         mainMenu = new MainMenu();
-        //cameraHelper.setTarget(mainMenu.playButton);
     }
 
     public void update(float deltaTime)
@@ -41,16 +40,7 @@ public class MainMenuController extends InputAdapter implements Disposable
         mainMenu.update(deltaTime);
         cameraHelper.update(deltaTime);
 
-        if (this.mainMenu.state == MainMenu.MainMenuState.Active)
-        {
-
-        }
-        else if (this.mainMenu.state == MainMenu.MainMenuState.ZoomInToInfo)
-        {
-
-
-        }
-        else if (this.mainMenu.state == MainMenu.MainMenuState.ZoomInToPlay)
+        if (this.mainMenu.state == MainMenu.MainMenuState.ZoomInToPlay)
         {
             float camZoomSpeed = 2 * deltaTime;
             cameraHelper.addZoom(-camZoomSpeed);
@@ -62,27 +52,21 @@ public class MainMenuController extends InputAdapter implements Disposable
                 game.setScreen(new GameScreen(game));
             }
         }
-        else
-        {
-            Gdx.app.error(TAG, "INVALID MENU STATE");
-        }
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button)
     {
-
-        Gdx.app.debug(TAG, "Touch at screenX = " + screenX + " screenY = " + screenY);
-
         if (mainMenu.playButton.isTouched(screenX, screenY))
         {
-            Gdx.app.debug(TAG, "SET TARGET PLAY BUTTON");
             this.mainMenu.state = MainMenu.MainMenuState.ZoomInToPlay;
         }
         else if (mainMenu.infoButton.isTouched(screenX, screenY))
         {
-            Gdx.app.debug(TAG, "SET TARGET INFO BUTTON");
-            //Gdx.net.openURI("http://www.nba.com");
+            Gdx.net.openURI("http://www.nba.com");
+        }
+        else if (mainMenu.leaderboardButton.isTouched(screenX, screenY))
+        {
             if (this.game.activityRequestHandler != null)
             {
                 this.game.activityRequestHandler.showScores();

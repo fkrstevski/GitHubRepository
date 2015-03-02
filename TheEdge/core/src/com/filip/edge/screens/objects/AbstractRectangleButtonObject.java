@@ -3,6 +3,7 @@ package com.filip.edge.screens.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.filip.edge.util.Constants;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -54,4 +55,59 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         return false;
     }
 
+    public void fillTopRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0, height - digitPartWidth, width, digitPartWidth);
+    }
+
+    public void fillTopLeftRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0, height / 2 , digitPartWidth, height / 2);
+    }
+
+    public void fillTopRightRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width - digitPartWidth, height / 2 , digitPartWidth, height / 2);
+    }
+
+    public void fillMiddleRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0, height / 2 - digitPartWidth / 2, width, digitPartWidth);
+    }
+
+    public void fillBottomRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0, 0, width, digitPartWidth);
+    }
+
+    public void fillBottomLeftRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0, 0, digitPartWidth, height / 2);
+    }
+
+    public void fillBottomRightRect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width - digitPartWidth, 0, digitPartWidth, height / 2);
+    }
 }

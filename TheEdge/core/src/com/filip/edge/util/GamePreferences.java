@@ -41,8 +41,8 @@ public class GamePreferences
         level = prefs.getInteger("level", 0);
         stage = prefs.getInteger("stage", 0);
         zone = prefs.getInteger("zone", 0);
-        currentScore = prefs.getInteger("currentScore", 1000000);
-        highestScore = prefs.getInteger("highestScore", 1000000);
+        currentScore = prefs.getInteger("currentScore", 1000000000);
+        highestScore = prefs.getInteger("highestScore", 1000000000);
     }
 
     public void save()

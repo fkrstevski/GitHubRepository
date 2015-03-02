@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 
 public class WorldRenderer implements Disposable
@@ -174,13 +175,10 @@ public class WorldRenderer implements Disposable
 
     private void renderGuiScore(SpriteBatch batch)
     {
-        float x = camera.viewportWidth / 2;
-        float y = 0;
-        String level = "" + (int) GamePreferences.instance.currentScore;
+        String score = "" + (int) GamePreferences.instance.currentScore;
 
-        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
-        fontGameOver.setColor(Constants.WHITE);
-        fontGameOver.drawMultiLine(batch, level, x, y, 1, BitmapFont.HAlignment.CENTER);
+        // Custom
+        DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 40), (int) (camera.viewportHeight / 40 * Constants.DIGIT_ASPECT_RATIO), batch);
     }
 
     public void resize(int width, int height)

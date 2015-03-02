@@ -3,11 +3,25 @@ package com.filip.edge.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.LeaderboardButton;
 import com.filip.edge.screens.objects.PlayButton;
 import com.filip.edge.screens.objects.digits.EightDigit;
+import com.filip.edge.screens.objects.digits.FiveDigit;
+import com.filip.edge.screens.objects.digits.FourDigit;
+import com.filip.edge.screens.objects.digits.NineDigit;
+import com.filip.edge.screens.objects.digits.OneDigit;
+import com.filip.edge.screens.objects.digits.SevenDigit;
+import com.filip.edge.screens.objects.digits.SixDigit;
+import com.filip.edge.screens.objects.digits.ThreeDigit;
+import com.filip.edge.screens.objects.digits.TwoDigit;
+import com.filip.edge.screens.objects.digits.ZeroDigit;
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.DigitRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -18,8 +32,6 @@ public class MainMenu
     public PlayButton playButton;
     public InfoButton infoButton;
     public LeaderboardButton leaderboardButton;
-
-    public EightDigit eightDigit;
 
     public MainMenuState state;
 
@@ -54,10 +66,6 @@ public class MainMenu
                 Constants.WHITE,         // outside color
                 Constants.BLUE);      // inside color
 
-
-        int eightWidth = (int) (width * 0.05f);
-        int eightHeight = (int) (eightWidth * Constants.DIGIT_ASPECT_RATIO);
-        eightDigit = new EightDigit(eightWidth, eightHeight, width / 2, 100, Constants.WHITE, Constants.GREEN);
     }
 
     public void update(float deltaTime)
@@ -67,16 +75,11 @@ public class MainMenu
         {
             playButton.update(deltaTime);
             infoButton.update(deltaTime);
-            eightDigit.update(deltaTime);
             leaderboardButton.update(deltaTime);
         }
         else if (this.state == MainMenuState.ZoomInToPlay)
         {
             playButton.update(deltaTime);
-        }
-        else
-        {
-            Gdx.app.error(TAG, "INVALID MENU STATE");
         }
     }
 
@@ -86,8 +89,10 @@ public class MainMenu
         {
             playButton.render(batch);
             infoButton.render(batch);
-            eightDigit.render(batch);
             leaderboardButton.render(batch);
+
+
+
         }
         else if (this.state == MainMenuState.ZoomInToPlay)
         {

@@ -9,6 +9,7 @@ import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.util.AudioManager;
+import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
 
@@ -33,6 +34,9 @@ public class EdgeGame extends DirectedGame
 
         // Load preferences for audio settings and start playing music
         GamePreferences.instance.load();
+
+        DigitRenderer.instance.load();
+
         AudioManager.instance.play(Assets.instance.music.song01);
 
         if (this.activityRequestHandler != null)

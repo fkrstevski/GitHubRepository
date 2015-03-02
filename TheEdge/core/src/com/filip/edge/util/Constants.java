@@ -16,6 +16,7 @@ public class Constants
     public static final String shaderMonochromeVertex = "shaders/monochrome.vs";
     public static final String shaderMonochromeFragment = "shaders/monochrome.fs";
 
+    public static final double DIGIT_ASPECT_RATIO = 1.8; // 1.8 = 9(height) / 5(width)
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
     public static final int INSIDE_CIRCLE_RADIUS = 27;
@@ -34,6 +35,7 @@ public class Constants
     public static final Color TURQUOISE = new Color(61 / 255.0f, 200 / 255.0f, 177 / 255.0f, 0xff / 255.0f);
     public static final Color RED = new Color(238 / 255.0f, 115 / 255.0f, 98 / 255.0f, 0xff / 255.0f);
     public static final Color BLACK = new Color(47 / 255.0f, 72 / 255.0f, 94 / 255.0f, 0xff / 255.0f);
+    public static final Color TRANSPARENT = new Color(0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 / 255.0f);
 
 
     public static float BOX2D_SCALE = 10;

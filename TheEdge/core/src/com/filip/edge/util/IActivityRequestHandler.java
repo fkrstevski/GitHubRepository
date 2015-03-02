@@ -13,7 +13,7 @@ public interface IActivityRequestHandler
 
     public boolean isSignedIn();
 
-    public void submitScore(int score);
+    public void submitScore(long score);
     //public void unlockAchievement(int stars);
 
     //gets the scores/achievements and displays them threw googles default widget

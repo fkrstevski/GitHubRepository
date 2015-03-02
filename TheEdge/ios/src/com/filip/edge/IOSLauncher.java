@@ -164,7 +164,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
-    public void submitScore(int score)
+    public void submitScore(long score)
     {
         if (this.isSignedIn)
         {

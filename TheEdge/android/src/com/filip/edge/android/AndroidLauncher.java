@@ -158,7 +158,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    public void submitScore(int score) {
+    public void submitScore(long score) {
         if (isSignedIn())
         {
             Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);

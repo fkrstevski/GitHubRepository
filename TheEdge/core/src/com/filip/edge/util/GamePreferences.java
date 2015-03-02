@@ -15,8 +15,8 @@ public class GamePreferences
     public boolean music;
     public float volSound;
     public float volMusic;
-    public int currentScore;
-    public int highestScore;
+    public float currentScore;
+    public float highestScore;
 
     public int level;
     public int stage;
@@ -41,8 +41,8 @@ public class GamePreferences
         level = prefs.getInteger("level", 0);
         stage = prefs.getInteger("stage", 0);
         zone = prefs.getInteger("zone", 0);
-        currentScore = prefs.getInteger("currentScore", 1000000000);
-        highestScore = prefs.getInteger("highestScore", 1000000000);
+        currentScore = prefs.getFloat("currentScore", 10000000);
+        highestScore = prefs.getFloat("highestScore", 10000000);
     }
 
     public void save()
@@ -55,8 +55,8 @@ public class GamePreferences
         prefs.putInteger("level", level);
         prefs.putInteger("stage", stage);
         prefs.putInteger("zone", zone);
-        prefs.putInteger("currentScore", currentScore);
-        prefs.putInteger("highestScore", highestScore);
+        prefs.putFloat("currentScore", currentScore);
+        prefs.putFloat("highestScore", highestScore);
         prefs.flush();
     }
 

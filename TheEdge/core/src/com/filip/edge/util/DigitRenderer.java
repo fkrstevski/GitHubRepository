@@ -64,14 +64,5 @@ public class DigitRenderer
             digitObject.position.set(x - count * digitWidth * 1.1f, y);
             digitObject.render(batch);
         }
-
-/*
-        for (int i = number.length() - 1; i >= 0; --i) {
-            int digit = Character.getNumericValue(number.charAt(i));
-
-            AbstractRectangleButtonObject digitObject = digits.get(digit);
-            digitObject.position.set(x + i * digitObject.dimension.x * 1.1f, y);
-            digitObject.render(batch);
-        }*/
     }
 }

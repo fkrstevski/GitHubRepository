@@ -85,7 +85,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     GamePreferences.instance.highestScore = GamePreferences.instance.currentScore;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
-                    this.game.submitScore(GamePreferences.instance.highestScore);
+                    this.game.submitScore((long)GamePreferences.instance.highestScore);
                     GamePreferences.instance.zone = 0;
 
                     // Early out
@@ -266,7 +266,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else if (state == LevelState.Gameplay)
         {
-            GamePreferences.instance.currentScore -= deltaTime * 10;
+            float dt = deltaTime * 100;
+            GamePreferences.instance.currentScore -= dt;
             if (GamePreferences.instance.currentScore <= 0)
             {
                 GamePreferences.instance.currentScore = 0;

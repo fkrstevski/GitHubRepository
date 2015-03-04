@@ -175,7 +175,7 @@ public class WorldRenderer implements Disposable
 
     private void renderGuiScore(SpriteBatch batch)
     {
-        String score = "" + (int) GamePreferences.instance.currentScore;
+        String score = "" + GamePreferences.instance.currentScore;
 
         // Custom
         DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 40), (int) (camera.viewportHeight / 40 * Constants.DIGIT_ASPECT_RATIO), batch);

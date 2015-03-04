@@ -45,6 +45,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float readyTime;
     private float endTime;
     private float greenTime;
+    private float levelScore;
 
     public WorldController(DirectedGame game)
     {
@@ -103,6 +104,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void initLevel()
     {
+        levelScore = 0;
         level = new Level();
 
         if (b2world != null)
@@ -266,8 +268,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else if (state == LevelState.Gameplay)
         {
-            float dt = deltaTime * 100;
-            GamePreferences.instance.currentScore -= dt;
+            // Update the score
+            // need to do something fishy since current score is a long and subtracting
+            // a small float might not update the actual value
+            levelScore += deltaTime * 5;
+            if(levelScore > 1)
+            {
+                GamePreferences.instance.currentScore -= (int)levelScore;
+                levelScore = levelScore % 1;
+            }
+
             if (GamePreferences.instance.currentScore <= 0)
             {
                 GamePreferences.instance.currentScore = 0;

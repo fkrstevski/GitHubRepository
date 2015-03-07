@@ -5,7 +5,7 @@ public interface IActivityRequestHandler
     //for google analytcis
     //public void setTrackerScreenName(String path);
     //for andmod ads
-    //public void showAds(boolean show);
+    public void showAds(boolean show);
     //for google play services
     public void login();
 

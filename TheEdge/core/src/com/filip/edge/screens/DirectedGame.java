@@ -40,6 +40,14 @@ public abstract class DirectedGame implements ApplicationListener
         Gdx.input.setInputProcessor(currScreen.getInputProcessor());
     }
 
+    public void showAds(boolean show)
+    {
+        if (this.activityRequestHandler != null)
+        {
+            this.activityRequestHandler.showAds(show);
+        }
+    }
+
     public void submitScore(long score)
     {
         if (this.activityRequestHandler != null)

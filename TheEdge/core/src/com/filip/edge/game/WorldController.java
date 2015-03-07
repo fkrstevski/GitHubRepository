@@ -72,6 +72,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public void nextLevel()
     {
+
         GamePreferences.instance.level++;
         if (GamePreferences.instance.level > Constants.MAX_LEVELS - 1)
         {
@@ -201,6 +202,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && ratio >= 0.0f && ratio < 0.5f)
             {
+                this.game.showAds(false);
                 Gdx.app.debug(TAG, "RED");
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
@@ -223,6 +225,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.greenTime = 0;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
+
+                this.game.showAds(true);
             }
 
         }

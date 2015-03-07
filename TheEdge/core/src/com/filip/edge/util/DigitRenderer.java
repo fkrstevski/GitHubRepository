@@ -40,7 +40,7 @@ public class DigitRenderer
         int width = Gdx.graphics.getWidth();
         digits = new ArrayList<AbstractRectangleButtonObject>();
 
-        digitWidth = (int) (width * 0.02f);
+        digitWidth = (int) (width * 0.03f);
         digitHeight = (int) (digitWidth * Constants.DIGIT_ASPECT_RATIO);
 
         digits.add(new ZeroDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));

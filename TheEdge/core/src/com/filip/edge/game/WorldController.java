@@ -1,6 +1,7 @@
 package com.filip.edge.game;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
@@ -84,10 +85,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 {
                     state = LevelState.GameBeat;
                     GamePreferences.instance.highestScore = GamePreferences.instance.currentScore;
+                    GamePreferences.instance.zone = 0;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
                     this.game.submitScore((long)GamePreferences.instance.highestScore);
-                    GamePreferences.instance.zone = 0;
 
                     // Early out
                     return;

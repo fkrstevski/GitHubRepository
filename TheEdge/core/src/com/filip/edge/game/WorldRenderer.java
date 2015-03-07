@@ -87,6 +87,8 @@ public class WorldRenderer implements Disposable
             //	shaderMonochrome.setUniformf("u_amount", 1.0f);
             //}
 
+            worldController.level.renderBackButton(batch);
+
             if (worldController.state == WorldController.LevelState.GameOver)
             {
                 renderGuiGameOver(batch);
@@ -100,8 +102,6 @@ public class WorldRenderer implements Disposable
                 worldController.level.render(batch);
                 renderGuiScore(batch);
             }
-
-            worldController.level.renderBackButton(batch);
 
             if (Constants.DEBUG_BUILD)
             {
@@ -178,7 +178,7 @@ public class WorldRenderer implements Disposable
         String score = "" + GamePreferences.instance.currentScore;
 
         // Custom
-        DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 40), (int) (camera.viewportHeight / 40 * Constants.DIGIT_ASPECT_RATIO), batch);
+        DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
     }
 
     public void resize(int width, int height)

@@ -23,6 +23,7 @@ public class Level
 
     public Ball ball;
     public BackButton backButton;
+    public MiddlePart topBackground;
     public ArrayList<AbstractCircleButtonObject> circleShapes;
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
     public AbstractCircleButtonObject endCircle;
@@ -56,7 +57,9 @@ public class Level
                 (int) (width * 0.03),    // x
                 (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
-                Constants.BLUE);      // inside color
+                Constants.TURQUOISE);      // inside color
+
+        topBackground = new MiddlePart(width, (int) (width * 0.06), width / 2, (int) (width * 0.06) /2,Constants.TURQUOISE, Constants.WHITE);
 
         // Add Start Circle
         EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
@@ -157,6 +160,7 @@ public class Level
 
     public void renderBackButton(SpriteBatch batch)
     {
+        topBackground.render(batch);
         backButton.render(batch);
     }
 

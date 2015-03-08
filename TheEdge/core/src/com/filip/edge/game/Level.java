@@ -118,9 +118,6 @@ public class Level
                     Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
 
-            Gdx.app.debug(TAG, "Angle = " + s.rotation);
-            Gdx.app.debug(TAG, "Rad Angle = " + MathUtils.degreesToRadians * s.rotation);
-
             rectangleShapes.add(s);
         }
     }

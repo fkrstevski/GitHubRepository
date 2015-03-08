@@ -44,6 +44,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     public LevelState state;
     private DirectedGame game;
     private float readyTime;
+    public float readyTimeRatio;
     private float endTime;
     private float greenTime;
     private float levelScore;
@@ -56,6 +57,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.readyTime = 0;
         this.endTime = 0;
         this.greenTime = 0;
+        this.readyTimeRatio = this.readyTime / READY_TIME;
         this.state = LevelState.Countdown;
         init();
 
@@ -197,10 +199,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         if (state == LevelState.Countdown)
         {
             this.readyTime += deltaTime;
+            this.readyTimeRatio = this.readyTime / READY_TIME;
 
-            float ratio = readyTime / READY_TIME;
-
-            if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && ratio >= 0.0f && ratio < 0.5f)
+            if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f)
             {
                 this.game.showAds(false);
                 Gdx.app.debug(TAG, "RED");
@@ -208,7 +209,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
             }
-            else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && ratio > 0.5f && ratio < 1f)
+            else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f)
             {
                 Gdx.app.debug(TAG, "YELLOW");
                 this.level.startCircle = this.level.startCircleYellowIcon;
@@ -220,6 +221,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             {
                 Gdx.app.debug(TAG, "GREEN");
                 readyTime = 0;
+                //this.readyTimeRatio = this.readyTime / READY_TIME;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
                 this.greenTime = 0;

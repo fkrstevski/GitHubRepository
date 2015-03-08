@@ -63,7 +63,7 @@ public class Level
 
         // Add Start Circle
         EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.GREY, Constants.WHITE);
+                this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(st);
 
         startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,

@@ -1,5 +1,6 @@
 package com.filip.edge.util;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
@@ -29,6 +30,13 @@ public class GamePreferences
     private GamePreferences()
     {
         prefs = Gdx.app.getPreferences(Constants.PREFERENCES);
+
+        // Clear preferences every time the game runs on the desktop
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+        {
+            prefs.clear();
+            prefs.flush();
+        }
     }
 
     public void load()
@@ -41,8 +49,8 @@ public class GamePreferences
         level = prefs.getInteger("level", 0);
         stage = prefs.getInteger("stage", 0);
         zone = prefs.getInteger("zone", 0);
-        currentScore = prefs.getLong("currentScore", 1000000000000000000L);
-        highestScore = prefs.getLong("highestScore", 1000000000000000000L);
+        currentScore = prefs.getLong("currentScore", Constants.MAX_SCORE);
+        highestScore = prefs.getLong("highestScore", Constants.MAX_SCORE);
     }
 
     public void save()

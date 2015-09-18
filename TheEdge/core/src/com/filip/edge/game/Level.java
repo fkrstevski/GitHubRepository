@@ -49,46 +49,53 @@ public class Level
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
+        float scale = width / 1334.0f; // iPhone 6 width
+
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
-        ball = new Ball((int) (Constants.BALL_RADIUS * 2), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
-        backButton = new BackButton((int) (width * 0.05f),   // size
-                (int) (width * 0.03),    // x
-                (int) (width * 0.03),     // y
+        ball = new Ball((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
+        backButton = new BackButton((int) (height * 0.1f),   // size
+                (int) (height * 0.055),    // x
+                (int) (height * 0.055),     // y
                 Constants.WHITE,         // outside color
                 Constants.TURQUOISE);      // inside color
 
-        topBackground = new MiddlePart(width, (int) (width * 0.06), width / 2, (int) (width * 0.06) /2,Constants.TURQUOISE, Constants.WHITE);
+        int topWidth = width;
+        int topHeight = (int)(height * 0.11);
+        int topX = width/2;
+        int topY = topHeight/2;
+
+        topBackground = new MiddlePart(topWidth, topHeight, topX, topY,Constants.TURQUOISE, Constants.WHITE);
 
         // Add Start Circle
-        EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+        EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(st);
 
-        startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+        startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
-        startCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+        startCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE);
-        startCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getFirstPoint().x,
+        startCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.RED, Constants.WHITE);
 
         startCircle = startCircleRedIcon;
 
         // Add EndCircle - for target collision
-        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER), this.getLastPoint().x,
+        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision
-        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
+        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
 
-        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
+        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
-        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
+        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
-        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2), this.getLastPoint().x,
+        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.RED, Constants.WHITE);
 
         finishCircle = finishCircleRedIcon;
@@ -98,7 +105,7 @@ public class Level
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
 
-            Ball m = new Ball((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier()),
+            Ball m = new Ball((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
         }
@@ -113,7 +120,7 @@ public class Level
             float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
             AbstractRectangleButtonObject s = new MiddlePart((int) Vector2.dst(p1.x, p1.y, p2.x, p2.y),
-                    (int) (Constants.RECTANGLE_WIDTH * this.getLevelMultiplier()),
+                    (int) (Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * scale),
                     midpoint.x, midpoint.y,
                     Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;

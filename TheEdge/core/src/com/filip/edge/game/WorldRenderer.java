@@ -185,7 +185,6 @@ public class WorldRenderer implements Disposable
         {
             DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
         }
-
     }
 
     public void resize(int width, int height)

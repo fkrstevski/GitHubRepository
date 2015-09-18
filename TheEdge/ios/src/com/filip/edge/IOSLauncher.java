@@ -149,6 +149,11 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
+    public void showAds(boolean show) {
+        System.out.println("showAds");
+    }
+
+    @Override
     public boolean isSignedIn()
     {
         return this.isSignedIn;

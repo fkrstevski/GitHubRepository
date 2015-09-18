@@ -7,8 +7,17 @@ import com.filip.edge.EdgeGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.height = 750;
-        config.width = 1334;
+		// iPhone 6
+		config.height = 750;
+		config.width = 1334;
+
+		// iPad Mini
+		config.height = 760;
+        config.width = 1024;
+
+		// old iPhone
+		config.height = 320;
+		config.width = 480;
 		new LwjglApplication(new EdgeGame(null), config);
 	}
 }

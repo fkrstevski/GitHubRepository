@@ -38,10 +38,20 @@ public class DigitRenderer
     public void load()
     {
         int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
         digits = new ArrayList<AbstractRectangleButtonObject>();
 
-        digitWidth = (int) (width * 0.03f);
-        digitHeight = (int) (digitWidth * Constants.DIGIT_ASPECT_RATIO);
+        //digitWidth = (int) (width * 0.03f);
+        //digitHeight = (int) (digitWidth * Constants.DIGIT_ASPECT_RATIO);
+
+        digitHeight = (int) (height * 0.096);
+        digitWidth = (int) (digitHeight / Constants.DIGIT_ASPECT_RATIO);
+
+        Gdx.app.debug(TAG, "width = " + width);
+        Gdx.app.debug(TAG, "height = " + height);
+        Gdx.app.debug(TAG, "digitWidth = " + digitWidth);
+        Gdx.app.debug(TAG, "digitHeight = " + digitHeight);
+
 
         digits.add(new ZeroDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
         digits.add(new OneDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));

@@ -19,6 +19,7 @@ import com.filip.edge.screens.objects.digits.TwoDigit;
 import com.filip.edge.screens.objects.digits.ZeroDigit;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
+import com.filip.edge.util.GamePreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,19 +53,19 @@ public class MainMenu
                 width / 2,              // x
                 height / 2,             // y
                 Constants.WHITE,       // outside color
-                Constants.BLUE);       // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone]);       // inside color
 
         infoButton = new InfoButton((int) (width * 0.05f),   // size
                 (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
-                Constants.BLUE);      // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
 
         leaderboardButton = new LeaderboardButton((int) (width * 0.05f),   // size
                 width - (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
-                Constants.BLUE);      // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
 
     }
 

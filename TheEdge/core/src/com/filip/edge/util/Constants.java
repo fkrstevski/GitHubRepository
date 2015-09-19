@@ -37,6 +37,8 @@ public class Constants
     public static final Color BLACK = new Color(47 / 255.0f, 72 / 255.0f, 94 / 255.0f, 0xff / 255.0f);
     public static final Color TRANSPARENT = new Color(0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 / 255.0f);
 
+    public static final Color[] ZONE_COLORS = { BLUE, ORANGE, PURPLE, GREY};
+
     public static long MAX_SCORE = 1000000000000000000L;
 
     public static float BOX2D_SCALE = 10;

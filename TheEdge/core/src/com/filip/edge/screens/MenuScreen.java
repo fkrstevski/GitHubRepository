@@ -32,8 +32,13 @@ public class MenuScreen extends AbstractGameScreen
             // since last rendered frame.
             worldController.update(deltaTime);
         }
-        // Sets the clear screen color to: Cornflower Blue
-        Gdx.gl.glClearColor(Constants.BLUE.r, Constants.BLUE.g, Constants.BLUE.b, Constants.BLUE.a);
+
+        // Sets the clear screen color
+        Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Render game world to screen

@@ -82,7 +82,6 @@ public class MainMenuRenderer implements Disposable
         {
             renderGuiFpsCounter(batch);
         }
-
         batch.end();
     }
 

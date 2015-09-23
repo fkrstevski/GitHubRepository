@@ -7,6 +7,7 @@ import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.LeaderboardButton;
 import com.filip.edge.screens.objects.PlayButton;
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 
 /**
@@ -28,7 +29,6 @@ public class MainMenu
 
     private void init()
     {
-
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
@@ -73,11 +73,15 @@ public class MainMenu
     {
         if (this.state == MainMenuState.Active)
         {
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
             playButton.render(batch);
             infoButton.render(batch);
             leaderboardButton.render(batch);
 
-
+            String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), (int) (height / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
 
         }
         else if (this.state == MainMenuState.ZoomInToPlay)

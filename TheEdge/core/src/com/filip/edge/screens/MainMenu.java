@@ -3,26 +3,11 @@ package com.filip.edge.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.LeaderboardButton;
 import com.filip.edge.screens.objects.PlayButton;
-import com.filip.edge.screens.objects.digits.EightDigit;
-import com.filip.edge.screens.objects.digits.FiveDigit;
-import com.filip.edge.screens.objects.digits.FourDigit;
-import com.filip.edge.screens.objects.digits.NineDigit;
-import com.filip.edge.screens.objects.digits.OneDigit;
-import com.filip.edge.screens.objects.digits.SevenDigit;
-import com.filip.edge.screens.objects.digits.SixDigit;
-import com.filip.edge.screens.objects.digits.ThreeDigit;
-import com.filip.edge.screens.objects.digits.TwoDigit;
-import com.filip.edge.screens.objects.digits.ZeroDigit;
 import com.filip.edge.util.Constants;
-import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by fkrstevski on 2015-02-12.

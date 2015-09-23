@@ -55,6 +55,21 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         return false;
     }
 
+    public void fillCenterTop()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, height / 2, digitPartWidth, height / 2);
+    }
+    public void fillCenterBottom()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, 0, digitPartWidth, height / 2);
+    }
+
     public void fillTopRect()
     {
         int width = (int) (dimension.x);
@@ -85,6 +100,61 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
         int digitPartWidth = width / 3;
         buttonPixmap.fillRectangle(0, height / 2 - digitPartWidth / 2, width, digitPartWidth);
+    }
+
+    public void fillTopRight80Rect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width - digitPartWidth,
+                (int)(height * (Constants.DIGIT_WIDTH_CELLS / (float)Constants.DIGIT_HEIGHT_CELLS)) ,
+                digitPartWidth,
+                (int)(height * ((Constants.DIGIT_WIDTH_CELLS - 1) / (float)Constants.DIGIT_HEIGHT_CELLS)));
+    }
+
+    public void fillTopLeft80Rect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0,
+                (int)(height * (Constants.DIGIT_WIDTH_CELLS / (float)Constants.DIGIT_HEIGHT_CELLS)) ,
+                digitPartWidth,
+                (int)(height * ((Constants.DIGIT_WIDTH_CELLS - 1) / (float)Constants.DIGIT_HEIGHT_CELLS)));
+    }
+
+    public void fillBottomRight80Rect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(width - digitPartWidth,
+                0,
+                digitPartWidth,
+                (int)(height * ((Constants.DIGIT_WIDTH_CELLS - 1) / (float)Constants.DIGIT_HEIGHT_CELLS)));
+    }
+
+    public void fillBottomLeft80Rect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle(0,
+                0 ,
+                digitPartWidth,
+                (int)(height * ((Constants.DIGIT_WIDTH_CELLS - 1) / (float)Constants.DIGIT_HEIGHT_CELLS)));
+    }
+
+    public void fillMiddle60Rect()
+    {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / 3;
+        buttonPixmap.fillRectangle((int)(width * 0.2),
+                height / 2 - digitPartWidth / 2,
+                (int)(width * 0.6),
+                digitPartWidth);
     }
 
     public void fillBottomRect()

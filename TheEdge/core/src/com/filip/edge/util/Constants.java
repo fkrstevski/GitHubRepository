@@ -16,7 +16,11 @@ public class Constants
     public static final String shaderMonochromeVertex = "shaders/monochrome.vs";
     public static final String shaderMonochromeFragment = "shaders/monochrome.fs";
 
-    public static final double DIGIT_ASPECT_RATIO = 1.8; // 1.8 = 9(height) / 5(width)
+    public static final int DIGIT_WIDTH_CELLS = 5;
+    public static final int DIGIT_HEIGHT_CELLS = 9;
+
+    public static final float DIGIT_ASPECT_RATIO = DIGIT_HEIGHT_CELLS / (float)DIGIT_WIDTH_CELLS; // 1.8 = 9(height) / 5(width)
+
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
     public static final int INSIDE_CIRCLE_RADIUS = 27;

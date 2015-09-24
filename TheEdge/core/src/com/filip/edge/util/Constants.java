@@ -46,4 +46,6 @@ public class Constants
     public static long MAX_SCORE = 1000000000000000000L;
 
     public static float BOX2D_SCALE = 10;
+
+    public static int WIDTH_IN_PIXELS = 3;
 }

@@ -19,13 +19,13 @@ class ZeroDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -43,8 +43,8 @@ class OneDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRightRect();
-        fillBottomRightRect();
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -60,13 +60,13 @@ class TwoDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -83,13 +83,13 @@ class ThreeDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -106,12 +106,12 @@ class FourDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRightRect();
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -127,13 +127,13 @@ class FiveDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -150,14 +150,14 @@ class SixDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -174,10 +174,10 @@ class SevenDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRightRect();
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -194,15 +194,15 @@ class EightDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
@@ -219,12 +219,12 @@ class NineDigit extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRightRect();
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }

@@ -12,12 +12,12 @@ public class DesktopLauncher {
 		config.width = 1334;
 
 		// iPad Mini
-		config.height = 760;
-        config.width = 1024;
+		//config.height = 760;
+        //config.width = 1024;
 
 		// old iPhone
-		config.height = 320;
-		config.width = 480;
+		//config.height = 320;
+		//config.width = 480;
 		new LwjglApplication(new EdgeGame(null), config);
 	}
 }

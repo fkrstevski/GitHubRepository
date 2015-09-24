@@ -18,13 +18,13 @@ class LetterA extends AbstractRectangleButtonObject
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -39,15 +39,15 @@ class LetterB extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillBottomRect();
-        fillBottomLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
 
 
-        fillTopRight80Rect();
-        fillBottomRight80Rect();
-        fillMiddle60Rect();
+        fillTopRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillMiddle60Rect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -62,11 +62,11 @@ class LetterC extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -81,7 +81,13 @@ class LetterD extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        //fillTopCenter
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopMiddle60Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomMiddle60Rect(Constants.WIDTH_IN_PIXELS);
+        fillRight80Rect(Constants.WIDTH_IN_PIXELS);
+
+
     }
 }
 
@@ -96,13 +102,13 @@ class LetterE extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -117,12 +123,12 @@ class LetterF extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomLeftRect();
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -137,12 +143,12 @@ class LetterG extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -157,13 +163,12 @@ class LetterH extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        //fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -178,10 +183,10 @@ class LetterI extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillCenterTop();
-        fillCenterBottom();
-        fillBottomRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillCenterTop(Constants.WIDTH_IN_PIXELS);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS);
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -196,9 +201,9 @@ class LetterJ extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRightRect();
-        fillBottomRightRect();
-        fillBottomRect();
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -213,11 +218,11 @@ class LetterK extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRight80Rect();
-        fillTopLeftRect();
-        fillBottomRight80Rect();
-        fillBottomLeftRect();
-        fillMiddle60Rect();
+        fillTopRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillMiddle60Rect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -232,9 +237,9 @@ class LetterL extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopLeftRect();
-        fillBottomLeftRect();
-        fillBottomRect();
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -249,13 +254,13 @@ class LetterM extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
-        fillTopLeftRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
-        fillCenterTop();
-        fillCenterBottom();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS+1);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS+1);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS+1);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS+1);
+        fillCenterTop(Constants.WIDTH_IN_PIXELS + 1);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS + 1);
     }
 }
 
@@ -270,11 +275,11 @@ class LetterN extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
-        fillTopLeftRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -289,13 +294,13 @@ class LetterO extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -309,12 +314,12 @@ class LetterP extends AbstractRectangleButtonObject{
 
     @Override
     public void fillInside(int width) {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
-        fillBottomLeftRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -329,13 +334,14 @@ class LetterQ extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightSquare(Constants.WIDTH_IN_PIXELS + 1);
     }
 }
 
@@ -350,12 +356,12 @@ class LetterR extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRight80Rect();
-        fillTopLeftRect();
-        fillBottomRight80Rect();
-        fillBottomLeftRect();
-        fillMiddle60Rect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillMiddle60Rect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -370,13 +376,13 @@ class LetterS extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopLeftRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomRightRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -391,9 +397,9 @@ class LetterT extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillCenterTop();
-        fillCenterBottom();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillCenterTop(Constants.WIDTH_IN_PIXELS);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -408,12 +414,12 @@ class LetterU extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopLeftRect();
-        fillTopRightRect();
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomRightRect();
-        fillBottomLeftRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -428,7 +434,9 @@ class LetterV extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-
+        fillBottomCenterThirdRect(Constants.WIDTH_IN_PIXELS);
+        fillRightTop90Rect(Constants.WIDTH_IN_PIXELS);
+        fillLeftTop90Rect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -443,13 +451,13 @@ class LetterW extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRightRect();
-        fillTopLeftRect();
-        fillBottomRightRect();
-        fillBottomLeftRect();
-        fillBottomRect();
-        fillCenterTop();
-        fillCenterBottom();
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS+1);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS+1);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS+1);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS+1);
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillCenterTop(Constants.WIDTH_IN_PIXELS+1);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS+1);
     }
 }
 
@@ -464,11 +472,11 @@ class LetterX extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRight80Rect();
-        fillTopLeft80Rect();
-        fillBottomRight80Rect();
-        fillBottomLeft80Rect();
-        fillMiddle60Rect();
+        fillTopRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeft80Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRight80Rect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeft80Rect(Constants.WIDTH_IN_PIXELS);
+        fillMiddle60Rect(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -483,10 +491,10 @@ class LetterY extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopLeftRect();
-        fillTopRightRect();
-        fillMiddleRect();
-        fillCenterBottom();
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS);
     }
 }
 
@@ -501,12 +509,12 @@ class LetterZ extends AbstractRectangleButtonObject{
     @Override
     public void fillInside(int width)
     {
-        fillTopRect();
-        fillTopRightRect();
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRight80Rect(Constants.WIDTH_IN_PIXELS);
 
-        fillMiddleRect();
+        fillMiddle60Rect(Constants.WIDTH_IN_PIXELS);
 
-        fillBottomRect();
-        fillBottomLeftRect();
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
     }
 }

@@ -79,9 +79,24 @@ public class MainMenu
             playButton.render(batch);
             infoButton.render(batch);
             leaderboardButton.render(batch);
+            
+            DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2 , batch);
 
+            /*
+            //Test numbers and font
             String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), (int) (height / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 100, batch);
+            str = "FILIP AND MATT";
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 200, batch);
+            str = "ALIMA";
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 300, batch);
+            str = "YOU WIN";
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 400, batch);
+            str = "0123456789";
+            DigitRenderer.instance.renderNumber(str, (int) (width - width / 54), height - 500, batch);
+            str = "ZIPPER";
+            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 600, batch);
+            */
 
         }
         else if (this.state == MainMenuState.ZoomInToPlay)

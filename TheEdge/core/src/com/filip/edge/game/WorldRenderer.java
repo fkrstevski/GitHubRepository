@@ -93,10 +93,6 @@ public class WorldRenderer implements Disposable
             {
                 renderGuiGameOver(batch);
             }
-            else if (worldController.state == WorldController.LevelState.GameBeat)
-            {
-                renderGuiGameBeat(batch);
-            }
             else
             {
                 worldController.level.render(batch);
@@ -161,16 +157,6 @@ public class WorldRenderer implements Disposable
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.RED);
         fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 1, BitmapFont.HAlignment.CENTER);
-    }
-
-    private void renderGuiGameBeat(SpriteBatch batch)
-    {
-        float x = camera.viewportWidth / 2;
-        float y = camera.viewportHeight / 2;
-
-        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
-        fontGameOver.setColor(Constants.GREEN);
-        fontGameOver.drawMultiLine(batch, "YOU WIN\n" + GamePreferences.instance.highestScore, x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
     private void renderGuiScore(SpriteBatch batch)

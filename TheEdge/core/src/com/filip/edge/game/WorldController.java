@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
+import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.util.AudioManager;
@@ -91,7 +92,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     GamePreferences.instance.zone = 0;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
-                    this.game.submitScore((long)GamePreferences.instance.highestScore);
+                    this.game.submitScore((long) GamePreferences.instance.highestScore);
+                    game.setScreen(new ResultsScreen(game));
 
                     // Early out
                     return;

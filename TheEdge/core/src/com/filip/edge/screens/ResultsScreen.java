@@ -159,6 +159,7 @@ public class ResultsScreen extends AbstractGameScreen {
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
                 Gdx.app.log("Result ", httpResponse.getResultAsString());
+                game.setScreen(new MenuScreen(game));
             }
 
             @Override

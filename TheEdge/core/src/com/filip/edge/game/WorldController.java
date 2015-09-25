@@ -75,7 +75,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public void nextLevel()
     {
-
         GamePreferences.instance.level++;
         if (GamePreferences.instance.level > Constants.MAX_LEVELS - 1)
         {
@@ -196,6 +195,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public void update(float deltaTime)
     {
+
+        cameraHelper.update(deltaTime);
+
         handleDebugInput(deltaTime);
 
         if (state == LevelState.Countdown)
@@ -206,14 +208,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f)
             {
                 this.game.showAds(false);
-                Gdx.app.debug(TAG, "RED");
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
             }
             else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f)
             {
-                Gdx.app.debug(TAG, "YELLOW");
                 this.level.startCircle = this.level.startCircleYellowIcon;
                 this.level.finishCircle = this.level.finishCircleYellowIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
@@ -221,7 +221,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             if (readyTime > READY_TIME)
             {
-                Gdx.app.debug(TAG, "GREEN");
                 readyTime = 0;
                 //this.readyTimeRatio = this.readyTime / READY_TIME;
                 this.level.startCircle = this.level.startCircleGreenIcon;
@@ -315,8 +314,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
             }
         }
-
-        cameraHelper.update(deltaTime);
     }
 
     private void handleDebugInput(float deltaTime)
@@ -429,12 +426,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button)
     {
-
-        Gdx.app.debug(TAG, "Touch at screenX = " + screenX + " screenY = " + screenY);
-
         if (level.backButton.isTouched(screenX, screenY))
         {
             backToMenu();
+        }
+        else if (level.endCircle.isTouched(screenX, screenY))
+        {
+            this.state = LevelState.LevelComplete;
+            this.level.startCircle = this.level.startCircleGreenIcon;
+            this.level.finishCircle = this.level.finishCircleGreenIcon;
+        }
+        else if (level.startCircleGreenIcon.isTouched(screenX, screenY))
+        {
+            Constants.DEBUG_BUILD = !Constants.DEBUG_BUILD;
         }
         else
         {
@@ -458,9 +462,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     @Override
     public void endContact(Contact contact)
     {
-
         numberOfContacts--;
-        Gdx.app.debug(TAG, "endContact: " + numberOfContacts);
     }
 
     @Override
@@ -472,32 +474,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             if (contact.getFixtureA().getBody() == level.endCircle.body)
             {
-                Gdx.app.debug(TAG, "beginContact: B-> Ball A-> Last");
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
-            }
-            else
-            {
-                Gdx.app.debug(TAG, "beginContact: B-> Ball " + contact.getFixtureA().toString());
             }
         }
         else
         {
             if (contact.getFixtureB().getBody() == level.endCircle.body)
             {
-                Gdx.app.debug(TAG, "beginContact: A-> Ball B-> Last");
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
-            else
-            {
-                Gdx.app.debug(TAG, "beginContact: A-> Ball" + contact.getFixtureB().toString());
-            }
         }
-
-        Gdx.app.debug(TAG, "beginContact: " + numberOfContacts);
     }
 
     @Override

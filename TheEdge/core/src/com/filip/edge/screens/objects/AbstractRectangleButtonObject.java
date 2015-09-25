@@ -45,9 +45,6 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
     public boolean isTouched(int x, int y)
     {
-        Gdx.app.debug(TAG, "position.x = " + position.x + " position.y = " + position.y);
-        Gdx.app.debug(TAG, "bounds = " + bounds);
-
         if (this.bounds.contains(x, y))
         {
             return true;

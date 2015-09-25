@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants
 {
-    public static boolean DEBUG_BUILD = true;
+    public static boolean DEBUG_BUILD = false;
 
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";

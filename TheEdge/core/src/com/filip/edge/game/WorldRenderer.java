@@ -36,11 +36,8 @@ public class WorldRenderer implements Disposable
     private static final String TAG = WorldRenderer.class.getName();
 
     private OrthographicCamera camera;
-    private SpriteBatch batch;
     private WorldController worldController;
     private Box2DDebugRenderer b2debugRenderer;
-
-    private ShaderProgram shaderMonochrome;
 
     public WorldRenderer(WorldController worldController)
     {
@@ -50,22 +47,14 @@ public class WorldRenderer implements Disposable
 
     private void init()
     {
-        batch = new SpriteBatch();
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
         camera.update();
         b2debugRenderer = new Box2DDebugRenderer();
-        shaderMonochrome = new ShaderProgram(Gdx.files.internal(Constants.shaderMonochromeVertex),
-                Gdx.files.internal(Constants.shaderMonochromeFragment));
-        if (!shaderMonochrome.isCompiled())
-        {
-            String msg = "Could not compile shader program: " + shaderMonochrome.getLog();
-            throw new GdxRuntimeException(msg);
-        }
     }
 
-    public void render()
+    public void render(SpriteBatch batch)
     {
         renderWorld(batch);
     }
@@ -81,11 +70,8 @@ public class WorldRenderer implements Disposable
         else
         {
             batch.setProjectionMatrix(camera.combined);
+            //Gdx.app.log(TAG, "Sprite Batch begin");
             batch.begin();
-            //if (GamePreferences.instance.useMonochromeShader) {
-            //	batch.setShader(shaderMonochrome);
-            //	shaderMonochrome.setUniformf("u_amount", 1.0f);
-            //}
 
             worldController.level.renderBackButton(batch);
 
@@ -107,6 +93,7 @@ public class WorldRenderer implements Disposable
 
             batch.setShader(null);
             batch.end();
+            //Gdx.app.log(TAG, "Sprite Batch end");
         }
     }
 
@@ -183,8 +170,7 @@ public class WorldRenderer implements Disposable
     @Override
     public void dispose()
     {
-        batch.dispose();
-        shaderMonochrome.dispose();
+
     }
 
 }

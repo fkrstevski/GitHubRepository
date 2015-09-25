@@ -20,11 +20,7 @@ public class MainMenuRenderer implements Disposable
 
     private OrthographicCamera camera;
     private OrthographicCamera cameraGUI;
-    private SpriteBatch batch;
     private MainMenuController worldController;
-
-    private ShaderProgram shaderMonochrome;
-
     public MainMenuRenderer(MainMenuController worldController)
     {
         this.worldController = worldController;
@@ -33,7 +29,6 @@ public class MainMenuRenderer implements Disposable
 
     private void init()
     {
-        batch = new SpriteBatch();
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
@@ -42,17 +37,9 @@ public class MainMenuRenderer implements Disposable
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
-
-        shaderMonochrome = new ShaderProgram(Gdx.files.internal(Constants.shaderMonochromeVertex),
-                Gdx.files.internal(Constants.shaderMonochromeFragment));
-        if (!shaderMonochrome.isCompiled())
-        {
-            String msg = "Could not compile shader program: " + shaderMonochrome.getLog();
-            throw new GdxRuntimeException(msg);
-        }
     }
 
-    public void render()
+    public void render(SpriteBatch batch)
     {
         renderWorld(batch);
         renderGui(batch);
@@ -62,12 +49,7 @@ public class MainMenuRenderer implements Disposable
     {
         worldController.cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
-
         batch.begin();
-        //if (GamePreferences.instance.useMonochromeShader) {
-        //	batch.setShader(shaderMonochrome);
-        //	shaderMonochrome.setUniformf("u_amount", 1.0f);
-        //}
         worldController.mainMenu.render(batch);
         batch.setShader(null);
         batch.end();
@@ -127,7 +109,6 @@ public class MainMenuRenderer implements Disposable
     @Override
     public void dispose()
     {
-        batch.dispose();
-        shaderMonochrome.dispose();
+
     }
 }

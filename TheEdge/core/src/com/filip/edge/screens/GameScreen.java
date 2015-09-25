@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.game.WorldController;
 import com.filip.edge.game.WorldRenderer;
 import com.filip.edge.util.Constants;
@@ -38,14 +39,15 @@ public class GameScreen extends AbstractGameScreen
 
         // Sets the clear screen color
         Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
-                            Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
-                            Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
-                            Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
 
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         // Render game world to screen
-        worldRenderer.render();
+        worldRenderer.render(game.batch);
     }
 
     @Override
@@ -66,8 +68,9 @@ public class GameScreen extends AbstractGameScreen
     @Override
     public void hide()
     {
-        worldController.dispose();
+
         worldRenderer.dispose();
+        worldController.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 

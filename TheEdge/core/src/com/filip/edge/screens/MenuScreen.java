@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
@@ -42,7 +43,7 @@ public class MenuScreen extends AbstractGameScreen
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Render game world to screen
-        worldRenderer.render();
+        worldRenderer.render(game.batch);
     }
 
 
@@ -64,8 +65,8 @@ public class MenuScreen extends AbstractGameScreen
     @Override
     public void hide()
     {
-        worldController.dispose();
         worldRenderer.dispose();
+        worldController.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 

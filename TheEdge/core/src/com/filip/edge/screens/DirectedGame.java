@@ -8,11 +8,11 @@ import com.filip.edge.util.IActivityRequestHandler;
 
 public abstract class DirectedGame implements ApplicationListener
 {
-
+    private static final String TAG = DirectedGame.class.getName();
     protected IActivityRequestHandler activityRequestHandler;
     private boolean init;
     private AbstractGameScreen currScreen;
-    private SpriteBatch batch;
+    public SpriteBatch batch;
 
     public DirectedGame(IActivityRequestHandler activityRequestHandler)
     {
@@ -24,7 +24,9 @@ public abstract class DirectedGame implements ApplicationListener
         if (!init)
         {
 
+            Gdx.app.log(TAG, " create Sprite Batch 1");
             batch = new SpriteBatch();
+            Gdx.app.log(TAG, " create Sprite Batch 2");
             init = true;
         }
         if (this.currScreen != null)
@@ -107,7 +109,9 @@ public abstract class DirectedGame implements ApplicationListener
         if (init)
         {
             currScreen = null;
+            Gdx.app.log(TAG, " dispose Sprite Batch 1");
             batch.dispose();
+            Gdx.app.log(TAG, " dispose Sprite Batch 2");
             init = false;
         }
     }

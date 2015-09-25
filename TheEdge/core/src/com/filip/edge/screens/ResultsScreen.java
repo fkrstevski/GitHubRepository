@@ -36,6 +36,7 @@ public class ResultsScreen extends AbstractGameScreen {
     private Stage stage;
     private TextField txtEmail;
     private Label lblScore;
+    private boolean scoreSubmitted;
 
 
     private int btnSubmitWidth;
@@ -47,6 +48,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
     public ResultsScreen(DirectedGame game) {
         super(game);
+        this.game = game;
     }
 
     @Override
@@ -64,6 +66,10 @@ public class ResultsScreen extends AbstractGameScreen {
 
         stage.act(deltaTime);
         stage.draw();
+
+        if(scoreSubmitted == true) {
+            game.setScreen(new MenuScreen(game));
+        }
     }
 
     @Override
@@ -77,7 +83,6 @@ public class ResultsScreen extends AbstractGameScreen {
     {
         GamePreferences.instance.load();
 
-        this.game = game;
         this.stage = new Stage();
 
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -86,7 +91,7 @@ public class ResultsScreen extends AbstractGameScreen {
         btnSubmitWidth = (int)(Gdx.graphics.getWidth() * 0.3);
         btnSubmitHeight = (int)(Gdx.graphics.getWidth() * 0.05);
 
-        btnSubmit.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 2 );
+        btnSubmit.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 2);
         btnSubmit.setSize(btnSubmitWidth, btnSubmitHeight);
 
         btnSubmit.addListener(new ClickListener() {
@@ -96,7 +101,8 @@ public class ResultsScreen extends AbstractGameScreen {
             }
         });
 
-        txtEmail = new TextField("Enter your email:", skin);
+        //txtEmail = new TextField("Enter your email:", skin);
+        txtEmail = new TextField("fk@gm.ca", skin);
         txtEmailWidth = (int)(Gdx.graphics.getWidth() * 0.3);
         txtEmailHeight = (int)(Gdx.graphics.getWidth() * 0.05);
         txtEmail.setPosition(Gdx.graphics.getWidth() / 2 - txtEmailWidth / 2, (int)(Gdx.graphics.getHeight() / 2 + txtEmailHeight * 1.5));
@@ -105,24 +111,20 @@ public class ResultsScreen extends AbstractGameScreen {
         txtEmail.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                txtEmail.setText("");
+                //txtEmail.setText("");
                 return true;
             }
         });
 
         txtEmail.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped (TextField textField, char c) {
-                Gdx.app.log("txtEmail ", textField.getText());
+            public void keyTyped(TextField textField, char c) {
                 String email = textField.getText();
                 Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
                 Matcher m = p.matcher(email);
                 boolean matchFound = m.matches();
-                if(matchFound) {
-                    Gdx.app.log("btnSubmit ", "enabled");
+                if (matchFound) {
                     btnSubmit.setTouchable(Touchable.enabled);
-                }
-                else {
-                    Gdx.app.log("btnSubmit ", "disabled");
+                } else {
                     btnSubmit.setTouchable(Touchable.disabled);
                 }
             }
@@ -159,12 +161,12 @@ public class ResultsScreen extends AbstractGameScreen {
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
                 Gdx.app.log("Result ", httpResponse.getResultAsString());
-                game.setScreen(new MenuScreen(game));
+                scoreSubmitted = true;
             }
 
             @Override
             public void failed(Throwable t) {
-                Gdx.app.log("Failed ", t.getMessage());
+                Gdx.app.error("Failed ", t.getMessage());
             }
 
             @Override
@@ -178,6 +180,7 @@ public class ResultsScreen extends AbstractGameScreen {
     @Override
     public void hide()
     {
+        stage.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 

@@ -1,6 +1,7 @@
 package com.filip.edge;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
@@ -8,6 +9,7 @@ import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
+import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
@@ -44,8 +46,13 @@ public class EdgeGame extends DirectedGame
             this.activityRequestHandler.login();
         }
 
-        // Start game at menu screen
-        setScreen(new MenuScreen(this));
+        if(GamePreferences.instance.scoreNeedsToBeSubmitted) {
+            setScreen(new ResultsScreen(this));
+        }
+        else {
+            // Start game at menu screen
+            setScreen(new MenuScreen(this));
+        }
     }
 
 }

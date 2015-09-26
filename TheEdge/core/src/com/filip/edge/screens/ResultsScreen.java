@@ -68,6 +68,9 @@ public class ResultsScreen extends AbstractGameScreen {
         stage.draw();
 
         if(scoreSubmitted == true) {
+            GamePreferences.instance.scoreNeedsToBeSubmitted = false;
+            GamePreferences.instance.currentScore = Constants.MAX_SCORE;
+            GamePreferences.instance.save();
             game.setScreen(new MenuScreen(game));
         }
     }
@@ -131,7 +134,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
         });
 
-        lblScore = new Label("THE END - Score: " + GamePreferences.instance.highestScore, skin);
+        lblScore = new Label("THE END - Score: " + GamePreferences.instance.currentScore, skin);
         lblScoreWidth = (int)(Gdx.graphics.getWidth() * 0.3);
         lblScoreHeight = (int)(Gdx.graphics.getWidth() * 0.05);
         lblScore.setPosition(Gdx.graphics.getWidth() / 2 - lblScoreWidth / 2, (int) (Gdx.graphics.getHeight() / 2 + lblScoreHeight * 3));
@@ -149,7 +152,7 @@ public class ResultsScreen extends AbstractGameScreen {
         Map<String, String> parameters = new HashMap<String, String>();
         Date date = new Date(TimeUtils.millis());
         parameters.put("name", txtEmail.getText());
-        parameters.put("score", "" + GamePreferences.instance.highestScore);
+        parameters.put("score", "" + GamePreferences.instance.currentScore);
         Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
         request.setUrl("http://www.absolutegames.ca/httptest.php");
 

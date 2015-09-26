@@ -14,10 +14,10 @@ public class GamePreferences
 
     public boolean sound;
     public boolean music;
+    public boolean scoreNeedsToBeSubmitted;
     public float volSound;
     public float volMusic;
     public long currentScore;
-    public long highestScore;
 
     public int level;
     public int stage;
@@ -43,6 +43,7 @@ public class GamePreferences
     {
         sound = prefs.getBoolean("sound", true);
         music = prefs.getBoolean("music", true);
+        scoreNeedsToBeSubmitted = prefs.getBoolean("scoreNeedsToBeSubmitted", false);
         volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
         useMonochromeShader = prefs.getBoolean("useMonochromeShader", false);
@@ -50,13 +51,13 @@ public class GamePreferences
         stage = prefs.getInteger("stage", 0);
         zone = prefs.getInteger("zone", 0);
         currentScore = prefs.getLong("currentScore", Constants.MAX_SCORE);
-        highestScore = prefs.getLong("highestScore", Constants.MAX_SCORE);
     }
 
     public void save()
     {
         prefs.putBoolean("sound", sound);
         prefs.putBoolean("music", music);
+        prefs.putBoolean("scoreNeedsToBeSubmitted", scoreNeedsToBeSubmitted);
         prefs.putFloat("volSound", volSound);
         prefs.putFloat("volMusic", volMusic);
         prefs.putBoolean("useMonochromeShader", useMonochromeShader);
@@ -64,7 +65,6 @@ public class GamePreferences
         prefs.putInteger("stage", stage);
         prefs.putInteger("zone", zone);
         prefs.putLong("currentScore", currentScore);
-        prefs.putLong("highestScore", highestScore);
         prefs.flush();
     }
 

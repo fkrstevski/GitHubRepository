@@ -12,10 +12,6 @@ public class Constants
     // iOS Leaderboard
     public static final String IOS_LEADERBOARD_ID = "1212";
 
-    // Shader
-    public static final String shaderMonochromeVertex = "shaders/monochrome.vs";
-    public static final String shaderMonochromeFragment = "shaders/monochrome.fs";
-
     public static final int DIGIT_WIDTH_CELLS = 5;
     public static final int DIGIT_HEIGHT_CELLS = 9;
 

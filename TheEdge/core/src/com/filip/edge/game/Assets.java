@@ -24,6 +24,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Disposable;
 
 public class Assets implements Disposable, AssetErrorListener
@@ -90,18 +91,20 @@ public class Assets implements Disposable, AssetErrorListener
 
         public AssetFonts()
         {
-            // create three fonts using Libgdx's built-in 15px bitmap font
-            defaultSmall = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"), true);
-            defaultNormal = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"), true);
-            defaultBig = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"), true);
-            // set font sizes
-            defaultSmall.setScale(0.75f);
-            defaultNormal.setScale(1.0f);
-            defaultBig.setScale(2.0f);
-            // enable linear texture filtering for smooth fonts
-            defaultSmall.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-            defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-            defaultBig.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UnscreenMK.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            parameter.size = 20;
+            parameter.flip = true;
+            BitmapFont font12 = generator.generateFont(parameter);
+            parameter.size = 30;
+            BitmapFont font16 = generator.generateFont(parameter);
+            parameter.size = 40;
+            BitmapFont font20 = generator.generateFont(parameter);
+            generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+            defaultSmall = font12;
+            defaultNormal = font16;
+            defaultBig = font20;
         }
     }
 

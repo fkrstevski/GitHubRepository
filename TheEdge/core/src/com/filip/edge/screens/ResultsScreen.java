@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -72,6 +73,7 @@ public class ResultsScreen extends AbstractGameScreen {
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         stage.act(deltaTime);
         stage.draw();
 
@@ -80,9 +82,9 @@ public class ResultsScreen extends AbstractGameScreen {
         game.batch.begin();
 
         DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch);
-        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 2 ), game.batch);
+        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5 ), game.batch);
 
-        DigitRenderer.instance.renderStringCentered(email, (int) (Gdx.graphics.getHeight() * 0.35 ), game.batch);
+        //DigitRenderer.instance.renderStringCentered(email, (int) (Gdx.graphics.getHeight() * 0.35 ), game.batch);
 
         String score = ""+GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
@@ -149,20 +151,33 @@ public class ResultsScreen extends AbstractGameScreen {
         skin.add("defaultInside", textInsideButtonStyle);
 
         TextField.TextFieldStyle tStyle = new TextField.TextFieldStyle();
-        tStyle.font = skin.getFont("default");
-        tStyle.fontColor = Color.BLUE;
+
+
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UnscreenMK.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = Gdx.graphics.getWidth() / 20;
+        BitmapFont font = generator.generateFont(parameter);
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+        tStyle.background = skin.newDrawable("white", Constants.WHITE);
+        tStyle.cursor = skin.newDrawable("white", insideColor);
+        tStyle.cursor.setMinWidth(2f);
+        tStyle.selection = skin.newDrawable("white", 0.5f, 0.5f, 0.5f, 0.5f);
+        tStyle.font = font;
+        tStyle.fontColor = insideColor;
         skin.add("default", tStyle);
 
         final TextButton btnSubmitOutside = new TextButton("", skin, "defaultOutside");
-        btnSubmitWidth = (int)(Gdx.graphics.getWidth() * 0.31);
-        btnSubmitHeight = (int)(Gdx.graphics.getHeight() * 0.16);
-        btnSubmitOutside.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 2 - btnSubmitHeight / 2);
+        btnSubmitWidth = (int) (Gdx.graphics.getWidth() * 0.31);
+        btnSubmitHeight = (int) (Gdx.graphics.getHeight() * 0.16);
+        btnSubmitOutside.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 3 - btnSubmitHeight / 2);
         btnSubmitOutside.setSize(btnSubmitWidth, btnSubmitHeight);
 
         final TextButton btnSubmit = new TextButton("", skin, "defaultInside");
-        btnSubmitWidth = (int)(Gdx.graphics.getWidth() * 0.3);
+        btnSubmitWidth = (int) (Gdx.graphics.getWidth() * 0.3);
         btnSubmitHeight = (int) (Gdx.graphics.getHeight() * 0.15);
-        btnSubmit.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 2 - btnSubmitHeight / 2);
+        btnSubmit.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 3 - btnSubmitHeight / 2);
         btnSubmit.setSize(btnSubmitWidth, btnSubmitHeight);
         btnSubmit.addListener(new ClickListener() {
             @Override
@@ -175,10 +190,11 @@ public class ResultsScreen extends AbstractGameScreen {
 
         txtEmail = new TextField("Enter your email:", skin);
         //txtEmail = new TextField(this.email, skin);
-        txtEmailWidth = (int)(Gdx.graphics.getWidth() * 0.3);
-        txtEmailHeight = (int)(Gdx.graphics.getWidth() * 0.05);
-        txtEmail.setPosition(Gdx.graphics.getWidth() / 2 - txtEmailWidth / 2, (int) (Gdx.graphics.getHeight() / 2 + txtEmailHeight * 1.5));
+        txtEmailWidth = (int)(Gdx.graphics.getWidth() * 0.95);
+        txtEmailHeight = (int)(Gdx.graphics.getWidth() * 0.08);
+        txtEmail.setPosition(Gdx.graphics.getWidth() / 2 - txtEmailWidth / 2, (int) (Gdx.graphics.getHeight() / 2.4));
         txtEmail.setSize(txtEmailWidth, txtEmailHeight);
+        txtEmail.setCursorPosition(5);
 
         txtEmail.addListener(new ClickListener() {
             @Override

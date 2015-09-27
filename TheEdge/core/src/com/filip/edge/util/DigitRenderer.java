@@ -32,7 +32,7 @@ public class DigitRenderer
         digits = new ArrayList<AbstractRectangleButtonObject>();
         letters = new ArrayList<AbstractRectangleButtonObject>();
 
-        digitHeight = (int) (height * 0.096);
+        digitHeight = (int) (Gdx.graphics.getWidth() * 0.054);
         digitWidth = (int) (digitHeight / Constants.DIGIT_ASPECT_RATIO);
 
         digits.add(new ZeroDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));

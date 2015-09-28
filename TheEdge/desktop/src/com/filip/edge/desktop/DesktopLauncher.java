@@ -16,8 +16,8 @@ public class DesktopLauncher {
         //config.width = 1024;
 
 		// old iPhone
-		config.height = 320;
-		config.width = 480;
+		//config.height = 320;
+		//config.width = 480;
 		new LwjglApplication(new EdgeGame(null), config);
 	}
 }

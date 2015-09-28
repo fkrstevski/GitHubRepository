@@ -7,6 +7,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -21,31 +24,42 @@ public class StageLoader
     private static final String TAG = StageLoader.class.getName();
     private static ArrayList<Zone> zones;
 
+    public static boolean isInteger(String s) {
+        boolean isValidInteger = false;
+        try
+        {
+            Integer.parseInt(s);
+
+            // s is a valid integer
+
+            isValidInteger = true;
+        }
+        catch (NumberFormatException ex)
+        {
+            // s is not an integer
+        }
+
+        return isValidInteger;
+    }
+
     public static void init()
     {
-        int numberOfStages = 4;
-        int numberOfZones = 3;
-
-        if (Constants.DEBUG_BUILD)
-        {
-            numberOfStages = 1;
-            numberOfZones = 1;
-
-        }
-        int maxPoints = 7;
-
-        Vector2[] points = new Vector2[maxPoints];
-        for (int i = 0; i < maxPoints; i++)
-        {
-            points[i] = new Vector2();
-        }
+        int numberOfStages = 2;
+        int numberOfZones = 1;
 
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop)
         {
-            Vector2 startPos = new Vector2();
-            Vector2 finishPos = new Vector2();
+            final int maxPoints = 30;
+            final int sheetWidth = 80;
+            final int sheetHeight = 27;
+
+            Vector2[] points = new Vector2[maxPoints];
+
+            BufferedReader br = null;
+            String line = "";
+            String cvsSplitBy = ",";
 
             StringBuffer sb = new StringBuffer();
 
@@ -53,122 +67,55 @@ public class StageLoader
             {
                 for (int currentStage = 0; currentStage < numberOfStages; ++currentStage)
                 {
-                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage + ".png";
+                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage + ".csv";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     assert (fileHandle != null);
 
-                    // load image file that represents the level data
-                    Pixmap pixmap = new Pixmap(fileHandle);
+                    try {
 
-                    int pixmapHeight = pixmap.getHeight();
-                    int pixmapWidth = pixmap.getWidth();
+                        br = new BufferedReader(new FileReader(filename));
+                        int y = 0;
+                        while ((line = br.readLine()) != null) {
 
-                    // scan pixels from top-left to bottom-right
-                    int lastPixel = -1;
-                    for (int pixelY = 0; pixelY < pixmapHeight; pixelY++)
-                    {
-                        for (int pixelX = 0; pixelX < pixmapWidth; pixelX++)
-                        {
-                            float offsetHeight = 0;
-                            // height grows from bottom to top
-                            float baseHeight = pixmapHeight - pixelY;
-                            // get color of current pixel as 32-bit RGBA value
-                            int currentPixel = pixmap.getPixel(pixelX, pixelY);
-                            // find matching color value to identify block type at (x,y)
-                            // point and create the corresponding game object if there is
-                            // a match
+                            // use comma as separator
+                            String[] cells = line.split(cvsSplitBy);
+                            for(int x = 0; x < cells.length; ++x) {
+                                String cell = cells[x];
+                                if(!cell.isEmpty() && isInteger(cell)) {
+                                    points[Integer.parseInt(cell)] = new Vector2(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
+                                            sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+                                }
+                            }
+                            ++y;
+                        }
 
-                            // empty space
-                            if (BLOCK_TYPE.EMPTY.sameColor(currentPixel) || BLOCK_TYPE.BORDER.sameColor(currentPixel))
-                            {
-                                // do nothing
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (br != null) {
+                            try {
+                                br.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                            // START
-                            else if (BLOCK_TYPE.START.sameColor(currentPixel))
-                            {
-                                startPos.set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // FINISH
-                            else if (BLOCK_TYPE.FINISH.sameColor(currentPixel))
-                            {
-                                finishPos.set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 1
-                            else if (BLOCK_TYPE.POINT1.sameColor(currentPixel))
-                            {
-                                points[0].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 2
-                            else if (BLOCK_TYPE.POINT2.sameColor(currentPixel))
-                            {
-                                points[1].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 3
-                            else if (BLOCK_TYPE.POINT3.sameColor(currentPixel))
-                            {
-                                points[2].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 4
-                            else if (BLOCK_TYPE.POINT4.sameColor(currentPixel))
-                            {
-                                points[3].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 5
-                            else if (BLOCK_TYPE.POINT5.sameColor(currentPixel))
-                            {
-                                points[4].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 6
-                            else if (BLOCK_TYPE.POINT6.sameColor(currentPixel))
-                            {
-                                points[5].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // Point 7
-                            else if (BLOCK_TYPE.POINT7.sameColor(currentPixel))
-                            {
-                                points[6].set((float) pixelX / pixmapWidth, (float) pixelY / pixmapHeight);
-                            }
-                            // unknown object/pixel color
-                            else
-                            {
-                                // red color channel
-                                int r = 0xff & (currentPixel >>> 24);
-                                // green color channel
-                                int g = 0xff & (currentPixel >>> 16);
-                                // blue color channel
-                                int b = 0xff & (currentPixel >>> 8);
-                                // alpha channel
-                                int a = 0xff & currentPixel;
-                                Gdx.app.error(TAG, "Unknown object at x<" + pixelX + "> y<" + pixelY + ">: r<" + r + "> g<" + g + "> b<" + b
-                                        + "> a<" + a + ">");
-                            }
-                            lastPixel = currentPixel;
                         }
                     }
 
-                    // reset vectors
-                    sb.append(startPos.x + "," + startPos.y + ";");
-                    startPos.set(0, 0);
-                    for (int i = 0; i < maxPoints; i++)
+                    for (int i = 0; i < points.length; i++)
                     {
-                        if (!points[i].isZero())
+                        if (points[i] != null)
                         {
-                            sb.append(points[i].x + "," + points[i].y + ";");
-                            points[i].set(0, 0);
+                            sb.append(String.format("%.02f,%.02f;", points[i].x, points[i].y));
+                            points[i] = null;
                         }
                         else
                         {
                             break;
                         }
                     }
-                    sb.append(finishPos.x + "," + finishPos.y + "");
-                    finishPos.set(0, 0);
                     sb.append(nl);
-
-
-                    // free memory
-                    pixmap.dispose();
-                    Gdx.app.debug(TAG, "level '" + filename + "' loaded");
                 }
             }
 
@@ -259,37 +206,5 @@ public class StageLoader
     public static ArrayList<Vector2> getPoints(int zone, int stage)
     {
         return zones.get(zone).getStage(stage).getPoints();
-    }
-
-    public enum BLOCK_TYPE
-    {
-        START(255, 0, 0),       // RED
-        FINISH(0, 255, 0),      // GREEN
-        POINT1(255, 127, 0),    // ORANGE
-        POINT2(255, 255, 0),    // YELLOW
-        POINT3(0, 127, 255),    // BLUEISH
-        POINT4(0, 255, 255),    // TURQUOISE
-        POINT5(0, 0, 255),      // BLUE
-        POINT6(127, 0, 255),    // PURPLE
-        POINT7(255, 0, 255),    // PINK
-        EMPTY(0, 0, 0),         // BLACK
-        BORDER(255, 255, 255);  // WHITE
-
-        private int color;
-
-        private BLOCK_TYPE(int r, int g, int b)
-        {
-            color = r << 24 | g << 16 | b << 8 | 0xff;
-        }
-
-        public boolean sameColor(int color)
-        {
-            return this.color == color;
-        }
-
-        public int getColor()
-        {
-            return color;
-        }
     }
 }

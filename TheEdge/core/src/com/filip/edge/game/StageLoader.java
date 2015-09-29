@@ -44,8 +44,8 @@ public class StageLoader
 
     public static void init()
     {
-        int numberOfStages = 2;
-        int numberOfZones = 1;
+        int numberOfStages = 1;
+        int numberOfZones = 4;
 
         String nl = System.getProperty("line.separator");
 

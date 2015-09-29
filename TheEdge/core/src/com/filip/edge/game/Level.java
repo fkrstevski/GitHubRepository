@@ -2,12 +2,11 @@ package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
-import com.filip.edge.game.objects.Ball;
+import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.BackButton;
@@ -21,7 +20,7 @@ public class Level
 
     public static final String TAG = Level.class.getName();
 
-    public Ball ball;
+    public EmptyCircle ball;
     public BackButton backButton;
     public MiddlePart topBackground;
     public ArrayList<AbstractCircleButtonObject> circleShapes;
@@ -54,7 +53,7 @@ public class Level
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
-        ball = new Ball((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
+        ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
         backButton = new BackButton((int) (height * 0.1f),   // size
                 (int) (height * 0.055),    // x
                 (int) (height * 0.055),     // y
@@ -83,7 +82,7 @@ public class Level
         startCircle = startCircleRedIcon;
 
         // Add EndCircle - for target collision
-        endCircle = new Ball((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * scale), this.getLastPoint().x,
+        endCircle = new EmptyCircle((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * scale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision
@@ -105,7 +104,7 @@ public class Level
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
 
-            Ball m = new Ball((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+            EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
         }
@@ -193,7 +192,7 @@ public class Level
         return points.size();
     }
 
-    public Ball getBall()
+    public EmptyCircle getBall()
     {
         return ball;
     }

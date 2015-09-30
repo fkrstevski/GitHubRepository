@@ -12,15 +12,15 @@ public class Stage
     private static final String TAG = Stage.class.getName();
 
     private int stageID;
-    private ArrayList<Vector2> points;
+    private ArrayList<LevelPoint> points;
 
-    public Stage(int id, ArrayList<Vector2> p)
+    public Stage(int id, ArrayList<LevelPoint> p)
     {
         this.stageID = id;
         this.points = p;
     }
 
-    public ArrayList<Vector2> getPoints()
+    public ArrayList<LevelPoint> getPoints()
     {
         return points;
     }

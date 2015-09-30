@@ -20,7 +20,7 @@ public class Zone
         stages = new ArrayList<Stage>();
     }
 
-    public void AddStage(int stageID, ArrayList<Vector2> points)
+    public void AddStage(int stageID, ArrayList<LevelPoint> points)
     {
         stages.add(new Stage(stageID, points));
     }

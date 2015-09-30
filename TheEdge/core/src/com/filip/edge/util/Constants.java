@@ -19,7 +19,7 @@ public class Constants
 
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
-    public static final int INSIDE_CIRCLE_RADIUS = 27;
+    public static final int INSIDE_CIRCLE_RADIUS = 26;
     public static final int RECTANGLE_WIDTH = 50;
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 2;

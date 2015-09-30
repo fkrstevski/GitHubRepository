@@ -26,6 +26,7 @@ import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
@@ -143,6 +144,22 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         body.createFixture(fixtureDef);
         circleShape.dispose();
 
+        // Hole Physics Body
+        for (Hole hole :level.holes) {
+            BodyDef holeBodyDef = new BodyDef();
+            holeBodyDef.type = BodyType.StaticBody;
+            holeBodyDef.position.set(new Vector2(hole.position.x / Constants.BOX2D_SCALE, hole.position.y / Constants.BOX2D_SCALE));
+            Body holeBody = b2world.createBody(holeBodyDef);
+            hole.body = holeBody;
+            CircleShape circleHoleShape = new CircleShape();
+            circleHoleShape.setRadius((hole.radius - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureHoleDef = new FixtureDef();
+            fixtureHoleDef.shape = circleHoleShape;
+            fixtureHoleDef.isSensor = true;
+            holeBody.createFixture(fixtureHoleDef);
+            circleHoleShape.dispose();
+        }
+
         // EndTarget Physics Body
         BodyDef bodyDef2 = new BodyDef();
         bodyDef2.type = BodyType.StaticBody;
@@ -257,7 +274,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (endTime > END_TIME)
             {
                 endTime = 0;
-                GamePreferences.instance.currentScore -= 100;
+                GamePreferences.instance.currentScore -= 10000;
                 if (GamePreferences.instance.currentScore <= 0)
                 {
                     GamePreferences.instance.currentScore = 0;
@@ -478,6 +495,18 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
+            else
+            {
+                for (Hole hole : level.holes) {
+                    if (contact.getFixtureA().getBody() == hole.body)
+                    {
+                        Gdx.app.log(TAG, "BALL HOLE COLLISION");
+                        this.state = LevelState.OffTheEdge;
+                        this.level.startCircle = this.level.startCircleRedIcon;
+                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                    }
+                }
+            }
         }
         else
         {
@@ -486,6 +515,18 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
+            }
+            else
+            {
+                for (Hole hole : level.holes) {
+                    if (contact.getFixtureB().getBody() == hole.body)
+                    {
+                        Gdx.app.log(TAG, "BALL HOLE COLLISION");
+                        this.state = LevelState.OffTheEdge;
+                        this.level.startCircle = this.level.startCircleRedIcon;
+                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                    }
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
+import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
@@ -34,7 +35,9 @@ public class Level
     public EndTarget finishCircleRedIcon;
     public EndTarget startCircle;
     public EndTarget finishCircle;
-    private ArrayList<Vector2> points;
+    public ArrayList<LevelPoint> points;
+
+    public ArrayList<Hole> holes;
 
     public Level()
     {
@@ -53,7 +56,9 @@ public class Level
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
-        ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLUE, Constants.WHITE);
+        holes = new ArrayList<Hole>();
+
+        ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
         backButton = new BackButton((int) (height * 0.1f),   // size
                 (int) (height * 0.055),    // x
                 (int) (height * 0.055),     // y
@@ -103,10 +108,13 @@ public class Level
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
         {
-
             EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
+
+            if(points.get(i).hasAHole) {
+                holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale), this.points.get(i).x, this.points.get(i).y));
+            }
         }
 
         // Add Rectangles
@@ -131,6 +139,9 @@ public class Level
     public void update(float deltaTime)
     {
         ball.update(deltaTime);
+        for (Hole hole :holes) {
+            hole.update(deltaTime);
+        }
     }
 
     public void render(SpriteBatch batch)
@@ -157,8 +168,11 @@ public class Level
 
         //endCircle.render(batch);
 
-        ball.render(batch);
+        for (Hole hole :holes) {
+            hole.render(batch);
+        }
 
+        ball.render(batch);
     }
 
     public void renderBackButton(SpriteBatch batch)

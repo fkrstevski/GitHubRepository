@@ -55,7 +55,7 @@ public class StageLoader
             final int sheetWidth = 80;
             final int sheetHeight = 27;
 
-            Vector2[] points = new Vector2[maxPoints];
+            LevelPoint[] points = new LevelPoint[maxPoints];
 
             BufferedReader br = null;
             String line = "";
@@ -81,9 +81,27 @@ public class StageLoader
                             String[] cells = line.split(cvsSplitBy);
                             for(int x = 0; x < cells.length; ++x) {
                                 String cell = cells[x];
-                                if(!cell.isEmpty() && isInteger(cell)) {
-                                    points[Integer.parseInt(cell)] = new Vector2(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
-                                            sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+                                if(!cell.isEmpty()) {
+                                    if (cell.equals("M") || cell.equals("Q") || cell.equals("E"))
+                                    {
+                                        // do nothing
+                                    }
+                                    else {
+                                        String a[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
+
+                                        points[Integer.parseInt(a[0])] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
+                                                    sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+
+                                        if(a.length > 1) {
+                                            for (int id = 0; id < a[1].length(); ++id) {
+                                                Gdx.app.log(TAG, "cell located at (" + x + ", " + y + ") " + a[1].charAt(id));
+                                                if(Character.toLowerCase(a[1].charAt(id)) == 'h'){
+                                                    points[Integer.parseInt(a[0])].hasAHole = true;
+                                                }
+                                            }
+                                        }
+
+                                    }
                                 }
                             }
                             ++y;
@@ -107,7 +125,7 @@ public class StageLoader
                     {
                         if (points[i] != null)
                         {
-                            sb.append(String.format("%.02f,%.02f;", points[i].x, points[i].y));
+                            sb.append(String.format("%.02f,%.02f,%b;", points[i].x, points[i].y, points[i].hasAHole));
                             points[i] = null;
                         }
                         else
@@ -174,15 +192,15 @@ public class StageLoader
             Gdx.app.debug(TAG, "line = " + line);
             String[] pointsInLine = line.split(";");
 
-            ArrayList<Vector2> stagePoints = new ArrayList<Vector2>();
+            ArrayList<LevelPoint> stagePoints = new ArrayList<LevelPoint>();
 
             for (int j = 0; j < pointsInLine.length; j++)
             {
-                String[] xANDy = pointsInLine[j].split(",");
+                String[] xANDyANDhole = pointsInLine[j].split(",");
 
-                Gdx.app.debug(TAG, "Point = x:" + xANDy[0] + " y:" + xANDy[1]);
+                Gdx.app.debug(TAG, "Point = x:" + xANDyANDhole[0] + " y:" + xANDyANDhole[1]);
 
-                stagePoints.add(new Vector2(Float.parseFloat(xANDy[0]) * width, Float.parseFloat(xANDy[1]) * height));
+                stagePoints.add(new LevelPoint(Float.parseFloat(xANDyANDhole[0]) * width, Float.parseFloat(xANDyANDhole[1]) * height, Boolean.parseBoolean(xANDyANDhole[2])));
             }
             zones.get(currentZone).AddStage(currentStage, stagePoints);
         }
@@ -203,7 +221,7 @@ public class StageLoader
         return zones.size();
     }
 
-    public static ArrayList<Vector2> getPoints(int zone, int stage)
+    public static ArrayList<LevelPoint> getPoints(int zone, int stage)
     {
         return zones.get(zone).getStage(stage).getPoints();
     }

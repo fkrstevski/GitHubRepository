@@ -25,11 +25,16 @@ public class Constants
     public static final int MAX_LEVELS = 2;
     public static final float[] LEVEL_MULTIPLIERS = {1.5f, 0.75f};
 
-    public static final float[] FOLLOWER_SPEED = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
-    public static final float[] FOLLOWER_STARTTIME = {1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5, 5.5f};
+    public static final float[] FOLLOWER_SPEED = {2.5f, 5, 7.5f, 10, 12.5f, 15, 17.5f, 20, 22.5f, 25};
+    public static final float[] FOLLOWER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
+
+    public static final float[] DISAPPEARING_SPEED = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] HOLE_SCALE_TIME = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
+
+
 
 
 

@@ -16,6 +16,30 @@ import java.util.ArrayList;
 
 import com.filip.edge.util.Constants;
 
+enum LevelProperties {
+    None,
+    Follower,
+    Disappears
+}
+
+class LevelProperty{
+    LevelProperties property;
+    boolean set;
+    int startupTime;
+    int speed;
+    int zone;
+    int stage;
+
+    LevelProperty(LevelProperties p, int startup, int speed, int z, int s){
+        this.set = true;
+        this.property = p;
+        this.startupTime = startup;
+        this.speed = speed;
+        this.zone = z;
+        this.stage = s;
+    }
+}
+
 /**
  * Created by fkrstevski on 2015-02-09.
  */
@@ -47,7 +71,7 @@ public class StageLoader
         int numberOfStages = 1;
         int numberOfZones = 4;
 
-        boolean stageFollower[][] = new boolean[numberOfZones][numberOfStages];
+        ArrayList<LevelProperty> levelProperties = new ArrayList<LevelProperty>();
 
         String nl = System.getProperty("line.separator");
 
@@ -88,15 +112,41 @@ public class StageLoader
                                     {
                                         // do nothing
                                     }
-                                    else if(cell.equals("F")) { //TODO : add times
-                                        stageFollower[currentZone][currentStage] = true;
+                                    // if the first char in the cell is not an int, it means we are setting the level properties
+                                    else if(!isInteger(""+cell.charAt(0))) {
+                                        String results[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
+
+                                        for (String r : results){
+                                            if(r.charAt(0) == 'F'){
+                                                levelProperties.add(
+                                                        new LevelProperty(LevelProperties.Follower,
+                                                                Integer.parseInt(r.substring(1, 2)),
+                                                                Integer.parseInt(r.substring(2, 3)),
+                                                                currentZone, currentStage
+                                                        )
+                                                );
+                                            }
+                                            else if(r.charAt(0) == 'D'){
+                                                levelProperties.add(
+                                                        new LevelProperty(LevelProperties.Disappears,
+                                                                Integer.parseInt(r.substring(1, 2)),
+                                                                Integer.parseInt(r.substring(2, 3)),
+                                                                currentZone, currentStage
+                                                        )
+                                                );
+                                            }
+                                        }
+
+
                                     }
                                     else {
-                                        if(isInteger(cell)){
+                                        if(isInteger(cell)){ /* if the cell is an int the value, it means there is no additional properties */
                                             points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
                                                     sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
                                         }
                                         else {
+
+                                            // Check to see if the point index in the cell is 1 or 2 digits
                                             int pointIndex;
                                             if(Character.isDigit(cell.charAt(1))){
                                                 pointIndex = Integer.parseInt(cell.substring(0,2));
@@ -156,8 +206,20 @@ public class StageLoader
                         }
                     }
 
-                    sb.append(String.format("follower,%b;", stageFollower[currentZone][currentStage]));
+                    if(levelProperties.size() > 0) {
+                        for (LevelProperty property : levelProperties) {
+                            if (property.zone == currentZone && property.stage == currentStage) {
+                                sb.append(String.format("%s,%b,%d,%d;", property.property.name(), property.set, property.startupTime, property.speed));
+                            }
+                        }
+                    }
+                    else {
+                        sb.append(String.format("%s,%b,%d,%d;", LevelProperties.Follower, false, 0, 0));
+                        sb.append(String.format("%s,%b,%d,%d;", LevelProperties.Disappears, false, 0, 0));
+                    }
+
                     sb.append(nl);
+
                     for (int i = 0; i < points.length; i++)
                     {
                         if (points[i] != null)
@@ -227,18 +289,23 @@ public class StageLoader
             Gdx.app.debug(TAG, "Zone = " + currentZone);
             Gdx.app.debug(TAG, "Stage = " + currentStage);
 
+            ArrayList<LevelProperty> stageProperties = new ArrayList<LevelProperty>();
+
             // Level line
             String line = linesInFile[i];
             Gdx.app.debug(TAG, "Level line = " + line);
-            String[] levelProperties = line.split(";");
-            boolean levelFollower = false;
-            for (int j = 0; j < levelProperties.length; j++)
-            {
-                String[] propertyValue = levelProperties[j].split(",");
+            if(line.length() > 0) {
+                String[] levelPropertiesString = line.split(";");
 
-                Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
-                if(propertyValue[0].equalsIgnoreCase("follower")){
-                    levelFollower = Boolean.parseBoolean(propertyValue[1]);
+                for (int j = 0; j < levelPropertiesString.length; j++) {
+                    String[] propertyValue = levelPropertiesString[j].split(",");
+
+                    Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
+                    Gdx.app.debug(TAG, "Level Property start time: = " + propertyValue[2] + " speed time: = " + propertyValue[3]);
+                    if (Boolean.parseBoolean(propertyValue[1])) {
+                        stageProperties.add(new LevelProperty(LevelProperties.valueOf(propertyValue[0]),
+                                Integer.parseInt(propertyValue[2]), Integer.parseInt(propertyValue[3]), currentZone, currentStage));
+                    }
                 }
             }
 
@@ -260,7 +327,7 @@ public class StageLoader
                 stagePoints.add(new LevelPoint(Float.parseFloat(pointProperty[0]) * width, Float.parseFloat(pointProperty[1]) * height,
                         Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4])));
             }
-            zones.get(currentZone).AddStage(currentStage, stagePoints, levelFollower);
+            zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties);
         }
     }
 

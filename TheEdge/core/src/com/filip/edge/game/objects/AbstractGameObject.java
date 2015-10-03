@@ -19,6 +19,7 @@ public abstract class AbstractGameObject
     public Vector2 terminalVelocity;
     public Vector2 friction;
     public Vector2 acceleration;
+    public boolean visible;
 
     public Body body;
 
@@ -33,6 +34,7 @@ public abstract class AbstractGameObject
         terminalVelocity = new Vector2(1, 1);
         friction = new Vector2();
         acceleration = new Vector2();
+        visible = true;
     }
 
     public void update(float deltaTime)

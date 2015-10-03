@@ -43,25 +43,27 @@ public abstract class AbstractButtonObject extends AbstractGameObject
 
     public void render(SpriteBatch batch)
     {
-        Texture tex = null;
+        if(visible) {
+            Texture tex = null;
 
-        tex = pixmapTexture;
-        batch.draw(tex,
-                position.x - origin.x,
-                position.y - origin.y,
-                origin.x,
-                origin.y,
-                dimension.x,
-                dimension.y,
-                scale.x,
-                scale.y,
-                rotation,
-                0,
-                0,
-                (int) dimension.x,
-                (int) dimension.y,
-                false,
-                false);
+            tex = pixmapTexture;
+            batch.draw(tex,
+                    position.x - origin.x,
+                    position.y - origin.y,
+                    origin.x,
+                    origin.y,
+                    dimension.x,
+                    dimension.y,
+                    scale.x,
+                    scale.y,
+                    rotation,
+                    0,
+                    0,
+                    (int) dimension.x,
+                    (int) dimension.y,
+                    false,
+                    false);
+        }
     }
 
     public abstract boolean isTouched(int x, int y);

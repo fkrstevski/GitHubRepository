@@ -12,12 +12,31 @@ public class Stage
     private int stageID;
     private ArrayList<LevelPoint> points;
     public boolean hasFollowerObject;
+    public int followerSpeedIndex;
+    public int followerStartupTimeIndex;
+    public boolean disappears;
+    public int disappearSpeedIndex;
+    public int disappearsStartupTimeIndex;
 
-    public Stage(int id, ArrayList<LevelPoint> p, boolean follower)
+    public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties)
     {
         this.stageID = id;
         this.points = p;
-        this.hasFollowerObject = follower;
+        for (LevelProperty property :
+                properties) {
+            if(property.set){
+                if(property.property == LevelProperties.Disappears) {
+                    disappears = true;
+                    disappearsStartupTimeIndex = property.startupTime;
+                    disappearSpeedIndex = property.speed;
+                }
+                else if (property.property == LevelProperties.Follower){
+                    hasFollowerObject = true;
+                    followerStartupTimeIndex = property.startupTime;
+                    followerSpeedIndex = property.speed;
+                }
+            }
+        }
     }
 
     public ArrayList<LevelPoint> getPoints()

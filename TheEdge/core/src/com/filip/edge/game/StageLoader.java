@@ -47,6 +47,8 @@ public class StageLoader
         int numberOfStages = 1;
         int numberOfZones = 4;
 
+        boolean stageFollower[][] = new boolean[numberOfZones][numberOfStages];
+
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop)
@@ -80,25 +82,58 @@ public class StageLoader
                             // use comma as separator
                             String[] cells = line.split(cvsSplitBy);
                             for(int x = 0; x < cells.length; ++x) {
-                                String cell = cells[x];
+                                String cell = cells[x].toUpperCase();
                                 if(!cell.isEmpty()) {
-                                    if (cell.equals("M") || cell.equals("Q") || cell.equals("E"))
+                                    if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E"))
                                     {
                                         // do nothing
                                     }
+                                    else if(cell.equals("F")) { //TODO : add times
+                                        stageFollower[currentZone][currentStage] = true;
+                                    }
                                     else {
-                                        String a[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
+                                        if(isInteger(cell)){
+                                            points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
+                                                    sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+                                        }
+                                        else {
+                                            int pointIndex;
+                                            if(Character.isDigit(cell.charAt(1))){
+                                                pointIndex = Integer.parseInt(cell.substring(0,2));
+                                            }
+                                            else {
+                                                pointIndex = Integer.parseInt(cell.substring(0,1));
+                                            }
 
-                                        points[Integer.parseInt(a[0])] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
+                                            System.out.println("pointIndex = " + pointIndex);
+                                            points[pointIndex] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
                                                     sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
 
-                                        if(a.length > 1) {
-                                            for (int id = 0; id < a[1].length(); ++id) {
-                                                Gdx.app.log(TAG, "cell located at (" + x + ", " + y + ") " + a[1].charAt(id));
-                                                if(Character.toLowerCase(a[1].charAt(id)) == 'h'){
-                                                    points[Integer.parseInt(a[0])].hasAHole = true;
+                                            String resultsArray[] = cell.split("^[0-9]{1,2}");
+
+                                            String s = resultsArray[1]; //Ignore first empty result
+                                            System.out.println(s);
+                                            String results[] = s.split("(?<=[0-9])(?=[a-zA-Z])");
+
+                                            for (String r : results){
+                                                if(r.charAt(0) == 'H'){
+                                                    points[pointIndex].hasAHole = true;
+                                                    if(r.length() > 1) {
+                                                        points[pointIndex].holeStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                        points[pointIndex].holeScaleIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                    }
+                                                }
+                                                else if(r.charAt(0) == 'M'){
+                                                    points[pointIndex].moves = true;
+                                                }
+                                                else if(r.charAt(0) == 'F'){
+                                                    points[pointIndex].hasAFollower = true;
+                                                }
+                                                else if(r.charAt(0) == 'D'){
+                                                    points[pointIndex].disappears = true;
                                                 }
                                             }
+
                                         }
 
                                     }
@@ -121,11 +156,14 @@ public class StageLoader
                         }
                     }
 
+                    sb.append(String.format("follower,%b;", stageFollower[currentZone][currentStage]));
+                    sb.append(nl);
                     for (int i = 0; i < points.length; i++)
                     {
                         if (points[i] != null)
                         {
-                            sb.append(String.format("%.02f,%.02f,%b;", points[i].x, points[i].y, points[i].hasAHole));
+                            sb.append(String.format("%.02f,%.02f,%b,%d,%d;", points[i].x, points[i].y,
+                                    points[i].hasAHole, points[i].holeStartupIndex, points[i].holeScaleIndex));
                             points[i] = null;
                         }
                         else
@@ -183,26 +221,46 @@ public class StageLoader
 
         for (int i = 0; i < linesInFile.length; i++)
         {
-            currentZone = i / numberOfStages;
-            currentStage = i % numberOfStages;
+            currentZone = i / (numberOfStages * 2);
+            currentStage = i % (numberOfStages * 2); // * 2, since we are moving 2 lines per each loop
 
             Gdx.app.debug(TAG, "Zone = " + currentZone);
             Gdx.app.debug(TAG, "Stage = " + currentStage);
+
+            // Level line
             String line = linesInFile[i];
+            Gdx.app.debug(TAG, "Level line = " + line);
+            String[] levelProperties = line.split(";");
+            boolean levelFollower = false;
+            for (int j = 0; j < levelProperties.length; j++)
+            {
+                String[] propertyValue = levelProperties[j].split(",");
+
+                Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
+                if(propertyValue[0].equalsIgnoreCase("follower")){
+                    levelFollower = Boolean.parseBoolean(propertyValue[1]);
+                }
+            }
+
+
+            i++; // move to points line
+            line = linesInFile[i];
             Gdx.app.debug(TAG, "line = " + line);
+
             String[] pointsInLine = line.split(";");
 
             ArrayList<LevelPoint> stagePoints = new ArrayList<LevelPoint>();
 
             for (int j = 0; j < pointsInLine.length; j++)
             {
-                String[] xANDyANDhole = pointsInLine[j].split(",");
+                String[] pointProperty = pointsInLine[j].split(",");
 
-                Gdx.app.debug(TAG, "Point = x:" + xANDyANDhole[0] + " y:" + xANDyANDhole[1]);
+                Gdx.app.debug(TAG, "Point = x:" + pointProperty[0] + " y:" + pointProperty[1]);
 
-                stagePoints.add(new LevelPoint(Float.parseFloat(xANDyANDhole[0]) * width, Float.parseFloat(xANDyANDhole[1]) * height, Boolean.parseBoolean(xANDyANDhole[2])));
+                stagePoints.add(new LevelPoint(Float.parseFloat(pointProperty[0]) * width, Float.parseFloat(pointProperty[1]) * height,
+                        Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4])));
             }
-            zones.get(currentZone).AddStage(currentStage, stagePoints);
+            zones.get(currentZone).AddStage(currentStage, stagePoints, levelFollower);
         }
     }
 

@@ -20,9 +20,9 @@ public class Zone
         stages = new ArrayList<Stage>();
     }
 
-    public void AddStage(int stageID, ArrayList<LevelPoint> points)
+    public void AddStage(int stageID, ArrayList<LevelPoint> points, boolean follower)
     {
-        stages.add(new Stage(stageID, points));
+        stages.add(new Stage(stageID, points, follower));
     }
 
     public Stage getStage(int stage)

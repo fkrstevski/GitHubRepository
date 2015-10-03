@@ -1,7 +1,9 @@
 package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 
 public class Level
@@ -37,7 +40,21 @@ public class Level
     public EndTarget finishCircle;
     public ArrayList<LevelPoint> points;
 
+    public EmptyCircle followerObject;
+
     public ArrayList<Hole> holes;
+
+    enum FollowerObjectState {
+        Inactive,
+        Following
+    }
+
+    private float followerObjectTime;
+    private float followerObjectDisplayStartTime;
+    private FollowerObjectState followerObjectState;
+    private Vector2 followObjectFrom;
+    private Vector2 followObjectTo;
+    private int followPointIndex;
 
     public Level()
     {
@@ -46,6 +63,11 @@ public class Level
 
     private void init()
     {
+        followerObjectTime = 0;
+        followerObjectDisplayStartTime = 1;
+        followerObjectState = FollowerObjectState.Inactive;
+        followPointIndex = 0;
+
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
@@ -113,7 +135,9 @@ public class Level
             circleShapes.add(m);
 
             if(points.get(i).hasAHole) {
-                holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale), this.points.get(i).x, this.points.get(i).y));
+                holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+                        this.points.get(i).x, this.points.get(i).y,
+                        this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
             }
         }
 
@@ -134,6 +158,14 @@ public class Level
 
             rectangleShapes.add(s);
         }
+
+        if(StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage).hasFollowerObject) {
+            followerObject = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+                    points.get(0).x,
+                    points.get(0).y,
+                    Color.BLACK,
+                    Color.BLACK);
+        }
     }
 
     public void update(float deltaTime)
@@ -141,6 +173,42 @@ public class Level
         ball.update(deltaTime);
         for (Hole hole :holes) {
             hole.update(deltaTime);
+        }
+        if(followerObject != null)
+        {
+            followerObjectTime += deltaTime;
+            switch (followerObjectState) {
+                case Inactive:
+
+                    if(followerObjectTime > followerObjectDisplayStartTime)
+                    {
+                        followerObject.body.setActive(true);
+                        followerObjectTime = 0;
+                        followObjectFrom = points.get(followPointIndex);
+                        followObjectTo = points.get(followPointIndex+1);
+                        followerObjectState = FollowerObjectState.Following;
+                    }
+
+
+                    break;
+                case Following:
+                    Vector2 dir = new Vector2(followObjectTo.x - followObjectFrom.x, followObjectTo.y - followObjectFrom.y);
+                    Vector2 dirN = dir.nor();
+                    followerObject.body.setLinearVelocity(dirN.scl(10));
+
+                    if(followerObject.position.epsilonEquals(followObjectTo, 5f))
+                    {
+                        followerObject.position.set(followObjectTo.x, followObjectTo.y);
+                        followPointIndex++;
+                        followObjectFrom = points.get(followPointIndex);
+                        if(followPointIndex < points.size() - 1) {
+                            followObjectTo = points.get(followPointIndex + 1);
+                        }
+                    }
+                    followerObject.update(deltaTime);
+                    break;
+            }
+
         }
     }
 
@@ -172,7 +240,14 @@ public class Level
             hole.render(batch);
         }
 
+        if(followerObject != null) {
+            if(followerObject.body.isActive()) {
+                followerObject.render(batch);
+            }
+        }
+
         ball.render(batch);
+
     }
 
     public void renderBackButton(SpriteBatch batch)

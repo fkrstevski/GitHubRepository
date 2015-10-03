@@ -25,6 +25,14 @@ public class Constants
     public static final int MAX_LEVELS = 2;
     public static final float[] LEVEL_MULTIPLIERS = {1.5f, 0.75f};
 
+    public static final float[] FOLLOWER_SPEED = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
+    public static final float[] FOLLOWER_STARTTIME = {1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5, 5.5f};
+
+    public static final float[] HOLE_SCALE_TIME = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
+
+
+
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);
     public static final Color YELLOW = new Color(244 / 255.0f, 206 / 255.0f, 58 / 255.0f, 0xff / 255.0f);

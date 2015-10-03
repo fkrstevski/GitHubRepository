@@ -14,20 +14,21 @@ import com.filip.edge.util.GamePreferences;
  */
 public class Hole extends EmptyCircle {
     public static final String TAG = Hole.class.getName();
-    private float currentScaleTime = 0;
-    private float currentTime = 0;
-    private final float SCALE_TIME = 5.5f;
-    private final float COOLDOWN_TIME = 1.5f;
+    private float currentScaleTime;
+    private float currentTime;
+    private float scaleTime;
+    private float startupTime;
     private int originalSize;
 
-    private State state = State.ScalingUp;
+    private State state;
 
     enum State {
+        StartingUp,
         ScalingUp,
         ScalingDown
     }
 
-    public Hole(int size, float x, float y)
+    public Hole(int size, float x, float y, int scaleTimeIndex, int startupTimeIndex)
     {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
@@ -37,8 +38,11 @@ public class Hole extends EmptyCircle {
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].a));
 
+        this.state = State.StartingUp;
         this.originalSize = size;
         this.scale.set(0, 0);
+        this.startupTime = Constants.HOLE_STARTUP_TIME[startupTimeIndex];
+        this.scaleTime = Constants.HOLE_SCALE_TIME[scaleTimeIndex];
     }
 
     @Override
@@ -46,30 +50,38 @@ public class Hole extends EmptyCircle {
         super.update(deltaTime);
 
         switch (state){
+            case StartingUp:
+                currentTime+=deltaTime;
+                if(currentTime > startupTime)
+                {
+                    currentTime = 0;
+                    state = State.ScalingUp;
+                }
+                break;
             case ScalingUp:
                 currentScaleTime += deltaTime;
-                if(currentScaleTime > SCALE_TIME)
+                if(currentScaleTime > scaleTime)
                 {
                     currentScaleTime = 0;
                     state = State.ScalingDown;
                 }
                 else {
-                    this.scale.set(currentScaleTime / SCALE_TIME, currentScaleTime / SCALE_TIME);
-                    body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / SCALE_TIME) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
+                    this.scale.set(currentScaleTime / scaleTime, currentScaleTime / scaleTime);
+                    body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
 
                 }
                 break;
 
             case ScalingDown:
                 currentScaleTime += deltaTime;
-                if(currentScaleTime > SCALE_TIME)
+                if(currentScaleTime > scaleTime)
                 {
                     currentScaleTime = 0;
                     state = State.ScalingUp;
                 }
                 else {
-                    this.scale.set(1 - currentScaleTime / SCALE_TIME, 1 - currentScaleTime / SCALE_TIME);
-                    body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / SCALE_TIME) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
+                    this.scale.set(1 - currentScaleTime / scaleTime, 1 - currentScaleTime / scaleTime);
+                    body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
                 }
 
                 break;

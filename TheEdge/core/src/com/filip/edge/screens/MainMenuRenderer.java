@@ -89,7 +89,7 @@ public class MainMenuRenderer implements Disposable
             fpsFont.setColor(1, 0, 0, 1);
         }
 
-        fpsFont.draw(batch, "FPS: " + fps, x, y);
+        fpsFont.draw(batch, " " + fps, x, y);
         fpsFont.setColor(1, 1, 1, 1); // white
     }
 

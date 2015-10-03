@@ -1,7 +1,5 @@
 package com.filip.edge.game;
 
-import com.badlogic.gdx.math.Vector2;
-
 import java.util.ArrayList;
 
 /**
@@ -13,11 +11,13 @@ public class Stage
 
     private int stageID;
     private ArrayList<LevelPoint> points;
+    public boolean hasFollowerObject;
 
-    public Stage(int id, ArrayList<LevelPoint> p)
+    public Stage(int id, ArrayList<LevelPoint> p, boolean follower)
     {
         this.stageID = id;
         this.points = p;
+        this.hasFollowerObject = follower;
     }
 
     public ArrayList<LevelPoint> getPoints()

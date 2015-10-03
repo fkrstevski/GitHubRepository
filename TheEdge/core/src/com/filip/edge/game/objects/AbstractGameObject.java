@@ -39,7 +39,6 @@ public abstract class AbstractGameObject
     {
         if (body != null)
         {
-
             position.set(new Vector2(body.getPosition().x * Constants.BOX2D_SCALE, body.getPosition().y * Constants.BOX2D_SCALE));
             rotation = body.getAngle() * MathUtils.radiansToDegrees;
         }

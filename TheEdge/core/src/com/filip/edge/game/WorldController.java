@@ -130,6 +130,23 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         float extraScale = 0;//level.ball.radius * 2;
 
+        // Follower object body
+        if(level.followerObject != null) {
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyType.KinematicBody;
+            bodyDef.position.set(new Vector2(level.followerObject.position.x / Constants.BOX2D_SCALE, level.followerObject.position.y / Constants.BOX2D_SCALE));
+            Body body = b2world.createBody(bodyDef);
+            body.setActive(false);
+            level.followerObject.body = body;
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius((level.followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = circleShape;
+            fixtureDef.isSensor = true;
+            body.createFixture(fixtureDef);
+            circleShape.dispose();
+        }
+
         // Ball Physics Body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
@@ -495,8 +512,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             }
-            else
+            else if(level.followerObject != null && contact.getFixtureA().getBody() == level.followerObject.body)
             {
+                Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
+                this.state = LevelState.OffTheEdge;
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
+            }
+            else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureA().getBody() == hole.body)
                     {
@@ -515,6 +538,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
+            }
+            else if (level.followerObject != null && contact.getFixtureB().getBody() == level.followerObject.body)
+            {
+                Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
+                this.state = LevelState.OffTheEdge;
+                this.level.startCircle = this.level.startCircleRedIcon;
+                this.level.finishCircle = this.level.finishCircleRedIcon;
             }
             else
             {

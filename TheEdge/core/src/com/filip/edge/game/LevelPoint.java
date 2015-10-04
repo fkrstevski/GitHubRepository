@@ -13,13 +13,13 @@ public class LevelPoint extends Vector2 {
     public int followStartupIndex;
     public int followSpeedIndex;
 
-    public LevelPoint(float x, float y){
+    public LevelPoint(float x, float y) {
         super(x, y);
     }
 
     public LevelPoint(float x, float y,
                       boolean h, int holeStartupIndex, int holeScaleIndex,
-                      boolean f, int followStartupIndex, int followSpeedIndex){
+                      boolean f, int followStartupIndex, int followSpeedIndex) {
         super(x, y);
         this.hasAHole = h;
         this.holeStartupIndex = holeStartupIndex;

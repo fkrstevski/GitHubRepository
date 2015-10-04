@@ -1,11 +1,11 @@
 package com.filip.edge.util;
 
-public interface IActivityRequestHandler
-{
+public interface IActivityRequestHandler {
     //for google analytcis
     //public void setTrackerScreenName(String path);
     //for andmod ads
     public void showAds(boolean show);
+
     //for google play services
     public void login();
 

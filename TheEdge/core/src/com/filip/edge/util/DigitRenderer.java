@@ -9,8 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by FILIP on 3/1/2015.
  */
-public class DigitRenderer
-{
+public class DigitRenderer {
     public static final String TAG = DigitRenderer.class.getName();
 
     public static final DigitRenderer instance = new DigitRenderer();
@@ -21,13 +20,11 @@ public class DigitRenderer
     public int digitWidth;
     private int digitHeight;
 
-    private DigitRenderer()
-    {
+    private DigitRenderer() {
 
     }
 
-    public void load()
-    {
+    public void load() {
         int height = Gdx.graphics.getHeight();
         digits = new ArrayList<AbstractRectangleButtonObject>();
         letters = new ArrayList<AbstractRectangleButtonObject>();
@@ -75,8 +72,7 @@ public class DigitRenderer
 
     }
 
-    public void renderNumber(String number, int x, int y, SpriteBatch batch)
-    {
+    public void renderNumber(String number, int x, int y, SpriteBatch batch) {
         int count = 0;
         for (int i = number.length() - 1; i >= 0; --i, ++count) {
             int digit = Character.getNumericValue(number.charAt(i));
@@ -86,13 +82,11 @@ public class DigitRenderer
         }
     }
 
-    public void renderString(String str, int x, int y, SpriteBatch batch)
-    {
+    public void renderString(String str, int x, int y, SpriteBatch batch) {
         int count = 0;
         for (int i = str.length() - 1; i >= 0; --i, ++count) {
             // not space
-            if(str.charAt(i) != ' ')
-            {
+            if (str.charAt(i) != ' ') {
                 int index = str.charAt(i) - 'A';
                 AbstractRectangleButtonObject digitObject = letters.get(index);
                 digitObject.position.set(x - count * digitWidth * 1.1f, y);
@@ -101,8 +95,7 @@ public class DigitRenderer
         }
     }
 
-    public void renderStringCentered(String str, int y, SpriteBatch batch)
-    {
+    public void renderStringCentered(String str, int y, SpriteBatch batch) {
         this.renderString(str, Gdx.graphics.getWidth() / 2 + str.length() * digitWidth / 2, y, batch);
     }
 }

@@ -13,16 +13,13 @@ import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
 
-public class EdgeGame extends DirectedGame
-{
-    public EdgeGame(IActivityRequestHandler activityRequestHandler)
-    {
+public class EdgeGame extends DirectedGame {
+    public EdgeGame(IActivityRequestHandler activityRequestHandler) {
         super(activityRequestHandler);
     }
 
     @Override
-    public void create()
-    {
+    public void create() {
         // Set Libgdx log level
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
@@ -39,15 +36,13 @@ public class EdgeGame extends DirectedGame
 
         AudioManager.instance.play(Assets.instance.music.song01);
 
-        if (this.activityRequestHandler != null)
-        {
+        if (this.activityRequestHandler != null) {
             this.activityRequestHandler.login();
         }
 
-        if(GamePreferences.instance.scoreNeedsToBeSubmitted) {
+        if (GamePreferences.instance.scoreNeedsToBeSubmitted) {
             setScreen(new ResultsScreen(this));
-        }
-        else {
+        } else {
             // Start game at menu screen
             setScreen(new MenuScreen(this));
         }

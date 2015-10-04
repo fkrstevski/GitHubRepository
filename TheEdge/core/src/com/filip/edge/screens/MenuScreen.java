@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
-public class MenuScreen extends AbstractGameScreen
-{
+public class MenuScreen extends AbstractGameScreen {
 
     private static final String TAG = MenuScreen.class.getName();
 
@@ -16,17 +15,14 @@ public class MenuScreen extends AbstractGameScreen
 
     private boolean paused;
 
-    public MenuScreen(DirectedGame game)
-    {
+    public MenuScreen(DirectedGame game) {
         super(game);
     }
 
     @Override
-    public void render(float deltaTime)
-    {
+    public void render(float deltaTime) {
         // Do not update game world when paused.
-        if (!paused)
-        {
+        if (!paused) {
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(deltaTime);
@@ -46,14 +42,12 @@ public class MenuScreen extends AbstractGameScreen
 
 
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         worldRenderer.resize(width, height);
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
         GamePreferences.instance.load();
         worldController = new MainMenuController(game);
         worldRenderer = new MainMenuRenderer(worldController);
@@ -61,30 +55,26 @@ public class MenuScreen extends AbstractGameScreen
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
         worldRenderer.dispose();
         worldController.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
         paused = true;
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         super.resume();
         // Only called on Android!
         paused = false;
     }
 
     @Override
-    public InputProcessor getInputProcessor()
-    {
+    public InputProcessor getInputProcessor() {
         return worldController;
     }
 

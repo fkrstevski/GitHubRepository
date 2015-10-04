@@ -16,8 +16,7 @@ import com.filip.edge.util.GamePreferences;
 
 import java.util.ArrayList;
 
-public class Level
-{
+public class Level {
 
     public static final String TAG = Level.class.getName();
 
@@ -61,13 +60,11 @@ public class Level
     private float disappearingTime;
     private int disappearingIndex;
 
-    public Level()
-    {
+    public Level() {
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
@@ -88,11 +85,11 @@ public class Level
                 Constants.TURQUOISE);      // inside color
 
         int topWidth = width;
-        int topHeight = (int)(height * 0.11);
-        int topX = width/2;
-        int topY = topHeight/2;
+        int topHeight = (int) (height * 0.11);
+        int topX = width / 2;
+        int topY = topHeight / 2;
 
-        topBackground = new MiddlePart(topWidth, topHeight, topX, topY,Constants.TURQUOISE, Constants.WHITE);
+        topBackground = new MiddlePart(topWidth, topHeight, topX, topY, Constants.TURQUOISE, Constants.WHITE);
 
         // Add Start Circle
         EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
@@ -110,13 +107,12 @@ public class Level
 
 
         // Add Middle Circles
-        for (int i = 1; i < this.getNumberOfPoints() - 1; ++i)
-        {
+        for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
             EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
 
-            if(points.get(i).hasAHole) {
+            if (points.get(i).hasAHole) {
                 holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
@@ -142,8 +138,7 @@ public class Level
         finishCircle = finishCircleRedIcon;
 
         // Add Rectangles
-        for (int i = 0; i < this.getNumberOfPoints() - 1; ++i)
-        {
+        for (int i = 0; i < this.getNumberOfPoints() - 1; ++i) {
             Vector2 p1 = points.get(i);
             Vector2 p2 = points.get(i + 1);
 
@@ -161,7 +156,7 @@ public class Level
 
         // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
-        if(s.hasFollowerObject) {
+        if (s.hasFollowerObject) {
             followerObjectTime = 0;
             followerObjectDisplayStartTime = Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex];
             followerObjectState = PropertyState.Inactive;
@@ -175,41 +170,40 @@ public class Level
                     Color.BLACK);
         }
 
-        if(s.disappears){
+        if (s.disappears) {
             disappearingState = PropertyState.Inactive;
             disappearing = s.disappears;
-            disappearingStartTime =Constants.DISAPPEARING_STARTTIME[s.disappearsStartupTimeIndex];
+            disappearingStartTime = Constants.DISAPPEARING_STARTTIME[s.disappearsStartupTimeIndex];
             disappearingSpeed = Constants.DISAPPEARING_SPEED[s.disappearSpeedIndex];
             disappearingIndex = 0;
         }
     }
 
-    public void update(float deltaTime)
-    {
+    public void update(float deltaTime) {
         ball.update(deltaTime);
-        for (Hole hole :holes) {
+        for (Hole hole : holes) {
             hole.update(deltaTime);
         }
 
-        if(disappearing) {
+        if (disappearing) {
             disappearingTime += deltaTime;
-            switch (disappearingState){
+            switch (disappearingState) {
                 case Inactive:
-                    if(disappearingTime > disappearingStartTime) {
+                    if (disappearingTime > disappearingStartTime) {
                         disappearingTime = 0;
                         disappearingState = PropertyState.Active;
                     }
                     break;
 
                 case Active:
-                    if(disappearingTime > disappearingSpeed) {
+                    if (disappearingTime > disappearingSpeed) {
                         disappearingTime = 0;
                         Gdx.app.log(TAG, "disappearingIndex = " + disappearingIndex);
-                        if(disappearingIndex > 0 && disappearingIndex < circleShapes.size()){
+                        if (disappearingIndex > 0 && disappearingIndex < circleShapes.size()) {
                             circleShapes.get(disappearingIndex).visible = false;
                             circleShapes.get(disappearingIndex).body.setActive(false);
                         }
-                        if (disappearingIndex < rectangleShapes.size() ) {
+                        if (disappearingIndex < rectangleShapes.size()) {
                             rectangleShapes.get(disappearingIndex).visible = false;
                             rectangleShapes.get(disappearingIndex).body.setActive(false);
                         }
@@ -220,18 +214,16 @@ public class Level
             }
         }
 
-        if(followerObject != null)
-        {
+        if (followerObject != null) {
             followerObjectTime += deltaTime;
             switch (followerObjectState) {
                 case Inactive:
 
-                    if(followerObjectTime > followerObjectDisplayStartTime)
-                    {
+                    if (followerObjectTime > followerObjectDisplayStartTime) {
                         followerObject.body.setActive(true);
                         followerObjectTime = 0;
                         followObjectFrom = points.get(followPointIndex);
-                        followObjectTo = points.get(followPointIndex+1);
+                        followObjectTo = points.get(followPointIndex + 1);
                         followerObjectState = PropertyState.Active;
                     }
 
@@ -242,12 +234,11 @@ public class Level
                     Vector2 dirN = dir.nor();
                     followerObject.body.setLinearVelocity(dirN.scl(followerObjectSpeed));
 
-                    if(followerObject.position.epsilonEquals(followObjectTo, 5f))
-                    {
+                    if (followerObject.position.epsilonEquals(followObjectTo, 5f)) {
                         followerObject.position.set(followObjectTo.x, followObjectTo.y);
                         followPointIndex++;
                         followObjectFrom = points.get(followPointIndex);
-                        if(followPointIndex < points.size() - 1) {
+                        if (followPointIndex < points.size() - 1) {
                             followObjectTo = points.get(followPointIndex + 1);
                         }
                     }
@@ -258,36 +249,31 @@ public class Level
         }
     }
 
-    public void render(SpriteBatch batch)
-    {
-        for (int i = 0; i < circleShapes.size(); ++i)
-        {
+    public void render(SpriteBatch batch) {
+        for (int i = 0; i < circleShapes.size(); ++i) {
             circleShapes.get(i).render(batch);
         }
 
-        if (this.startCircle != null)
-        {
+        if (this.startCircle != null) {
             startCircle.render(batch);
         }
 
-        if (this.finishCircle != null)
-        {
+        if (this.finishCircle != null) {
             finishCircle.render(batch);
         }
 
-        for (int i = 0; i < rectangleShapes.size(); ++i)
-        {
+        for (int i = 0; i < rectangleShapes.size(); ++i) {
             rectangleShapes.get(i).render(batch);
         }
 
         //endCircle.render(batch);
 
-        for (Hole hole :holes) {
+        for (Hole hole : holes) {
             hole.render(batch);
         }
 
-        if(followerObject != null) {
-            if(followerObject.body.isActive()) {
+        if (followerObject != null) {
+            if (followerObject.body.isActive()) {
                 followerObject.render(batch);
             }
         }
@@ -296,39 +282,32 @@ public class Level
 
     }
 
-    public void renderBackButton(SpriteBatch batch)
-    {
+    public void renderBackButton(SpriteBatch batch) {
         topBackground.render(batch);
         backButton.render(batch);
     }
 
-    public float getLevelMultiplier()
-    {
+    public float getLevelMultiplier() {
         return Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level];
     }
 
-    public Vector2 getPoint(int index)
-    {
+    public Vector2 getPoint(int index) {
         return points.get(index);
     }
 
-    public Vector2 getFirstPoint()
-    {
+    public Vector2 getFirstPoint() {
         return points.get(0);
     }
 
-    public Vector2 getLastPoint()
-    {
+    public Vector2 getLastPoint() {
         return points.get(points.size() - 1);
     }
 
-    public int getNumberOfPoints()
-    {
+    public int getNumberOfPoints() {
         return points.size();
     }
 
-    public EmptyCircle getBall()
-    {
+    public EmptyCircle getBall() {
         return ball;
     }
 }

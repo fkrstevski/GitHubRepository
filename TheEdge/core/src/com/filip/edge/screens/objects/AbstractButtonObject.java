@@ -9,20 +9,17 @@ import com.filip.edge.game.objects.AbstractGameObject;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public abstract class AbstractButtonObject extends AbstractGameObject
-{
+public abstract class AbstractButtonObject extends AbstractGameObject {
     public static final String TAG = AbstractButtonObject.class.getName();
 
     protected Texture pixmapTexture = null;
     protected Pixmap buttonPixmap = null;
 
-    public AbstractButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor)
-    {
+    public AbstractButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
         init(width, height, x, y, outsideColor, insideColor);
     }
 
-    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor)
-    {
+    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
         dimension.set(width, height);
         position.set(x, y);
 
@@ -40,9 +37,8 @@ public abstract class AbstractButtonObject extends AbstractGameObject
 
     public abstract void fillInside(int size);
 
-    public void render(SpriteBatch batch)
-    {
-        if(visible) {
+    public void render(SpriteBatch batch) {
+        if (visible) {
             Texture tex = null;
 
             tex = pixmapTexture;

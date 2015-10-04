@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2013 Andreas Oehlke
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,7 @@ import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 
-public class WorldRenderer implements Disposable
-{
+public class WorldRenderer implements Disposable {
 
     private static final String TAG = WorldRenderer.class.getName();
 
@@ -36,14 +35,12 @@ public class WorldRenderer implements Disposable
     private WorldController worldController;
     private Box2DDebugRenderer b2debugRenderer;
 
-    public WorldRenderer(WorldController worldController)
-    {
+    public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
@@ -51,39 +48,30 @@ public class WorldRenderer implements Disposable
         b2debugRenderer = new Box2DDebugRenderer();
     }
 
-    public void render(SpriteBatch batch)
-    {
+    public void render(SpriteBatch batch) {
         renderWorld(batch);
     }
 
-    private void renderWorld(SpriteBatch batch)
-    {
+    private void renderWorld(SpriteBatch batch) {
         worldController.cameraHelper.applyTo(camera);
 
-        if (worldController.renderPhysics)
-        {
+        if (worldController.renderPhysics) {
             b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));
-        }
-        else
-        {
+        } else {
             batch.setProjectionMatrix(camera.combined);
             //Gdx.app.log(TAG, "Sprite Batch begin");
             batch.begin();
 
             worldController.level.renderBackButton(batch);
 
-            if (worldController.state == WorldController.LevelState.GameOver)
-            {
+            if (worldController.state == WorldController.LevelState.GameOver) {
                 renderGuiGameOver(batch);
-            }
-            else
-            {
+            } else {
                 worldController.level.render(batch);
                 renderGuiScore(batch);
             }
 
-            if (Constants.DEBUG_BUILD)
-            {
+            if (Constants.DEBUG_BUILD) {
                 renderGuiLevel(batch);
                 renderGuiFpsCounter(batch);
             }
@@ -94,24 +82,18 @@ public class WorldRenderer implements Disposable
         }
     }
 
-    private void renderGuiFpsCounter(SpriteBatch batch)
-    {
+    private void renderGuiFpsCounter(SpriteBatch batch) {
         float x = camera.viewportWidth - 55;
         float y = camera.viewportHeight - 15;
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultNormal;
-        if (fps >= 45)
-        {
+        if (fps >= 45) {
             // 45 or more FPS show up in green
             fpsFont.setColor(0, 1, 0, 1);
-        }
-        else if (fps >= 30)
-        {
+        } else if (fps >= 30) {
             // 30 or more FPS show up in yellow
             fpsFont.setColor(1, 1, 0, 1);
-        }
-        else
-        {
+        } else {
             // less than 30 FPS show up in red
             fpsFont.setColor(1, 0, 0, 1);
         }
@@ -120,8 +102,7 @@ public class WorldRenderer implements Disposable
         fpsFont.setColor(1, 1, 1, 1); // white
     }
 
-    private void renderGuiLevel(SpriteBatch batch)
-    {
+    private void renderGuiLevel(SpriteBatch batch) {
         float x = camera.viewportWidth / 2;
         float y = camera.viewportHeight - 30;
         String level = "Level: " + GamePreferences.instance.zone + "-" +
@@ -133,8 +114,7 @@ public class WorldRenderer implements Disposable
         fontGameOver.drawMultiLine(batch, level, x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
-    private void renderGuiGameOver(SpriteBatch batch)
-    {
+    private void renderGuiGameOver(SpriteBatch batch) {
         float x = camera.viewportWidth / 2;
         float y = camera.viewportHeight / 2;
 
@@ -143,30 +123,24 @@ public class WorldRenderer implements Disposable
         fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 1, BitmapFont.HAlignment.CENTER);
     }
 
-    private void renderGuiScore(SpriteBatch batch)
-    {
+    private void renderGuiScore(SpriteBatch batch) {
         String score = "" + GamePreferences.instance.currentScore;
-        if(GamePreferences.instance.currentScore == Constants.MAX_SCORE)
-        {
-            String scoreSub = score.substring((int)(score.length() - this.worldController.readyTimeRatio * score.length()));
+        if (GamePreferences.instance.currentScore == Constants.MAX_SCORE) {
+            String scoreSub = score.substring((int) (score.length() - this.worldController.readyTimeRatio * score.length()));
             DigitRenderer.instance.renderNumber(scoreSub, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
-        }
-        else
-        {
+        } else {
             DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
         }
     }
 
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         // TODO: Look at viewport width
         /*camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
         camera.update();*/
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 

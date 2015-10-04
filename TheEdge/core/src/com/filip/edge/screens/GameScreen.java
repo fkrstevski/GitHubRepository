@@ -8,8 +8,7 @@ import com.filip.edge.game.WorldRenderer;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
-public class GameScreen extends AbstractGameScreen
-{
+public class GameScreen extends AbstractGameScreen {
 
     private static final String TAG = GameScreen.class.getName();
 
@@ -18,17 +17,14 @@ public class GameScreen extends AbstractGameScreen
 
     private boolean paused;
 
-    public GameScreen(DirectedGame game)
-    {
+    public GameScreen(DirectedGame game) {
         super(game);
     }
 
     @Override
-    public void render(float deltaTime)
-    {
+    public void render(float deltaTime) {
         // Do not update game world when paused.
-        if (!paused)
-        {
+        if (!paused) {
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(deltaTime);
@@ -48,14 +44,12 @@ public class GameScreen extends AbstractGameScreen
     }
 
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         worldRenderer.resize(width, height);
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
         GamePreferences.instance.load();
         worldController = new WorldController(game);
         worldRenderer = new WorldRenderer(worldController);
@@ -63,8 +57,7 @@ public class GameScreen extends AbstractGameScreen
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
 
         worldRenderer.dispose();
         worldController.dispose();
@@ -72,22 +65,19 @@ public class GameScreen extends AbstractGameScreen
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
         paused = true;
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         super.resume();
         // Only called on Android!
         paused = false;
     }
 
     @Override
-    public InputProcessor getInputProcessor()
-    {
+    public InputProcessor getInputProcessor() {
         return worldController;
     }
 

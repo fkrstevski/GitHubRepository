@@ -20,8 +20,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
-public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener
-{
+public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
     private GameHelper gameHelper;
     private static final String AD_UNIT_ID = "ca-app-pub-0265459346558615/8626109621";
     AdView adView;
@@ -29,19 +28,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private final int SHOW_ADS = 1;
     private final int HIDE_ADS = 0;
 
-    protected Handler handler = new Handler()
-    {
+    protected Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
-                case SHOW_ADS:
-                {
+            switch (msg.what) {
+                case SHOW_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW AD!");
                     adView.setVisibility(View.VISIBLE);
                     break;
                 }
-                case HIDE_ADS:
-                {
+                case HIDE_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! HIDE AD!");
                     adView.setVisibility(View.GONE);
                     break;
@@ -51,8 +47,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.numSamples = 4;
@@ -86,7 +81,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         /*GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         globalTracker=analytics.newTracker(R.xml.global_tracker)**/
 
-        gameHelper=new GameHelper(this, GameHelper.CLIENT_GAMES);
+        gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
         gameHelper.setup(this);
 
@@ -110,7 +105,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    protected void onStart(){ // TODO: call gameHelper.OnStart from the main menu
+    protected void onStart() { // TODO: call gameHelper.OnStart from the main menu
         super.onStart();
         //GoogleAnalytics.getInstance(this).reportActivityStart(this);
         gameHelper.onStart(this);
@@ -124,8 +119,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         gameHelper.onActivityResult(requestCode, resultCode, data);
     }
@@ -150,38 +144,28 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void login() {
-        try
-        {
-            runOnUiThread(new Runnable()
-            {
+        try {
+            runOnUiThread(new Runnable() {
                 //@Override
-                public void run()
-                {
+                public void run() {
                     gameHelper.beginUserInitiatedSignIn();
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Gdx.app.log("MyTemplateGame", "Log in failed: " + e.getMessage() + ".");
         }
     }
 
     @Override
     public void logOut() {
-        try
-        {
-            runOnUiThread(new Runnable()
-            {
+        try {
+            runOnUiThread(new Runnable() {
                 //@Override
-                public void run()
-                {
+                public void run() {
                     gameHelper.signOut();
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Gdx.app.log("MyTemplateGame", "Log out failed: " + e.getMessage() + ".");
         }
     }
@@ -193,32 +177,26 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void submitScore(long score) {
-        if (isSignedIn())
-        {
+        if (isSignedIn()) {
             Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);
             //startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), 9002);
-        }
-        else
-        {
+        } else {
             // Maybe sign in here then redirect to submitting score?
         }
     }
 
 
     public void unlockAchievements(String achievementID) {
-        if (isSignedIn()){
+        if (isSignedIn()) {
             //Games.Achievements.unlock(gameHelper.getApiClient(), achievementID);
         }
     }
 
     @Override
     public void showScores() {
-        if (isSignedIn() == true)
-        {
+        if (isSignedIn() == true) {
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), 9002);
-        }
-        else
-        {
+        } else {
             // Maybe sign in here then redirect to showing scores?
         }
     }
@@ -232,7 +210,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void onSignInSucceeded() {
         Gdx.app.log("MyTemplateGame", "SignedIn");
     }
-	/*
+    /*
 	@Override
 public void rateGame()
 {

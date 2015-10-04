@@ -12,8 +12,7 @@ import com.filip.edge.util.GamePreferences;
 /**
  * Created by fkrstevski on 2015-02-12.
  */
-public class MainMenu
-{
+public class MainMenu {
     public static final String TAG = MainMenu.class.getName();
     public PlayButton playButton;
     public InfoButton infoButton;
@@ -21,13 +20,11 @@ public class MainMenu
 
     public MainMenuState state;
 
-    public MainMenu()
-    {
+    public MainMenu() {
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
@@ -53,33 +50,27 @@ public class MainMenu
 
     }
 
-    public void update(float deltaTime)
-    {
+    public void update(float deltaTime) {
 
-        if (this.state == MainMenuState.Active)
-        {
+        if (this.state == MainMenuState.Active) {
             playButton.update(deltaTime);
             infoButton.update(deltaTime);
             leaderboardButton.update(deltaTime);
-        }
-        else if (this.state == MainMenuState.ZoomInToPlay)
-        {
+        } else if (this.state == MainMenuState.ZoomInToPlay) {
             playButton.update(deltaTime);
         }
     }
 
-    public void render(SpriteBatch batch)
-    {
-        if (this.state == MainMenuState.Active)
-        {
+    public void render(SpriteBatch batch) {
+        if (this.state == MainMenuState.Active) {
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();
 
             playButton.render(batch);
             infoButton.render(batch);
             leaderboardButton.render(batch);
-            
-            DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2 , batch);
+
+            DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2, batch);
 
             /*
             //Test numbers and font
@@ -97,15 +88,12 @@ public class MainMenu
             DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 600, batch);
             */
 
-        }
-        else if (this.state == MainMenuState.ZoomInToPlay)
-        {
+        } else if (this.state == MainMenuState.ZoomInToPlay) {
             playButton.render(batch);
         }
     }
 
-    enum MainMenuState
-    {
+    enum MainMenuState {
         Active,
         ZoomInToPlay,
         Done

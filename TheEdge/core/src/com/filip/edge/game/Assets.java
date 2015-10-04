@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2013 Andreas Oehlke
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,8 +26,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Disposable;
 
-public class Assets implements Disposable, AssetErrorListener
-{
+public class Assets implements Disposable, AssetErrorListener {
 
     public static final String TAG = Assets.class.getName();
 
@@ -38,12 +37,10 @@ public class Assets implements Disposable, AssetErrorListener
     private AssetManager assetManager;
 
     // singleton: prevent instantiation from other classes
-    private Assets()
-    {
+    private Assets() {
     }
 
-    public void init(AssetManager assetManager)
-    {
+    public void init(AssetManager assetManager) {
         this.assetManager = assetManager;
         // set asset manager error handler
         assetManager.setErrorListener(this);
@@ -56,8 +53,7 @@ public class Assets implements Disposable, AssetErrorListener
         assetManager.finishLoading();
 
         Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
-        for (String a : assetManager.getAssetNames())
-        {
+        for (String a : assetManager.getAssetNames()) {
             Gdx.app.debug(TAG, "asset: " + a);
         }
 
@@ -68,8 +64,7 @@ public class Assets implements Disposable, AssetErrorListener
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         assetManager.dispose();
         fonts.defaultSmall.dispose();
         fonts.defaultNormal.dispose();
@@ -77,19 +72,16 @@ public class Assets implements Disposable, AssetErrorListener
     }
 
     @Override
-    public void error(AssetDescriptor asset, Throwable throwable)
-    {
+    public void error(AssetDescriptor asset, Throwable throwable) {
         Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
     }
 
-    public class AssetFonts
-    {
+    public class AssetFonts {
         public final BitmapFont defaultSmall;
         public final BitmapFont defaultNormal;
         public final BitmapFont defaultBig;
 
-        public AssetFonts()
-        {
+        public AssetFonts() {
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UnscreenMK.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = 20;
@@ -107,24 +99,20 @@ public class Assets implements Disposable, AssetErrorListener
         }
     }
 
-    public class AssetSounds
-    {
+    public class AssetSounds {
         public final Sound tickSound;
         public final Sound liveLost;
 
-        public AssetSounds(AssetManager am)
-        {
+        public AssetSounds(AssetManager am) {
             tickSound = am.get("sounds/TickSound.wav", Sound.class);
             liveLost = am.get("sounds/live_lost.wav", Sound.class);
         }
     }
 
-    public class AssetMusic
-    {
+    public class AssetMusic {
         public final Music song01;
 
-        public AssetMusic(AssetManager am)
-        {
+        public AssetMusic(AssetManager am) {
             song01 = am.get("music/keith303_-_brand_new_highscore.mp3", Music.class);
         }
     }

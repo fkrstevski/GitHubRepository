@@ -30,8 +30,7 @@ import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
-public class WorldController extends InputAdapter implements Disposable, ContactListener
-{
+public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
     private static final float READY_TIME = 2.0f;
     private static final float END_TIME = 2.0f;
@@ -49,8 +48,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float greenTime;
     private float levelScore;
 
-    public WorldController(DirectedGame game)
-    {
+    public WorldController(DirectedGame game) {
         Box2D.init();
         this.game = game;
         this.renderPhysics = false;
@@ -66,25 +64,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         AudioManager.instance.play(Assets.instance.sounds.tickSound);
     }
 
-    private void init()
-    {
+    private void init() {
         cameraHelper = new CameraHelper();
         initLevel();
     }
 
-    public void nextLevel()
-    {
+    public void nextLevel() {
         GamePreferences.instance.level++;
-        if (GamePreferences.instance.level > Constants.MAX_LEVELS - 1)
-        {
+        if (GamePreferences.instance.level > Constants.MAX_LEVELS - 1) {
             GamePreferences.instance.level = 0;
             GamePreferences.instance.stage++;
-            if (GamePreferences.instance.stage > StageLoader.getZone(GamePreferences.instance.zone).getNumberOfStages() - 1)
-            {
+            if (GamePreferences.instance.stage > StageLoader.getZone(GamePreferences.instance.zone).getNumberOfStages() - 1) {
                 GamePreferences.instance.stage = 0;
                 GamePreferences.instance.zone++;
-                if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1)
-                {
+                if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1) {
                     state = LevelState.GameBeat;
                     GamePreferences.instance.zone = 0;
                     GamePreferences.instance.scoreNeedsToBeSubmitted = true;
@@ -106,13 +99,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         initLevel();
     }
 
-    private void initLevel()
-    {
+    private void initLevel() {
         levelScore = 0;
         level = new Level();
 
-        if (b2world != null)
-        {
+        if (b2world != null) {
             b2world.setContactListener(null);
             b2world.dispose();
         }
@@ -122,14 +113,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         initPhysics();
     }
 
-    private void initPhysics()
-    {
+    private void initPhysics() {
         numberOfContacts = 0;
 
         float extraScale = 0;//level.ball.radius * 2;
 
         // Follower object body
-        if(level.followerObject != null) {
+        if (level.followerObject != null) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyType.KinematicBody;
             bodyDef.position.set(new Vector2(level.followerObject.position.x / Constants.BOX2D_SCALE, level.followerObject.position.y / Constants.BOX2D_SCALE));
@@ -160,7 +150,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         circleShape.dispose();
 
         // Hole Physics Body
-        for (Hole hole :level.holes) {
+        for (Hole hole : level.holes) {
             BodyDef holeBodyDef = new BodyDef();
             holeBodyDef.type = BodyType.StaticBody;
             holeBodyDef.position.set(new Vector2(hole.position.x / Constants.BOX2D_SCALE, hole.position.y / Constants.BOX2D_SCALE));
@@ -190,8 +180,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         circleShape2.dispose();
 
         // Middle Circles Physics Bodies
-        for (AbstractCircleButtonObject c : level.circleShapes)
-        {
+        for (AbstractCircleButtonObject c : level.circleShapes) {
             BodyDef bodyDef1 = new BodyDef();
             bodyDef1.type = BodyType.StaticBody;
             bodyDef1.position.set(new Vector2(c.position.x / Constants.BOX2D_SCALE, c.position.y / Constants.BOX2D_SCALE));
@@ -207,8 +196,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // Rectangles Physics Bodies
-        for (AbstractRectangleButtonObject c : level.rectangleShapes)
-        {
+        for (AbstractRectangleButtonObject c : level.rectangleShapes) {
             BodyDef bodyDef1 = new BodyDef();
             bodyDef1.type = BodyType.StaticBody;
             bodyDef1.position.set(new Vector2(c.position.x / Constants.BOX2D_SCALE, c.position.y / Constants.BOX2D_SCALE));
@@ -225,34 +213,28 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
     }
 
-    public void update(float deltaTime)
-    {
+    public void update(float deltaTime) {
 
         cameraHelper.update(deltaTime);
 
         handleDebugInput(deltaTime);
 
-        if (state == LevelState.Countdown)
-        {
+        if (state == LevelState.Countdown) {
             this.readyTime += deltaTime;
             this.readyTimeRatio = this.readyTime / READY_TIME;
 
-            if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f)
-            {
+            if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f) {
                 this.game.showAds(false);
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
-            }
-            else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f)
-            {
+            } else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f) {
                 this.level.startCircle = this.level.startCircleYellowIcon;
                 this.level.finishCircle = this.level.finishCircleYellowIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
             }
 
-            if (readyTime > READY_TIME)
-            {
+            if (readyTime > READY_TIME) {
                 readyTime = 0;
                 //this.readyTimeRatio = this.readyTime / READY_TIME;
                 this.level.startCircle = this.level.startCircleGreenIcon;
@@ -264,15 +246,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.game.showAds(true);
             }
 
-        }
-        else if (state == LevelState.LevelComplete)
-        {
+        } else if (state == LevelState.LevelComplete) {
             this.endTime += deltaTime;
 
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / END_TIME);
 
-            if (endTime > END_TIME)
-            {
+            if (endTime > END_TIME) {
                 endTime = 0;
                 this.state = LevelState.Countdown;
                 this.level.startCircle = this.level.startCircleRedIcon;
@@ -280,24 +259,18 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
                 nextLevel();
             }
-        }
-        else if (state == LevelState.OffTheEdge)
-        {
+        } else if (state == LevelState.OffTheEdge) {
             this.endTime += deltaTime;
 
             level.ball.scale.set(level.ball.scale.x * (1 - endTime / END_TIME), level.ball.scale.y * (1 - endTime / END_TIME));
-            if (endTime > END_TIME)
-            {
+            if (endTime > END_TIME) {
                 endTime = 0;
                 GamePreferences.instance.currentScore -= 10000;
-                if (GamePreferences.instance.currentScore <= 0)
-                {
+                if (GamePreferences.instance.currentScore <= 0) {
                     GamePreferences.instance.currentScore = 0;
                     state = LevelState.GameOver;
                     AudioManager.instance.play(Assets.instance.sounds.liveLost);
-                }
-                else
-                {
+                } else {
                     this.state = LevelState.Countdown;
                     this.level.startCircle = this.level.startCircleRedIcon;
                     this.level.finishCircle = this.level.finishCircleRedIcon;
@@ -305,41 +278,33 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     this.initLevel();
                 }
             }
-        }
-        else if (state == LevelState.Gameplay)
-        {
+        } else if (state == LevelState.Gameplay) {
             // Update the score
             // need to do something fishy since current score is a long and subtracting
             // a small float might not update the actual value
             levelScore += deltaTime * 5;
-            if(levelScore > 1)
-            {
-                GamePreferences.instance.currentScore -= (int)levelScore;
+            if (levelScore > 1) {
+                GamePreferences.instance.currentScore -= (int) levelScore;
                 levelScore = levelScore % 1;
             }
 
-            if (GamePreferences.instance.currentScore <= 0)
-            {
+            if (GamePreferences.instance.currentScore <= 0) {
                 GamePreferences.instance.currentScore = 0;
                 state = LevelState.GameOver;
                 AudioManager.instance.play(Assets.instance.sounds.liveLost);
-            }
-            else
-            {
+            } else {
                 level.update(deltaTime);
                 handleInputGame(deltaTime);
                 b2world.step(deltaTime, 8, 3);
 
                 this.greenTime += deltaTime;
-                if (this.greenTime > GREEN_ICON_TIME)
-                {
+                if (this.greenTime > GREEN_ICON_TIME) {
                     this.greenTime = 0;
                     this.level.finishCircle = null;
                     this.level.startCircle = null;
                 }
 
-                if (this.numberOfContacts == 0 || this.b2world.getContactCount() == 0)
-                {
+                if (this.numberOfContacts == 0 || this.b2world.getContactCount() == 0) {
                     this.state = LevelState.OffTheEdge;
                     this.level.startCircle = this.level.startCircleRedIcon;
                     this.level.finishCircle = this.level.finishCircleRedIcon;
@@ -348,64 +313,49 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
     }
 
-    private void handleDebugInput(float deltaTime)
-    {
-        if (Gdx.app.getType() != ApplicationType.Desktop)
-        {
+    private void handleDebugInput(float deltaTime) {
+        if (Gdx.app.getType() != ApplicationType.Desktop) {
             return;
         }
 
         // Camera Controls (zoom)
         float camZoomSpeed = 1 * deltaTime;
         float camZoomSpeedAccelerationFactor = 5;
-        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
-        {
+        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
             camZoomSpeed *= camZoomSpeedAccelerationFactor;
         }
-        if (Gdx.input.isKeyPressed(Keys.COMMA))
-        {
+        if (Gdx.input.isKeyPressed(Keys.COMMA)) {
             cameraHelper.addZoom(camZoomSpeed);
         }
-        if (Gdx.input.isKeyPressed(Keys.PERIOD))
-        {
+        if (Gdx.input.isKeyPressed(Keys.PERIOD)) {
             cameraHelper.addZoom(-camZoomSpeed);
         }
-        if (Gdx.input.isKeyPressed(Keys.SLASH))
-        {
+        if (Gdx.input.isKeyPressed(Keys.SLASH)) {
             cameraHelper.setZoom(1);
         }
     }
 
-    private void handleInputGame(float deltaTime)
-    {
-        if (Gdx.app.getType() == ApplicationType.Desktop)
-        {
+    private void handleInputGame(float deltaTime) {
+        if (Gdx.app.getType() == ApplicationType.Desktop) {
             // Camera Controls (move)
             float ballMoveSpeed = 1000 * deltaTime;
             float camMoveSpeedAccelerationFactor = 5;
-            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
-            {
+            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
                 ballMoveSpeed *= camMoveSpeedAccelerationFactor;
             }
-            if (Gdx.input.isKeyPressed(Keys.LEFT))
-            {
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) {
                 moveBall(-ballMoveSpeed, 0);
             }
-            if (Gdx.input.isKeyPressed(Keys.RIGHT))
-            {
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
                 moveBall(ballMoveSpeed, 0);
             }
-            if (Gdx.input.isKeyPressed(Keys.UP))
-            {
+            if (Gdx.input.isKeyPressed(Keys.UP)) {
                 moveBall(0, -ballMoveSpeed);
             }
-            if (Gdx.input.isKeyPressed(Keys.DOWN))
-            {
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) {
                 moveBall(0, ballMoveSpeed);
             }
-        }
-        else
-        {
+        } else {
             float x = Gdx.input.getAccelerometerX();
             float y = Gdx.input.getAccelerometerY();
             moveBall(y * 700 * deltaTime, x * 700 * deltaTime);
@@ -413,35 +363,28 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
     }
 
-    private void moveBall(float x, float y)
-    {
+    private void moveBall(float x, float y) {
         level.ball.body.setLinearVelocity(x, y);
     }
 
     @Override
-    public boolean keyUp(int keycode)
-    {
+    public boolean keyUp(int keycode) {
         // Reset game world
-        if (keycode == Keys.R)
-        {
+        if (keycode == Keys.R) {
             init();
             Gdx.app.debug(TAG, "Game world resetted");
         }
         // Toggle camera follow
-        else if (keycode == Keys.ENTER)
-        {
+        else if (keycode == Keys.ENTER) {
             //this.nextLevel();
             this.state = LevelState.LevelComplete;
             this.level.startCircle = this.level.startCircleGreenIcon;
             this.level.finishCircle = this.level.finishCircleGreenIcon;
         }
         // Back to Menu
-        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
-        {
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
             backToMenu();
-        }
-        else if (keycode == Keys.SPACE)
-        {
+        } else if (keycode == Keys.SPACE) {
             //
             this.renderPhysics = !this.renderPhysics;
         }
@@ -449,33 +392,23 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         return false;
     }
 
-    private void backToMenu()
-    {
+    private void backToMenu() {
         // switch to menu screen
         game.setScreen(new MenuScreen(game));
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button)
-    {
-        if (level.backButton.isTouched(screenX, screenY))
-        {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (level.backButton.isTouched(screenX, screenY)) {
             backToMenu();
-        }
-        else if (level.endCircle.isTouched(screenX, screenY))
-        {
+        } else if (level.endCircle.isTouched(screenX, screenY)) {
             this.state = LevelState.LevelComplete;
             this.level.startCircle = this.level.startCircleGreenIcon;
             this.level.finishCircle = this.level.finishCircleGreenIcon;
-        }
-        else if (level.startCircleGreenIcon.isTouched(screenX, screenY))
-        {
+        } else if (level.startCircleGreenIcon.isTouched(screenX, screenY)) {
             Constants.DEBUG_BUILD = !Constants.DEBUG_BUILD;
-        }
-        else
-        {
-            if (Constants.DEBUG_BUILD)
-            {
+        } else {
+            if (Constants.DEBUG_BUILD) {
                 this.renderPhysics = !this.renderPhysics;
             }
         }
@@ -483,44 +416,34 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     @Override
-    public void dispose()
-    {
-        if (b2world != null)
-        {
+    public void dispose() {
+        if (b2world != null) {
             b2world.dispose();
         }
     }
 
     @Override
-    public void endContact(Contact contact)
-    {
+    public void endContact(Contact contact) {
         numberOfContacts--;
     }
 
     @Override
-    public void beginContact(Contact contact)
-    {
+    public void beginContact(Contact contact) {
         numberOfContacts++;
 
-        if (contact.getFixtureB().getBody() == level.ball.body)
-        {
-            if (contact.getFixtureA().getBody() == level.endCircle.body)
-            {
+        if (contact.getFixtureB().getBody() == level.ball.body) {
+            if (contact.getFixtureA().getBody() == level.endCircle.body) {
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
-            }
-            else if(level.followerObject != null && contact.getFixtureA().getBody() == level.followerObject.body)
-            {
+            } else if (level.followerObject != null && contact.getFixtureA().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 this.state = LevelState.OffTheEdge;
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
-            }
-            else {
+            } else {
                 for (Hole hole : level.holes) {
-                    if (contact.getFixtureA().getBody() == hole.body)
-                    {
+                    if (contact.getFixtureA().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         this.state = LevelState.OffTheEdge;
                         this.level.startCircle = this.level.startCircleRedIcon;
@@ -528,27 +451,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
             }
-        }
-        else
-        {
-            if (contact.getFixtureB().getBody() == level.endCircle.body)
-            {
+        } else {
+            if (contact.getFixtureB().getBody() == level.endCircle.body) {
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
-            }
-            else if (level.followerObject != null && contact.getFixtureB().getBody() == level.followerObject.body)
-            {
+            } else if (level.followerObject != null && contact.getFixtureB().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 this.state = LevelState.OffTheEdge;
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
-            }
-            else
-            {
+            } else {
                 for (Hole hole : level.holes) {
-                    if (contact.getFixtureB().getBody() == hole.body)
-                    {
+                    if (contact.getFixtureB().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         this.state = LevelState.OffTheEdge;
                         this.level.startCircle = this.level.startCircleRedIcon;
@@ -560,19 +475,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold)
-    {
+    public void preSolve(Contact contact, Manifold oldManifold) {
 
     }
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse)
-    {
+    public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }
 
-    public enum LevelState
-    {
+    public enum LevelState {
         Countdown,
         Gameplay,
         LevelComplete,

@@ -5,8 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
 
-public class GamePreferences
-{
+public class GamePreferences {
 
     public static final String TAG = GamePreferences.class.getName();
 
@@ -27,20 +26,17 @@ public class GamePreferences
     private Preferences prefs;
 
     // singleton: prevent instantiation from other classes
-    private GamePreferences()
-    {
+    private GamePreferences() {
         prefs = Gdx.app.getPreferences(Constants.PREFERENCES);
 
         // Clear preferences every time the game runs on the desktop
-        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
-        {
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             prefs.clear();
             prefs.flush();
         }
     }
 
-    public void load()
-    {
+    public void load() {
         sound = prefs.getBoolean("sound", true);
         music = prefs.getBoolean("music", true);
         scoreNeedsToBeSubmitted = prefs.getBoolean("scoreNeedsToBeSubmitted", false);
@@ -53,8 +49,7 @@ public class GamePreferences
         currentScore = prefs.getLong("currentScore", Constants.MAX_SCORE);
     }
 
-    public void save()
-    {
+    public void save() {
         prefs.putBoolean("sound", sound);
         prefs.putBoolean("music", music);
         prefs.putBoolean("scoreNeedsToBeSubmitted", scoreNeedsToBeSubmitted);

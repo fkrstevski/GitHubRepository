@@ -53,8 +53,7 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     @Override
-    public void render(float deltaTime)
-    {
+    public void render(float deltaTime) {
         // Sets the clear screen color
         Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
@@ -73,15 +72,15 @@ public class ResultsScreen extends AbstractGameScreen {
         game.batch.begin();
 
         DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch);
-        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5 ), game.batch);
+        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5), game.batch);
 
         //DigitRenderer.instance.renderStringCentered(email, (int) (Gdx.graphics.getHeight() * 0.35 ), game.batch);
 
-        String score = ""+GamePreferences.instance.currentScore;
+        String score = "" + GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
         DigitRenderer.instance.renderNumber("" + GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
 
-        if(scoreSubmitted == true) {
+        if (scoreSubmitted == true) {
             GamePreferences.instance.scoreNeedsToBeSubmitted = false;
             GamePreferences.instance.currentScore = Constants.MAX_SCORE;
             GamePreferences.instance.save();
@@ -93,14 +92,12 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
 
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
@@ -144,7 +141,6 @@ public class ResultsScreen extends AbstractGameScreen {
         TextField.TextFieldStyle tStyle = new TextField.TextFieldStyle();
 
 
-
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UnscreenMK.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Gdx.graphics.getWidth() / 20;
@@ -178,11 +174,10 @@ public class ResultsScreen extends AbstractGameScreen {
         });
 
 
-
         txtEmail = new TextField("Enter your email:", skin);
         //txtEmail = new TextField(this.email, skin);
-        txtEmailWidth = (int)(Gdx.graphics.getWidth() * 0.95);
-        txtEmailHeight = (int)(Gdx.graphics.getWidth() * 0.08);
+        txtEmailWidth = (int) (Gdx.graphics.getWidth() * 0.95);
+        txtEmailHeight = (int) (Gdx.graphics.getWidth() * 0.08);
         txtEmail.setPosition(Gdx.graphics.getWidth() / 2 - txtEmailWidth / 2, (int) (Gdx.graphics.getHeight() / 2.4));
         txtEmail.setSize(txtEmailWidth, txtEmailHeight);
         txtEmail.setCursorPosition(5);
@@ -243,35 +238,30 @@ public class ResultsScreen extends AbstractGameScreen {
             }
 
             @Override
-            public void cancelled ()
-            {
+            public void cancelled() {
 
             }
         });
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
         stage.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
 
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         super.resume();
     }
 
     @Override
-    public InputProcessor getInputProcessor()
-    {
+    public InputProcessor getInputProcessor() {
         return stage;
     }
 }

@@ -2,8 +2,7 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Constants
-{
+public class Constants {
     public static boolean DEBUG_BUILD = false;
 
     // Game preferences file
@@ -15,7 +14,7 @@ public class Constants
     public static final int DIGIT_WIDTH_CELLS = 5;
     public static final int DIGIT_HEIGHT_CELLS = 9;
 
-    public static final float DIGIT_ASPECT_RATIO = DIGIT_HEIGHT_CELLS / (float)DIGIT_WIDTH_CELLS; // 1.8 = 9(height) / 5(width)
+    public static final float DIGIT_ASPECT_RATIO = DIGIT_HEIGHT_CELLS / (float) DIGIT_WIDTH_CELLS; // 1.8 = 9(height) / 5(width)
 
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
@@ -35,9 +34,6 @@ public class Constants
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
 
 
-
-
-
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);
     public static final Color YELLOW = new Color(244 / 255.0f, 206 / 255.0f, 58 / 255.0f, 0xff / 255.0f);
@@ -50,7 +46,7 @@ public class Constants
     public static final Color BLACK = new Color(47 / 255.0f, 72 / 255.0f, 94 / 255.0f, 0xff / 255.0f);
     public static final Color TRANSPARENT = new Color(0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 / 255.0f);
 
-    public static final Color[] ZONE_COLORS = { BLUE, ORANGE, PURPLE, GREY};
+    public static final Color[] ZONE_COLORS = {BLUE, ORANGE, PURPLE, GREY};
 
     public static long MAX_SCORE = 1000000000000000000L;
 

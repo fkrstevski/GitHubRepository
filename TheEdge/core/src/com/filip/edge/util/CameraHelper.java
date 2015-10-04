@@ -6,8 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.filip.edge.game.objects.AbstractGameObject;
 
-public class CameraHelper
-{
+public class CameraHelper {
 
     private static final String TAG = CameraHelper.class.getName();
 
@@ -19,69 +18,56 @@ public class CameraHelper
     private float zoom;
     private AbstractGameObject target;
 
-    public CameraHelper()
-    {
+    public CameraHelper() {
         position = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         zoom = 1.0f;
     }
 
-    public void update(float deltaTime)
-    {
-        if (!hasTarget())
-        {
+    public void update(float deltaTime) {
+        if (!hasTarget()) {
             return;
         }
 
         position.lerp(target.position, FOLLOW_SPEED * deltaTime);
     }
 
-    public void setPosition(float x, float y)
-    {
+    public void setPosition(float x, float y) {
         this.position.set(x, y);
     }
 
-    public Vector2 getPosition()
-    {
+    public Vector2 getPosition() {
         return position;
     }
 
-    public void addZoom(float amount)
-    {
+    public void addZoom(float amount) {
         setZoom(zoom + amount);
     }
 
-    public float getZoom()
-    {
+    public float getZoom() {
         return zoom;
     }
 
-    public void setZoom(float zoom)
-    {
+    public void setZoom(float zoom) {
         this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
     }
 
-    public AbstractGameObject getTarget()
-    {
+    public AbstractGameObject getTarget() {
         return target;
     }
 
-    public void setTarget(AbstractGameObject target)
-    {
+    public void setTarget(AbstractGameObject target) {
         this.target = target;
     }
 
-    public boolean hasTarget()
-    {
+    public boolean hasTarget() {
         return target != null;
     }
 
-    public boolean hasTarget(AbstractGameObject target)
-    {
+    public boolean hasTarget(AbstractGameObject target) {
         return hasTarget() && this.target.equals(target);
     }
 
-    public void applyTo(OrthographicCamera camera)
-    {
+    public void applyTo(OrthographicCamera camera) {
         camera.position.x = position.x;
         camera.position.y = position.y;
         camera.zoom = zoom;

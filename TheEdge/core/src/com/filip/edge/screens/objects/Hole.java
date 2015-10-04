@@ -25,8 +25,7 @@ public class Hole extends EmptyCircle {
         ScalingDown
     }
 
-    public Hole(int size, float x, float y, int scaleTimeIndex, int startupTimeIndex)
-    {
+    public Hole(int size, float x, float y, int scaleTimeIndex, int startupTimeIndex) {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
@@ -46,23 +45,20 @@ public class Hole extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        switch (state){
+        switch (state) {
             case StartingUp:
-                currentTime+=deltaTime;
-                if(currentTime > startupTime)
-                {
+                currentTime += deltaTime;
+                if (currentTime > startupTime) {
                     currentTime = 0;
                     state = State.ScalingUp;
                 }
                 break;
             case ScalingUp:
                 currentScaleTime += deltaTime;
-                if(currentScaleTime > scaleTime)
-                {
+                if (currentScaleTime > scaleTime) {
                     currentScaleTime = 0;
                     state = State.ScalingDown;
-                }
-                else {
+                } else {
                     this.scale.set(currentScaleTime / scaleTime, currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
 
@@ -71,12 +67,10 @@ public class Hole extends EmptyCircle {
 
             case ScalingDown:
                 currentScaleTime += deltaTime;
-                if(currentScaleTime > scaleTime)
-                {
+                if (currentScaleTime > scaleTime) {
                     currentScaleTime = 0;
                     state = State.ScalingUp;
-                }
-                else {
+                } else {
                     this.scale.set(1 - currentScaleTime / scaleTime, 1 - currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
                 }
@@ -87,7 +81,7 @@ public class Hole extends EmptyCircle {
 
     @Override
     public void render(SpriteBatch batch) {
-        switch (state){
+        switch (state) {
             case ScalingUp:
             case ScalingDown:
                 super.render(batch);

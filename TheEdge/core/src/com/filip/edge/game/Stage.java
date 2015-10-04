@@ -5,8 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by fkrstevski on 2015-02-09.
  */
-public class Stage
-{
+public class Stage {
     private static final String TAG = Stage.class.getName();
 
     private int stageID;
@@ -18,19 +17,17 @@ public class Stage
     public int disappearSpeedIndex;
     public int disappearsStartupTimeIndex;
 
-    public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties)
-    {
+    public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties) {
         this.stageID = id;
         this.points = p;
         for (LevelProperty property :
                 properties) {
-            if(property.set){
-                if(property.property == LevelProperties.Disappears) {
+            if (property.set) {
+                if (property.property == LevelProperties.Disappears) {
                     disappears = true;
                     disappearsStartupTimeIndex = property.startupTime;
                     disappearSpeedIndex = property.speed;
-                }
-                else if (property.property == LevelProperties.Follower){
+                } else if (property.property == LevelProperties.Follower) {
                     hasFollowerObject = true;
                     followerStartupTimeIndex = property.startupTime;
                     followerSpeedIndex = property.speed;
@@ -39,8 +36,7 @@ public class Stage
         }
     }
 
-    public ArrayList<LevelPoint> getPoints()
-    {
+    public ArrayList<LevelPoint> getPoints() {
         return points;
     }
 }

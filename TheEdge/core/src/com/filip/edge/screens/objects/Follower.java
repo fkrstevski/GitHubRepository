@@ -1,5 +1,6 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
  * Created by fkrstevski on 2015-10-04.
  */
 public class Follower {
+    public static final String TAG = Follower.class.getName();
+
     public EmptyCircle followerObject;
     public float followerObjectTime;
     private float followerObjectDisplayStartTime;
@@ -26,8 +29,10 @@ public class Follower {
     private int followObjectOriginalSize;
     private static final float FOLLOW_OBJECT_SCALE_TIME = 0.5f;
     public ArrayList<LevelPoint> pointsToFollow;
+    private int direction;
+    private boolean backAndForth;
 
-    public Follower(float startUpTime, Vector2 speed, int size, Vector2 pos, ArrayList<LevelPoint> pointsToFollow){
+    public Follower(float startUpTime, Vector2 speed, int size, Vector2 pos, ArrayList<LevelPoint> pointsToFollow, int dir, boolean backAndForth){
 
         this.followerObjectTime = 0;
         this.followerObjectDisplayStartTime = startUpTime;
@@ -36,6 +41,8 @@ public class Follower {
         this.followerObjectSpeed = speed;
         this.followObjectOriginalSize = size;
         this.pointsToFollow = pointsToFollow;
+        this.direction = dir;
+        this.backAndForth = backAndForth;
 
         this.followerObject = new EmptyCircle(this.followObjectOriginalSize,
                 pos.x,
@@ -77,12 +84,25 @@ public class Follower {
                 this.followerObject.body.setLinearVelocity(dirN.scl(this.followerObjectSpeed));
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
                     this.followerObject.body.setTransform(this.followObjectTo.x / Constants.BOX2D_SCALE, this.followObjectTo.y / Constants.BOX2D_SCALE, 0);
-                    this.followPointIndex++;
-                    if(this.followPointIndex < pointsToFollow.size()) {
-                        this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
-                        if (this.followPointIndex < pointsToFollow.size() - 1) {
-                            this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
+                    this.followPointIndex += this.direction;
+
+                    if(this.backAndForth) {
+                        if(this.followPointIndex == 0 || this.followPointIndex == pointsToFollow.size() - 1) {
+                            this.direction *= -1;
                         }
+
+                        this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
+                        this.followObjectTo = pointsToFollow.get(this.followPointIndex + this.direction);
+                    }
+                    else {
+                        if(followPointIndex > pointsToFollow.size() - 2){
+                            this.followPointIndex = 0;
+                        }
+
+                        this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
+                        // Update the body to the new point TODO: doesnt work too well
+                        this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
+                        this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
                     }
                 }
                 this.followerObject.update(deltaTime);

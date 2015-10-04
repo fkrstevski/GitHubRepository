@@ -111,7 +111,6 @@ public class Level {
 
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
-            Gdx.app.log(TAG, "middle size = " + (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
             EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
@@ -166,7 +165,7 @@ public class Level {
                                         new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                                         (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
-                                        points.get(0), points);
+                                        points.get(0), points, 1, false);
         }
 
         if (s.disappears) {

@@ -41,6 +41,7 @@ public class Level {
     public ArrayList<LevelPoint> points;
 
     public ArrayList<Hole> holes;
+    public ArrayList<Follower> followers;
     public ArrayList<LevelProperty> properties;
 
     public enum PropertyState {
@@ -79,6 +80,7 @@ public class Level {
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
         holes = new ArrayList<Hole>();
+        followers = new ArrayList<Follower>();
 
         ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * horizontalScale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
         backButton = new BackButton((int) (height * 0.1f),   // size
@@ -119,6 +121,21 @@ public class Level {
                 holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
+            }
+
+            if(points.get(i).hasAFollower) {
+                ArrayList<LevelPoint> localPoints = new ArrayList<LevelPoint>();
+                localPoints.add(points.get(i));
+                localPoints.add(points.get(i+1));
+
+                followers.add(new Follower(
+                        Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
+                        new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
+                                Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
+                        (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
+                        points.get(i), localPoints, 1, false
+
+                ));
             }
         }
 
@@ -165,7 +182,7 @@ public class Level {
                                         new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                                         (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
-                                        points.get(0), points, 1, false);
+                                        points.get(0), points, 1, true);
         }
 
         if (s.disappears) {
@@ -181,6 +198,10 @@ public class Level {
         ball.update(deltaTime);
         for (Hole hole : holes) {
             hole.update(deltaTime);
+        }
+
+        for (Follower follower : followers) {
+            follower.update(deltaTime);
         }
 
         if (disappearing) {
@@ -238,6 +259,10 @@ public class Level {
 
         for (Hole hole : holes) {
             hole.render(batch);
+        }
+
+        for (Follower follower : followers) {
+            follower.render(batch);
         }
 
         if (levelFollower != null) {
@@ -303,7 +328,7 @@ public class Level {
     }
 
     public void updateFollowerScale(float scale) {
-        this.levelFollower.followerObject.scale.set(this.levelFollower.followerObject.scale.x * scale, this.levelFollower.followerObject.scale.y * scale);
+        this.levelFollower.scale(scale);
 
     }
 }

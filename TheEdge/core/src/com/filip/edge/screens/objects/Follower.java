@@ -136,6 +136,9 @@ public class Follower {
         if (followerObjectState != PropertyState.Inactive) {
             followerObject.render(batch);
         }
+    }
 
+    public void scale(float scale) {
+        this.followerObject.scale.set(this.followerObject.scale.x * scale, this.followerObject.scale.y * scale);
     }
 }

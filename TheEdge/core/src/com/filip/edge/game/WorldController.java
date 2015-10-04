@@ -118,15 +118,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         float extraScale = 0;//level.ball.radius * 2;
 
         // Follower object body
-        if (level.followerObject != null) {
+        if (level.hasFollowerObject()) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyType.KinematicBody;
-            bodyDef.position.set(new Vector2(level.followerObject.position.x / Constants.BOX2D_SCALE, level.followerObject.position.y / Constants.BOX2D_SCALE));
+            bodyDef.position.set(new Vector2(level.getFollowerPos().x / Constants.BOX2D_SCALE, level.getFollowerPos().y / Constants.BOX2D_SCALE));
             Body body = b2world.createBody(bodyDef);
             body.setActive(false);
-            level.followerObject.body = body;
+            level.setFollowerBody(body);
             CircleShape circleShape = new CircleShape();
-            circleShape.setRadius((level.followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+            circleShape.setRadius((level.getFollowerRadius() - extraScale) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;
@@ -249,8 +249,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             this.endTime += deltaTime;
 
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
-            if(level.followerObject != null) {
-                level.followerObject.scale.set(level.followerObject.scale.x * (1 - endTime / Constants.END_TIME), level.followerObject.scale.y * (1 - endTime / Constants.END_TIME));
+            if(level.hasFollowerObject()) {
+                level.updateFollowerScale((1 - endTime / Constants.END_TIME));
             }
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
@@ -436,7 +436,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
-            } else if (level.followerObject != null && contact.getFixtureA().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             } else {
@@ -452,7 +451,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
-            } else if (level.followerObject != null && contact.getFixtureB().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             } else {
@@ -468,9 +466,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void fallOff() {
         this.state = LevelState.OffTheEdge;
-        if(this.level.followerObject != null) {
-            this.level.followerObjectTime = 0;
-            this.level.followerObjectState = Level.PropertyState.Teardown;
         }
         this.level.startCircle = this.level.startCircleRedIcon;
         this.level.finishCircle = this.level.finishCircleRedIcon;

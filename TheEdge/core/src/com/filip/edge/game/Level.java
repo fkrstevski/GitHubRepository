@@ -4,17 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
+import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
 import java.util.ArrayList;
+
+
 
 public class Level {
 
@@ -39,23 +43,14 @@ public class Level {
     public ArrayList<Hole> holes;
     public ArrayList<LevelProperty> properties;
 
-    enum PropertyState {
+    public enum PropertyState {
         Inactive,
         Buildup,
         Active,
         Teardown
     }
 
-    public EmptyCircle followerObject;
-    public float followerObjectTime;
-    private float followerObjectDisplayStartTime;
-    private Vector2 followerObjectSpeed;
-    public PropertyState followerObjectState;
-    private Vector2 followObjectFrom;
-    private Vector2 followObjectTo;
-    private int followPointIndex;
-    private int followObjectOriginalSize;
-    private static final float FOLLOW_OBJECT_SCALE_TIME = 0.5f;
+    Follower levelFollower;
 
     private PropertyState disappearingState;
     private boolean disappearing;
@@ -166,19 +161,12 @@ public class Level {
         // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
         if (s.hasFollowerObject) {
-            followerObjectTime = 0;
-            followerObjectDisplayStartTime = Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex];
-            followerObjectState = PropertyState.Inactive;
-            followPointIndex = 0;
-            followerObjectSpeed = new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
-                    Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale);
-            followObjectOriginalSize = (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale);
 
-            followerObject = new EmptyCircle(followObjectOriginalSize,
-                    points.get(0).x,
-                    points.get(0).y,
-                    Color.BLACK,
-                    Color.BLACK);
+            levelFollower = new Follower(Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
+                                        new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
+                                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
+                                        (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
+                                        points.get(0), points);
         }
 
         if (s.disappears) {
@@ -225,54 +213,8 @@ public class Level {
             }
         }
 
-        if (followerObject != null) {
-            followerObjectTime += deltaTime;
-            switch (followerObjectState) {
-                case Inactive:
-
-                    if (followerObjectTime > followerObjectDisplayStartTime) {
-                        followerObject.body.setActive(true);
-                        followerObjectTime = 0;
-                        followObjectFrom = points.get(followPointIndex);
-                        followObjectTo = points.get(followPointIndex + 1);
-                        followerObject.scale.set(0, 0);
-                        followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
-
-                        followerObjectState = PropertyState.Buildup;
-                    }
-                    break;
-                case Buildup:
-                    if(followerObjectTime > FOLLOW_OBJECT_SCALE_TIME)
-                    {
-                        followerObjectState = PropertyState.Active;
-                    }
-
-                    followerObject.scale.set(followerObjectTime / FOLLOW_OBJECT_SCALE_TIME,
-                            followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);
-                    followerObject.body.getFixtureList().get(0).getShape().setRadius(((followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE);
-
-                    break;
-                case Active:
-                    Vector2 dir = new Vector2(followObjectTo.x - followObjectFrom.x, followObjectTo.y - followObjectFrom.y);
-                    Vector2 dirN = dir.nor();
-                    followerObject.body.setLinearVelocity(dirN.scl(followerObjectSpeed));
-                    if (followerObject.position.epsilonEquals(followObjectTo, followerObjectSpeed.len() / 7f)) {
-                        followerObject.body.setTransform(followObjectTo.x / Constants.BOX2D_SCALE, followObjectTo.y / Constants.BOX2D_SCALE, 0);
-                        followPointIndex++;
-                        if(followPointIndex < points.size()) {
-                            followObjectFrom = points.get(followPointIndex);
-                            if (followPointIndex < points.size() - 1) {
-                                followObjectTo = points.get(followPointIndex + 1);
-                            }
-                        }
-                    }
-                    followerObject.update(deltaTime);
-                    break;
-                case Teardown:
-
-                    break;
-            }
-
+        if (levelFollower != null) {
+            levelFollower.update(deltaTime);
         }
     }
 
@@ -299,10 +241,8 @@ public class Level {
             hole.render(batch);
         }
 
-        if (followerObject != null) {
-            if (followerObjectState != PropertyState.Inactive) {
-                followerObject.render(batch);
-            }
+        if (levelFollower != null) {
+            levelFollower.render(batch);
         }
 
         ball.render(batch);
@@ -336,5 +276,35 @@ public class Level {
 
     public EmptyCircle getBall() {
         return ball;
+    }
+
+    public boolean hasFollowerObject() {
+        return levelFollower != null;
+    }
+
+    public void tearDownFollower() {
+        this.levelFollower.followerObjectTime = 0;
+        this.levelFollower.followerObjectState = Level.PropertyState.Teardown;
+    }
+
+    public void setFollowerBody(Body body){
+        this.levelFollower.followerObject.body = body;
+    }
+
+    public Body getFollowerBody() {
+        return this.levelFollower.followerObject.body;
+    }
+
+    public Vector2 getFollowerPos() {
+        return this.levelFollower.followerObject.position;
+    }
+
+    public float getFollowerRadius() {
+        return this.levelFollower.followerObject.radius;
+    }
+
+    public void updateFollowerScale(float scale) {
+        this.levelFollower.followerObject.scale.set(this.levelFollower.followerObject.scale.x * scale, this.levelFollower.followerObject.scale.y * scale);
+
     }
 }

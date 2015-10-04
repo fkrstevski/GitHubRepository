@@ -340,7 +340,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     this.level.startCircle = null;
                 }
 
-                if (this.numberOfContacts == 0)
+                if (this.numberOfContacts == 0 || this.b2world.getContactCount() == 0)
                 {
                     this.state = LevelState.OffTheEdge;
                     this.level.startCircle = this.level.startCircleRedIcon;

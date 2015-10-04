@@ -42,6 +42,7 @@ public class Level {
 
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
+    public ArrayList<Follower> oscillators;
     public ArrayList<LevelProperty> properties;
 
     public enum PropertyState {
@@ -81,6 +82,7 @@ public class Level {
 
         holes = new ArrayList<Hole>();
         followers = new ArrayList<Follower>();
+        oscillators = new ArrayList<Follower>();
 
         ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * horizontalScale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
         backButton = new BackButton((int) (height * 0.1f),   // size
@@ -123,8 +125,36 @@ public class Level {
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
             }
 
+            if(points.get(i).hasVerticalOscillator) {
+                float dis = Constants.OSCILLATION_DISTANCE * this.getLevelMultiplier() * horizontalScale;
+                ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
+                localPoints.add(new Vector2(points.get(i).x + dis, points.get(i).y));
+                localPoints.add(new Vector2(points.get(i).x - dis, points.get(i).y));
+                oscillators.add(new Follower(
+                        Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
+                        new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
+                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
+                        (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
+                        points.get(i), localPoints, 1, true
+                ));
+            }
+
+            if(points.get(i).hasHorizontalOscillator) {
+                float dis = Constants.OSCILLATION_DISTANCE * this.getLevelMultiplier() * horizontalScale;
+                ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
+                localPoints.add(new Vector2(points.get(i).x, points.get(i).y + dis));
+                localPoints.add(new Vector2(points.get(i).x, points.get(i).y - dis));
+                oscillators.add(new Follower(
+                        Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
+                        new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
+                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
+                        (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
+                        points.get(i), localPoints, 1, true
+                ));
+            }
+
             if(points.get(i).hasAFollower) {
-                ArrayList<LevelPoint> localPoints = new ArrayList<LevelPoint>();
+                ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
                 localPoints.add(points.get(i+1));
 
@@ -182,7 +212,7 @@ public class Level {
                                         new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                                         (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
-                                        points.get(0), points, 1, true);
+                                        points.get(0), new ArrayList<Vector2>(points), 1, true);
         }
 
         if (s.disappears) {
@@ -202,6 +232,10 @@ public class Level {
 
         for (Follower follower : followers) {
             follower.update(deltaTime);
+        }
+
+        for (Follower oscillator : oscillators) {
+            oscillator.update(deltaTime);
         }
 
         if (disappearing) {
@@ -263,6 +297,10 @@ public class Level {
 
         for (Follower follower : followers) {
             follower.render(batch);
+        }
+
+        for (Follower oscillator : oscillators) {
+            oscillator.render(batch);
         }
 
         if (levelFollower != null) {
@@ -329,6 +367,5 @@ public class Level {
 
     public void updateFollowerScale(float scale) {
         this.levelFollower.scale(scale);
-
     }
 }

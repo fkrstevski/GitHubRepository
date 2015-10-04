@@ -24,6 +24,7 @@ import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
@@ -135,20 +136,22 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // Ball Physics Body
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DynamicBody;
-        bodyDef.position.set(new Vector2(level.ball.position.x / Constants.BOX2D_SCALE, level.ball.position.y / Constants.BOX2D_SCALE));
-        Body body = b2world.createBody(bodyDef);
-        level.ball.body = body;
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef);
-        circleShape.dispose();
+        {
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyType.DynamicBody;
+            bodyDef.position.set(new Vector2(level.ball.position.x / Constants.BOX2D_SCALE, level.ball.position.y / Constants.BOX2D_SCALE));
+            Body body = b2world.createBody(bodyDef);
+            level.ball.body = body;
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = circleShape;
+            fixtureDef.isSensor = true;
+            body.createFixture(fixtureDef);
+            circleShape.dispose();
+        }
 
-        // Hole Physics Body
+        // Hole Physics Bodies
         for (Hole hole : level.holes) {
             BodyDef holeBodyDef = new BodyDef();
             holeBodyDef.type = BodyType.StaticBody;
@@ -164,19 +167,54 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             circleHoleShape.dispose();
         }
 
+        // Followers Physics Bodies
+        for (Follower follower : level.followers) {
+            BodyDef followerBodyDef = new BodyDef();
+            followerBodyDef.type = BodyType.KinematicBody;
+            followerBodyDef.position.set(new Vector2(follower.followerObject.position.x / Constants.BOX2D_SCALE, follower.followerObject.position.y / Constants.BOX2D_SCALE));
+            Body followerBody = b2world.createBody(followerBodyDef);
+            followerBody.setActive(false);
+            follower.followerObject.body = followerBody;
+            CircleShape circleFollowerShape = new CircleShape();
+            circleFollowerShape.setRadius((follower.followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureFollowerDef = new FixtureDef();
+            fixtureFollowerDef.shape = circleFollowerShape;
+            fixtureFollowerDef.isSensor = true;
+            followerBody.createFixture(fixtureFollowerDef);
+            circleFollowerShape.dispose();
+        }
+
+        for (Follower oscillator : level.oscillators) {
+            BodyDef followerBodyDef = new BodyDef();
+            followerBodyDef.type = BodyType.KinematicBody;
+            followerBodyDef.position.set(new Vector2(oscillator.followerObject.position.x / Constants.BOX2D_SCALE, oscillator.followerObject.position.y / Constants.BOX2D_SCALE));
+            Body followerBody = b2world.createBody(followerBodyDef);
+            followerBody.setActive(false);
+            oscillator.followerObject.body = followerBody;
+            CircleShape circleFollowerShape = new CircleShape();
+            circleFollowerShape.setRadius((oscillator.followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureFollowerDef = new FixtureDef();
+            fixtureFollowerDef.shape = circleFollowerShape;
+            fixtureFollowerDef.isSensor = true;
+            followerBody.createFixture(fixtureFollowerDef);
+            circleFollowerShape.dispose();
+        }
+
         // EndTarget Physics Body
-        BodyDef bodyDef2 = new BodyDef();
-        bodyDef2.type = BodyType.StaticBody;
-        bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
-        Body body2 = b2world.createBody(bodyDef2);
-        level.endCircle.body = body2;
-        CircleShape circleShape2 = new CircleShape();
-        circleShape2.setRadius((level.endCircle.radius - extraScale) / Constants.BOX2D_SCALE);
-        FixtureDef fixtureDef2 = new FixtureDef();
-        fixtureDef2.shape = circleShape2;
-        fixtureDef2.isSensor = true;
-        body2.createFixture(fixtureDef2);
-        circleShape2.dispose();
+        {
+            BodyDef bodyDef2 = new BodyDef();
+            bodyDef2.type = BodyType.StaticBody;
+            bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
+            Body body2 = b2world.createBody(bodyDef2);
+            level.endCircle.body = body2;
+            CircleShape circleShape2 = new CircleShape();
+            circleShape2.setRadius((level.endCircle.radius - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureDef2 = new FixtureDef();
+            fixtureDef2.shape = circleShape2;
+            fixtureDef2.isSensor = true;
+            body2.createFixture(fixtureDef2);
+            circleShape2.dispose();
+        }
 
         // Middle Circles Physics Bodies
         for (AbstractCircleButtonObject c : level.circleShapes) {
@@ -252,6 +290,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if(level.hasFollowerObject()) {
                 level.updateFollowerScale((1 - endTime / Constants.END_TIME));
             }
+
+            for (Follower follower : level.followers) {
+                follower.scale((1 - endTime / Constants.END_TIME));
+            }
+
+            for (Follower oscillator : level.oscillators) {
+                oscillator.scale((1 - endTime / Constants.END_TIME));
+            }
+
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
                 this.state = LevelState.Countdown;
@@ -443,6 +490,23 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     if (contact.getFixtureA().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         fallOff();
+                        break;
+                    }
+                }
+
+                for (Follower follower : level.followers) {
+                    if (contact.getFixtureA().getBody() == follower.followerObject.body) {
+                        Gdx.app.log(TAG, "BALL Follower COLLISION");
+                        fallOff();
+                        break;
+                    }
+                }
+
+                for (Follower oscillator : level.oscillators) {
+                    if (contact.getFixtureA().getBody() == oscillator.followerObject.body) {
+                        Gdx.app.log(TAG, "BALL Oscillator COLLISION");
+                        fallOff();
+                        break;
                     }
                 }
             }
@@ -459,6 +523,22 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     if (contact.getFixtureB().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         fallOff();
+                        break;
+                    }
+                }
+                for (Follower follower : level.followers) {
+                    if (contact.getFixtureB().getBody() == follower.followerObject.body) {
+                        Gdx.app.log(TAG, "BALL Follower COLLISION");
+                        fallOff();
+                        break;
+                    }
+                }
+
+                for (Follower oscillator : level.oscillators) {
+                    if (contact.getFixtureB().getBody() == oscillator.followerObject.body) {
+                        Gdx.app.log(TAG, "BALL Oscillator COLLISION");
+                        fallOff();
+                        break;
                     }
                 }
             }

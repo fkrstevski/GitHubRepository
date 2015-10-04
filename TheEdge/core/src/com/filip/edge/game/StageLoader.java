@@ -161,7 +161,20 @@ public class StageLoader {
                                                         points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                         points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
                                                     }
+                                                } else if (r.charAt(0) == 'X') {
+                                                    points[pointIndex].hasHorizontalOscillator = true;
+                                                    if (r.length() > 1) {
+                                                        points[pointIndex].oscillatorStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                        points[pointIndex].oscillatorSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                    }
+                                                } else if (r.charAt(0) == 'Y') {
+                                                    points[pointIndex].hasVerticalOscillator = true;
+                                                    if (r.length() > 1) {
+                                                        points[pointIndex].oscillatorStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                        points[pointIndex].oscillatorSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                    }
                                                 }
+
                                             }
                                         }
 
@@ -200,9 +213,10 @@ public class StageLoader {
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.02f,%.02f,%b,%d,%d,%b,%d,%d;", points[i].x, points[i].y,
+                            sb.append(String.format("%.02f,%.02f,%b,%d,%d,%b,%d,%d,%b,%b,%d,%d;", points[i].x, points[i].y,
                                     points[i].hasAHole, points[i].holeStartupIndex, points[i].holeScaleIndex,
-                                    points[i].hasAFollower, points[i].followStartupIndex, points[i].followSpeedIndex));
+                                    points[i].hasAFollower, points[i].followStartupIndex, points[i].followSpeedIndex,
+                                    points[i].hasHorizontalOscillator, points[i].hasVerticalOscillator, points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex));
                             points[i] = null;
                         } else {
                             break;
@@ -293,7 +307,8 @@ public class StageLoader {
                                 Float.parseFloat(pointProperty[0]) * width,
                                 Float.parseFloat(pointProperty[1]) * height,
                                 Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
-                                Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7])
+                                Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]),
+                                Boolean.parseBoolean(pointProperty[8]), Boolean.parseBoolean(pointProperty[9]), Integer.parseInt(pointProperty[10]), Integer.parseInt(pointProperty[11])
                         )
                 );
             }

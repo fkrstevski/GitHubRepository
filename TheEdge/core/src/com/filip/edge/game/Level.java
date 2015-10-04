@@ -4,9 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
@@ -16,6 +13,8 @@ import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
+
+import java.util.ArrayList;
 
 public class Level
 {

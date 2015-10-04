@@ -1,7 +1,6 @@
 package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
-
 import com.filip.edge.util.Constants;
 
 /**

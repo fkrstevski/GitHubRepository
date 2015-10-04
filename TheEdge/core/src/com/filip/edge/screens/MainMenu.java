@@ -2,7 +2,6 @@ package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.LeaderboardButton;
 import com.filip.edge.screens.objects.PlayButton;

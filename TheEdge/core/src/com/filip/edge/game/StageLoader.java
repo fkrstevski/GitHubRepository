@@ -4,8 +4,6 @@ package com.filip.edge.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.Vector2;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,8 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
-import com.filip.edge.util.Constants;
 
 enum LevelProperties {
     None,

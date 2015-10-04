@@ -12,15 +12,13 @@ import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.filip.edge.EdgeGame;
+import com.filip.edge.util.IActivityRequestHandler;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
-
-import com.filip.edge.EdgeGame;
-import com.filip.edge.util.IActivityRequestHandler;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener
 {

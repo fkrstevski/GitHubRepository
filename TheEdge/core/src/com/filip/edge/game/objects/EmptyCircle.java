@@ -1,7 +1,6 @@
 package com.filip.edge.game.objects;
 
 import com.badlogic.gdx.graphics.Color;
-
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 
 

@@ -2,6 +2,8 @@ package com.filip.edge;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.IActivityRequestHandler;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.foundation.NSError;
@@ -14,9 +16,6 @@ import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
 
 import java.util.ArrayList;
-
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.IActivityRequestHandler;
 
 public class IOSLauncher extends IOSApplication.Delegate implements IActivityRequestHandler, GameCenterListener
 {

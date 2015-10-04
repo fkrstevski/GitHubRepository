@@ -1,10 +1,8 @@
 package com.filip.edge;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-
 import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;

@@ -1,7 +1,6 @@
 package com.filip.edge.game;
 
 import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;

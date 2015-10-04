@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
-
 import com.filip.edge.util.CameraHelper;
 
 public class MainMenuController extends InputAdapter implements Disposable

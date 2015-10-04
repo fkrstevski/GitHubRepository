@@ -3,7 +3,6 @@ package com.filip.edge.screens;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.filip.edge.util.IActivityRequestHandler;
 
 public abstract class DirectedGame implements ApplicationListener

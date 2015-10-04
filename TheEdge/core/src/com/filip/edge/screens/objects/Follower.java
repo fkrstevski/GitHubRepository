@@ -83,6 +83,7 @@ public class Follower {
                 Vector2 dirN = dir.nor();
                 this.followerObject.body.setLinearVelocity(dirN.scl(this.followerObjectSpeed));
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
+                    this.followerObject.position.set(this.followObjectTo.x, this.followObjectTo.y);
                     this.followerObject.body.setTransform(this.followObjectTo.x / Constants.BOX2D_SCALE, this.followObjectTo.y / Constants.BOX2D_SCALE, 0);
                     this.followPointIndex += this.direction;
 
@@ -95,20 +96,38 @@ public class Follower {
                         this.followObjectTo = pointsToFollow.get(this.followPointIndex + this.direction);
                     }
                     else {
-                        if(followPointIndex > pointsToFollow.size() - 2){
+                        if(followPointIndex >= pointsToFollow.size() - 1){
                             this.followPointIndex = 0;
+                            this.followerObjectTime = 0;
+                            this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
+                            this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
+                            this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
+                            this.followerObjectState = PropertyState.Teardown;
                         }
-
-                        this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
-                        // Update the body to the new point TODO: doesnt work too well
-                        this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
-                        this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
+                        else {
+                            this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
+                            // Update the body to the new point TODO: doesnt work too well
+                            this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
+                            this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
+                            this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
+                        }
                     }
                 }
                 this.followerObject.update(deltaTime);
                 break;
             case Teardown:
+                if(followerObjectTime > FOLLOW_OBJECT_SCALE_TIME)
+                {
+                    this.followerObjectTime = 0;
+                    this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
+                    this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
+                    this.followerObjectState = PropertyState.Buildup;
+                }
+                else {
 
+                    this.followerObject.scale.set(1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME, 1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);
+                    this.followerObject.body.getFixtureList().get(0).getShape().setRadius((((1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * this.followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE));
+                }
                 break;
         }
     }

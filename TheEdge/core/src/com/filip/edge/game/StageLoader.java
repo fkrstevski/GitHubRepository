@@ -173,17 +173,14 @@ public class StageLoader
                                                         points[pointIndex].holeScaleIndex = (Integer.parseInt(r.substring(2, 3)));
                                                     }
                                                 }
-                                                else if(r.charAt(0) == 'M'){
-                                                    points[pointIndex].moves = true;
-                                                }
                                                 else if(r.charAt(0) == 'F'){
                                                     points[pointIndex].hasAFollower = true;
-                                                }
-                                                else if(r.charAt(0) == 'D'){
-                                                    points[pointIndex].disappears = true;
+                                                    if(r.length() > 1) {
+                                                        points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                        points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                    }
                                                 }
                                             }
-
                                         }
 
                                     }
@@ -224,8 +221,9 @@ public class StageLoader
                     {
                         if (points[i] != null)
                         {
-                            sb.append(String.format("%.02f,%.02f,%b,%d,%d;", points[i].x, points[i].y,
-                                    points[i].hasAHole, points[i].holeStartupIndex, points[i].holeScaleIndex));
+                            sb.append(String.format("%.02f,%.02f,%b,%d,%d,%b,%d,%d;", points[i].x, points[i].y,
+                                    points[i].hasAHole, points[i].holeStartupIndex, points[i].holeScaleIndex,
+                                    points[i].hasAFollower, points[i].followStartupIndex, points[i].followSpeedIndex));
                             points[i] = null;
                         }
                         else
@@ -324,8 +322,14 @@ public class StageLoader
 
                 Gdx.app.debug(TAG, "Point = x:" + pointProperty[0] + " y:" + pointProperty[1]);
 
-                stagePoints.add(new LevelPoint(Float.parseFloat(pointProperty[0]) * width, Float.parseFloat(pointProperty[1]) * height,
-                        Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4])));
+                stagePoints.add(
+                        new LevelPoint(
+                                Float.parseFloat(pointProperty[0]) * width,
+                                Float.parseFloat(pointProperty[1]) * height,
+                                Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
+                                Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7])
+                                )
+                );
             }
             zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties);
         }

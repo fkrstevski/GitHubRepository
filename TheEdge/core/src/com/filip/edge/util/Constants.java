@@ -11,11 +11,16 @@ public class Constants {
     // iOS Leaderboard
     public static final String IOS_LEADERBOARD_ID = "1212";
 
+    public static final float BASE_SCREEN_WIDTH = 1334;
+    public static final float BASE_SCREEN_HEIGHT = 750;
+
+
     public static final int DIGIT_WIDTH_CELLS = 5;
     public static final int DIGIT_HEIGHT_CELLS = 9;
 
     public static final float DIGIT_ASPECT_RATIO = DIGIT_HEIGHT_CELLS / (float) DIGIT_WIDTH_CELLS; // 1.8 = 9(height) / 5(width)
 
+    public static final float END_TIME = 2.0f;
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 100;
     public static final int INSIDE_CIRCLE_RADIUS = 26;
@@ -23,11 +28,12 @@ public class Constants {
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 2;
     public static final float[] LEVEL_MULTIPLIERS = {1.5f, 0.75f};
+    public static float BOX2D_SCALE = 10;
 
-    public static final float[] FOLLOWER_SPEED = {2.5f, 5, 7.5f, 10, 12.5f, 15, 17.5f, 20, 22.5f, 25};
+    public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 /BOX2D_SCALE};
     public static final float[] FOLLOWER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] DISAPPEARING_SPEED = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    public static final float[] DISAPPEARING_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 0.5f, 0.1f};
     public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] HOLE_SCALE_TIME = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -49,8 +55,6 @@ public class Constants {
     public static final Color[] ZONE_COLORS = {BLUE, ORANGE, PURPLE, GREY};
 
     public static long MAX_SCORE = 1000000000000000000L;
-
-    public static float BOX2D_SCALE = 10;
 
     public static int WIDTH_IN_PIXELS = 3;
 }

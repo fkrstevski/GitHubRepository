@@ -33,7 +33,6 @@ import com.filip.edge.util.GamePreferences;
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
     private static final float READY_TIME = 2.0f;
-    private static final float END_TIME = 2.0f;
     private static final float GREEN_ICON_TIME = 0.75f;
     public Level level;
     public boolean renderPhysics;
@@ -249,9 +248,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         } else if (state == LevelState.LevelComplete) {
             this.endTime += deltaTime;
 
-            this.level.ball.position.lerp(this.level.getLastPoint(), endTime / END_TIME);
-
-            if (endTime > END_TIME) {
+            this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
+            if(level.followerObject != null) {
+                level.followerObject.scale.set(level.followerObject.scale.x * (1 - endTime / Constants.END_TIME), level.followerObject.scale.y * (1 - endTime / Constants.END_TIME));
+            }
+            if (endTime > Constants.END_TIME) {
                 endTime = 0;
                 this.state = LevelState.Countdown;
                 this.level.startCircle = this.level.startCircleRedIcon;
@@ -262,8 +263,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         } else if (state == LevelState.OffTheEdge) {
             this.endTime += deltaTime;
 
-            level.ball.scale.set(level.ball.scale.x * (1 - endTime / END_TIME), level.ball.scale.y * (1 - endTime / END_TIME));
-            if (endTime > END_TIME) {
+            level.ball.scale.set(level.ball.scale.x * (1 - endTime / Constants.END_TIME), level.ball.scale.y * (1 - endTime / Constants.END_TIME));
+            if (endTime > Constants.END_TIME) {
                 endTime = 0;
                 GamePreferences.instance.currentScore -= 10000;
                 if (GamePreferences.instance.currentScore <= 0) {
@@ -305,9 +306,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 if (this.numberOfContacts == 0 || this.b2world.getContactCount() == 0) {
-                    this.state = LevelState.OffTheEdge;
-                    this.level.startCircle = this.level.startCircleRedIcon;
-                    this.level.finishCircle = this.level.finishCircleRedIcon;
+                    fallOff();
                 }
             }
         }
@@ -338,7 +337,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void handleInputGame(float deltaTime) {
         if (Gdx.app.getType() == ApplicationType.Desktop) {
             // Camera Controls (move)
-            float ballMoveSpeed = 1000 * deltaTime;
+            float ballMoveSpeed = (10000 / Constants.BOX2D_SCALE * Gdx.graphics.getWidth() / Constants.BASE_SCREEN_WIDTH) * deltaTime;
             float camMoveSpeedAccelerationFactor = 5;
             if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
                 ballMoveSpeed *= camMoveSpeedAccelerationFactor;
@@ -358,6 +357,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         } else {
             float x = Gdx.input.getAccelerometerX();
             float y = Gdx.input.getAccelerometerY();
+            // TODO: make movement be the same on different screen devices;
             moveBall(y * 700 * deltaTime, x * 700 * deltaTime);
 
         }
@@ -438,16 +438,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             } else if (level.followerObject != null && contact.getFixtureA().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
-                this.state = LevelState.OffTheEdge;
-                this.level.startCircle = this.level.startCircleRedIcon;
-                this.level.finishCircle = this.level.finishCircleRedIcon;
+                fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureA().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
-                        this.state = LevelState.OffTheEdge;
-                        this.level.startCircle = this.level.startCircleRedIcon;
-                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                        fallOff();
                     }
                 }
             }
@@ -458,20 +454,26 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
             } else if (level.followerObject != null && contact.getFixtureB().getBody() == level.followerObject.body) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
-                this.state = LevelState.OffTheEdge;
-                this.level.startCircle = this.level.startCircleRedIcon;
-                this.level.finishCircle = this.level.finishCircleRedIcon;
+                fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureB().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
-                        this.state = LevelState.OffTheEdge;
-                        this.level.startCircle = this.level.startCircleRedIcon;
-                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                        fallOff();
                     }
                 }
             }
         }
+    }
+
+    private void fallOff() {
+        this.state = LevelState.OffTheEdge;
+        if(this.level.followerObject != null) {
+            this.level.followerObjectTime = 0;
+            this.level.followerObjectState = Level.PropertyState.Teardown;
+        }
+        this.level.startCircle = this.level.startCircleRedIcon;
+        this.level.finishCircle = this.level.finishCircleRedIcon;
     }
 
     @Override

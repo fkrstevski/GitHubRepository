@@ -41,17 +41,21 @@ public class Level {
 
     enum PropertyState {
         Inactive,
-        Active
+        Buildup,
+        Active,
+        Teardown
     }
 
     public EmptyCircle followerObject;
-    private float followerObjectTime;
+    public float followerObjectTime;
     private float followerObjectDisplayStartTime;
-    private float followerObjectSpeed;
-    private PropertyState followerObjectState;
+    private Vector2 followerObjectSpeed;
+    public PropertyState followerObjectState;
     private Vector2 followObjectFrom;
     private Vector2 followObjectTo;
     private int followPointIndex;
+    private int followObjectOriginalSize;
+    private static final float FOLLOW_OBJECT_SCALE_TIME = 0.5f;
 
     private PropertyState disappearingState;
     private boolean disappearing;
@@ -70,14 +74,18 @@ public class Level {
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        float scale = width / 1334.0f; // iPhone 6 width
+        float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
+        float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
+
+        float scale = horizontalScale * verticalScale;
+
 
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
         holes = new ArrayList<Hole>();
 
-        ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * scale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
+        ball = new EmptyCircle((int) (Constants.BALL_RADIUS * 2 * horizontalScale), this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
         backButton = new BackButton((int) (height * 0.1f),   // size
                 (int) (height * 0.055),    // x
                 (int) (height * 0.055),     // y
@@ -92,15 +100,15 @@ public class Level {
         topBackground = new MiddlePart(topWidth, topHeight, topX, topY, Constants.TURQUOISE, Constants.WHITE);
 
         // Add Start Circle
-        EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
+        EndTarget st = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(st);
 
-        startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
+        startCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
-        startCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
+        startCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE);
-        startCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getFirstPoint().x,
+        startCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getFirstPoint().x,
                 this.getFirstPoint().y, Constants.RED, Constants.WHITE);
 
         startCircle = startCircleRedIcon;
@@ -108,31 +116,32 @@ public class Level {
 
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
-            EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+            Gdx.app.log(TAG, "middle size = " + (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
+            EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
             circleShapes.add(m);
 
             if (points.get(i).hasAHole) {
-                holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+                holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
             }
         }
 
         // Add EndCircle - for target collision
-        endCircle = new EmptyCircle((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * scale), this.getLastPoint().x,
+        endCircle = new EmptyCircle((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision
-        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
+        EndTarget et = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
 
-        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
+        finishCircleGreenIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
-        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
+        finishCircleYellowIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
-        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * scale), this.getLastPoint().x,
+        finishCircleRedIcon = new EndTarget((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale), this.getLastPoint().x,
                 this.getLastPoint().y, Constants.RED, Constants.WHITE);
 
         finishCircle = finishCircleRedIcon;
@@ -146,7 +155,7 @@ public class Level {
             float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
             AbstractRectangleButtonObject s = new MiddlePart((int) Vector2.dst(p1.x, p1.y, p2.x, p2.y),
-                    (int) (Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * scale),
+                    (int) (Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale),
                     midpoint.x, midpoint.y,
                     Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
@@ -161,9 +170,11 @@ public class Level {
             followerObjectDisplayStartTime = Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex];
             followerObjectState = PropertyState.Inactive;
             followPointIndex = 0;
-            followerObjectSpeed = Constants.FOLLOWER_SPEED[s.followerSpeedIndex];
+            followerObjectSpeed = new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
+                    Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale);
+            followObjectOriginalSize = (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale);
 
-            followerObject = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * scale),
+            followerObject = new EmptyCircle(followObjectOriginalSize,
                     points.get(0).x,
                     points.get(0).y,
                     Color.BLACK,
@@ -174,7 +185,7 @@ public class Level {
             disappearingState = PropertyState.Inactive;
             disappearing = s.disappears;
             disappearingStartTime = Constants.DISAPPEARING_STARTTIME[s.disappearsStartupTimeIndex];
-            disappearingSpeed = Constants.DISAPPEARING_SPEED[s.disappearSpeedIndex];
+            disappearingSpeed = Constants.DISAPPEARING_TIME[s.disappearSpeedIndex];
             disappearingIndex = 0;
         }
     }
@@ -199,7 +210,7 @@ public class Level {
                     if (disappearingTime > disappearingSpeed) {
                         disappearingTime = 0;
                         Gdx.app.log(TAG, "disappearingIndex = " + disappearingIndex);
-                        if (disappearingIndex > 0 && disappearingIndex < circleShapes.size()) {
+                        if (disappearingIndex > 0 && disappearingIndex < circleShapes.size() - 1 /*do not remove the final circle*/) {
                             circleShapes.get(disappearingIndex).visible = false;
                             circleShapes.get(disappearingIndex).body.setActive(false);
                         }
@@ -224,25 +235,41 @@ public class Level {
                         followerObjectTime = 0;
                         followObjectFrom = points.get(followPointIndex);
                         followObjectTo = points.get(followPointIndex + 1);
+                        followerObject.scale.set(0, 0);
+                        followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
+
+                        followerObjectState = PropertyState.Buildup;
+                    }
+                    break;
+                case Buildup:
+                    if(followerObjectTime > FOLLOW_OBJECT_SCALE_TIME)
+                    {
                         followerObjectState = PropertyState.Active;
                     }
 
+                    followerObject.scale.set(followerObjectTime / FOLLOW_OBJECT_SCALE_TIME,
+                            followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);
+                    followerObject.body.getFixtureList().get(0).getShape().setRadius(((followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE);
 
                     break;
                 case Active:
                     Vector2 dir = new Vector2(followObjectTo.x - followObjectFrom.x, followObjectTo.y - followObjectFrom.y);
                     Vector2 dirN = dir.nor();
                     followerObject.body.setLinearVelocity(dirN.scl(followerObjectSpeed));
-
-                    if (followerObject.position.epsilonEquals(followObjectTo, 5f)) {
-                        followerObject.position.set(followObjectTo.x, followObjectTo.y);
+                    if (followerObject.position.epsilonEquals(followObjectTo, followerObjectSpeed.len() / 7f)) {
+                        followerObject.body.setTransform(followObjectTo.x / Constants.BOX2D_SCALE, followObjectTo.y / Constants.BOX2D_SCALE, 0);
                         followPointIndex++;
-                        followObjectFrom = points.get(followPointIndex);
-                        if (followPointIndex < points.size() - 1) {
-                            followObjectTo = points.get(followPointIndex + 1);
+                        if(followPointIndex < points.size()) {
+                            followObjectFrom = points.get(followPointIndex);
+                            if (followPointIndex < points.size() - 1) {
+                                followObjectTo = points.get(followPointIndex + 1);
+                            }
                         }
                     }
                     followerObject.update(deltaTime);
+                    break;
+                case Teardown:
+
                     break;
             }
 
@@ -250,7 +277,7 @@ public class Level {
     }
 
     public void render(SpriteBatch batch) {
-        for (int i = 0; i < circleShapes.size(); ++i) {
+        for (int i = circleShapes.size() - 1; i >= 0; --i) {
             circleShapes.get(i).render(batch);
         }
 
@@ -273,7 +300,7 @@ public class Level {
         }
 
         if (followerObject != null) {
-            if (followerObject.body.isActive()) {
+            if (followerObjectState != PropertyState.Inactive) {
                 followerObject.render(batch);
             }
         }

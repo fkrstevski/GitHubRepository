@@ -385,7 +385,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
             backToMenu();
         } else if (keycode == Keys.SPACE) {
-            //
             this.renderPhysics = !this.renderPhysics;
         }
 
@@ -436,6 +435,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
+            } else if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             } else {
@@ -451,6 +451,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.state = LevelState.LevelComplete;
                 this.level.startCircle = this.level.startCircleGreenIcon;
                 this.level.finishCircle = this.level.finishCircleGreenIcon;
+            } else if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             } else {
@@ -466,6 +467,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void fallOff() {
         this.state = LevelState.OffTheEdge;
+        if(this.level.hasFollowerObject()) {
+            this.level.tearDownFollower();
         }
         this.level.startCircle = this.level.startCircleRedIcon;
         this.level.finishCircle = this.level.finishCircleRedIcon;

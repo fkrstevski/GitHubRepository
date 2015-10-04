@@ -83,6 +83,7 @@ public class Follower {
                 Vector2 dirN = dir.nor();
                 this.followerObject.body.setLinearVelocity(dirN.scl(this.followerObjectSpeed));
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
+                    this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
                     this.followerObject.position.set(this.followObjectTo.x, this.followObjectTo.y);
                     this.followerObject.body.setTransform(this.followObjectTo.x / Constants.BOX2D_SCALE, this.followObjectTo.y / Constants.BOX2D_SCALE, 0);
                     this.followPointIndex += this.direction;
@@ -106,6 +107,7 @@ public class Follower {
                         }
                         else {
                             this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
+                            this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
                             // Update the body to the new point TODO: doesnt work too well
                             this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
                             this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
@@ -119,6 +121,7 @@ public class Follower {
                 if(followerObjectTime > FOLLOW_OBJECT_SCALE_TIME)
                 {
                     this.followerObjectTime = 0;
+                    this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
                     this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
                     this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
                     this.followerObjectState = PropertyState.Buildup;

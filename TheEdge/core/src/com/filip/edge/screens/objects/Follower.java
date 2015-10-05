@@ -92,12 +92,15 @@ public class Follower {
                         if(this.followPointIndex == 0 || this.followPointIndex == pointsToFollow.size() - 1) {
                             this.direction *= -1;
                         }
-
+                        if(followPointIndex < 0) {
+                            this.followPointIndex = 0;
+                            this.direction *= -1;
+                        }
                         this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                         this.followObjectTo = pointsToFollow.get(this.followPointIndex + this.direction);
                     }
                     else {
-                        if(followPointIndex >= pointsToFollow.size() - 1){
+                        if(followPointIndex >= pointsToFollow.size() - 1 || followPointIndex < 0){
                             this.followPointIndex = 0;
                             this.followerObjectTime = 0;
                             this.followObjectFrom = pointsToFollow.get(this.followPointIndex);

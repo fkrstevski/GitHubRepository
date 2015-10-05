@@ -153,17 +153,17 @@ public class Level {
                 ));
             }
 
-            if(points.get(i).hasAFollower) {
+            if(points.get(i).followerDirection != 0) {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
-                localPoints.add(points.get(i+1));
+                localPoints.add(points.get(i+points.get(i).followerDirection));
 
                 followers.add(new Follower(
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
                                 Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
                         (int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
-                        points.get(i), localPoints, 1, false
+                        points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth
 
                 ));
             }

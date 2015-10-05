@@ -62,7 +62,9 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(currentScaleTime / scaleTime, currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-
+                    if(currentScaleTime / scaleTime > 0.15f){
+                        body.setActive(true);
+                    }
                 }
                 break;
 
@@ -74,6 +76,9 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(1 - currentScaleTime / scaleTime, 1 - currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
+                    if(1 - currentScaleTime / scaleTime < 0.15f){
+                        body.setActive(false);
+                    }
                 }
 
                 break;

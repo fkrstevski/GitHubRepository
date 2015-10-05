@@ -28,7 +28,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
         fillPixmap(width, height, outsideColor, insideColor);
 
         this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA8888, false);
-        pixmapTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        pixmapTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         origin.set(dimension.x / 2, dimension.y / 2);
     }

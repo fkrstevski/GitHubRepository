@@ -41,7 +41,7 @@ public class Constants {
     public static final float[] DISAPPEARING_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 0.5f, 0.1f};
     public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] HOLE_SCALE_TIME = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    public static final float[] HOLE_SCALE_TIME = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
 
 

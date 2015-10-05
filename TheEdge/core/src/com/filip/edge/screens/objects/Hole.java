@@ -1,5 +1,6 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.game.objects.EmptyCircle;
@@ -25,7 +26,7 @@ public class Hole extends EmptyCircle {
         ScalingDown
     }
 
-    public Hole(int size, float x, float y, int scaleTimeIndex, int startupTimeIndex) {
+    public Hole(int size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,

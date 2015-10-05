@@ -92,99 +92,103 @@ public class StageLoader {
                         while ((line = br.readLine()) != null) {
 
                             // use comma as separator
-                            String[] cells = line.split(cvsSplitBy);
-                            for (int x = 0; x < cells.length; ++x) {
-                                String cell = cells[x].toUpperCase();
-                                if (!cell.isEmpty()) {
-                                    if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E")) {
-                                        // do nothing
-                                    }
-                                    // if the first char in the cell is not an int, it means we are setting the level properties
-                                    else if (!isInteger("" + cell.charAt(0))) {
-                                        String results[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
-
-                                        for (String r : results) {
-                                            if (r.charAt(0) == 'F') {
-                                                levelProperties.add(
-                                                        new LevelProperty(LevelProperties.Follower,
-                                                                Integer.parseInt(r.substring(1, 2)),
-                                                                Integer.parseInt(r.substring(2, 3)),
-                                                                currentZone, currentStage
-                                                        )
-                                                );
-                                            } else if (r.charAt(0) == 'D') {
-                                                levelProperties.add(
-                                                        new LevelProperty(LevelProperties.Disappears,
-                                                                Integer.parseInt(r.substring(1, 2)),
-                                                                Integer.parseInt(r.substring(2, 3)),
-                                                                currentZone, currentStage
-                                                        )
-                                                );
-                                            }
+                            String[] fullCells = line.split(cvsSplitBy);
+                            for (int x = 0; x < fullCells.length; ++x) {
+                                String fullCell = fullCells[x].toUpperCase();
+                                String[] cells = fullCell.split(";");
+                                for (int i = 0; i < cells.length; ++i) {
+                                    String cell = cells[i].toUpperCase();
+                                    if (!cell.isEmpty()) {
+                                        if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E")) {
+                                            // do nothing
                                         }
-
-
-                                    } else {
-                                        if (isInteger(cell)) { /* if the cell is an int the value, it means there is no additional properties */
-                                            points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
-                                                    sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
-                                        } else {
-
-                                            // Check to see if the point index in the cell is 1 or 2 digits
-                                            int pointIndex;
-                                            if (Character.isDigit(cell.charAt(1))) {
-                                                pointIndex = Integer.parseInt(cell.substring(0, 2));
-                                            } else {
-                                                pointIndex = Integer.parseInt(cell.substring(0, 1));
-                                            }
-
-                                            System.out.println("pointIndex = " + pointIndex);
-                                            points[pointIndex] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
-                                                    sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
-
-                                            String resultsArray[] = cell.split("^[0-9]{1,2}");
-
-                                            String s = resultsArray[1]; //Ignore first empty result
-                                            System.out.println(s);
-                                            String results[] = s.split("(?<=[0-9])(?=[a-zA-Z])");
+                                        // if the first char in the cell is not an int, it means we are setting the level properties
+                                        else if (!isInteger("" + cell.charAt(0))) {
+                                            String results[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
 
                                             for (String r : results) {
-                                                if (r.charAt(0) == 'H') {
-                                                    points[pointIndex].hasAHole = true;
-                                                    if (r.length() > 1) {
-                                                        points[pointIndex].holeStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                        points[pointIndex].holeScaleIndex = (Integer.parseInt(r.substring(2, 3)));
-                                                    }
-                                                } else if (r.charAt(0) == 'F' || r.charAt(0) == 'R') {
-                                                    points[pointIndex].followerDirection = (r.charAt(0) == 'F' ? 1 : -1);
-                                                    if (r.length() > 1) {
-                                                        points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                        points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
-                                                    }
-                                                } else if(r.charAt(0) == 'B') {
-                                                    if (r.charAt(1) == 'F' || r.charAt(1) == 'R') {
-                                                        points[pointIndex].followerDirection = (r.charAt(1) == 'F' ? 1 : -1);
-                                                        points[pointIndex].followerIsBackAndForth = true;
-                                                        if (r.length() > 2) {
-                                                            points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(2, 3)));
-                                                            points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(3, 4)));
+                                                if (r.charAt(0) == 'F') {
+                                                    levelProperties.add(
+                                                            new LevelProperty(LevelProperties.Follower,
+                                                                    Integer.parseInt(r.substring(1, 2)),
+                                                                    Integer.parseInt(r.substring(2, 3)),
+                                                                    currentZone, currentStage
+                                                            )
+                                                    );
+                                                } else if (r.charAt(0) == 'D') {
+                                                    levelProperties.add(
+                                                            new LevelProperty(LevelProperties.Disappears,
+                                                                    Integer.parseInt(r.substring(1, 2)),
+                                                                    Integer.parseInt(r.substring(2, 3)),
+                                                                    currentZone, currentStage
+                                                            )
+                                                    );
+                                                }
+                                            }
+
+
+                                        } else {
+                                            if (isInteger(cell)) { /* if the cell is an int the value, it means there is no additional properties */
+                                                points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
+                                                        sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
+                                            } else {
+
+                                                // Check to see if the point index in the cell is 1 or 2 digits
+                                                int pointIndex;
+                                                if (Character.isDigit(cell.charAt(1))) {
+                                                    pointIndex = Integer.parseInt(cell.substring(0, 2));
+                                                } else {
+                                                    pointIndex = Integer.parseInt(cell.substring(0, 1));
+                                                }
+
+                                                System.out.println("pointIndex = " + pointIndex);
+                                                points[pointIndex] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
+                                                        sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
+
+                                                String resultsArray[] = cell.split("^[0-9]{1,2}");
+
+                                                String s = resultsArray[1]; //Ignore first empty result
+                                                System.out.println(s);
+                                                String results[] = s.split("(?<=[0-9])(?=[a-zA-Z])");
+
+                                                for (String r : results) {
+                                                    if (r.charAt(0) == 'H') {
+                                                        points[pointIndex].hasAHole = true;
+                                                        if (r.length() > 1) {
+                                                            points[pointIndex].holeStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                            points[pointIndex].holeScaleIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
-                                                    }
-                                                } else if (r.charAt(0) == 'X' || r.charAt(0) == 'Y') {
-                                                    if(r.charAt(0) == 'X'){
-                                                        points[pointIndex].hasHorizontalOscillator = true;
-                                                    }
-                                                    else {
-                                                        points[pointIndex].hasVerticalOscillator = true;
-                                                    }
-                                                    if (r.length() > 1) {
-                                                        points[pointIndex].oscillatorStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                        points[pointIndex].oscillatorSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                    } else if (r.charAt(0) == 'F' || r.charAt(0) == 'R') {
+                                                        points[pointIndex].followerDirection = (r.charAt(0) == 'F' ? 1 : -1);
+                                                        if (r.length() > 1) {
+                                                            points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                            points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                        }
+                                                    } else if(r.charAt(0) == 'B') {
+                                                        if (r.charAt(1) == 'F' || r.charAt(1) == 'R') {
+                                                            points[pointIndex].followerDirection = (r.charAt(1) == 'F' ? 1 : -1);
+                                                            points[pointIndex].followerIsBackAndForth = true;
+                                                            if (r.length() > 2) {
+                                                                points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                                points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(3, 4)));
+                                                            }
+                                                        }
+                                                    } else if (r.charAt(0) == 'X' || r.charAt(0) == 'Y') {
+                                                        if(r.charAt(0) == 'X'){
+                                                            points[pointIndex].hasHorizontalOscillator = true;
+                                                        }
+                                                        else {
+                                                            points[pointIndex].hasVerticalOscillator = true;
+                                                        }
+                                                        if (r.length() > 1) {
+                                                            points[pointIndex].oscillatorStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                            points[pointIndex].oscillatorSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
 
+                                        }
                                     }
                                 }
                             }

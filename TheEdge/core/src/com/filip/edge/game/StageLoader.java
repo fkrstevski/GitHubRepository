@@ -68,8 +68,8 @@ public class StageLoader {
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             final int maxPoints = 60;
-            final int sheetWidth = 80;
-            final int sheetHeight = 27;
+            final int sheetWidth = 81;
+            final int sheetHeight = 29;
 
             LevelPoint[] points = new LevelPoint[maxPoints];
 
@@ -81,7 +81,7 @@ public class StageLoader {
 
             for (int currentZone = 0; currentZone < numberOfZones; ++currentZone) {
                 for (int currentStage = 0; currentStage < numberOfStages; ++currentStage) {
-                    String filename = "levels/Zone" + currentZone + "/stage" + currentStage + ".csv";
+                    String filename = "levels/Zone" + currentZone + "Stage" + currentStage + ".csv";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     assert (fileHandle != null);
 
@@ -126,8 +126,8 @@ public class StageLoader {
 
                                     } else {
                                         if (isInteger(cell)) { /* if the cell is an int the value, it means there is no additional properties */
-                                            points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
-                                                    sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+                                            points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
+                                                    sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
                                         } else {
 
                                             // Check to see if the point index in the cell is 1 or 2 digits
@@ -139,8 +139,8 @@ public class StageLoader {
                                             }
 
                                             System.out.println("pointIndex = " + pointIndex);
-                                            points[pointIndex] = new LevelPoint(sheetWidth * 0.00083f + x / (sheetWidth * 1.17f),
-                                                    sheetHeight * 0.0085f + y / (sheetHeight * 1.58f));
+                                            points[pointIndex] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
+                                                    sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
 
                                             String resultsArray[] = cell.split("^[0-9]{1,2}");
 

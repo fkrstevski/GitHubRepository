@@ -22,13 +22,13 @@ public class Constants {
 
     public static final float END_TIME = 2.0f;
     public static final int BALL_RADIUS = 20;
-    public static final int END_CIRCLE_RADIUS = 100;
+    public static final int END_CIRCLE_RADIUS = 80;
     public static final int INSIDE_CIRCLE_RADIUS = 26;
     public static final int RECTANGLE_WIDTH = 50;
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 1;
     public static final int OSCILLATION_DISTANCE = 50;
-    public static final float[] LEVEL_MULTIPLIERS = {1f, 0.75f};
+    public static final float[] LEVEL_MULTIPLIERS = {1, 0.75f};
     public static float BOX2D_SCALE = 10;
 
     public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 /BOX2D_SCALE};

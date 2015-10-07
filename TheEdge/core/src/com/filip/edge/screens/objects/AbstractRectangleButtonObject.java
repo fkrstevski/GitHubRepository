@@ -224,4 +224,19 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         int digitPartWidth = width / widthInPixels;
         buttonPixmap.fillRectangle(width - digitPartWidth, 0, digitPartWidth, height / 2);
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean sameSame = false;
+
+        if (object != null && object instanceof AbstractRectangleButtonObject)
+        {
+            AbstractRectangleButtonObject point = ((AbstractRectangleButtonObject) object);
+            sameSame = position.equals(point.position) &&
+                    dimension.equals(point.dimension);
+        }
+
+        return sameSame;
+    }
 }

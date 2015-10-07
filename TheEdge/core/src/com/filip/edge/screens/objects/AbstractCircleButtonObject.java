@@ -55,4 +55,18 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
         return false;
     }
 
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean sameSame = false;
+
+        if (object != null && object instanceof AbstractCircleButtonObject)
+        {
+            AbstractCircleButtonObject point = ((AbstractCircleButtonObject) object);
+            sameSame = bounds.equals(point.bounds);
+        }
+
+        return sameSame;
+    }
+
 }

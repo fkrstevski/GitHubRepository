@@ -67,7 +67,7 @@ public class Level {
 
     private void init() {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
-
+        
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
@@ -117,7 +117,11 @@ public class Level {
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
             EmptyCircle m = new EmptyCircle((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
-            circleShapes.add(m);
+
+            // Do not add multiple circles that are the same
+            if(!circleShapes.contains(m)) {
+                circleShapes.add(m);
+            }
 
             if (points.get(i).hasAHole) {
                 holes.add(new Hole((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale),
@@ -201,7 +205,10 @@ public class Level {
                     Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
 
-            rectangleShapes.add(s);
+            // Do not add multiple rectangles that are the same
+            if(!rectangleShapes.contains(s)) {
+                rectangleShapes.add(s);
+            }
         }
 
         // Add follower
@@ -222,6 +229,14 @@ public class Level {
             disappearingSpeed = Constants.DISAPPEARING_TIME[s.disappearSpeedIndex];
             disappearingIndex = 0;
         }
+
+
+
+        Gdx.app.log(TAG, "LEVEL = " + GamePreferences.instance.zone + "-" + GamePreferences.instance.stage);
+        Gdx.app.log(TAG, "LEVEL points = " + points.size());
+        Gdx.app.log(TAG, "LEVEL circles = " + circleShapes.size());
+        Gdx.app.log(TAG, "LEVEL rectangles = " + rectangleShapes.size());
+
     }
 
     public void update(float deltaTime) {

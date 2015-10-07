@@ -10,14 +10,13 @@ public class LevelPoint extends Vector2 {
     public int holeStartupIndex;
     public int holeScaleIndex;
     public boolean followerIsBackAndForth;
-    public int followerDirection;
+    public int followerDirection; // has a follower if not 0
     public int followStartupIndex;
     public int followSpeedIndex;
     public boolean hasVerticalOscillator;
     public boolean hasHorizontalOscillator;
     public int oscillatorStartupIndex;
     public int oscillatorSpeedIndex;
-
 
     public LevelPoint(float x, float y) {
         super(x, y);

@@ -1,7 +1,13 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.filip.edge.game.Level;
 import com.filip.edge.util.Constants;
 
 /**
@@ -12,10 +18,25 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
     public Rectangle bounds;
 
+    public boolean disapears;
+    public float disappearsStartupTime;
+    public float disappearsTime;
+    public float currentTime;
+    private Level.PropertyState disappearingState;
+
+    float hx, hy, angle;
+    Vector2 center;
+
+
+    private static final float SCALE_TIME = 1.f;
+
+
     public AbstractRectangleButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
 
         init(width, height, x, y, outsideColor, insideColor);
+
+        disappearingState = Level.PropertyState.Inactive;
 
     }
 
@@ -25,6 +46,68 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         bounds = new Rectangle();
         bounds.set(position.x - origin.x, position.y - origin.y, dimension.x, dimension.y);
 
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        if(disapears) {
+            currentTime += deltaTime;
+            switch (disappearingState) {
+                case Inactive:
+                    if (currentTime > disappearsStartupTime) {
+                        currentTime = 0;
+                        this.scale.set(1, 1);
+                        disappearingState = Level.PropertyState.Buildup;
+                    }
+                    break;
+                case Buildup:
+                    if (currentTime > SCALE_TIME) {
+                        currentTime = 0;
+                        this.scale.set(0, 0);
+                        disappearingState = Level.PropertyState.Active;
+                    }
+                    else {
+                        Fixture f = body.getFixtureList().get(0);
+                        PolygonShape s = (PolygonShape) f.getShape();
+                        // scale down
+                        float scale = 1 - this.currentTime / SCALE_TIME;
+                        this.scale.set(scale, scale);
+                        s.setAsBox(scale * hx, scale * hy, center, angle);
+                    }
+                    break;
+                case Active:
+                    if (currentTime > disappearsTime) {
+                        currentTime = 0;
+                        this.scale.set(0, 0);
+                        disappearingState = Level.PropertyState.Teardown;
+                    }
+                    break;
+                case Teardown:
+                    if (currentTime > SCALE_TIME) {
+                        currentTime = 0;
+                        this.scale.set(1, 1);
+                        disappearingState = Level.PropertyState.Inactive;
+                    }
+                    else {
+                        Fixture f = body.getFixtureList().get(0);
+                        PolygonShape s = (PolygonShape) f.getShape();
+                        // scale up
+                        float scale = this.currentTime / SCALE_TIME;
+                        this.scale.set(scale, scale);
+                        s.setAsBox(scale * hx, scale * hy, center, angle);
+                        break;
+                    }
+
+            }
+        }
+
+    }
+
+    public void setBox(float hx, float hy, Vector2 center, float angle) {
+        this.hx = hx;
+        this.hy = hy;
+        this.center = center;
+        this.angle = angle;
     }
 
     @Override

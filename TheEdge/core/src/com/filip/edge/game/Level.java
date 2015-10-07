@@ -67,7 +67,7 @@ public class Level {
 
     private void init() {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
-        
+
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
@@ -205,6 +205,12 @@ public class Level {
                     Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
 
+            if(points.get(i).disappears) {
+                s.disapears = true;
+                s.disappearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsStartupIndex];
+                s.disappearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsTimeIndex];
+            }
+
             // Do not add multiple rectangles that are the same
             if(!rectangleShapes.contains(s)) {
                 rectangleShapes.add(s);
@@ -251,6 +257,10 @@ public class Level {
 
         for (Follower oscillator : oscillators) {
             oscillator.update(deltaTime);
+        }
+
+        for (AbstractRectangleButtonObject rect : rectangleShapes) {
+            rect.update(deltaTime);
         }
 
         if (disappearing) {

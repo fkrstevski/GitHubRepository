@@ -14,7 +14,6 @@ public class Constants {
     public static final float BASE_SCREEN_WIDTH = 1334;
     public static final float BASE_SCREEN_HEIGHT = 750;
 
-
     public static final int DIGIT_WIDTH_CELLS = 5;
     public static final int DIGIT_HEIGHT_CELLS = 9;
 
@@ -31,19 +30,20 @@ public class Constants {
     public static final float[] LEVEL_MULTIPLIERS = {1, 0.75f};
     public static float BOX2D_SCALE = 10;
 
+    public static final float[] DISAPPEARING_OBJECT_TIME = {4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1f, 0.5f, 0.1f};
+    public static final float[] DISAPPEARING_OBJECT_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
+
     public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 /BOX2D_SCALE};
     public static final float[] FOLLOWER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] OSCILLATOR_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 /BOX2D_SCALE};
     public static final float[] OSCILLATOR_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-
     public static final float[] DISAPPEARING_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 0.5f, 0.1f};
     public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] HOLE_SCALE_TIME = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
-
 
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);

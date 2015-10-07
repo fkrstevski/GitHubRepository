@@ -17,6 +17,9 @@ public class LevelPoint extends Vector2 {
     public boolean hasHorizontalOscillator;
     public int oscillatorStartupIndex;
     public int oscillatorSpeedIndex;
+    public boolean disappears;
+    public int disappearsStartupIndex;
+    public int disappearsTimeIndex;
 
     public LevelPoint(float x, float y) {
         super(x, y);
@@ -25,7 +28,8 @@ public class LevelPoint extends Vector2 {
     public LevelPoint(float x, float y,
                       boolean h, int holeStartupIndex, int holeScaleIndex,
                       boolean backAndForth, int followerDirection, int followStartupIndex, int followSpeedIndex,
-                      boolean vertical, boolean horizontal, int oscillatorStartupIndex, int oscillatorSpeedIndex) {
+                      boolean vertical, boolean horizontal, int oscillatorStartupIndex, int oscillatorSpeedIndex,
+                      boolean disappears, int disappearsStartupIndex, int disappearsTimeIndex) {
         super(x, y);
         this.hasAHole = h;
         this.holeStartupIndex = holeStartupIndex;
@@ -40,5 +44,9 @@ public class LevelPoint extends Vector2 {
         this.hasHorizontalOscillator = horizontal;
         this.oscillatorStartupIndex = oscillatorStartupIndex;
         this.oscillatorSpeedIndex = oscillatorSpeedIndex;
+
+        this.disappears = disappears;
+        this.disappearsStartupIndex = disappearsStartupIndex;
+        this.disappearsTimeIndex = disappearsTimeIndex;
     }
 }

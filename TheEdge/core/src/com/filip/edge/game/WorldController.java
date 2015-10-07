@@ -242,6 +242,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             PolygonShape polygonShape = new PolygonShape();
             Vector2 o = new Vector2(0, 0);
             polygonShape.setAsBox((c.dimension.x / 2) / Constants.BOX2D_SCALE, (c.dimension.y / 2 - extraScale) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * c.rotation);
+            c.setBox((c.dimension.x / 2) / Constants.BOX2D_SCALE, (c.dimension.y / 2 - extraScale) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * c.rotation);
             FixtureDef fixtureDef1 = new FixtureDef();
             fixtureDef1.shape = polygonShape;
             fixtureDef1.isSensor = true;

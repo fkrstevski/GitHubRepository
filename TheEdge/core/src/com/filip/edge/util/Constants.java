@@ -22,7 +22,7 @@ public class Constants {
     public static final float END_TIME = 2.0f;
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 80;
-    public static final int INSIDE_CIRCLE_RADIUS = 26;
+    public static final int INSIDE_CIRCLE_RADIUS = 25;
     public static final int RECTANGLE_WIDTH = 50;
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 1;
@@ -62,4 +62,9 @@ public class Constants {
     public static long MAX_SCORE = 1000000000000000000L;
 
     public static int WIDTH_IN_PIXELS = 3;
+
+
+    public static int getOdd(int val) {
+        return (val % 2 == 0 ? val - 1 : val);
+    }
 }

@@ -24,8 +24,7 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
         super.init(width, height, x, y, outsideColor, insideColor);
 
-        // Make the radius slightly smaller than half the size (looks more like a circle)
-        radius = width / 2 - 2;
+        radius = width / 2;
         bounds = new Circle();
         bounds.set(position.x, position.y, radius);
     }

@@ -30,19 +30,25 @@ public class MainMenu {
 
         this.state = MainMenuState.Active;
 
-        playButton = new PlayButton((int) (width * 0.25f),     // size
-                width / 2,              // x
-                height / 2,             // y
+        int size = Constants.getOdd((int) (width * 0.25f));
+        Gdx.app.log(TAG, "playButton size = " + size);
+        playButton = new PlayButton(size,     // size
+                width / 2 - 1,              // x
+                height / 2 - 1,             // y
                 Constants.WHITE,       // outside color
                 Constants.ZONE_COLORS[GamePreferences.instance.zone]);       // inside color
 
-        infoButton = new InfoButton((int) (width * 0.05f),   // size
+        size = Constants.getOdd((int) (width * 0.05f));
+        Gdx.app.log(TAG, "infoButton size = " + size);
+        infoButton = new InfoButton(size,   // size
                 (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
                 Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
 
-        leaderboardButton = new LeaderboardButton((int) (width * 0.05f),   // size
+        size = Constants.getOdd((int) (width * 0.05f));
+        Gdx.app.log(TAG, "leaderboardButton size = " + size);
+        leaderboardButton = new LeaderboardButton(size,   // size
                 width - (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color

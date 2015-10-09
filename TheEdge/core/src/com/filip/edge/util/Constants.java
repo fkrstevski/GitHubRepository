@@ -33,10 +33,10 @@ public class Constants {
     public static final float[] DISAPPEARING_OBJECT_TIME = {4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1f, 0.5f, 0.1f};
     public static final float[] DISAPPEARING_OBJECT_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 /BOX2D_SCALE};
+    public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 / BOX2D_SCALE};
     public static final float[] FOLLOWER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] OSCILLATOR_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 /BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 /BOX2D_SCALE};
+    public static final float[] OSCILLATOR_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 / BOX2D_SCALE};
     public static final float[] OSCILLATOR_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] DISAPPEARING_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 0.5f, 0.1f};

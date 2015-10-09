@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Align;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
@@ -111,7 +112,7 @@ public class WorldRenderer implements Disposable {
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.WHITE);
-        fontGameOver.drawMultiLine(batch, level, x, y, 1, BitmapFont.HAlignment.CENTER);
+        fontGameOver.draw(batch, level, x, y);
     }
 
     private void renderGuiGameOver(SpriteBatch batch) {
@@ -120,7 +121,7 @@ public class WorldRenderer implements Disposable {
 
         BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
         fontGameOver.setColor(Constants.RED);
-        fontGameOver.drawMultiLine(batch, "GAME OVER", x, y, 1, BitmapFont.HAlignment.CENTER);
+        fontGameOver.draw(batch, "GAME OVER", x, y);
     }
 
     private void renderGuiScore(SpriteBatch batch) {

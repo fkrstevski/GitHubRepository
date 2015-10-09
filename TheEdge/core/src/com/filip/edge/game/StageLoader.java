@@ -164,7 +164,7 @@ public class StageLoader {
                                                             points[pointIndex].followStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                             points[pointIndex].followSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
-                                                    } else if(r.charAt(0) == 'B') {
+                                                    } else if (r.charAt(0) == 'B') {
                                                         if (r.charAt(1) == 'F' || r.charAt(1) == 'R') {
                                                             points[pointIndex].followerDirection = (r.charAt(1) == 'F' ? 1 : -1);
                                                             points[pointIndex].followerIsBackAndForth = true;
@@ -174,18 +174,16 @@ public class StageLoader {
                                                             }
                                                         }
                                                     } else if (r.charAt(0) == 'X' || r.charAt(0) == 'Y') {
-                                                        if(r.charAt(0) == 'X'){
+                                                        if (r.charAt(0) == 'X') {
                                                             points[pointIndex].hasHorizontalOscillator = true;
-                                                        }
-                                                        else {
+                                                        } else {
                                                             points[pointIndex].hasVerticalOscillator = true;
                                                         }
                                                         if (r.length() > 1) {
                                                             points[pointIndex].oscillatorStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                             points[pointIndex].oscillatorSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
-                                                    }
-                                                    else if (r.charAt(0) == 'D') {
+                                                    } else if (r.charAt(0) == 'D') {
                                                         points[pointIndex].disappears = true;
                                                         if (r.length() > 1) {
                                                             points[pointIndex].disappearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
@@ -326,7 +324,7 @@ public class StageLoader {
                                 Float.parseFloat(pointProperty[0]) * width,
                                 Float.parseFloat(pointProperty[1]) * height,
                                 Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
-                                Boolean.parseBoolean(pointProperty[5]),Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
+                                Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
                                 Boolean.parseBoolean(pointProperty[9]), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
                                 Boolean.parseBoolean(pointProperty[13]), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15])
                         )

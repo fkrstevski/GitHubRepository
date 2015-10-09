@@ -15,6 +15,6 @@ public class EndTarget extends AbstractCircleButtonObject {
 
     @Override
     public void fillInside(float size) {
-        buttonPixmap.fillCircle((int)(size / 2), (int)(size / 2), (int) (size / 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER));
+        buttonPixmap.fillCircle((int) (size / 2), (int) (size / 2), (int) (size / 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER));
     }
 }

@@ -7,15 +7,14 @@ import java.util.ArrayList;
  */
 public class Stage {
     private static final String TAG = Stage.class.getName();
-
-    private int stageID;
-    private ArrayList<LevelPoint> points;
     public boolean hasFollowerObject;
     public int followerSpeedIndex;
     public int followerStartupTimeIndex;
     public boolean disappears;
     public int disappearSpeedIndex;
     public int disappearsStartupTimeIndex;
+    private int stageID;
+    private ArrayList<LevelPoint> points;
 
     public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties) {
         this.stageID = id;

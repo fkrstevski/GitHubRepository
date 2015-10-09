@@ -14,13 +14,13 @@ public class InfoButton extends AbstractCircleButtonObject {
 
     @Override
     public void fillInside(float size) {
-        buttonPixmap.fillRectangle((int)(size / 2 - size / 10),
-                (int)(size / 2 - (size / 2.5)),
-                (int)(size / 5),
-                (int)(size / 2));
-        buttonPixmap.fillRectangle((int)(size / 2 - size / 10),
-                (int)(size / 2 + size / 5),
-                (int)(size / 5),
-                (int)(size / 5));
+        buttonPixmap.fillRectangle((int) (size / 2 - size / 10),
+                (int) (size / 2 - (size / 2.5)),
+                (int) (size / 5),
+                (int) (size / 2));
+        buttonPixmap.fillRectangle((int) (size / 2 - size / 10),
+                (int) (size / 2 + size / 5),
+                (int) (size / 5),
+                (int) (size / 5));
     }
 }

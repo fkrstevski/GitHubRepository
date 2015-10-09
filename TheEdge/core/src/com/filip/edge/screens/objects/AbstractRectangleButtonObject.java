@@ -1,8 +1,6 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -15,20 +13,15 @@ import com.filip.edge.util.Constants;
  */
 public abstract class AbstractRectangleButtonObject extends AbstractButtonObject {
     public static final String TAG = AbstractButtonObject.class.getName();
-
+    private static final float SCALE_TIME = 1.f;
     public Rectangle bounds;
-
     public boolean disapears;
     public float disappearsStartupTime;
     public float disappearsTime;
     public float currentTime;
-    private Level.PropertyState disappearingState;
-
     float hx, hy, angle;
     Vector2 center;
-
-
-    private static final float SCALE_TIME = 1.f;
+    private Level.PropertyState disappearingState;
 
 
     public AbstractRectangleButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
@@ -50,7 +43,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
     @Override
     public void update(float deltaTime) {
-        if(disapears) {
+        if (disapears) {
             currentTime += deltaTime;
             switch (disappearingState) {
                 case Inactive:
@@ -65,8 +58,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
                         currentTime = 0;
                         this.scale.set(0, 0);
                         disappearingState = Level.PropertyState.Active;
-                    }
-                    else {
+                    } else {
                         Fixture f = body.getFixtureList().get(0);
                         PolygonShape s = (PolygonShape) f.getShape();
                         // scale down
@@ -87,8 +79,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
                         currentTime = 0;
                         this.scale.set(1, 1);
                         disappearingState = Level.PropertyState.Inactive;
-                    }
-                    else {
+                    } else {
                         Fixture f = body.getFixtureList().get(0);
                         PolygonShape s = (PolygonShape) f.getShape();
                         // scale up
@@ -309,12 +300,10 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         boolean sameSame = false;
 
-        if (object != null && object instanceof AbstractRectangleButtonObject)
-        {
+        if (object != null && object instanceof AbstractRectangleButtonObject) {
             AbstractRectangleButtonObject point = ((AbstractRectangleButtonObject) object);
             sameSame = position.equals(point.position) &&
                     dimension.equals(point.dimension);

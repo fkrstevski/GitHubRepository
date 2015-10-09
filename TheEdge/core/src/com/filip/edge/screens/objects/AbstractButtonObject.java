@@ -23,7 +23,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
         dimension.set(width, height);
         position.set(x, y);
 
-        buttonPixmap = new Pixmap((int)width, (int)height, Pixmap.Format.RGBA8888);
+        buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
 
         fillPixmap(width, height, outsideColor, insideColor);
 

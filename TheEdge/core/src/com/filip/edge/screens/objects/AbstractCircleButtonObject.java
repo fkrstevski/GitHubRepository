@@ -37,7 +37,7 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     @Override
     public void fillPixmap(float width, float height, Color outsideColor, Color insideColor) {
         buttonPixmap.setColor(outsideColor);
-        buttonPixmap.fillCircle((int)(width / 2), (int)(width / 2), (int)radius);
+        buttonPixmap.fillCircle((int) (width / 2), (int) (width / 2), (int) radius);
         buttonPixmap.setColor(insideColor);
 
         fillInside(width);
@@ -55,12 +55,10 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         boolean sameSame = false;
 
-        if (object != null && object instanceof AbstractCircleButtonObject)
-        {
+        if (object != null && object instanceof AbstractCircleButtonObject) {
             AbstractCircleButtonObject point = ((AbstractCircleButtonObject) object);
             sameSame = bounds.equals(point.bounds);
         }

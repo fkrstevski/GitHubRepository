@@ -1,6 +1,5 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.game.objects.EmptyCircle;
@@ -19,12 +18,6 @@ public class Hole extends EmptyCircle {
     private float originalSize;
 
     private State state;
-
-    enum State {
-        StartingUp,
-        ScalingUp,
-        ScalingDown
-    }
 
     public Hole(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
@@ -62,7 +55,7 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(currentScaleTime / scaleTime, currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if(currentScaleTime / scaleTime > 0.2f){
+                    if (currentScaleTime / scaleTime > 0.2f) {
                         body.setActive(true);
                     }
                 }
@@ -76,7 +69,7 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(1 - currentScaleTime / scaleTime, 1 - currentScaleTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if(1 - currentScaleTime / scaleTime < 0.2f){
+                    if (1 - currentScaleTime / scaleTime < 0.2f) {
                         body.setActive(false);
                     }
                 }
@@ -93,5 +86,11 @@ public class Hole extends EmptyCircle {
                 super.render(batch);
                 break;
         }
+    }
+
+    enum State {
+        StartingUp,
+        ScalingUp,
+        ScalingDown
     }
 }

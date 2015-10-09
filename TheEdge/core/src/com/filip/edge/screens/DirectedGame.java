@@ -7,10 +7,10 @@ import com.filip.edge.util.IActivityRequestHandler;
 
 public abstract class DirectedGame implements ApplicationListener {
     private static final String TAG = DirectedGame.class.getName();
+    public SpriteBatch batch;
     protected IActivityRequestHandler activityRequestHandler;
     private boolean init;
     private AbstractGameScreen currScreen;
-    public SpriteBatch batch;
 
     public DirectedGame(IActivityRequestHandler activityRequestHandler) {
         this.activityRequestHandler = activityRequestHandler;

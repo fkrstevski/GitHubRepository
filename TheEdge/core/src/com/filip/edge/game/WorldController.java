@@ -41,9 +41,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     public CameraHelper cameraHelper;
     public World b2world;
     public LevelState state;
+    public float readyTimeRatio;
     private DirectedGame game;
     private float readyTime;
-    public float readyTimeRatio;
     private float endTime;
     private float greenTime;
     private float levelScore;
@@ -288,7 +288,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             this.endTime += deltaTime;
 
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
-            if(level.hasFollowerObject()) {
+            if (level.hasFollowerObject()) {
                 level.updateFollowerScale((1 - endTime / Constants.END_TIME));
             }
 
@@ -548,7 +548,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void fallOff() {
         this.state = LevelState.OffTheEdge;
-        if(this.level.hasFollowerObject()) {
+        if (this.level.hasFollowerObject()) {
             this.level.tearDownFollower();
         }
         this.level.startCircle = this.level.startCircleRedIcon;

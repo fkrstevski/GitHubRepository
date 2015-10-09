@@ -12,7 +12,6 @@ import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
-import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
@@ -41,23 +40,13 @@ public class Level {
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
-
-    public enum PropertyState {
-        Inactive,
-        Buildup,
-        Active,
-        Teardown
-    }
-
     Follower levelFollower;
-
     private PropertyState disappearingState;
     private boolean disappearing;
     private float disappearingStartTime;
     private float disappearingSpeed;
     private float disappearingTime;
     private int disappearingIndex;
-
     public Level() {
         init();
     }
@@ -111,7 +100,7 @@ public class Level {
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TRANSPARENT);
 
             // Do not add multiple circles that are the same
-            if(!circleShapes.contains(m)) {
+            if (!circleShapes.contains(m)) {
                 circleShapes.add(m);
             }
 
@@ -123,7 +112,7 @@ public class Level {
             }
 
             // Add a vertical oscillator to the point
-            if(points.get(i).hasVerticalOscillator) {
+            if (points.get(i).hasVerticalOscillator) {
                 float dis = Constants.OSCILLATION_DISTANCE * this.getLevelMultiplier() * horizontalScale;
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x + dis, points.get(i).y));
@@ -138,7 +127,7 @@ public class Level {
             }
 
             // Add a horizontal oscillator
-            if(points.get(i).hasHorizontalOscillator) {
+            if (points.get(i).hasHorizontalOscillator) {
                 float dis = Constants.OSCILLATION_DISTANCE * this.getLevelMultiplier() * horizontalScale;
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y + dis));
@@ -153,10 +142,10 @@ public class Level {
             }
 
             // Add the followers
-            if(points.get(i).followerDirection != 0) {
+            if (points.get(i).followerDirection != 0) {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
-                localPoints.add(points.get(i+points.get(i).followerDirection));
+                localPoints.add(points.get(i + points.get(i).followerDirection));
                 followers.add(new Follower(
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
@@ -199,14 +188,14 @@ public class Level {
                     midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
 
-            if(points.get(i).disappears) {
+            if (points.get(i).disappears) {
                 s.disapears = true;
                 s.disappearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsStartupIndex];
                 s.disappearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsTimeIndex];
             }
 
             // Do not add multiple rectangles that are the same
-            if(!rectangleShapes.contains(s)) {
+            if (!rectangleShapes.contains(s)) {
                 rectangleShapes.add(s);
             }
         }
@@ -215,10 +204,10 @@ public class Level {
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
         if (s.hasFollowerObject) {
             levelFollower = new Follower(Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
-                                        new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
-                                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
-                                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                                        points.get(0), new ArrayList<Vector2>(points), 1, true);
+                    new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
+                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
+                    Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                    points.get(0), new ArrayList<Vector2>(points), 1, true);
         }
 
         if (s.disappears) {
@@ -362,12 +351,12 @@ public class Level {
         this.levelFollower.followerObjectState = Level.PropertyState.Teardown;
     }
 
-    public void setFollowerBody(Body body){
-        this.levelFollower.followerObject.body = body;
-    }
-
     public Body getFollowerBody() {
         return this.levelFollower.followerObject.body;
+    }
+
+    public void setFollowerBody(Body body) {
+        this.levelFollower.followerObject.body = body;
     }
 
     public Vector2 getFollowerPos() {
@@ -380,5 +369,12 @@ public class Level {
 
     public void updateFollowerScale(float scale) {
         this.levelFollower.scale(scale);
+    }
+
+    public enum PropertyState {
+        Inactive,
+        Buildup,
+        Active,
+        Teardown
     }
 }

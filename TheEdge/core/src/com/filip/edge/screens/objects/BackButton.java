@@ -14,9 +14,9 @@ public class BackButton extends AbstractCircleButtonObject {
 
     @Override
     public void fillInside(float size) {
-        buttonPixmap.fillTriangle((int)(size / 2 + size / 5), (int)(size / 2 - size / 4),
-                (int)(size / 2 + size / 5), (int)(size / 2 + size / 4),
-                (int)(size / 2 - size / 3), (int)(size / 2));
+        buttonPixmap.fillTriangle((int) (size / 2 + size / 5), (int) (size / 2 - size / 4),
+                (int) (size / 2 + size / 5), (int) (size / 2 + size / 4),
+                (int) (size / 2 - size / 3), (int) (size / 2));
 
     }
 }

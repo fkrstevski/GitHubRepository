@@ -15,21 +15,21 @@ public class LeaderboardButton extends AbstractCircleButtonObject {
     @Override
     public void fillInside(float size) {
         // middle
-        buttonPixmap.fillRectangle((int)(size / 2 - size / 10),           // x
-                (int)(size / 2 - size / 5),    // y
-                (int)(size / 5),                       // width
-                (int)(size / 2));                      // height
+        buttonPixmap.fillRectangle((int) (size / 2 - size / 10),           // x
+                (int) (size / 2 - size / 5),    // y
+                (int) (size / 5),                       // width
+                (int) (size / 2));                      // height
         // right
-        buttonPixmap.fillRectangle((int)(size / 2 + size / 6.5),  // x
-                (int)(size / 2 - size / 5),    // y
-                (int)(size / 5),                       // width
-                (int)(size / 4));                      // height
+        buttonPixmap.fillRectangle((int) (size / 2 + size / 6.5),  // x
+                (int) (size / 2 - size / 5),    // y
+                (int) (size / 5),                       // width
+                (int) (size / 4));                      // height
 
         // left
-        buttonPixmap.fillRectangle((int)(size / 2 - size / 3),            // x
-                (int)(size / 2 - size / 5),    // y
-                (int)(size / 5),                       // width
-                (int)(size / 3));                      // height
+        buttonPixmap.fillRectangle((int) (size / 2 - size / 3),            // x
+                (int) (size / 2 - size / 5),    // y
+                (int) (size / 5),                       // width
+                (int) (size / 3));                      // height
 
 
     }

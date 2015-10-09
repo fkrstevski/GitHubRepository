@@ -10,18 +10,18 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     public static final String TAG = AbstractButtonObject.class.getName();
 
-    public int radius;
+    public float radius;
 
     public Circle bounds;
 
-    public AbstractCircleButtonObject(int size, float x, float y, Color outsideColor, Color insideColor) {
+    public AbstractCircleButtonObject(float size, float x, float y, Color outsideColor, Color insideColor) {
         super(size, size, x, y, outsideColor, insideColor);
 
         this.init(size, size, x, y, outsideColor, insideColor);
     }
 
     @Override
-    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super.init(width, height, x, y, outsideColor, insideColor);
 
         radius = width / 2;
@@ -35,15 +35,15 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     }
 
     @Override
-    public void fillPixmap(int width, int height, Color outsideColor, Color insideColor) {
+    public void fillPixmap(float width, float height, Color outsideColor, Color insideColor) {
         buttonPixmap.setColor(outsideColor);
-        buttonPixmap.fillCircle(width / 2, width / 2, radius);
+        buttonPixmap.fillCircle((int)(width / 2), (int)(width / 2), (int)radius);
         buttonPixmap.setColor(insideColor);
 
         fillInside(width);
     }
 
-    public abstract void fillInside(int size);
+    public abstract void fillInside(float size);
 
     public boolean isTouched(int x, int y) {
         float distance = Vector2.dst(position.x, position.y, x, y);

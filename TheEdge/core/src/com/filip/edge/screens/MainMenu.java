@@ -30,34 +30,26 @@ public class MainMenu {
 
         this.state = MainMenuState.Active;
 
-        int size = Constants.getOdd((int) (width * 0.25f));
-        Gdx.app.log(TAG, "playButton size = " + size);
-        playButton = new PlayButton(size,     // size
+        playButton = new PlayButton(width * 0.25f,     // size
                 width / 2 - 1,              // x
                 height / 2 - 1,             // y
                 Constants.WHITE,       // outside color
                 Constants.ZONE_COLORS[GamePreferences.instance.zone]);       // inside color
 
-        size = Constants.getOdd((int) (width * 0.05f));
-        Gdx.app.log(TAG, "infoButton size = " + size);
-        infoButton = new InfoButton(size,   // size
+        infoButton = new InfoButton(width * 0.05f,   // size
                 (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
                 Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
 
-        size = Constants.getOdd((int) (width * 0.05f));
-        Gdx.app.log(TAG, "leaderboardButton size = " + size);
-        leaderboardButton = new LeaderboardButton(size,   // size
+        leaderboardButton = new LeaderboardButton(width * 0.05f,   // size
                 width - (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
                 Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
-
     }
 
     public void update(float deltaTime) {
-
         if (this.state == MainMenuState.Active) {
             playButton.update(deltaTime);
             infoButton.update(deltaTime);
@@ -77,23 +69,6 @@ public class MainMenu {
             leaderboardButton.render(batch);
 
             DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2, batch);
-
-            /*
-            //Test numbers and font
-            String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 100, batch);
-            str = "FILIP AND MATT";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 200, batch);
-            str = "ALIMA";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 300, batch);
-            str = "YOU WIN";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 400, batch);
-            str = "0123456789";
-            DigitRenderer.instance.renderNumber(str, (int) (width - width / 54), height - 500, batch);
-            str = "ZIPPER";
-            DigitRenderer.instance.renderString(str, (int) (width - width / 54), height - 600, batch);
-            */
-
         } else if (this.state == MainMenuState.ZoomInToPlay) {
             playButton.render(batch);
         }

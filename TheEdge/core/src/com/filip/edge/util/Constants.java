@@ -62,9 +62,4 @@ public class Constants {
     public static long MAX_SCORE = 1000000000000000000L;
 
     public static int WIDTH_IN_PIXELS = 3;
-
-
-    public static int getOdd(int val) {
-        return (val % 2 == 0 ? val - 1 : val);
-    }
 }

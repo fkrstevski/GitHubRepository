@@ -15,15 +15,15 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
     protected Texture pixmapTexture = null;
     protected Pixmap buttonPixmap = null;
 
-    public AbstractButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         init(width, height, x, y, outsideColor, insideColor);
     }
 
-    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         dimension.set(width, height);
         position.set(x, y);
 
-        buttonPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        buttonPixmap = new Pixmap((int)width, (int)height, Pixmap.Format.RGBA8888);
 
         fillPixmap(width, height, outsideColor, insideColor);
 
@@ -33,16 +33,13 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 
-    public abstract void fillPixmap(int width, int height, Color outsideColor, Color insideColor);
+    public abstract void fillPixmap(float width, float height, Color outsideColor, Color insideColor);
 
-    public abstract void fillInside(int size);
+    public abstract void fillInside(float size);
 
     public void render(SpriteBatch batch) {
         if (visible) {
-            Texture tex = null;
-
-            tex = pixmapTexture;
-            batch.draw(tex,
+            batch.draw(pixmapTexture,
                     position.x - origin.x,
                     position.y - origin.y,
                     origin.x,

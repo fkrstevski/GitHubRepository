@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 public class MiddlePart extends AbstractRectangleButtonObject {
     public static final String TAG = MiddlePart.class.getName();
 
-    public MiddlePart(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public MiddlePart(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int size) {
+    public void fillInside(float size) {
 
     }
 }

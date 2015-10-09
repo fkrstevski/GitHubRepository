@@ -8,15 +8,15 @@ import com.badlogic.gdx.graphics.Color;
 public class PlayButton extends AbstractCircleButtonObject {
     public static final String TAG = PlayButton.class.getName();
 
-    public PlayButton(int size, float x, float y, Color outsideColor, Color insideColor) {
+    public PlayButton(float size, float x, float y, Color outsideColor, Color insideColor) {
         super(size, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int size) {
-        buttonPixmap.fillTriangle(size / 2 - size / 5, size / 2 - size / 4,
-                size / 2 + size / 3, size / 2,
-                size / 2 - size / 5, size / 2 + size / 4
+    public void fillInside(float size) {
+        buttonPixmap.fillTriangle((int)(size / 2 - size / 5), (int)(size / 2 - size / 4),
+                (int)(size / 2 + size / 3), (int)(size / 2),
+                (int)(size / 2 - size / 5), (int)(size / 2 + size / 4)
         );
     }
 }

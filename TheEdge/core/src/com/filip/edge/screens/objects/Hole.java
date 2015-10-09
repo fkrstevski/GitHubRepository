@@ -16,7 +16,7 @@ public class Hole extends EmptyCircle {
     private float currentTime;
     private float scaleTime;
     private float startupTime;
-    private int originalSize;
+    private float originalSize;
 
     private State state;
 
@@ -26,7 +26,7 @@ public class Hole extends EmptyCircle {
         ScalingDown
     }
 
-    public Hole(int size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
+    public Hole(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,

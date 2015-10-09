@@ -31,7 +31,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     private static final float SCALE_TIME = 1.f;
 
 
-    public AbstractRectangleButtonObject(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public AbstractRectangleButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
 
         init(width, height, x, y, outsideColor, insideColor);
@@ -41,7 +41,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     }
 
     @Override
-    protected void init(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super.init(width, height, x, y, outsideColor, insideColor);
         bounds = new Rectangle();
         bounds.set(position.x - origin.x, position.y - origin.y, dimension.x, dimension.y);
@@ -111,7 +111,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     }
 
     @Override
-    public void fillPixmap(int width, int height, Color outsideColor, Color insideColor) {
+    public void fillPixmap(float width, float height, Color outsideColor, Color insideColor) {
         buttonPixmap.setColor(outsideColor);
         buttonPixmap.fill();
         buttonPixmap.setColor(insideColor);
@@ -119,7 +119,7 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         fillInside(width);
     }
 
-    public abstract void fillInside(int size);
+    public abstract void fillInside(float size);
 
     public boolean isTouched(int x, int y) {
         if (this.bounds.contains(x, y)) {

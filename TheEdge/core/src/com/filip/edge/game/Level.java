@@ -12,6 +12,7 @@ import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
+import com.filip.edge.screens.objects.InfoButton;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
@@ -40,7 +41,6 @@ public class Level {
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
-    public ArrayList<LevelProperty> properties;
 
     public enum PropertyState {
         Inactive,
@@ -79,14 +79,13 @@ public class Level {
         oscillators = new ArrayList<Follower>();
 
         // Ball
-        int size = Constants.getOdd((int) (Constants.BALL_RADIUS * 2 * horizontalScale));
-        ball = new EmptyCircle(size, this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
+        ball = new EmptyCircle(Constants.BALL_RADIUS * 2 * horizontalScale,
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
 
         // Backbutton
-        size = Constants.getOdd((int) (height * 0.1f));
-        backButton = new BackButton(size,   // size
-                (int) (height * 0.055),    // x
-                (int) (height * 0.055),     // y
+        backButton = new BackButton(width * 0.05f,   // size
+                (int) (width * 0.03),    // x
+                (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
                 new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                         Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
@@ -94,23 +93,22 @@ public class Level {
                         Constants.ZONE_COLORS[GamePreferences.instance.zone].a));      // inside color
 
         // Add Start Circle
-        size = Constants.getOdd((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale));
-        EndTarget st = new EndTarget(size, this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
+        EndTarget st = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(st);
 
-        startCircleGreenIcon = new EndTarget(size, this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
-        startCircleYellowIcon = new EndTarget(size, this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE);
-        startCircleRedIcon = new EndTarget(size, this.getFirstPoint().x,
-                this.getFirstPoint().y, Constants.RED, Constants.WHITE);
+        startCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE);
+        startCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE);
+        startCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.RED, Constants.WHITE);
         startCircle = startCircleRedIcon;
 
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
-            size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
-            EmptyCircle m = new EmptyCircle(size, points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TURQUOISE);
+            EmptyCircle m = new EmptyCircle(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                    points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TRANSPARENT);
 
             // Do not add multiple circles that are the same
             if(!circleShapes.contains(m)) {
@@ -119,8 +117,7 @@ public class Level {
 
             // Add a hole to the point
             if (points.get(i).hasAHole) {
-                size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
-                holes.add(new Hole(size,
+                holes.add(new Hole(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
             }
@@ -131,12 +128,11 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x + dis, points.get(i).y));
                 localPoints.add(new Vector2(points.get(i).x - dis, points.get(i).y));
-                size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
                 oscillators.add(new Follower(
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
-                        size,
+                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true
                 ));
             }
@@ -147,12 +143,11 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y + dis));
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y - dis));
-                size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
                 oscillators.add(new Follower(
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
-                        size,
+                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true
                 ));
             }
@@ -162,12 +157,11 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
                 localPoints.add(points.get(i+points.get(i).followerDirection));
-                size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
                 followers.add(new Follower(
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
                                 Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
-                        size,
+                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth
 
                 ));
@@ -175,22 +169,20 @@ public class Level {
         }
 
         // Add EndCircle - for target collision
-        size = Constants.getOdd((int) (Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale));
-        endCircle = new EmptyCircle(size, this.getLastPoint().x,
-                this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
+        endCircle = new EmptyCircle(Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale,
+                this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
 
         // Add EndCircle - for boundary collision
-        size = Constants.getOdd((int) (Constants.END_CIRCLE_RADIUS * 2 * horizontalScale));
-        EndTarget et = new EndTarget(size, this.getLastPoint().x,
-                this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
+        EndTarget et = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
         circleShapes.add(et);
 
-        finishCircleGreenIcon = new EndTarget(size, this.getLastPoint().x,
-                this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
-        finishCircleYellowIcon = new EndTarget(size, this.getLastPoint().x,
-                this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
-        finishCircleRedIcon = new EndTarget(size, this.getLastPoint().x,
-                this.getLastPoint().y, Constants.RED, Constants.WHITE);
+        finishCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE);
+        finishCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getLastPoint().x, this.getLastPoint().y, Constants.YELLOW, Constants.WHITE);
+        finishCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
+                this.getLastPoint().x, this.getLastPoint().y, Constants.RED, Constants.WHITE);
 
         finishCircle = finishCircleRedIcon;
 
@@ -202,10 +194,9 @@ public class Level {
             Vector2 midpoint = new Vector2((p1.x + p2.x) / 2.0f, (p1.y + p2.y) / 2.0f);
             float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
-            AbstractRectangleButtonObject s = new MiddlePart((int) Vector2.dst(p1.x, p1.y, p2.x, p2.y),
-                    (int) (Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale),
-                    midpoint.x, midpoint.y,
-                    Constants.WHITE, Constants.TURQUOISE);
+            AbstractRectangleButtonObject s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
+                    Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale,
+                    midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE);
             s.rotation = angle;
 
             if(points.get(i).disappears) {
@@ -223,11 +214,10 @@ public class Level {
         // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
         if (s.hasFollowerObject) {
-            size = Constants.getOdd((int) (Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale));
             levelFollower = new Follower(Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                                         new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
-                                        size,
+                                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                                         points.get(0), new ArrayList<Vector2>(points), 1, true);
         }
 

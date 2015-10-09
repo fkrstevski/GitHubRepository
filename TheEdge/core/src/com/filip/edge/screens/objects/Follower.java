@@ -26,13 +26,13 @@ public class Follower {
     private Vector2 followObjectFrom;
     private Vector2 followObjectTo;
     private int followPointIndex;
-    private int followObjectOriginalSize;
+    private float followObjectOriginalSize;
     private static final float FOLLOW_OBJECT_SCALE_TIME = 0.5f;
     public ArrayList<Vector2> pointsToFollow;
     private int direction;
     private boolean backAndForth;
 
-    public Follower(float startUpTime, Vector2 speed, int size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth){
+    public Follower(float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth){
 
         this.followerObjectTime = 0;
         this.followerObjectDisplayStartTime = startUpTime;

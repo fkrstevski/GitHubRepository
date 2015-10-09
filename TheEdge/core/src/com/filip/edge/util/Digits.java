@@ -10,12 +10,12 @@ import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 class ZeroDigit extends AbstractRectangleButtonObject {
     public static final String TAG = ZeroDigit.class.getName();
 
-    public ZeroDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public ZeroDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
@@ -31,12 +31,12 @@ class ZeroDigit extends AbstractRectangleButtonObject {
 class OneDigit extends AbstractRectangleButtonObject {
     public static final String TAG = OneDigit.class.getName();
 
-    public OneDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public OneDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
         fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
     }
@@ -45,12 +45,12 @@ class OneDigit extends AbstractRectangleButtonObject {
 class TwoDigit extends AbstractRectangleButtonObject {
     public static final String TAG = TwoDigit.class.getName();
 
-    public TwoDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public TwoDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
@@ -65,12 +65,12 @@ class TwoDigit extends AbstractRectangleButtonObject {
 class ThreeDigit extends AbstractRectangleButtonObject {
     public static final String TAG = ThreeDigit.class.getName();
 
-    public ThreeDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public ThreeDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
@@ -85,12 +85,12 @@ class ThreeDigit extends AbstractRectangleButtonObject {
 class FourDigit extends AbstractRectangleButtonObject {
     public static final String TAG = FourDigit.class.getName();
 
-    public FourDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public FourDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
@@ -103,12 +103,12 @@ class FourDigit extends AbstractRectangleButtonObject {
 class FiveDigit extends AbstractRectangleButtonObject {
     public static final String TAG = FiveDigit.class.getName();
 
-    public FiveDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public FiveDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
@@ -123,12 +123,12 @@ class FiveDigit extends AbstractRectangleButtonObject {
 class SixDigit extends AbstractRectangleButtonObject {
     public static final String TAG = SixDigit.class.getName();
 
-    public SixDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public SixDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
 
@@ -144,12 +144,12 @@ class SixDigit extends AbstractRectangleButtonObject {
 class SevenDigit extends AbstractRectangleButtonObject {
     public static final String TAG = SevenDigit.class.getName();
 
-    public SevenDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public SevenDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
@@ -161,12 +161,12 @@ class SevenDigit extends AbstractRectangleButtonObject {
 class EightDigit extends AbstractRectangleButtonObject {
     public static final String TAG = EightDigit.class.getName();
 
-    public EightDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public EightDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);
@@ -183,12 +183,12 @@ class EightDigit extends AbstractRectangleButtonObject {
 class NineDigit extends AbstractRectangleButtonObject {
     public static final String TAG = NineDigit.class.getName();
 
-    public NineDigit(int width, int height, float x, float y, Color outsideColor, Color insideColor) {
+    public NineDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int width) {
+    public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
         fillTopRightRect(Constants.WIDTH_IN_PIXELS);

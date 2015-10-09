@@ -8,12 +8,12 @@ public class EmptyCircle extends AbstractCircleButtonObject {
 
     public static final String TAG = EmptyCircle.class.getName();
 
-    public EmptyCircle(int size, float x, float y, Color outsideColor, Color insideColor) {
+    public EmptyCircle(float size, float x, float y, Color outsideColor, Color insideColor) {
         super(size, x, y, outsideColor, insideColor);
     }
 
     @Override
-    public void fillInside(int size) {
+    public void fillInside(float size) {
 
     }
 }

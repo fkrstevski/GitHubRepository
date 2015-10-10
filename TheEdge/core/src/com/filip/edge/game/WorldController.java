@@ -107,6 +107,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void initLevel() {
         levelScore = 0;
+        visibleOrbiters = 0;
         level = new Level();
 
         if (b2world != null) {
@@ -568,6 +569,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
                     if (contact.getFixtureA().getBody() == orbiterPickup.body) {
                         Gdx.app.log(TAG, "BALL ORBITER COLLISION");
+                        orbiterPickup.pickedUp();
                         addOrbiters();
                         break;
                     }
@@ -611,6 +613,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
                     if (contact.getFixtureB().getBody() == orbiterPickup.body) {
                         Gdx.app.log(TAG, "BALL ORBITER COLLISION");
+                        orbiterPickup.pickedUp();
                         addOrbiters();
                         break;
                     }

@@ -20,6 +20,7 @@ public class OrbiterPickup extends EmptyCircle {
     private float originalSize;
     private boolean scalingUp;
     private float minScale;
+    private boolean deactivate;
 
     private State state;
 
@@ -39,6 +40,11 @@ public class OrbiterPickup extends EmptyCircle {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        if(deactivate) {
+            deactivate = false;
+            body.setActive(false);
+        }
 
         switch (state) {
             case StartingUp:
@@ -90,6 +96,11 @@ public class OrbiterPickup extends EmptyCircle {
                 }
                 break;
         }
+    }
+
+    public void pickedUp(){
+        this.state = State.Gone;
+        deactivate = true;
     }
 
     @Override

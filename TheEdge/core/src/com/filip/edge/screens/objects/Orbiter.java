@@ -1,108 +1,37 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
+
+import java.util.ArrayList;
 
 /**
- * Created by fkrstevski on 2015-09-29.
+ * Created by fkrstevski on 2015-10-10.
  */
 public class Orbiter extends EmptyCircle {
-    public static final String TAG = Hole.class.getName();
-    private float currentDisappearTime;
-    private float currentTime;
-    private float scaleTime;
-    private float startupTime;
-    private float disappearTime;
-    private float originalSize;
-    private boolean scalingUp;
-    private float minScale;
+    public static final String TAG = Orbiter.class.getName();
 
-    private State state;
+    public float angle;
+    public Ball ball;
 
-    public Orbiter(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
-        super(size, x, y, Constants.GREEN, Constants.GREEN);
-
-        this.state = State.StartingUp;
-        this.originalSize = size;
-        this.scale.set(0, 0);
-        this.startupTime = Constants.ORBITER_STARTUP_TIME[startupTimeIndex];
-        this.disappearTime = Constants.ORBITER_DISAPPEAR_TIME[startupTimeIndex];
-        this.scaleTime = 0.2f;
-        this.scalingUp = true;
-        this.minScale = 0;
+    public Orbiter(float size, float x, float y, Color outsideColor, Color insideColor, Ball ball, float angle) {
+        super(size, x, y, outsideColor, insideColor);
+        this.angle = angle;
+        this.ball = ball;
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
-        switch (state) {
-            case StartingUp:
-                currentTime += deltaTime;
-                if (currentTime > startupTime) {
-                    currentTime = 0;
-                    currentDisappearTime = 0;
-                    state = State.Active;
-                    body.setActive(true);
-                }
-                break;
-            case Active:
-                currentTime += deltaTime;
-                currentDisappearTime += deltaTime;
-                minScale = (currentDisappearTime / disappearTime) / 2;
-                if(scalingUp) {
-                    this.scale.set(currentTime / scaleTime + minScale, currentTime / scaleTime + minScale);
-                    //body.getFixtureList().get(0).getShape().setRadius(((currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if(this.scale.epsilonEquals(1, 1, 0.1f)) {
-                        scalingUp = !scalingUp;
-                        currentTime = 0;
-                    }
-                }
-                else {
-
-                    if (currentDisappearTime > disappearTime) {
-                        currentDisappearTime = 0;
-                        state = State.Disappearing;
-                        minScale = 0;
-                    }
-
-                    this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
-                    //body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if(this.scale.epsilonEquals(minScale, minScale, 0.1f)) {
-                        scalingUp = !scalingUp;
-                        currentTime = 0;
-                    }
-                }
-                break;
-
-            case Disappearing:
-                currentTime += deltaTime;
-                this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
-                body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                if(this.scale.epsilonEquals(0, 0, 0.1f)) {
-                    currentTime = 0;
-                    state = State.Gone;
-                    body.setActive(false);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        if(state != State.Gone) {
-            super.render(batch);
-        }
-    }
-
-    enum State {
-        StartingUp,
-        Active,
-        Disappearing,
-        Gone
+        int width = Gdx.graphics.getWidth();
+        float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
+        angle += Constants.ORBITER_ANGULAR_VELOCITY * deltaTime;
+        float xPos = this.ball.position.x + (ball.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
+        float yPos = this.ball.position.y + (ball.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
+        this.position.set(xPos, yPos);
+        this.body.setTransform(xPos / Constants.BOX2D_SCALE, yPos / Constants.BOX2D_SCALE, 0);
     }
 }

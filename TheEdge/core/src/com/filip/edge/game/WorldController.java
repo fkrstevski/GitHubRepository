@@ -27,6 +27,7 @@ import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.Orbiter;
+import com.filip.edge.screens.objects.OrbiterPickup;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
@@ -48,6 +49,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float endTime;
     private float greenTime;
     private float levelScore;
+
+    private static final int MAX_NUMBER_ORBITERS = 2;
+    private boolean[] newlyVisibleOrbiters = new boolean[MAX_NUMBER_ORBITERS];
+    private int visibleOrbiters;
 
     public WorldController(DirectedGame game) {
         Box2D.init();
@@ -161,7 +166,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             Body body = b2world.createBody(bodyDef);
             level.ball.body = body;
             CircleShape circleShape = new CircleShape();
-            circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
+            circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE); // TODO: fix 0.1 to be screen dependant
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;
@@ -169,13 +174,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             circleShape.dispose();
         }
 
-        // Orbiter Physics Bodies
-        for (Orbiter orbiter : level.orbiters) {
+        // Orbiter Pickup Physics Bodies
+        for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyType.StaticBody;
-            bodyDef.position.set(new Vector2(orbiter.position.x / Constants.BOX2D_SCALE, orbiter.position.y / Constants.BOX2D_SCALE));
+            bodyDef.position.set(new Vector2(orbiterPickup.position.x / Constants.BOX2D_SCALE, orbiterPickup.position.y / Constants.BOX2D_SCALE));
             Body body = b2world.createBody(bodyDef);
-            orbiter.body = body;
+            orbiterPickup.body = body;
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius((Constants.INSIDE_CIRCLE_RADIUS - extraScale) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
@@ -384,6 +389,30 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 handleInputGame(deltaTime);
                 b2world.step(deltaTime, 8, 3);
 
+                // We can only set the orbit's body active outside of the
+                // step for the physics world
+                for (int i = 0; i < MAX_NUMBER_ORBITERS; ++i) {
+                    if (newlyVisibleOrbiters[i]) {
+                        newlyVisibleOrbiters[i] = false;
+                        Orbiter orbiter = level.ball.addNewOrbiter();
+                        if(orbiter != null) {
+                            BodyDef bodyDef = new BodyDef();
+                            bodyDef.type = BodyType.KinematicBody;
+                            bodyDef.position.set(new Vector2(orbiter.position.x / Constants.BOX2D_SCALE, orbiter.position.y / Constants.BOX2D_SCALE));
+                            Body body = b2world.createBody(bodyDef);
+                            body.setActive(true);
+                            orbiter.body = body;
+                            CircleShape circleShape = new CircleShape();
+                            circleShape.setRadius((orbiter.radius) / Constants.BOX2D_SCALE);
+                            FixtureDef fixtureDef = new FixtureDef();
+                            fixtureDef.shape = circleShape;
+                            fixtureDef.isSensor = true;
+                            body.createFixture(fixtureDef);
+                            circleShape.dispose();
+                        }
+                    }
+                }
+
                 this.greenTime += deltaTime;
                 if (this.greenTime > GREEN_ICON_TIME) {
                     this.greenTime = 0;
@@ -536,9 +565,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
-                for (Orbiter orbiter : level.orbiters) {
-                    if (contact.getFixtureA().getBody() == orbiter.body) {
+                for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
+                    if (contact.getFixtureA().getBody() == orbiterPickup.body) {
                         Gdx.app.log(TAG, "BALL ORBITER COLLISION");
+                        addOrbiters();
                         break;
                     }
                 }
@@ -578,9 +608,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         break;
                     }
                 }
-                for (Orbiter orbiter : level.orbiters) {
-                    if (contact.getFixtureB().getBody() == orbiter.body) {
+                for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
+                    if (contact.getFixtureB().getBody() == orbiterPickup.body) {
                         Gdx.app.log(TAG, "BALL ORBITER COLLISION");
+                        addOrbiters();
                         break;
                     }
                 }
@@ -600,6 +631,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
             }
+        }
+    }
+
+    private void addOrbiters() {
+        if(visibleOrbiters > MAX_NUMBER_ORBITERS - 1) {
+            Gdx.app.error(TAG, "CANNOT ADD ANY MORE ORBITERS");
+        }
+        else {
+            newlyVisibleOrbiters[this.visibleOrbiters] = true;
+            this.visibleOrbiters++;
         }
     }
 

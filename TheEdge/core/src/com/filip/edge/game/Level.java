@@ -12,8 +12,9 @@ import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
+import com.filip.edge.screens.objects.Ball;
 import com.filip.edge.screens.objects.MiddlePart;
-import com.filip.edge.screens.objects.Orbiter;
+import com.filip.edge.screens.objects.OrbiterPickup;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
@@ -23,7 +24,7 @@ public class Level {
 
     public static final String TAG = Level.class.getName();
 
-    public EmptyCircle ball;
+    public Ball ball;
     public BackButton backButton;
     public ArrayList<AbstractCircleButtonObject> circleShapes;
     public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
@@ -43,7 +44,7 @@ public class Level {
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
-    public ArrayList<Orbiter> orbiters;
+    public ArrayList<OrbiterPickup> orbiterPickups;
     Follower levelFollower;
     private PropertyState disappearingState;
     private boolean disappearing;
@@ -68,12 +69,12 @@ public class Level {
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
         holes = new ArrayList<Hole>();
-        orbiters = new ArrayList<Orbiter>();
+        orbiterPickups = new ArrayList<OrbiterPickup>();
         followers = new ArrayList<Follower>();
         oscillators = new ArrayList<Follower>();
 
         // Ball
-        ball = new EmptyCircle(Constants.BALL_RADIUS * 2 * horizontalScale,
+        ball = new Ball(Constants.BALL_RADIUS * 2 * horizontalScale,
                 this.getFirstPoint().x, this.getFirstPoint().y, Constants.BLACK, Constants.WHITE);
 
         // Backbutton
@@ -118,7 +119,7 @@ public class Level {
 
             // Add a orbiter pickup to the hole
             if(points.get(i).orbiterPickup) {
-                orbiters.add(new Orbiter(Constants.ORBITER_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                orbiterPickups.add(new OrbiterPickup(Constants.ORBITER_PICKUP_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex));
             }
@@ -257,8 +258,8 @@ public class Level {
             hole.update(deltaTime);
         }
 
-        for (Orbiter orbiter : orbiters) {
-            orbiter.update(deltaTime);
+        for (OrbiterPickup orbiterPickup : orbiterPickups) {
+            orbiterPickup.update(deltaTime);
         }
 
         for (Follower follower : followers) {
@@ -334,8 +335,8 @@ public class Level {
             hole.render(batch);
         }
 
-        for (Orbiter orbiter : orbiters) {
-            orbiter.render(batch);
+        for (OrbiterPickup orbiterPickup : orbiterPickups) {
+            orbiterPickup.render(batch);
         }
 
         for (Follower follower : followers) {

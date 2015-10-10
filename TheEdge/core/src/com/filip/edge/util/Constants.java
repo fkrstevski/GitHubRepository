@@ -23,7 +23,10 @@ public class Constants {
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 80;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
-    public static final int ORBITER_CIRCLE_RADIUS = 15;
+    public static final int ORBITER_PICKUP_RADIUS = 15;
+    public static final int ORBITER_OFFSET = 12;
+    public static final int ORBITER_ANGULAR_VELOCITY = 10;
+    public static final int ORBITER_RADIUS = 10;
     public static final int RECTANGLE_WIDTH = 50;
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 1;

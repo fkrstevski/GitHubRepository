@@ -28,8 +28,9 @@ public class Follower {
     private float followObjectOriginalSize;
     private int direction;
     private boolean backAndForth;
+    private boolean oneTimeOnly;
 
-    public Follower(float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth) {
+    public Follower(Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly) {
 
         this.followerObjectTime = 0;
         this.followerObjectDisplayStartTime = startUpTime;
@@ -40,12 +41,13 @@ public class Follower {
         this.pointsToFollow = pointsToFollow;
         this.direction = dir;
         this.backAndForth = backAndForth;
+        this.oneTimeOnly = oneTimeOnly;
 
         this.followerObject = new EmptyCircle(this.followObjectOriginalSize,
                 pos.x,
                 pos.y,
-                Color.BLACK,
-                Color.BLACK);
+                color,
+                color);
     }
 
     public void update(float deltaTime) {
@@ -116,11 +118,13 @@ public class Follower {
                 break;
             case Teardown:
                 if (followerObjectTime > FOLLOW_OBJECT_SCALE_TIME) {
-                    this.followerObjectTime = 0;
-                    this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
-                    this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
-                    this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
-                    this.followerObjectState = PropertyState.Buildup;
+                    if(!oneTimeOnly) {
+                        this.followerObjectTime = 0;
+                        this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
+                        this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
+                        this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
+                        this.followerObjectState = PropertyState.Buildup;
+                    }
                 } else {
 
                     this.followerObject.scale.set(1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME, 1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);

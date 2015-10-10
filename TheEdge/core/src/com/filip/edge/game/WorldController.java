@@ -118,6 +118,23 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         float extraScale = 0;//level.ball.radius * 2;
 
+        // Pacer object body
+        if (level.hasPacerObject()) {
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyType.KinematicBody;
+            bodyDef.position.set(new Vector2(level.getPacerPos().x / Constants.BOX2D_SCALE, level.getPacerPos().y / Constants.BOX2D_SCALE));
+            Body body = b2world.createBody(bodyDef);
+            body.setActive(false);
+            level.setPacerBody(body);
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius((level.getPacerRadius() - extraScale) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = circleShape;
+            fixtureDef.isSensor = true;
+            body.createFixture(fixtureDef);
+            circleShape.dispose();
+        }
+
         // Follower object body
         if (level.hasFollowerObject()) {
             BodyDef bodyDef = new BodyDef();
@@ -290,6 +307,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
             if (level.hasFollowerObject()) {
                 level.updateFollowerScale((1 - endTime / Constants.END_TIME));
+            }
+
+            if (level.hasPacerObject()) {
+                level.updatePacerScale((1 - endTime / Constants.END_TIME));
             }
 
             for (Follower follower : level.followers) {
@@ -486,6 +507,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             } else if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
+            } else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
+                Gdx.app.log(TAG, "BALL PACER COLLISION");
+                fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureA().getBody() == hole.body) {
@@ -519,6 +543,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             } else if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                 Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
+            }  else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
+                Gdx.app.log(TAG, "BALL PACER COLLISION");
+                fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureB().getBody() == hole.body) {
@@ -551,6 +578,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         if (this.level.hasFollowerObject()) {
             this.level.tearDownFollower();
         }
+        if (this.level.hasPacerObject()) {
+            this.level.tearDownPacer();
+        }
+
         this.level.startCircle = this.level.startCircleRedIcon;
         this.level.finishCircle = this.level.finishCircleRedIcon;
     }

@@ -37,6 +37,8 @@ public class Level {
     public EndTarget finishCircle;
     public ArrayList<LevelPoint> points;
 
+    public Follower levelPacer;
+
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
@@ -117,12 +119,12 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x + dis, points.get(i).y));
                 localPoints.add(new Vector2(points.get(i).x - dis, points.get(i).y));
-                oscillators.add(new Follower(
+                oscillators.add(new Follower( Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                        points.get(i), localPoints, 1, true
+                        points.get(i), localPoints, 1, true, false
                 ));
             }
 
@@ -132,12 +134,12 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y + dis));
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y - dis));
-                oscillators.add(new Follower(
+                oscillators.add(new Follower(Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                        points.get(i), localPoints, 1, true
+                        points.get(i), localPoints, 1, true, false
                 ));
             }
 
@@ -146,14 +148,28 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
                 localPoints.add(points.get(i + points.get(i).followerDirection));
-                followers.add(new Follower(
+                followers.add(new Follower(Constants.RED,
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
                                 Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                        points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth
+                        points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth, false
 
                 ));
+            }
+
+            // Add the pacer
+            if(points.get(i).pacer) {
+                ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
+                for (int j = i; j < points.size(); ++j) {
+                    localPoints.add(points.get(j));
+                }
+                levelPacer = new Follower(Constants.YELLOW,
+                        Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
+                        new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
+                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
+                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                        points.get(i), localPoints, 1, false, true);
             }
         }
 
@@ -203,11 +219,12 @@ public class Level {
         // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
         if (s.hasFollowerObject) {
-            levelFollower = new Follower(Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
+            levelFollower = new Follower(Constants.RED,
+                    Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                     Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                    points.get(0), new ArrayList<Vector2>(points), 1, true);
+                    points.get(0), new ArrayList<Vector2>(points), 1, true, false);
         }
 
         if (s.disappears) {
@@ -274,6 +291,10 @@ public class Level {
         if (levelFollower != null) {
             levelFollower.update(deltaTime);
         }
+
+        if(levelPacer != null) {
+            levelPacer.update(deltaTime);
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -311,6 +332,10 @@ public class Level {
             levelFollower.render(batch);
         }
 
+        if(levelPacer != null)  {
+            levelPacer.render(batch);
+        }
+
         ball.render(batch);
     }
 
@@ -340,6 +365,33 @@ public class Level {
 
     public EmptyCircle getBall() {
         return ball;
+    }
+
+    public boolean hasPacerObject() { return levelPacer != null; }
+
+    public void tearDownPacer() {
+        this.levelPacer.followerObjectTime = 0;
+        this.levelPacer.followerObjectState = Level.PropertyState.Teardown;
+    }
+
+    public Body getPacerBody() {
+        return this.levelPacer.followerObject.body;
+    }
+
+    public void setPacerBody(Body body) {
+        this.levelPacer.followerObject.body = body;
+    }
+
+    public Vector2 getPacerPos() {
+        return this.levelPacer.followerObject.position;
+    }
+
+    public float getPacerRadius() {
+        return this.levelPacer.followerObject.radius;
+    }
+
+    public void updatePacerScale(float scale) {
+        this.levelPacer.scale(scale);
     }
 
     public boolean hasFollowerObject() {

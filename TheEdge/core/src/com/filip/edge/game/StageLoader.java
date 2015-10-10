@@ -295,12 +295,13 @@ public class StageLoader {
 
                 for (int j = 0; j < levelPropertiesString.length; j++) {
                     String[] propertyValue = levelPropertiesString[j].split(",");
-
-                    Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
-                    Gdx.app.debug(TAG, "Level Property start time: = " + propertyValue[2] + " speed time: = " + propertyValue[3]);
-                    if (Boolean.parseBoolean(propertyValue[1])) {
-                        stageProperties.add(new LevelProperty(LevelProperties.valueOf(propertyValue[0]),
-                                Integer.parseInt(propertyValue[2]), Integer.parseInt(propertyValue[3]), currentZone, currentStage));
+                    if(propertyValue.length > 1) {
+                        Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
+                        Gdx.app.debug(TAG, "Level Property start time: = " + propertyValue[2] + " speed time: = " + propertyValue[3]);
+                        if (Boolean.parseBoolean(propertyValue[1])) {
+                            stageProperties.add(new LevelProperty(LevelProperties.valueOf(propertyValue[0]),
+                                    Integer.parseInt(propertyValue[2]), Integer.parseInt(propertyValue[3]), currentZone, currentStage));
+                        }
                     }
                 }
             }
@@ -316,19 +317,20 @@ public class StageLoader {
 
             for (int j = 0; j < pointsInLine.length; j++) {
                 String[] pointProperty = pointsInLine[j].split(",");
+                if(pointProperty.length > 1) {
+                    Gdx.app.debug(TAG, "Point = x:" + pointProperty[0] + " y:" + pointProperty[1]);
 
-                Gdx.app.debug(TAG, "Point = x:" + pointProperty[0] + " y:" + pointProperty[1]);
-
-                stagePoints.add(
-                        new LevelPoint(
-                                Float.parseFloat(pointProperty[0]) * width,
-                                Float.parseFloat(pointProperty[1]) * height,
-                                Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
-                                Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
-                                Boolean.parseBoolean(pointProperty[9]), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
-                                Boolean.parseBoolean(pointProperty[13]), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15])
-                        )
-                );
+                    stagePoints.add(
+                            new LevelPoint(
+                                    Float.parseFloat(pointProperty[0]) * width,
+                                    Float.parseFloat(pointProperty[1]) * height,
+                                    Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
+                                    Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
+                                    Boolean.parseBoolean(pointProperty[9]), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
+                                    Boolean.parseBoolean(pointProperty[13]), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15])
+                            )
+                    );
+                }
             }
             zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties);
         }

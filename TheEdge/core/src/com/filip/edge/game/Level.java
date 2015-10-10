@@ -13,6 +13,7 @@ import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
 import com.filip.edge.screens.objects.MiddlePart;
+import com.filip.edge.screens.objects.Orbiter;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 
@@ -42,6 +43,7 @@ public class Level {
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
+    public ArrayList<Orbiter> orbiters;
     Follower levelFollower;
     private PropertyState disappearingState;
     private boolean disappearing;
@@ -66,6 +68,7 @@ public class Level {
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
 
         holes = new ArrayList<Hole>();
+        orbiters = new ArrayList<Orbiter>();
         followers = new ArrayList<Follower>();
         oscillators = new ArrayList<Follower>();
 
@@ -111,6 +114,13 @@ public class Level {
                 holes.add(new Hole(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex));
+            }
+
+            // Add a orbiter pickup to the hole
+            if(points.get(i).orbiterPickup) {
+                orbiters.add(new Orbiter(Constants.ORBITER_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                        this.points.get(i).x, this.points.get(i).y,
+                        this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex));
             }
 
             // Add a vertical oscillator to the point
@@ -247,6 +257,10 @@ public class Level {
             hole.update(deltaTime);
         }
 
+        for (Orbiter orbiter : orbiters) {
+            orbiter.update(deltaTime);
+        }
+
         for (Follower follower : followers) {
             follower.update(deltaTime);
         }
@@ -318,6 +332,10 @@ public class Level {
 
         for (Hole hole : holes) {
             hole.render(batch);
+        }
+
+        for (Orbiter orbiter : orbiters) {
+            orbiter.render(batch);
         }
 
         for (Follower follower : followers) {

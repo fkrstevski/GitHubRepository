@@ -26,6 +26,7 @@ import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.Follower;
 import com.filip.edge.screens.objects.Hole;
+import com.filip.edge.screens.objects.Orbiter;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
@@ -161,6 +162,22 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             level.ball.body = body;
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = circleShape;
+            fixtureDef.isSensor = true;
+            body.createFixture(fixtureDef);
+            circleShape.dispose();
+        }
+
+        // Orbiter Physics Bodies
+        for (Orbiter orbiter : level.orbiters) {
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyType.StaticBody;
+            bodyDef.position.set(new Vector2(orbiter.position.x / Constants.BOX2D_SCALE, orbiter.position.y / Constants.BOX2D_SCALE));
+            Body body = b2world.createBody(bodyDef);
+            orbiter.body = body;
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius((Constants.INSIDE_CIRCLE_RADIUS - extraScale) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;
@@ -519,6 +536,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
+                for (Orbiter orbiter : level.orbiters) {
+                    if (contact.getFixtureA().getBody() == orbiter.body) {
+                        Gdx.app.log(TAG, "BALL ORBITER COLLISION");
+                        break;
+                    }
+                }
+
                 for (Follower follower : level.followers) {
                     if (contact.getFixtureA().getBody() == follower.followerObject.body) {
                         Gdx.app.log(TAG, "BALL Follower COLLISION");
@@ -551,6 +575,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     if (contact.getFixtureB().getBody() == hole.body) {
                         Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         fallOff();
+                        break;
+                    }
+                }
+                for (Orbiter orbiter : level.orbiters) {
+                    if (contact.getFixtureB().getBody() == orbiter.body) {
+                        Gdx.app.log(TAG, "BALL ORBITER COLLISION");
                         break;
                     }
                 }

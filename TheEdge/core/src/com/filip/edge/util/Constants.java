@@ -23,6 +23,7 @@ public class Constants {
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 80;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
+    public static final int ORBITER_CIRCLE_RADIUS = 15;
     public static final int RECTANGLE_WIDTH = 50;
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 1;
@@ -47,6 +48,9 @@ public class Constants {
 
     public static final float[] HOLE_SCALE_TIME = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
+
+    public static final float[] ORBITER_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
+    public static final float[] ORBITER_DISAPPEAR_TIME = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);

@@ -287,7 +287,6 @@ public class Level {
                 case Active:
                     if (disappearingTime > disappearingSpeed) {
                         disappearingTime = 0;
-                        Gdx.app.log(TAG, "disappearingIndex = " + disappearingIndex);
                         if (disappearingIndex > 0 && disappearingIndex < circleShapes.size() - 1 /*do not remove the final circle*/) {
                             circleShapes.get(disappearingIndex).visible = false;
                             circleShapes.get(disappearingIndex).body.setActive(false);

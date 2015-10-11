@@ -398,7 +398,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         Orbiter orbiter = level.ball.addNewOrbiter();
                         if(orbiter != null) {
                             BodyDef bodyDef = new BodyDef();
-                            bodyDef.type = BodyType.KinematicBody;
+                            bodyDef.type = BodyType.DynamicBody;
                             bodyDef.position.set(new Vector2(orbiter.position.x / Constants.BOX2D_SCALE, orbiter.position.y / Constants.BOX2D_SCALE));
                             Body body = b2world.createBody(bodyDef);
                             body.setActive(true);
@@ -411,6 +411,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                             body.createFixture(fixtureDef);
                             circleShape.dispose();
                         }
+
                     }
                 }
 
@@ -421,7 +422,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     this.level.startCircle = null;
                 }
 
-                if (this.numberOfContacts == 0 || this.b2world.getContactCount() == 0) {
+                if (this.numberOfContacts == 0) {
                     fallOff();
                 }
             }
@@ -493,9 +494,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         // Toggle camera follow
         else if (keycode == Keys.ENTER) {
             //this.nextLevel();
-            this.state = LevelState.LevelComplete;
-            this.level.startCircle = this.level.startCircleGreenIcon;
-            this.level.finishCircle = this.level.finishCircleGreenIcon;
+            levelComplete();
         }
         // Back to Menu
         else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
@@ -517,9 +516,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         if (level.backButton.isTouched(screenX, screenY)) {
             backToMenu();
         } else if (level.endCircle.isTouched(screenX, screenY)) {
-            this.state = LevelState.LevelComplete;
-            this.level.startCircle = this.level.startCircleGreenIcon;
-            this.level.finishCircle = this.level.finishCircleGreenIcon;
+            levelComplete();
         } else if (level.startCircleGreenIcon.isTouched(screenX, screenY)) {
             Constants.DEBUG_BUILD = !Constants.DEBUG_BUILD;
         } else {
@@ -539,28 +536,88 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     @Override
     public void endContact(Contact contact) {
-        numberOfContacts--;
+        if (contact.getFixtureB().getBody() == level.ball.body) {
+            numberOfContacts--;
+        }
+        else if (contact.getFixtureA().getBody() == level.ball.body) {
+            numberOfContacts--;
+        }
     }
 
     @Override
     public void beginContact(Contact contact) {
-        numberOfContacts++;
+        for (Orbiter orbiter : level.ball.orbiters) {
+            if (contact.getFixtureB().getBody() == orbiter.body) {
+                if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
+                    level.levelFollower.destroy();
+                    orbiter.destroy();
+                }
+                else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
+                    level.levelPacer.destroy();
+                    orbiter.destroy();
+                }
 
+                else {
+                    for (Follower follower : level.followers) {
+                        if (contact.getFixtureA().getBody() == follower.followerObject.body) {
+                            follower.destroy();
+                            orbiter.destroy();
+                            break;
+                        }
+                    }
+
+                    for (Follower oscillator : level.oscillators) {
+                        if (contact.getFixtureA().getBody() == oscillator.followerObject.body) {
+                            oscillator.destroy();
+                            orbiter.destroy();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (contact.getFixtureA().getBody() == orbiter.body) {
+                if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
+                    level.levelFollower.destroy();
+                    orbiter.destroy();
+                }
+                else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
+                    level.levelPacer.destroy();
+                    orbiter.destroy();
+                }
+
+                else {
+                    for (Follower follower : level.followers) {
+                        if (contact.getFixtureB().getBody() == follower.followerObject.body) {
+                            follower.destroy();
+                            orbiter.destroy();
+                            break;
+                        }
+                    }
+
+                    for (Follower oscillator : level.oscillators) {
+                        if (contact.getFixtureB().getBody() == oscillator.followerObject.body) {
+                            oscillator.destroy();
+                            orbiter.destroy();
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        // Ball collision -> fixture B
         if (contact.getFixtureB().getBody() == level.ball.body) {
+            numberOfContacts++;
             if (contact.getFixtureA().getBody() == level.endCircle.body) {
-                this.state = LevelState.LevelComplete;
-                this.level.startCircle = this.level.startCircleGreenIcon;
-                this.level.finishCircle = this.level.finishCircleGreenIcon;
+                levelComplete();
             } else if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
-                Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             } else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
-                Gdx.app.log(TAG, "BALL PACER COLLISION");
                 fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureA().getBody() == hole.body) {
-                        Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         fallOff();
                         break;
                     }
@@ -568,7 +625,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
                     if (contact.getFixtureA().getBody() == orbiterPickup.body) {
-                        Gdx.app.log(TAG, "BALL ORBITER COLLISION");
                         orbiterPickup.pickedUp();
                         addOrbiters();
                         break;
@@ -577,7 +633,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 for (Follower follower : level.followers) {
                     if (contact.getFixtureA().getBody() == follower.followerObject.body) {
-                        Gdx.app.log(TAG, "BALL Follower COLLISION");
                         fallOff();
                         break;
                     }
@@ -585,34 +640,30 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 for (Follower oscillator : level.oscillators) {
                     if (contact.getFixtureA().getBody() == oscillator.followerObject.body) {
-                        Gdx.app.log(TAG, "BALL Oscillator COLLISION");
                         fallOff();
                         break;
                     }
                 }
             }
-        } else {
+        }
+        // Ball collision -> fixture A
+        else if (contact.getFixtureA().getBody() == level.ball.body) {
+            numberOfContacts++;
             if (contact.getFixtureB().getBody() == level.endCircle.body) {
-                this.state = LevelState.LevelComplete;
-                this.level.startCircle = this.level.startCircleGreenIcon;
-                this.level.finishCircle = this.level.finishCircleGreenIcon;
+                levelComplete();
             } else if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
-                Gdx.app.log(TAG, "BALL FOLLOWER COLLISION");
                 fallOff();
             }  else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
-                Gdx.app.log(TAG, "BALL PACER COLLISION");
                 fallOff();
             } else {
                 for (Hole hole : level.holes) {
                     if (contact.getFixtureB().getBody() == hole.body) {
-                        Gdx.app.log(TAG, "BALL HOLE COLLISION");
                         fallOff();
                         break;
                     }
                 }
                 for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
                     if (contact.getFixtureB().getBody() == orbiterPickup.body) {
-                        Gdx.app.log(TAG, "BALL ORBITER COLLISION");
                         orbiterPickup.pickedUp();
                         addOrbiters();
                         break;
@@ -620,7 +671,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
                 for (Follower follower : level.followers) {
                     if (contact.getFixtureB().getBody() == follower.followerObject.body) {
-                        Gdx.app.log(TAG, "BALL Follower COLLISION");
                         fallOff();
                         break;
                     }
@@ -628,13 +678,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 for (Follower oscillator : level.oscillators) {
                     if (contact.getFixtureB().getBody() == oscillator.followerObject.body) {
-                        Gdx.app.log(TAG, "BALL Oscillator COLLISION");
                         fallOff();
                         break;
                     }
                 }
             }
         }
+
+
+    }
+
+    private void levelComplete() {
+        this.state = LevelState.LevelComplete;
+        this.level.startCircle = this.level.startCircleGreenIcon;
+        this.level.finishCircle = this.level.finishCircleGreenIcon;
     }
 
     private void addOrbiters() {

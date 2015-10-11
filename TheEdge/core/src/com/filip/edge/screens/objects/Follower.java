@@ -30,6 +30,8 @@ public class Follower {
     private boolean backAndForth;
     private boolean oneTimeOnly;
 
+    public boolean deactivate;
+
     public Follower(Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly) {
 
         this.followerObjectTime = 0;
@@ -131,16 +133,27 @@ public class Follower {
                     this.followerObject.body.getFixtureList().get(0).getShape().setRadius((((1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * this.followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE));
                 }
                 break;
+            case Gone:
+                if(deactivate) {
+                    this.followerObject.body.setActive(false);
+                    deactivate = false;
+                }
+                break;
         }
     }
 
     public void render(SpriteBatch batch) {
-        if (followerObjectState != PropertyState.Inactive) {
+        if (followerObjectState != PropertyState.Inactive && followerObjectState != PropertyState.Gone) {
             followerObject.render(batch);
         }
     }
 
     public void scale(float scale) {
         this.followerObject.scale.set(this.followerObject.scale.x * scale, this.followerObject.scale.y * scale);
+    }
+
+    public void destroy() {
+        this.followerObjectState = PropertyState.Gone;
+        this.deactivate = true;
     }
 }

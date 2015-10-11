@@ -45,7 +45,7 @@ public class Level {
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
     public ArrayList<OrbiterPickup> orbiterPickups;
-    Follower levelFollower;
+    public Follower levelFollower;
     private PropertyState disappearingState;
     private boolean disappearing;
     private float disappearingStartTime;
@@ -389,8 +389,10 @@ public class Level {
     public boolean hasPacerObject() { return levelPacer != null; }
 
     public void tearDownPacer() {
-        this.levelPacer.followerObjectTime = 0;
-        this.levelPacer.followerObjectState = Level.PropertyState.Teardown;
+        if (this.levelPacer != null && this.levelPacer.followerObjectState != PropertyState.Gone) {
+            this.levelPacer.followerObjectTime = 0;
+            this.levelPacer.followerObjectState = Level.PropertyState.Teardown;
+        }
     }
 
     public Body getPacerBody() {
@@ -418,8 +420,10 @@ public class Level {
     }
 
     public void tearDownFollower() {
-        this.levelFollower.followerObjectTime = 0;
-        this.levelFollower.followerObjectState = Level.PropertyState.Teardown;
+        if(this.levelFollower != null && this.levelFollower.followerObjectState != PropertyState.Gone) {
+            this.levelFollower.followerObjectTime = 0;
+            this.levelFollower.followerObjectState = Level.PropertyState.Teardown;
+        }
     }
 
     public Body getFollowerBody() {
@@ -446,6 +450,7 @@ public class Level {
         Inactive,
         Buildup,
         Active,
-        Teardown
+        Teardown,
+        Gone
     }
 }

@@ -42,12 +42,14 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
             if(sharedPixmapTexture == null) {
                 fillPixmap(width, height, outsideColor, insideColor);
                 sharedPixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
+                buttonPixmap.dispose();
             }
             pixmapTexture = sharedPixmapTexture;
 
         } else {
             fillPixmap(width, height, outsideColor, insideColor);
             this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
+            buttonPixmap.dispose();
         }
 
         pixmapTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);

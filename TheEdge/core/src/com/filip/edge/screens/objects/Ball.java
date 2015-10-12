@@ -19,7 +19,7 @@ public class Ball extends EmptyCircle {
     public ArrayList<Orbiter> orbiters;
 
     public Ball(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor);
+        super(size, x, y, outsideColor, insideColor, false);
         orbiters = new ArrayList<Orbiter>();
     }
 

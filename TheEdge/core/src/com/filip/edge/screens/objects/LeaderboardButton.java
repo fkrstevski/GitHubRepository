@@ -9,7 +9,7 @@ public class LeaderboardButton extends AbstractCircleButtonObject {
     public static final String TAG = LeaderboardButton.class.getName();
 
     public LeaderboardButton(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor);
+        super(size, x, y, outsideColor, insideColor, false);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Hole extends EmptyCircle {
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].a), new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
-                Constants.ZONE_COLORS[GamePreferences.instance.zone].a));
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].a), false);
 
         this.state = State.StartingUp;
         this.originalSize = size;

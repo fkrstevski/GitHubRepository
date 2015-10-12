@@ -25,17 +25,17 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
 
     public AbstractRectangleButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, false);
 
-        init(width, height, x, y, outsideColor, insideColor);
+        init(width, height, x, y, outsideColor, insideColor, false);
 
         disappearingState = Level.PropertyState.Inactive;
 
     }
 
     @Override
-    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super.init(width, height, x, y, outsideColor, insideColor);
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
+        super.init(width, height, x, y, outsideColor, insideColor, shared);
         bounds = new Rectangle();
         bounds.set(position.x - origin.x, position.y - origin.y, dimension.x, dimension.y);
 

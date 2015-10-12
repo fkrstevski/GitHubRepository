@@ -25,7 +25,7 @@ public class OrbiterPickup extends EmptyCircle {
     private State state;
 
     public OrbiterPickup(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
-        super(size, x, y, Constants.GREEN, Constants.GREEN);
+        super(size, x, y, Constants.GREEN, Constants.GREEN, false);
 
         this.state = State.StartingUp;
         this.originalSize = size;

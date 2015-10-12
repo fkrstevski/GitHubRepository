@@ -1,5 +1,6 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,21 +16,41 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
     protected Texture pixmapTexture = null;
     protected Pixmap buttonPixmap = null;
 
-    public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        init(width, height, x, y, outsideColor, insideColor);
+    protected static Pixmap sharedButtonPixmap = null;
+    protected static Texture sharedPixmapTexture = null;
+
+    public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
+        init(width, height, x, y, outsideColor, insideColor, shared);
     }
 
-    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
         dimension.set(width, height);
         position.set(x, y);
 
-        buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
+        if(shared) {
+            if(sharedButtonPixmap == null) {
+                sharedButtonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+            }
+            buttonPixmap = sharedButtonPixmap;
+        }
+        else {
+            buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+        }
 
-        fillPixmap(width, height, outsideColor, insideColor);
 
-        this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA8888, false);
+        if(shared) {
+            if(sharedPixmapTexture == null) {
+                fillPixmap(width, height, outsideColor, insideColor);
+                sharedPixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
+            }
+            pixmapTexture = sharedPixmapTexture;
+
+        } else {
+            fillPixmap(width, height, outsideColor, insideColor);
+            this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
+        }
+
         pixmapTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 

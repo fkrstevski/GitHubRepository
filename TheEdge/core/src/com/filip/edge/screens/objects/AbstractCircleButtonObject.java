@@ -14,15 +14,15 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
 
     public Circle bounds;
 
-    public AbstractCircleButtonObject(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, size, x, y, outsideColor, insideColor);
+    public AbstractCircleButtonObject(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
+        super(size, size, x, y, outsideColor, insideColor, shared);
 
-        this.init(size, size, x, y, outsideColor, insideColor);
+        this.init(size, size, x, y, outsideColor, insideColor, shared);
     }
 
     @Override
-    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super.init(width, height, x, y, outsideColor, insideColor);
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
+        super.init(width, height, x, y, outsideColor, insideColor, shared);
 
         radius = width / 2;
         bounds = new Circle();
@@ -37,7 +37,7 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
     @Override
     public void fillPixmap(float width, float height, Color outsideColor, Color insideColor) {
         buttonPixmap.setColor(outsideColor);
-        buttonPixmap.fillCircle((int) (width / 2), (int) (width / 2), (int) radius);
+        buttonPixmap.fillCircle((int) (width / 2), (int) (width / 2), (int) (width / 2));
         buttonPixmap.setColor(insideColor);
 
         fillInside(width);

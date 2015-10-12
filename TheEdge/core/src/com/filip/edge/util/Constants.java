@@ -21,7 +21,7 @@ public class Constants {
 
     public static final float END_TIME = 2.0f;
     public static final int BALL_RADIUS = 20;
-    public static final int END_CIRCLE_RADIUS = 80;
+    public static final int END_CIRCLE_RADIUS = 55;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
     public static final int ORBITER_PICKUP_RADIUS = 15;
     public static final int ORBITER_OFFSET = 12;
@@ -31,7 +31,7 @@ public class Constants {
     public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
     public static final int MAX_LEVELS = 1;
     public static final int OSCILLATION_DISTANCE = 50;
-    public static final float[] LEVEL_MULTIPLIERS = {1, 0.75f};
+    public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};
     public static float BOX2D_SCALE = 10;
 
     public static final float[] DISAPPEARING_OBJECT_TIME = {4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1f, 0.5f, 0.1f};
@@ -41,7 +41,7 @@ public class Constants {
     public static final float[] FOLLOWER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] PACER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 / BOX2D_SCALE};
-    public static final float[] PACER_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
+    public static final float[] PACER_STARTTIME = {1.8f, 1.6f, 1.4f, 1.2f, 1, 0.8f, 0.6f, 0.4f, 0.2f, 0};
 
     public static final float[] OSCILLATOR_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 / BOX2D_SCALE};
     public static final float[] OSCILLATOR_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};

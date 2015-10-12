@@ -10,7 +10,7 @@ public class EndTarget extends AbstractCircleButtonObject {
     public static final String TAG = EndTarget.class.getName();
 
     public EndTarget(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor);
+        super(size, x, y, outsideColor, insideColor, false);
     }
 
     @Override

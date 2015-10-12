@@ -49,7 +49,7 @@ public class Follower {
                 pos.x,
                 pos.y,
                 color,
-                color);
+                color, false);
     }
 
     public void update(float deltaTime) {

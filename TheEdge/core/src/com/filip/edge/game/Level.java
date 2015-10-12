@@ -103,7 +103,7 @@ public class Level {
         // Add Middle Circles
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
             EmptyCircle m = new EmptyCircle(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                    points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TRANSPARENT);
+                    points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TRANSPARENT, true);
 
             // Do not add multiple circles that are the same
             if (!circleShapes.contains(m)) {
@@ -186,7 +186,7 @@ public class Level {
 
         // Add EndCircle - for target collision
         endCircle = new EmptyCircle(Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE);
+                this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE, false);
 
         // Add EndCircle - for boundary collision
         EndTarget et = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,

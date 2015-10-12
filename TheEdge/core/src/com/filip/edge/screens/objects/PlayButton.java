@@ -9,7 +9,7 @@ public class PlayButton extends AbstractCircleButtonObject {
     public static final String TAG = PlayButton.class.getName();
 
     public PlayButton(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor);
+        super(size, x, y, outsideColor, insideColor, false);
     }
 
     @Override

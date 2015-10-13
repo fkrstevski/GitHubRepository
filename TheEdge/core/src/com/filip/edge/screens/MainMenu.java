@@ -34,19 +34,19 @@ public class MainMenu {
                 width / 2 - 1,              // x
                 height / 2 - 1,             // y
                 Constants.WHITE,       // outside color
-                Constants.ZONE_COLORS[GamePreferences.instance.zone]);       // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone], false, "CirclePlay" + GamePreferences.instance.zone);       // inside color
 
         infoButton = new InfoButton(width * 0.05f,   // size
                 (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
-                Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone], false, "CircleInfo" + GamePreferences.instance.zone);      // inside color
 
         leaderboardButton = new LeaderboardButton(width * 0.05f,   // size
                 width - (int) (width * 0.03),    // x
                 height - (int) (width * 0.03),     // y
                 Constants.WHITE,         // outside color
-                Constants.ZONE_COLORS[GamePreferences.instance.zone]);      // inside color
+                Constants.ZONE_COLORS[GamePreferences.instance.zone], false, "CircleLeaderboard" + GamePreferences.instance.zone);      // inside color
     }
 
     public void update(float deltaTime) {

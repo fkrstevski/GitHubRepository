@@ -7,10 +7,10 @@ import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
  * Created by fkrstevski on 2015-09-20.
  */
 class LetterA extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterA.class.getName();
+    public static final String TAG = LetterA.class.getSimpleName();
 
     public LetterA(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -26,10 +26,10 @@ class LetterA extends AbstractRectangleButtonObject {
 }
 
 class LetterB extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterB.class.getName();
+    public static final String TAG = LetterB.class.getSimpleName();
 
     public LetterB(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -47,10 +47,10 @@ class LetterB extends AbstractRectangleButtonObject {
 }
 
 class LetterC extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterC.class.getName();
+    public static final String TAG = LetterC.class.getSimpleName();
 
     public LetterC(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -64,10 +64,10 @@ class LetterC extends AbstractRectangleButtonObject {
 }
 
 class LetterD extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterD.class.getName();
+    public static final String TAG = LetterD.class.getSimpleName();
 
     public LetterD(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -83,10 +83,10 @@ class LetterD extends AbstractRectangleButtonObject {
 }
 
 class LetterE extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterE.class.getName();
+    public static final String TAG = LetterE.class.getSimpleName();
 
     public LetterE(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -102,10 +102,10 @@ class LetterE extends AbstractRectangleButtonObject {
 }
 
 class LetterF extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterF.class.getName();
+    public static final String TAG = LetterF.class.getSimpleName();
 
     public LetterF(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -120,10 +120,10 @@ class LetterF extends AbstractRectangleButtonObject {
 }
 
 class LetterG extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterG.class.getName();
+    public static final String TAG = LetterG.class.getSimpleName();
 
     public LetterG(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -138,10 +138,10 @@ class LetterG extends AbstractRectangleButtonObject {
 }
 
 class LetterH extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterH.class.getName();
+    public static final String TAG = LetterH.class.getSimpleName();
 
     public LetterH(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -156,10 +156,10 @@ class LetterH extends AbstractRectangleButtonObject {
 }
 
 class LetterI extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterI.class.getName();
+    public static final String TAG = LetterI.class.getSimpleName();
 
     public LetterI(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -172,10 +172,10 @@ class LetterI extends AbstractRectangleButtonObject {
 }
 
 class LetterJ extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterJ.class.getName();
+    public static final String TAG = LetterJ.class.getSimpleName();
 
     public LetterJ(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -187,10 +187,10 @@ class LetterJ extends AbstractRectangleButtonObject {
 }
 
 class LetterK extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterK.class.getName();
+    public static final String TAG = LetterK.class.getSimpleName();
 
     public LetterK(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -204,10 +204,10 @@ class LetterK extends AbstractRectangleButtonObject {
 }
 
 class LetterL extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterL.class.getName();
+    public static final String TAG = LetterL.class.getSimpleName();
 
     public LetterL(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -219,10 +219,10 @@ class LetterL extends AbstractRectangleButtonObject {
 }
 
 class LetterM extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterM.class.getName();
+    public static final String TAG = LetterM.class.getSimpleName();
 
     public LetterM(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -238,10 +238,10 @@ class LetterM extends AbstractRectangleButtonObject {
 }
 
 class LetterN extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterN.class.getName();
+    public static final String TAG = LetterN.class.getSimpleName();
 
     public LetterN(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -255,10 +255,10 @@ class LetterN extends AbstractRectangleButtonObject {
 }
 
 class LetterO extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterO.class.getName();
+    public static final String TAG = LetterO.class.getSimpleName();
 
     public LetterO(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -274,10 +274,10 @@ class LetterO extends AbstractRectangleButtonObject {
 }
 
 class LetterP extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterP.class.getName();
+    public static final String TAG = LetterP.class.getSimpleName();
 
     public LetterP(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -292,10 +292,10 @@ class LetterP extends AbstractRectangleButtonObject {
 }
 
 class LetterQ extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterQ.class.getName();
+    public static final String TAG = LetterQ.class.getSimpleName();
 
     public LetterQ(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -312,10 +312,10 @@ class LetterQ extends AbstractRectangleButtonObject {
 }
 
 class LetterR extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterR.class.getName();
+    public static final String TAG = LetterR.class.getSimpleName();
 
     public LetterR(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -330,10 +330,10 @@ class LetterR extends AbstractRectangleButtonObject {
 }
 
 class LetterS extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterS.class.getName();
+    public static final String TAG = LetterS.class.getSimpleName();
 
     public LetterS(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -349,10 +349,10 @@ class LetterS extends AbstractRectangleButtonObject {
 }
 
 class LetterT extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterT.class.getName();
+    public static final String TAG = LetterT.class.getSimpleName();
 
     public LetterT(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -364,10 +364,10 @@ class LetterT extends AbstractRectangleButtonObject {
 }
 
 class LetterU extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterU.class.getName();
+    public static final String TAG = LetterU.class.getSimpleName();
 
     public LetterU(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -382,10 +382,10 @@ class LetterU extends AbstractRectangleButtonObject {
 }
 
 class LetterV extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterV.class.getName();
+    public static final String TAG = LetterV.class.getSimpleName();
 
     public LetterV(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -397,10 +397,10 @@ class LetterV extends AbstractRectangleButtonObject {
 }
 
 class LetterW extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterW.class.getName();
+    public static final String TAG = LetterW.class.getSimpleName();
 
     public LetterW(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -416,10 +416,10 @@ class LetterW extends AbstractRectangleButtonObject {
 }
 
 class LetterX extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterX.class.getName();
+    public static final String TAG = LetterX.class.getSimpleName();
 
     public LetterX(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -433,10 +433,10 @@ class LetterX extends AbstractRectangleButtonObject {
 }
 
 class LetterY extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterY.class.getName();
+    public static final String TAG = LetterY.class.getSimpleName();
 
     public LetterY(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -449,10 +449,10 @@ class LetterY extends AbstractRectangleButtonObject {
 }
 
 class LetterZ extends AbstractRectangleButtonObject {
-    public static final String TAG = LetterZ.class.getName();
+    public static final String TAG = LetterZ.class.getSimpleName();
 
     public LetterZ(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override

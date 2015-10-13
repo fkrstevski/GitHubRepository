@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
+import com.filip.edge.screens.objects.AbstractButtonObject;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.Follower;
@@ -32,6 +33,7 @@ import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
+import com.filip.edge.util.TextureManager;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -301,12 +303,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             this.readyTime += deltaTime;
             this.readyTimeRatio = this.readyTime / READY_TIME;
 
-            if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleRedIcon) && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f) {
+            if (this.level.startCircle != null && this.level.startCircle != this.level.startCircleRedIcon && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f) {
                 this.game.showAds(false);
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
-            } else if (this.level.startCircle != null && !this.level.startCircle.equals(this.level.startCircleYellowIcon) && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f) {
+            } else if (this.level.startCircle != null && this.level.startCircle != this.level.startCircleYellowIcon && this.readyTimeRatio > 0.5f && this.readyTimeRatio < 1f) {
                 this.level.startCircle = this.level.startCircleYellowIcon;
                 this.level.finishCircle = this.level.finishCircleYellowIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);

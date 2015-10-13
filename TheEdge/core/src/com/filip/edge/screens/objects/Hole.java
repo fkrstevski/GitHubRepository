@@ -19,14 +19,14 @@ public class Hole extends EmptyCircle {
 
     private State state;
 
-    public Hole(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex) {
+    public Hole(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex, boolean shared, String region) {
         super(size, x, y, new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].a), new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
-                Constants.ZONE_COLORS[GamePreferences.instance.zone].a), false);
+                Constants.ZONE_COLORS[GamePreferences.instance.zone].a), shared, region);
 
         this.state = State.StartingUp;
         this.originalSize = size;

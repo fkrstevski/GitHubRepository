@@ -18,8 +18,8 @@ public class Ball extends EmptyCircle {
 
     public ArrayList<Orbiter> orbiters;
 
-    public Ball(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor, false);
+    public Ball(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
+        super(size, x, y, outsideColor, insideColor, shared, region);
         orbiters = new ArrayList<Orbiter>();
     }
 
@@ -32,7 +32,7 @@ public class Ball extends EmptyCircle {
             float xpos = this.position.x + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
             float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
-                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle);
+                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
             orbiters.add(orbiter);
         }
         else if(orbiters.size() == 1) {
@@ -40,7 +40,7 @@ public class Ball extends EmptyCircle {
             float xpos = this.position.x + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
             float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
-                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle);
+                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
             orbiters.add(orbiter);
         }
         else {

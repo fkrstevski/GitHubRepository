@@ -32,7 +32,7 @@ public class Follower {
 
     public boolean deactivate;
 
-    public Follower(Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly) {
+    public Follower(Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly, boolean shared, String region) {
 
         this.followerObjectTime = 0;
         this.followerObjectDisplayStartTime = startUpTime;
@@ -49,7 +49,7 @@ public class Follower {
                 pos.x,
                 pos.y,
                 color,
-                color, false);
+                color, shared, region);
     }
 
     public void update(float deltaTime) {

@@ -19,8 +19,8 @@ public class Orbiter extends EmptyCircle {
     public Ball ball;
     public boolean deactivate;
 
-    public Orbiter(float size, float x, float y, Color outsideColor, Color insideColor, Ball ball, float angle) {
-        super(size, x, y, outsideColor, insideColor, false);
+    public Orbiter(float size, float x, float y, Color outsideColor, Color insideColor, Ball ball, float angle, boolean shared, String region) {
+        super(size, x, y, outsideColor, insideColor, shared, region);
         this.angle = angle;
         this.ball = ball;
     }

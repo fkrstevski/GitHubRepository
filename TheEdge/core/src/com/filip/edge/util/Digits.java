@@ -8,10 +8,10 @@ import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
  */
 
 class ZeroDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = ZeroDigit.class.getName();
+    public static final String TAG = ZeroDigit.class.getSimpleName();
 
     public ZeroDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -29,10 +29,10 @@ class ZeroDigit extends AbstractRectangleButtonObject {
 
 
 class OneDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = OneDigit.class.getName();
+    public static final String TAG = OneDigit.class.getSimpleName();
 
     public OneDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -43,10 +43,10 @@ class OneDigit extends AbstractRectangleButtonObject {
 }
 
 class TwoDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = TwoDigit.class.getName();
+    public static final String TAG = TwoDigit.class.getSimpleName();
 
     public TwoDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -63,10 +63,10 @@ class TwoDigit extends AbstractRectangleButtonObject {
 }
 
 class ThreeDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = ThreeDigit.class.getName();
+    public static final String TAG = ThreeDigit.class.getSimpleName();
 
     public ThreeDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -83,10 +83,10 @@ class ThreeDigit extends AbstractRectangleButtonObject {
 }
 
 class FourDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = FourDigit.class.getName();
+    public static final String TAG = FourDigit.class.getSimpleName();
 
     public FourDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -101,10 +101,10 @@ class FourDigit extends AbstractRectangleButtonObject {
 }
 
 class FiveDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = FiveDigit.class.getName();
+    public static final String TAG = FiveDigit.class.getSimpleName();
 
     public FiveDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -121,10 +121,10 @@ class FiveDigit extends AbstractRectangleButtonObject {
 }
 
 class SixDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = SixDigit.class.getName();
+    public static final String TAG = SixDigit.class.getSimpleName();
 
     public SixDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -142,10 +142,10 @@ class SixDigit extends AbstractRectangleButtonObject {
 }
 
 class SevenDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = SevenDigit.class.getName();
+    public static final String TAG = SevenDigit.class.getSimpleName();
 
     public SevenDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -159,10 +159,10 @@ class SevenDigit extends AbstractRectangleButtonObject {
 
 
 class EightDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = EightDigit.class.getName();
+    public static final String TAG = EightDigit.class.getSimpleName();
 
     public EightDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override
@@ -181,10 +181,10 @@ class EightDigit extends AbstractRectangleButtonObject {
 }
 
 class NineDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = NineDigit.class.getName();
+    public static final String TAG = NineDigit.class.getSimpleName();
 
     public NineDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor);
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
     @Override

@@ -9,8 +9,8 @@ import com.filip.edge.util.Constants;
 public class EndTarget extends AbstractCircleButtonObject {
     public static final String TAG = EndTarget.class.getName();
 
-    public EndTarget(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor, false);
+    public EndTarget(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
+        super(size, x, y, outsideColor, insideColor, shared, region);
     }
 
     @Override

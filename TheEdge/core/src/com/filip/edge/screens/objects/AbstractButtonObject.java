@@ -1,11 +1,11 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.game.objects.AbstractGameObject;
+import com.filip.edge.util.TextureManager;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -13,46 +13,31 @@ import com.filip.edge.game.objects.AbstractGameObject;
 public abstract class AbstractButtonObject extends AbstractGameObject {
     public static final String TAG = AbstractButtonObject.class.getName();
 
-    protected Texture pixmapTexture = null;
     protected Pixmap buttonPixmap = null;
+    protected Texture texture = null;
+    protected String atlasRegion;
 
-    protected static Pixmap sharedButtonPixmap = null;
-    protected static Texture sharedPixmapTexture = null;
-
-    public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
-        init(width, height, x, y, outsideColor, insideColor, shared);
+    public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
+        init(width, height, x, y, outsideColor, insideColor, shared, region);
     }
 
-    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared) {
+    protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String r) {
         dimension.set(width, height);
         position.set(x, y);
 
-        if(shared) {
-            if(sharedButtonPixmap == null) {
-                sharedButtonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
-            }
-            buttonPixmap = sharedButtonPixmap;
-        }
-        else {
-            buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
-        }
+        buttonPixmap = TextureManager.instance.getPixmap(width, height, shared, r);
 
+        this.atlasRegion = (r.length() > 0 ? r : TextureManager.instance.getTextureRegion());
 
-        if(shared) {
-            if(sharedPixmapTexture == null) {
-                fillPixmap(width, height, outsideColor, insideColor);
-                sharedPixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
-                buttonPixmap.dispose();
-            }
-            pixmapTexture = sharedPixmapTexture;
+        fillPixmap(width, height, outsideColor, insideColor);
 
-        } else {
-            fillPixmap(width, height, outsideColor, insideColor);
-            this.pixmapTexture = new Texture(buttonPixmap, Pixmap.Format.RGBA4444, false);
+        texture = TextureManager.instance.addTextureRegion(this.atlasRegion, this.buttonPixmap);
+
+        if (!shared) {
             buttonPixmap.dispose();
+            buttonPixmap = null;
         }
 
-        pixmapTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 
@@ -62,7 +47,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     public void render(SpriteBatch batch) {
         if (visible) {
-            batch.draw(pixmapTexture,
+            batch.draw(texture,
                     position.x - origin.x,
                     position.y - origin.y,
                     origin.x,

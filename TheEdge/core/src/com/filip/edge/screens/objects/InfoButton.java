@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 public class InfoButton extends AbstractCircleButtonObject {
     public static final String TAG = InfoButton.class.getName();
 
-    public InfoButton(float size, float x, float y, Color outsideColor, Color insideColor) {
-        super(size, x, y, outsideColor, insideColor, false);
+    public InfoButton(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
+        super(size, x, y, outsideColor, insideColor, shared, region);
     }
 
     @Override

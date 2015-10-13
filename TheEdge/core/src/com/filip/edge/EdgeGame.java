@@ -6,12 +6,14 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
+import com.filip.edge.screens.GameScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
+import com.filip.edge.util.TextureManager;
 
 public class EdgeGame extends DirectedGame {
     public EdgeGame(IActivityRequestHandler activityRequestHandler) {
@@ -31,6 +33,8 @@ public class EdgeGame extends DirectedGame {
 
         // Load preferences for audio settings and start playing music
         GamePreferences.instance.load();
+
+        TextureManager.instance.load();
 
         DigitRenderer.instance.load();
 

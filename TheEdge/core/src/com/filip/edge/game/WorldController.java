@@ -548,58 +548,59 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     @Override
     public void beginContact(Contact contact) {
-        for (Orbiter orbiter : level.ball.orbiters) {
-            if (contact.getFixtureB().getBody() == orbiter.body) {
+        int j = 0;
+        for (int i = 0; i < level.ball.orbiters.size(); ++i) {
+            if (contact.getFixtureB().getBody() == level.ball.orbiters.get(i).body) {
                 if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
-                    orbiter.destroy();
+                    level.ball.orbiters.get(i).destroy();
                 }
                 else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
-                    orbiter.destroy();
+                    level.ball.orbiters.get(i).destroy();
                 }
 
                 else {
-                    for (Follower follower : level.followers) {
-                        if (contact.getFixtureA().getBody() == follower.followerObject.body) {
-                            follower.destroy();
-                            orbiter.destroy();
+                    for (j = 0; j < level.followers.size(); ++j) {
+                        if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
+                            level.followers.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
                             break;
                         }
                     }
 
-                    for (Follower oscillator : level.oscillators) {
-                        if (contact.getFixtureA().getBody() == oscillator.followerObject.body) {
-                            oscillator.destroy();
-                            orbiter.destroy();
+                    for (j = 0; j < level.oscillators.size(); ++j) {
+                        if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
+                            level.oscillators.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
                             break;
                         }
                     }
                 }
             }
-            if (contact.getFixtureA().getBody() == orbiter.body) {
+            if (contact.getFixtureA().getBody() == level.ball.orbiters.get(i).body) {
                 if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
-                    orbiter.destroy();
+                    level.ball.orbiters.get(i).destroy();
                 }
                 else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
-                    orbiter.destroy();
+                    level.ball.orbiters.get(i).destroy();
                 }
 
                 else {
-                    for (Follower follower : level.followers) {
-                        if (contact.getFixtureB().getBody() == follower.followerObject.body) {
-                            follower.destroy();
-                            orbiter.destroy();
+                    for (j = 0; j < level.followers.size(); ++j) {
+                        if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
+                            level.followers.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
                             break;
                         }
                     }
 
-                    for (Follower oscillator : level.oscillators) {
-                        if (contact.getFixtureB().getBody() == oscillator.followerObject.body) {
-                            oscillator.destroy();
-                            orbiter.destroy();
+                    for (j = 0; j < level.oscillators.size(); ++j) {
+                        if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
+                            level.oscillators.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
                             break;
                         }
                     }
@@ -618,30 +619,30 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             } else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
                 fallOff();
             } else {
-                for (Hole hole : level.holes) {
-                    if (contact.getFixtureA().getBody() == hole.body) {
+                for (j = 0; j < level.holes.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.holes.get(j).body) {
                         fallOff();
                         break;
                     }
                 }
 
-                for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
-                    if (contact.getFixtureA().getBody() == orbiterPickup.body) {
-                        orbiterPickup.pickedUp();
+                for (j = 0; j < level.orbiterPickups.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.orbiterPickups.get(j).body) {
+                        level.orbiterPickups.get(j).pickedUp();
                         addOrbiters();
                         break;
                     }
                 }
 
-                for (Follower follower : level.followers) {
-                    if (contact.getFixtureA().getBody() == follower.followerObject.body) {
+                for (j = 0; j < level.followers.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
-                for (Follower oscillator : level.oscillators) {
-                    if (contact.getFixtureA().getBody() == oscillator.followerObject.body) {
+                for (j = 0; j < level.oscillators.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
@@ -658,28 +659,30 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }  else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                 fallOff();
             } else {
-                for (Hole hole : level.holes) {
-                    if (contact.getFixtureB().getBody() == hole.body) {
-                        fallOff();
-                        break;
-                    }
-                }
-                for (OrbiterPickup orbiterPickup : level.orbiterPickups) {
-                    if (contact.getFixtureB().getBody() == orbiterPickup.body) {
-                        orbiterPickup.pickedUp();
-                        addOrbiters();
-                        break;
-                    }
-                }
-                for (Follower follower : level.followers) {
-                    if (contact.getFixtureB().getBody() == follower.followerObject.body) {
+                for (j = 0; j < level.holes.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.holes.get(j).body) {
                         fallOff();
                         break;
                     }
                 }
 
-                for (Follower oscillator : level.oscillators) {
-                    if (contact.getFixtureB().getBody() == oscillator.followerObject.body) {
+                for (j = 0; j < level.orbiterPickups.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.orbiterPickups.get(j).body) {
+                        level.orbiterPickups.get(j).pickedUp();
+                        addOrbiters();
+                        break;
+                    }
+                }
+
+                for (j = 0; j < level.followers.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
+                        fallOff();
+                        break;
+                    }
+                }
+
+                for (j = 0; j < level.oscillators.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }

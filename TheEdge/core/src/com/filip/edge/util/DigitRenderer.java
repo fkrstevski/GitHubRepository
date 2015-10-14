@@ -72,6 +72,20 @@ public class DigitRenderer {
 
     }
 
+    public void renderNumber(long number, int x, int y, SpriteBatch batch) {
+        int count = 0;
+        while (number > 0){
+            int digit = (int)(number % 10);
+            AbstractRectangleButtonObject digitObject = digits.get(digit);
+            digitObject.position.set(x - count * digitWidth * 1.1f, y);
+            digitObject.render(batch);
+            number /= 10;
+            ++count;
+        }
+    }
+
+    // Less memory efficient version to render a string as a number, so that
+    // the buildup sequence can render correctly.
     public void renderNumber(String number, int x, int y, SpriteBatch batch) {
         int count = 0;
         for (int i = number.length() - 1; i >= 0; --i, ++count) {

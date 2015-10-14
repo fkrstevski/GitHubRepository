@@ -256,24 +256,25 @@ public class Level {
 
     public void update(float deltaTime) {
         ball.update(deltaTime);
-        for (Hole hole : holes) {
-            hole.update(deltaTime);
+        int i = 0;
+        for (i = 0; i < holes.size(); ++i) {
+            holes.get(i).update(deltaTime);
         }
 
-        for (OrbiterPickup orbiterPickup : orbiterPickups) {
-            orbiterPickup.update(deltaTime);
+        for (i = 0; i < orbiterPickups.size(); ++i) {
+            orbiterPickups.get(i).update(deltaTime);
         }
 
-        for (Follower follower : followers) {
-            follower.update(deltaTime);
+        for (i = 0; i < followers.size(); ++i) {
+            followers.get(i).update(deltaTime);
         }
 
-        for (Follower oscillator : oscillators) {
-            oscillator.update(deltaTime);
+        for (i = 0; i < oscillators.size(); ++i) {
+            oscillators.get(i).update(deltaTime);
         }
 
-        for (AbstractRectangleButtonObject rect : rectangleShapes) {
-            rect.update(deltaTime);
+        for (i = 0; i < rectangleShapes.size(); ++i) {
+            rectangleShapes.get(i).update(deltaTime);
         }
 
         if (disappearing) {
@@ -314,7 +315,8 @@ public class Level {
     }
 
     public void render(SpriteBatch batch) {
-        for (int i = circleShapes.size() - 1; i >= 0; --i) {
+        int i = 0;
+        for (i = circleShapes.size() - 1; i >= 0; --i) {
             circleShapes.get(i).render(batch);
         }
 
@@ -326,26 +328,26 @@ public class Level {
             finishCircle.render(batch);
         }
 
-        for (int i = 0; i < rectangleShapes.size(); ++i) {
+        for (i = 0; i < rectangleShapes.size(); ++i) {
             rectangleShapes.get(i).render(batch);
         }
 
         //endCircle.render(batch);
 
-        for (Hole hole : holes) {
-            hole.render(batch);
+        for (i = 0; i < holes.size(); ++i) {
+            holes.get(i).render(batch);
         }
 
-        for (OrbiterPickup orbiterPickup : orbiterPickups) {
-            orbiterPickup.render(batch);
+        for (i = 0; i < orbiterPickups.size(); ++i) {
+            orbiterPickups.get(0).render(batch);
         }
 
-        for (Follower follower : followers) {
-            follower.render(batch);
+        for (i = 0; i < followers.size(); ++i) {
+            followers.get(i).render(batch);
         }
 
-        for (Follower oscillator : oscillators) {
-            oscillator.render(batch);
+        for (i = 0; i < oscillators.size(); ++i) {
+            oscillators.get(i).render(batch);
         }
 
         if (levelFollower != null) {

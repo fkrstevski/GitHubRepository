@@ -78,7 +78,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
         String score = "" + GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
-        DigitRenderer.instance.renderNumber("" + GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
+        DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
 
         if (scoreSubmitted == true) {
             GamePreferences.instance.scoreNeedsToBeSubmitted = false;

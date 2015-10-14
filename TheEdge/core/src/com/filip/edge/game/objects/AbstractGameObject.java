@@ -36,7 +36,8 @@ public abstract class AbstractGameObject {
 
     public void update(float deltaTime) {
         if (body != null) {
-            position.set(new Vector2(body.getPosition().x * Constants.BOX2D_SCALE, body.getPosition().y * Constants.BOX2D_SCALE));
+            position.x = body.getPosition().x * Constants.BOX2D_SCALE;
+            position.y = body.getPosition().y * Constants.BOX2D_SCALE;
             rotation = body.getAngle() * MathUtils.radiansToDegrees;
         }
     }

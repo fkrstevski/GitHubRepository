@@ -36,6 +36,8 @@ public class WorldRenderer implements Disposable {
     private WorldController worldController;
     private Box2DDebugRenderer b2debugRenderer;
 
+    private String score;
+
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         init();
@@ -74,8 +76,9 @@ public class WorldRenderer implements Disposable {
 
             if (Constants.DEBUG_BUILD) {
                 renderGuiLevel(batch);
-                renderGuiFpsCounter(batch);
             }
+
+            //renderGuiFpsCounter(batch);
 
             batch.setShader(null);
             batch.end();
@@ -125,12 +128,12 @@ public class WorldRenderer implements Disposable {
     }
 
     private void renderGuiScore(SpriteBatch batch) {
-        String score = "" + GamePreferences.instance.currentScore;
         if (GamePreferences.instance.currentScore == Constants.MAX_SCORE) {
+            score = "" + GamePreferences.instance.currentScore;
             String scoreSub = score.substring((int) (score.length() - this.worldController.readyTimeRatio * score.length()));
             DigitRenderer.instance.renderNumber(scoreSub, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
         } else {
-            DigitRenderer.instance.renderNumber(score, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
+            DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
         }
     }
 

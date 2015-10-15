@@ -474,8 +474,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 moveBall(0, ballMoveSpeed);
             }
         } else {
-            float x = Gdx.input.getAccelerometerX();
-            float y = Gdx.input.getAccelerometerY();
+            float x, y;
+            if( Gdx.input.getRotation()  == 90) {
+                x = Gdx.input.getAccelerometerX();
+                y = Gdx.input.getAccelerometerY();
+            }
+            else {
+                x = Gdx.input.getAccelerometerX() * -1;
+                y = Gdx.input.getAccelerometerY() * -1;
+            }
             // TODO: make movement be the same on different screen devices;
             moveBall(y * 700 * deltaTime, x * 700 * deltaTime);
 

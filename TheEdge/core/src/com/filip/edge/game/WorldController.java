@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
-import com.filip.edge.screens.objects.AbstractButtonObject;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.Follower;
@@ -33,7 +32,6 @@ import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
-import com.filip.edge.util.TextureManager;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -377,7 +375,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             // Update the score
             // need to do something fishy since current score is a long and subtracting
             // a small float might not update the actual value
-            levelScore += deltaTime * 5;
+            levelScore += deltaTime * 100 ;
             if (levelScore > 1) {
                 GamePreferences.instance.currentScore -= (int) levelScore;
                 levelScore = levelScore % 1;
@@ -475,6 +473,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         } else {
             float x, y;
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
+            float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
+
             if( Gdx.input.getRotation()  == 90) {
                 x = Gdx.input.getAccelerometerX();
                 y = Gdx.input.getAccelerometerY();
@@ -483,8 +487,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 x = Gdx.input.getAccelerometerX() * -1;
                 y = Gdx.input.getAccelerometerY() * -1;
             }
-            // TODO: make movement be the same on different screen devices;
-            moveBall(y * 700 * deltaTime, x * 700 * deltaTime);
+
+            moveBall(y * 700 * horizontalScale * deltaTime, x * 700 * verticalScale * deltaTime);
 
         }
     }

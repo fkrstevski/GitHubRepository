@@ -67,7 +67,7 @@ public class StageLoader {
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-            final int maxPoints = 300;
+            final int maxPoints = 600;
             final int sheetWidth = 81;
             final int sheetHeight = 29;
 

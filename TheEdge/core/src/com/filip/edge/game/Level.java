@@ -61,10 +61,8 @@ public class Level {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
 
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
-        float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
 
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
@@ -113,14 +111,14 @@ public class Level {
             if (points.get(i).hasAHole) {
                 holes.add(new Hole(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
-                        this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex, true, "CircleHole" + GamePreferences.instance.zone));
+                        this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex, false, "CircleHole" + GamePreferences.instance.zone));
             }
 
             // Add a orbiter pickup to the hole
             if(points.get(i).orbiterPickup) {
                 orbiterPickups.add(new OrbiterPickup(Constants.ORBITER_PICKUP_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
-                        this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, true, "CircleOrbiter"));
+                        this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, false, "CircleOrbiter"));
             }
 
             // Add a vertical oscillator to the point
@@ -132,10 +130,10 @@ public class Level {
                 oscillators.add(new Follower( Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
-                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
-                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
+                        Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        true, "CircleOscillatorV"
+                        false, "CircleOscillatorV"
                 ));
             }
 
@@ -148,10 +146,10 @@ public class Level {
                 oscillators.add(new Follower(Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
-                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
-                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
+                        Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        true, "CircleOscillatorH"
+                        false, "CircleOscillatorH"
                 ));
             }
 
@@ -163,7 +161,7 @@ public class Level {
                 followers.add(new Follower(Constants.RED,
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
-                                Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
+                                Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth, false,
                         true, "CircleFollower"
@@ -180,7 +178,7 @@ public class Level {
                 levelPacer = new Follower(Constants.YELLOW,
                         Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
                         new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
-                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
+                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, false, true, true, "CirclePacer");
             }
@@ -235,7 +233,7 @@ public class Level {
             levelFollower = new Follower(Constants.RED,
                     Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
-                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
+                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale),
                     Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                     points.get(0), new ArrayList<Vector2>(points), 1, true, false, true, "CircleFollower");
         }
@@ -339,7 +337,7 @@ public class Level {
         }
 
         for (i = 0; i < orbiterPickups.size(); ++i) {
-            orbiterPickups.get(0).render(batch);
+            orbiterPickups.get(i).render(batch);
         }
 
         for (i = 0; i < followers.size(); ++i) {

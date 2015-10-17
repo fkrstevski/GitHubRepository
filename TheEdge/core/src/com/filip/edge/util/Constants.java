@@ -23,6 +23,7 @@ public class Constants {
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 55;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
+    public static final int HOLE_RADIUS = 22;
     public static final int OSCILLATOR_RADIUS = 15;
     public static final int ORBITER_PICKUP_RADIUS = 15;
     public static final int ORBITER_OFFSET = 12;
@@ -68,7 +69,7 @@ public class Constants {
     public static final Color BLACK = new Color(47 / 255.0f, 72 / 255.0f, 94 / 255.0f, 0xff / 255.0f);
     public static final Color TRANSPARENT = new Color(0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 / 255.0f);
 
-    public static final Color[] ZONE_COLORS = {BLUE, ORANGE, PURPLE, GREY};
+    public static final Color[] ZONE_COLORS = {BLUE, TURQUOISE, PURPLE, GREY};
 
     public static long MAX_SCORE = 1000000000000000000L;
 

@@ -109,7 +109,7 @@ public class Level {
 
             // Add a hole to the point
             if (points.get(i).hasAHole) {
-                holes.add(new Hole(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                holes.add(new Hole(Constants.HOLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).holeStartupIndex, this.points.get(i).holeScaleIndex, false, "CircleHole" + GamePreferences.instance.zone));
             }

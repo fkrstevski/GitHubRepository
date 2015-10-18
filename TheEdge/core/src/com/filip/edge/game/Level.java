@@ -313,7 +313,7 @@ public class Level {
     }
 
     public void render(SpriteBatch batch) {
-        int i = 0;
+        int i;
         for (i = circleShapes.size() - 1; i >= 0; --i) {
             circleShapes.get(i).render(batch);
         }
@@ -329,8 +329,6 @@ public class Level {
         for (i = 0; i < rectangleShapes.size(); ++i) {
             rectangleShapes.get(i).render(batch);
         }
-
-        //endCircle.render(batch);
 
         for (i = 0; i < holes.size(); ++i) {
             holes.get(i).render(batch);

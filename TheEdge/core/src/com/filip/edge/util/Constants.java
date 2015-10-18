@@ -21,7 +21,7 @@ public class Constants {
 
     public static final float END_TIME = 2.0f;
     public static final int BALL_RADIUS = 20;
-    public static final int END_CIRCLE_RADIUS = 55;
+    public static final int END_CIRCLE_RADIUS = 50;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
     public static final int HOLE_RADIUS = 22;
     public static final int OSCILLATOR_RADIUS = 15;
@@ -30,7 +30,7 @@ public class Constants {
     public static final int ORBITER_ANGULAR_VELOCITY = 20;
     public static final int ORBITER_RADIUS = 10;
     public static final int RECTANGLE_WIDTH = 50;
-    public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.7f;
+    public static final float END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER = 0.75f;
     public static final int MAX_LEVELS = 1;
     public static final int OSCILLATION_DISTANCE = 50;
     public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};

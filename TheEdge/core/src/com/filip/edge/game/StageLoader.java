@@ -231,26 +231,23 @@ public class StageLoader {
                     if (levelProperties.size() > 0) {
                         for (LevelProperty property : levelProperties) {
                             if (property.zone == currentZone && property.stage == currentStage) {
-                                sb.append(String.format("%s,%b,%d,%d;", property.property.name(), property.set, property.startupTime, property.speed));
+                                sb.append(String.format("%c,%b,%d,%d;", property.property.name().charAt(0), property.set, property.startupTime, property.speed));
                             }
                         }
-                    } else {
-                        sb.append(String.format("%s,%b,%d,%d;", LevelProperties.Follower, false, 0, 0));
-                        sb.append(String.format("%s,%b,%d,%d;", LevelProperties.Disappears, false, 0, 0));
                     }
 
                     sb.append(nl);
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.02f,%.02f,%b,%d,%d,%b,%d,%d,%d,%b,%b,%d,%d,%b,%d,%d,%b,%d,%d,%b,%d,%d;",
+                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%d,%d,%c,%d,%d,%c,%d,%d;",
                                     points[i].x, points[i].y,
-                                    points[i].hasAHole, points[i].holeStartupIndex, points[i].holeScaleIndex,
-                                    points[i].followerIsBackAndForth, points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
-                                    points[i].hasHorizontalOscillator, points[i].hasVerticalOscillator, points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
-                                    points[i].disappears, points[i].disappearsStartupIndex, points[i].disappearsTimeIndex,
-                                    points[i].pacer, points[i].pacerStartupIndex, points[i].pacerSpeedIndex,
-                                    points[i].orbiterPickup, points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex));
+                                    (points[i].hasAHole ? 't' : 'f'), points[i].holeStartupIndex, points[i].holeScaleIndex,
+                                    (points[i].followerIsBackAndForth ? 't' : 'f'), points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
+                                    (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
+                                    (points[i].disappears ? 't' : 'f'), points[i].disappearsStartupIndex, points[i].disappearsTimeIndex,
+                                    (points[i].pacer ? 't' : 'f'), points[i].pacerStartupIndex, points[i].pacerSpeedIndex,
+                                    (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex));
                             points[i] = null;
                         } else {
                             break;
@@ -313,16 +310,13 @@ public class StageLoader {
                 for (int j = 0; j < levelPropertiesString.length; j++) {
                     String[] propertyValue = levelPropertiesString[j].split(",");
                     if(propertyValue.length > 1) {
-                        Gdx.app.debug(TAG, "Level Property: " + propertyValue[0] + " = " + propertyValue[1]);
-                        Gdx.app.debug(TAG, "Level Property start time: = " + propertyValue[2] + " speed time: = " + propertyValue[3]);
                         if (Boolean.parseBoolean(propertyValue[1])) {
-                            stageProperties.add(new LevelProperty(LevelProperties.valueOf(propertyValue[0]),
+                            stageProperties.add(new LevelProperty(LevelProperties.valueOf((propertyValue[0].equalsIgnoreCase("f") ? "Follower" : "Disappears")),
                                     Integer.parseInt(propertyValue[2]), Integer.parseInt(propertyValue[3]), currentZone, currentStage));
                         }
                     }
                 }
             }
-
 
             i++; // move to points line
             line = linesInFile[i];
@@ -341,12 +335,12 @@ public class StageLoader {
                             new LevelPoint(
                                     Float.parseFloat(pointProperty[0]) * width,
                                     Float.parseFloat(pointProperty[1]) * height,
-                                    Boolean.parseBoolean(pointProperty[2]), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
-                                    Boolean.parseBoolean(pointProperty[5]), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
-                                    Boolean.parseBoolean(pointProperty[9]), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
-                                    Boolean.parseBoolean(pointProperty[13]), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
-                                    Boolean.parseBoolean(pointProperty[16]), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
-                                    Boolean.parseBoolean(pointProperty[19]), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])
+                                    (pointProperty[2].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
+                                    (pointProperty[5].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
+                                    (pointProperty[9].equalsIgnoreCase("t") ? true : false), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
+                                    (pointProperty[13].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
+                                    (pointProperty[16].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
+                                    (pointProperty[19].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])
                             )
                     );
                 }

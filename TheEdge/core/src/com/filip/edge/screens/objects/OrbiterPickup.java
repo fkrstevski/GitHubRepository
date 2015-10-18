@@ -24,14 +24,14 @@ public class OrbiterPickup extends EmptyCircle {
 
     private State state;
 
-    public OrbiterPickup(float size, float x, float y, int startupTimeIndex, int scaleTimeIndex, boolean shared, String region) {
+    public OrbiterPickup(float size, float x, float y, int startupTimeIndex, int disappearTimeIndex, boolean shared, String region) {
         super(size, x, y, Constants.GREEN, Constants.GREEN, shared, region);
 
         this.state = State.StartingUp;
         this.originalSize = size;
         this.scale.set(0, 0);
         this.startupTime = Constants.ORBITER_STARTUP_TIME[startupTimeIndex];
-        this.disappearTime = Constants.ORBITER_DISAPPEAR_TIME[startupTimeIndex];
+        this.disappearTime = Constants.ORBITER_DISAPPEAR_TIME[disappearTimeIndex];
         this.scaleTime = 0.2f;
         this.scalingUp = true;
         this.minScale = 0;

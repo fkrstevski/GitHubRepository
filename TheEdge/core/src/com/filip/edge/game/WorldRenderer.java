@@ -62,7 +62,6 @@ public class WorldRenderer implements Disposable {
             b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));
         } else {
             batch.setProjectionMatrix(camera.combined);
-            //Gdx.app.log(TAG, "Sprite Batch begin");
             batch.begin();
 
             worldController.level.renderBackButton(batch);
@@ -76,13 +75,11 @@ public class WorldRenderer implements Disposable {
 
             if (Constants.DEBUG_BUILD) {
                 renderGuiLevel(batch);
+                renderGuiFpsCounter(batch);
             }
-
-            //renderGuiFpsCounter(batch);
 
             batch.setShader(null);
             batch.end();
-            //Gdx.app.log(TAG, "Sprite Batch end");
         }
     }
 

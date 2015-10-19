@@ -488,7 +488,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 y = Gdx.input.getAccelerometerY() * -1;
             }
 
-            moveBall(y * 700 * horizontalScale * deltaTime, x * 700 * verticalScale * deltaTime);
+            moveBall(y * 500 * horizontalScale * deltaTime, x * 500 * verticalScale * deltaTime);
 
         }
     }

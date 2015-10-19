@@ -135,9 +135,7 @@ public class WorldRenderer implements Disposable {
     }
 
     public void resize(int width, int height) {
-        // TODO: Look at viewport width
-        /*camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
-        camera.update();*/
+
     }
 
     @Override

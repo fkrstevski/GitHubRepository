@@ -81,13 +81,6 @@ public class MainMenuRenderer implements Disposable {
 
     public void resize(int width, int height) {
 
-        // TODO: Look at viewport width
-        /*camera.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
-        camera.update();
-        cameraGUI.viewportHeight = Gdx.graphics.getHeight();
-        cameraGUI.viewportWidth = (Gdx.graphics.getHeight() / (float)height) * (float)width;
-        cameraGUI.position.set(cameraGUI.viewportWidth / 2, cameraGUI.viewportHeight / 2, 0);
-        cameraGUI.update();*/
     }
 
     @Override

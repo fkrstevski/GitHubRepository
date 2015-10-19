@@ -118,7 +118,7 @@ public class Level {
             if(points.get(i).orbiterPickup) {
                 orbiterPickups.add(new OrbiterPickup(Constants.ORBITER_PICKUP_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
-                        this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, false, "CircleOrbiter"));
+                        this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, false, "CircleOrbiterPickup"));
             }
 
             // Add a vertical oscillator to the point

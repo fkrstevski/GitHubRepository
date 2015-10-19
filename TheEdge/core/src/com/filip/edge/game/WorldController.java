@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.filip.edge.screens.DirectedGame;
+import com.filip.edge.screens.GameOverScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
@@ -360,9 +361,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 endTime = 0;
                 GamePreferences.instance.currentScore -= 10000;
                 if (GamePreferences.instance.currentScore <= 0) {
-                    GamePreferences.instance.currentScore = 0;
-                    state = LevelState.GameOver;
-                    AudioManager.instance.play(Assets.instance.sounds.liveLost);
+                    GameOver();
                 } else {
                     this.state = LevelState.Countdown;
                     this.level.startCircle = this.level.startCircleRedIcon;
@@ -382,9 +381,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
 
             if (GamePreferences.instance.currentScore <= 0) {
-                GamePreferences.instance.currentScore = 0;
-                state = LevelState.GameOver;
-                AudioManager.instance.play(Assets.instance.sounds.liveLost);
+                GameOver();
             } else {
                 level.update(deltaTime);
                 handleInputGame(deltaTime);
@@ -427,6 +424,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
             }
         }
+    }
+
+    private void GameOver() {
+        state = LevelState.GameOver;
+        AudioManager.instance.play(Assets.instance.sounds.liveLost);
+        game.setScreen(new GameOverScreen(game));
     }
 
     private void handleDebugInput(float deltaTime) {

@@ -133,7 +133,7 @@ public class Level {
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
                         Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        false, "CircleOscillatorV"
+                        false, "CircleOscillator"
                 ));
             }
 
@@ -149,7 +149,7 @@ public class Level {
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
                         Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        false, "CircleOscillatorH"
+                        false, "CircleOscillator"
                 ));
             }
 

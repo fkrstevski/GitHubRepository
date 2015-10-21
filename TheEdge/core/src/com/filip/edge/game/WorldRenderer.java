@@ -58,25 +58,23 @@ public class WorldRenderer implements Disposable {
     private void renderWorld(SpriteBatch batch) {
         worldController.cameraHelper.applyTo(camera);
 
+        batch.begin();
+        worldController.level.renderBackButton(batch);
+        worldController.level.render(batch);
+        if(worldController.state != WorldController.LevelState.GameOver){
+            renderGuiScore(batch);
+        }
+
+        if (Constants.DEBUG_BUILD) {
+            renderGuiLevel(batch);
+            renderGuiFpsCounter(batch);
+        }
+
+        batch.setShader(null);
+        batch.end();
+
         if (worldController.renderPhysics) {
             b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));
-        } else {
-            batch.setProjectionMatrix(camera.combined);
-            batch.begin();
-
-            worldController.level.renderBackButton(batch);
-            worldController.level.render(batch);
-            if(worldController.state != WorldController.LevelState.GameOver){
-                renderGuiScore(batch);
-            }
-
-            if (Constants.DEBUG_BUILD) {
-                renderGuiLevel(batch);
-                renderGuiFpsCounter(batch);
-            }
-
-            batch.setShader(null);
-            batch.end();
         }
     }
 

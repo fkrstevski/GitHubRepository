@@ -19,4 +19,9 @@ public interface IActivityRequestHandler {
     //gets the scores/achievements and displays them threw googles default widget
     public void showScores();
     //public void showAchievements();
+
+
+    public void startMethodTracing(String name);
+
+    public void stopMethodTracing();
 }

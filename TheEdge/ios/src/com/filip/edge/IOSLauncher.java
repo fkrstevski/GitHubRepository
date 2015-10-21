@@ -153,6 +153,16 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
+    public void startMethodTracing(String name){
+
+    }
+
+    @Override
+    public void stopMethodTracing(){
+
+    }
+
+    @Override
     public boolean isSignedIn()
     {
         return this.isSignedIn;

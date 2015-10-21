@@ -47,6 +47,18 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
+    public void startMethodTracing(String name){
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.startMethodTracing(name);
+        }
+    }
+
+    public void stopMethodTracing(){
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.stopMethodTracing();
+        }
+    }
+
     @Override
     public void render() {
         // get delta time and ensure an upper limit of one 60th second

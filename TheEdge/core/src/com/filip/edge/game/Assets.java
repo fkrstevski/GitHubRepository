@@ -52,11 +52,6 @@ public class Assets implements Disposable, AssetErrorListener {
         // start loading assets and wait until finished
         assetManager.finishLoading();
 
-        Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
-        for (String a : assetManager.getAssetNames()) {
-            Gdx.app.debug(TAG, "asset: " + a);
-        }
-
         // create game resource objects
         fonts = new AssetFonts();
         sounds = new AssetSounds(assetManager);

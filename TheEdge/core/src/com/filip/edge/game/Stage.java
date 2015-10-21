@@ -19,17 +19,16 @@ public class Stage {
     public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties) {
         this.stageID = id;
         this.points = p;
-        for (LevelProperty property :
-                properties) {
-            if (property.set) {
-                if (property.property == LevelProperties.Disappears) {
+        for (int i = 0; i < properties.size(); ++i) {
+            if (properties.get(i).set) {
+                if (properties.get(i).property == LevelProperties.Disappears) {
                     disappears = true;
-                    disappearsStartupTimeIndex = property.startupTime;
-                    disappearSpeedIndex = property.speed;
-                } else if (property.property == LevelProperties.Follower) {
+                    disappearsStartupTimeIndex = properties.get(i).startupTime;
+                    disappearSpeedIndex = properties.get(i).speed;
+                } else if (properties.get(i).property == LevelProperties.Follower) {
                     hasFollowerObject = true;
-                    followerStartupTimeIndex = property.startupTime;
-                    followerSpeedIndex = property.speed;
+                    followerStartupTimeIndex = properties.get(i).startupTime;
+                    followerSpeedIndex = properties.get(i).speed;
                 }
             }
         }

@@ -105,6 +105,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public void startMethodTracing(String name){
+        android.os.Debug.startMethodTracing(name);
+    }
+
+    @Override
+    public void stopMethodTracing(){
+        android.os.Debug.stopMethodTracing();
+    }
+
+    @Override
     protected void onStart() { // TODO: call gameHelper.OnStart from the main menu
         super.onStart();
         //GoogleAnalytics.getInstance(this).reportActivityStart(this);

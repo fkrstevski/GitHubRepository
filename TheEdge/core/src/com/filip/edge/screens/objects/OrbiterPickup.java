@@ -113,7 +113,7 @@ public class OrbiterPickup extends EmptyCircle {
     @Override
     public void reset() {
         this.scale.set(0,0);
-        this.body.getFixtureList().get(0).getShape().setRadius(0);
+        this.body.getFixtureList().get(0).getShape().setRadius(Constants.ORBITER_PICKUP_BODY_RADIUS / Constants.BOX2D_SCALE);
         this.body.setActive(true);
         this.currentTime = 0;
         this.minScale = 0;

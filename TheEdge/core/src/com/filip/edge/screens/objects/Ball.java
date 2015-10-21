@@ -18,17 +18,20 @@ public class Ball extends EmptyCircle {
 
     public ArrayList<Orbiter> orbiters;
 
-    private float startingX;
-    private float startingY;
+    public float startingX;
+    public float startingY;
 
     public Ball(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(size, x, y, outsideColor, insideColor, shared, region);
         orbiters = new ArrayList<Orbiter>();
         this.startingX = x;
         this.startingY = y;
+
+        addNewOrbiter();
+        addNewOrbiter();
     }
 
-    public Orbiter addNewOrbiter(){
+    private Orbiter addNewOrbiter(){
         int width = Gdx.graphics.getWidth();
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
         Orbiter orbiter = null;
@@ -38,7 +41,9 @@ public class Ball extends EmptyCircle {
             float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
                     xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
+            orbiter.visible = false;
             orbiters.add(orbiter);
+
         }
         else if(orbiters.size() == 1) {
             float angle = orbiters.get(0).angle + MathUtils.PI;
@@ -46,6 +51,7 @@ public class Ball extends EmptyCircle {
             float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
                     xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
+            orbiter.visible = false;
             orbiters.add(orbiter);
         }
         else {
@@ -59,20 +65,21 @@ public class Ball extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
         for (int i = 0; i < orbiters.size(); ++i) {
-            if(orbiters.get(i).visible) {
-                orbiters.get(i).update(deltaTime);
-            }
+            orbiters.get(i).update(deltaTime);
         }
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        super.render(batch);
+
+        // Render the orbiters first
         for (int i = 0; i < orbiters.size(); ++i) {
             if(orbiters.get(i).visible) {
                 orbiters.get(i).render(batch);
             }
         }
+
+        super.render(batch);
     }
 
     @Override
@@ -83,6 +90,8 @@ public class Ball extends EmptyCircle {
         this.body.setLinearVelocity(0,0);
         this.body.setTransform(this.position.x / Constants.BOX2D_SCALE, this.position.y / Constants.BOX2D_SCALE, 0);
 
-
+        for (int i = 0; i < orbiters.size(); ++i) {
+            orbiters.get(i).reset();
+        }
     }
 }

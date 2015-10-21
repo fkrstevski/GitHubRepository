@@ -53,6 +53,9 @@ public class Level {
     private float disappearingSpeed;
     private float disappearingTime;
     private int disappearingIndex;
+
+    public int numberOfOrbitersFinishedWith;
+
     public Level() {
         init();
     }

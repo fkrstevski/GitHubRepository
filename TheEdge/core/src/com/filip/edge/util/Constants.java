@@ -26,6 +26,7 @@ public class Constants {
     public static final int HOLE_RADIUS = 22;
     public static final int OSCILLATOR_RADIUS = 15;
     public static final int ORBITER_PICKUP_RADIUS = 15;
+    public static final int ORBITER_PICKUP_BODY_RADIUS = 25;
     public static final int ORBITER_OFFSET = 12;
     public static final int ORBITER_ANGULAR_VELOCITY = 20;
     public static final int ORBITER_RADIUS = 10;
@@ -72,6 +73,8 @@ public class Constants {
     public static final Color[] ZONE_COLORS = {BLUE, TURQUOISE, PURPLE, GREY};
 
     public static long MAX_SCORE = 1000000000000000000L;
+    public static int SCORE_DECREMENT_FOR_COLLISION = 10000;
+    public static int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
 
     public static int WIDTH_IN_PIXELS = 3;
 }

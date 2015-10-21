@@ -134,8 +134,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void initPhysics() {
         numberOfContacts = 0;
 
-        float extraScale = 0;//level.ball.radius * 2;
-
         // Pacer object body
         if (level.hasPacerObject() && level.levelPacer.followerObject.body == null) {
             BodyDef bodyDef = new BodyDef();
@@ -145,7 +143,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             body.setActive(false);
             level.setPacerBody(body);
             CircleShape circleShape = new CircleShape();
-            circleShape.setRadius((level.getPacerRadius() - extraScale) / Constants.BOX2D_SCALE);
+            circleShape.setRadius((level.getPacerRadius()) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;
@@ -162,7 +160,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             body.setActive(false);
             level.setFollowerBody(body);
             CircleShape circleShape = new CircleShape();
-            circleShape.setRadius((level.getFollowerRadius() - extraScale) / Constants.BOX2D_SCALE);
+            circleShape.setRadius((level.getFollowerRadius()) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;
@@ -187,6 +185,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             circleShape.dispose();
         }
 
+        // Orbiter Physics Body
+        for (int i = 0; i < MAX_NUMBER_ORBITERS; ++i) {
+            if(level.ball.orbiters.get(i).body == null) {
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.type = BodyType.DynamicBody;
+                bodyDef.position.set(new Vector2(level.ball.orbiters.get(i).position.x / Constants.BOX2D_SCALE, level.ball.orbiters.get(i).position.y / Constants.BOX2D_SCALE));
+                Body body = b2world.createBody(bodyDef);
+                body.setActive(false);
+                level.ball.orbiters.get(i).body = body;
+                CircleShape circleShape = new CircleShape();
+                circleShape.setRadius((level.ball.orbiters.get(i).radius) / Constants.BOX2D_SCALE);
+                FixtureDef fixtureDef = new FixtureDef();
+                fixtureDef.shape = circleShape;
+                fixtureDef.isSensor = true;
+                body.createFixture(fixtureDef);
+                circleShape.dispose();
+            }
+        }
+
         // Orbiter Pickup Physics Bodies
         for (int i = 0; i < level.orbiterPickups.size(); ++i) {
             if(level.orbiterPickups.get(i).body == null) {
@@ -196,7 +213,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Body body = b2world.createBody(bodyDef);
                 level.orbiterPickups.get(i).body = body;
                 CircleShape circleShape = new CircleShape();
-                circleShape.setRadius((Constants.INSIDE_CIRCLE_RADIUS - extraScale) / Constants.BOX2D_SCALE);
+                circleShape.setRadius((Constants.ORBITER_PICKUP_BODY_RADIUS) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = circleShape;
                 fixtureDef.isSensor = true;
@@ -214,7 +231,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Body holeBody = b2world.createBody(holeBodyDef);
                 level.holes.get(i).body = holeBody;
                 CircleShape circleHoleShape = new CircleShape();
-                circleHoleShape.setRadius((level.holes.get(i).radius - extraScale) / Constants.BOX2D_SCALE);
+                circleHoleShape.setRadius((level.holes.get(i).radius) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureHoleDef = new FixtureDef();
                 fixtureHoleDef.shape = circleHoleShape;
                 fixtureHoleDef.isSensor = true;
@@ -233,7 +250,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 followerBody.setActive(false);
                 level.followers.get(i).followerObject.body = followerBody;
                 CircleShape circleFollowerShape = new CircleShape();
-                circleFollowerShape.setRadius((level.followers.get(i).followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+                circleFollowerShape.setRadius((level.followers.get(i).followerObject.radius) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureFollowerDef = new FixtureDef();
                 fixtureFollowerDef.shape = circleFollowerShape;
                 fixtureFollowerDef.isSensor = true;
@@ -251,7 +268,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 followerBody.setActive(false);
                 level.oscillators.get(i).followerObject.body = followerBody;
                 CircleShape circleFollowerShape = new CircleShape();
-                circleFollowerShape.setRadius((level.oscillators.get(i).followerObject.radius - extraScale) / Constants.BOX2D_SCALE);
+                circleFollowerShape.setRadius((level.oscillators.get(i).followerObject.radius) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureFollowerDef = new FixtureDef();
                 fixtureFollowerDef.shape = circleFollowerShape;
                 fixtureFollowerDef.isSensor = true;
@@ -269,7 +286,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             Body body2 = b2world.createBody(bodyDef2);
             level.endCircle.body = body2;
             CircleShape circleShape2 = new CircleShape();
-            circleShape2.setRadius((level.endCircle.radius - extraScale) / Constants.BOX2D_SCALE);
+            circleShape2.setRadius((level.endCircle.radius) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef2 = new FixtureDef();
             fixtureDef2.shape = circleShape2;
             fixtureDef2.isSensor = true;
@@ -286,7 +303,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Body body1 = b2world.createBody(bodyDef1);
                 level.circleShapes.get(i).body = body1;
                 CircleShape circleShape1 = new CircleShape();
-                circleShape1.setRadius((level.circleShapes.get(i).radius - extraScale) / Constants.BOX2D_SCALE);
+                circleShape1.setRadius((level.circleShapes.get(i).radius) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureDef1 = new FixtureDef();
                 fixtureDef1.shape = circleShape1;
                 fixtureDef1.isSensor = true;
@@ -305,8 +322,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 level.rectangleShapes.get(i).body = body1;
                 PolygonShape polygonShape = new PolygonShape();
                 Vector2 o = new Vector2(0, 0);
-                polygonShape.setAsBox((level.rectangleShapes.get(i).dimension.x / 2) / Constants.BOX2D_SCALE, (level.rectangleShapes.get(i).dimension.y / 2 - extraScale) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * level.rectangleShapes.get(i).rotation);
-                level.rectangleShapes.get(i).setBox((level.rectangleShapes.get(i).dimension.x / 2) / Constants.BOX2D_SCALE, (level.rectangleShapes.get(i).dimension.y / 2 - extraScale) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * level.rectangleShapes.get(i).rotation);
+                polygonShape.setAsBox((level.rectangleShapes.get(i).dimension.x / 2) / Constants.BOX2D_SCALE, (level.rectangleShapes.get(i).dimension.y / 2) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * level.rectangleShapes.get(i).rotation);
+                level.rectangleShapes.get(i).setBox((level.rectangleShapes.get(i).dimension.x / 2) / Constants.BOX2D_SCALE, (level.rectangleShapes.get(i).dimension.y / 2) / Constants.BOX2D_SCALE, o, MathUtils.degreesToRadians * level.rectangleShapes.get(i).rotation);
                 FixtureDef fixtureDef1 = new FixtureDef();
                 fixtureDef1.shape = polygonShape;
                 fixtureDef1.isSensor = true;
@@ -402,7 +419,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         } else if (state == LevelState.LevelComplete) {
             this.endTime += deltaTime;
 
+            // Move the ball and orbiters into the end point
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
+            for(int i = 0; i < this.level.ball.orbiters.size(); ++i) {
+                this.level.ball.orbiters.get(i).position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
+            }
+
             if (level.hasFollowerObject()) {
                 level.updateFollowerScale((1 - endTime / Constants.END_TIME));
             }
@@ -419,6 +441,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 level.oscillators.get(i).scale((1 - endTime / Constants.END_TIME));
             }
 
+            if(this.endTime / Constants.END_TIME > 0.5f && level.numberOfOrbitersFinishedWith > 0) {
+                GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
+                level.numberOfOrbitersFinishedWith = 0;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            }
+
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
                 this.state = LevelState.Countdown;
@@ -433,7 +461,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             level.ball.scale.set(level.ball.scale.x * (1 - endTime / Constants.END_TIME), level.ball.scale.y * (1 - endTime / Constants.END_TIME));
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
-                GamePreferences.instance.currentScore -= 10000;
+                GamePreferences.instance.currentScore -= Constants.SCORE_DECREMENT_FOR_COLLISION;
                 if (GamePreferences.instance.currentScore <= 0) {
                     GameOver();
                 } else {
@@ -466,23 +494,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 for (int i = 0; i < MAX_NUMBER_ORBITERS; ++i) {
                     if (newlyVisibleOrbiters[i]) {
                         newlyVisibleOrbiters[i] = false;
-                        Orbiter orbiter = level.ball.addNewOrbiter();
-                        if(orbiter != null) {
-                            BodyDef bodyDef = new BodyDef();
-                            bodyDef.type = BodyType.DynamicBody;
-                            bodyDef.position.set(new Vector2(orbiter.position.x / Constants.BOX2D_SCALE, orbiter.position.y / Constants.BOX2D_SCALE));
-                            Body body = b2world.createBody(bodyDef);
-                            body.setActive(true);
-                            orbiter.body = body;
-                            CircleShape circleShape = new CircleShape();
-                            circleShape.setRadius((orbiter.radius) / Constants.BOX2D_SCALE);
-                            FixtureDef fixtureDef = new FixtureDef();
-                            fixtureDef.shape = circleShape;
-                            fixtureDef.isSensor = true;
-                            body.createFixture(fixtureDef);
-                            circleShape.dispose();
-                        }
-
+                        this.level.ball.orbiters.get(i).visible = true;
+                        this.level.ball.orbiters.get(i).body.setActive(true);
                     }
                 }
 
@@ -778,6 +791,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.state = LevelState.LevelComplete;
         this.level.startCircle = this.level.startCircleGreenIcon;
         this.level.finishCircle = this.level.finishCircleGreenIcon;
+        this.level.numberOfOrbitersFinishedWith = 0;
+        for (int i = 0; i < this.level.ball.orbiters.size(); ++i) {
+            if(this.level.ball.orbiters.get(i).body.isActive()) {
+                this.level.numberOfOrbitersFinishedWith++;
+            }
+        }
     }
 
     private void addOrbiters() {

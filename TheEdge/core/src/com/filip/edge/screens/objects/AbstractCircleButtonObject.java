@@ -66,4 +66,9 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
         return sameSame;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
 }

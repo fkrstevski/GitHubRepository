@@ -337,7 +337,7 @@ public class StageLoader {
                                     Float.parseFloat(pointProperty[1]) * height,
                                     (pointProperty[2].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
                                     (pointProperty[5].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
-                                    (pointProperty[9].equalsIgnoreCase("t") ? true : false), Boolean.parseBoolean(pointProperty[10]), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
+                                    (pointProperty[9].equalsIgnoreCase("t") ? true : false), (pointProperty[10].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
                                     (pointProperty[13].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
                                     (pointProperty[16].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
                                     (pointProperty[19].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])

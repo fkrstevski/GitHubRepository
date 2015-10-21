@@ -67,4 +67,6 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
     }
 
     public abstract boolean isTouched(int x, int y);
+
+    public abstract void reset();
 }

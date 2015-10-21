@@ -47,14 +47,78 @@ public class Level {
     public ArrayList<Follower> oscillators;
     public ArrayList<OrbiterPickup> orbiterPickups;
     public Follower levelFollower;
-    private PropertyState disappearingState;
-    private boolean disappearing;
+    public PropertyState disappearingState;
+    public boolean disappearing;
     private float disappearingStartTime;
     private float disappearingSpeed;
     private float disappearingTime;
     private int disappearingIndex;
     public Level() {
         init();
+    }
+
+    public void reset(){
+
+        // BALL RESET
+        ball.reset();
+
+        // TODO: BALL ORBITER RESET
+
+
+        // HOLES RESET
+        for (int i = 0; i < holes.size(); ++i) {
+            holes.get(i).reset();
+        }
+
+        // ORBITER PICKUP RESET
+        for (int i = 0; i < orbiterPickups.size(); ++i) {
+            orbiterPickups.get(i).reset();
+        }
+
+        // OSCILLATOR RESET
+        for (int i = 0; i < oscillators.size(); ++i) {
+            oscillators.get(i).reset();
+        }
+
+        // FOLLOWERS RESET
+        for (int i = 0; i < followers.size(); ++i) {
+            followers.get(i).reset();
+        }
+
+        // PACER RESET
+        if(this.hasPacerObject()) {
+            levelPacer.reset();
+        }
+
+        // LEVEL FOLLOWER RESET
+        if(this.hasFollowerObject()) {
+            levelFollower.reset();
+        }
+
+        // SCALING RESET
+        for (int i = 0; i < rectangleShapes.size(); ++i) {
+            if(rectangleShapes.get(i).disapears) {
+                rectangleShapes.get(i).reset();
+            }
+        }
+
+        // DISAPPEARING RESET
+        if(this.disappearing) {
+            disappearingTime = 0;
+            disappearingIndex = 0;
+
+            // Circles
+            for (int i = circleShapes.size() - 1; i >= 0; --i) {
+                circleShapes.get(i).visible = true;
+                circleShapes.get(i).body.setActive(true);
+            }
+
+            // Rectangles
+            for (int i = 0; i < rectangleShapes.size(); ++i) {
+                rectangleShapes.get(i).visible = true;
+                rectangleShapes.get(i).body.setActive(true);
+            }
+        }
     }
 
     private void init() {
@@ -388,7 +452,8 @@ public class Level {
     public boolean hasPacerObject() { return levelPacer != null; }
 
     public void tearDownPacer() {
-        if (this.levelPacer != null && this.levelPacer.followerObjectState != PropertyState.Gone) {
+        if (this.levelPacer != null &&
+                (this.levelPacer.followerObjectState != PropertyState.Gone && this.levelPacer.followerObjectState != PropertyState.Inactive)) {
             this.levelPacer.followerObjectTime = 0;
             this.levelPacer.followerObjectState = Level.PropertyState.Teardown;
         }
@@ -419,7 +484,8 @@ public class Level {
     }
 
     public void tearDownFollower() {
-        if(this.levelFollower != null && this.levelFollower.followerObjectState != PropertyState.Gone) {
+        if(this.levelFollower != null &&
+                (this.levelFollower.followerObjectState != PropertyState.Gone && this.levelFollower.followerObjectState != PropertyState.Inactive)) {
             this.levelFollower.followerObjectTime = 0;
             this.levelFollower.followerObjectState = Level.PropertyState.Teardown;
         }

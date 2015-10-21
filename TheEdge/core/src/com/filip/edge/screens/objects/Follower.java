@@ -30,6 +30,8 @@ public class Follower {
     private int direction;
     private boolean backAndForth;
     private boolean oneTimeOnly;
+    private Vector2 startingPosition;
+    private int startingDirection;
 
     public boolean deactivate;
 
@@ -43,8 +45,10 @@ public class Follower {
         this.followObjectOriginalSize = size;
         this.pointsToFollow = pointsToFollow;
         this.direction = dir;
+        this.startingDirection = dir;
         this.backAndForth = backAndForth;
         this.oneTimeOnly = oneTimeOnly;
+        this.startingPosition = pos;
 
         this.vectorDirection = new Vector2();
 
@@ -70,6 +74,7 @@ public class Follower {
                     this.followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
 
                     this.followerObjectState = PropertyState.Buildup;
+                    this.followerObject.body.setActive(true);
                 }
                 break;
             case Buildup:
@@ -161,5 +166,30 @@ public class Follower {
     public void destroy() {
         this.followerObjectState = PropertyState.Gone;
         this.deactivate = true;
+    }
+
+    public void reset() {
+        this.followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
+        this.followerObject.body.setLinearVelocity(0, 0);
+        this.followerObject.body.setActive(false);
+        this.followerObject.body.setTransform(this.startingPosition.x / Constants.BOX2D_SCALE, this.startingPosition.y / Constants.BOX2D_SCALE, 0);
+
+        this.followerObjectTime = 0;
+
+        this.followPointIndex = 0;
+        this.direction = this.startingDirection;
+
+        this.vectorDirection.set(0,0);
+
+        this.followerObject.position.x = this.startingPosition.x;
+        this.followerObject.position.y = this.startingPosition.y;
+
+        this.followerObject.scale.set(0, 0);
+    }
+
+    public void start() {
+        this.followerObjectTime = 0;
+        this.followerObjectState = PropertyState.Inactive;
+
     }
 }

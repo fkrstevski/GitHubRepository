@@ -311,4 +311,23 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
         return sameSame;
     }
+
+    @Override
+    public void reset() {
+        if(disapears) {
+            currentTime = 0;
+            Fixture f = body.getFixtureList().get(0);
+            PolygonShape s = (PolygonShape) f.getShape();
+            this.scale.set(1, 1);
+            s.setAsBox(hx, hy, center, angle);
+        }
+    }
+
+    public void start()
+    {
+        if(disapears) {
+            this.currentTime = 0;
+            this.disappearingState = Level.PropertyState.Inactive;
+        }
+    }
 }

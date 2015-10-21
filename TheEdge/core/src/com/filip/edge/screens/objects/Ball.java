@@ -18,9 +18,14 @@ public class Ball extends EmptyCircle {
 
     public ArrayList<Orbiter> orbiters;
 
+    private float startingX;
+    private float startingY;
+
     public Ball(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(size, x, y, outsideColor, insideColor, shared, region);
         orbiters = new ArrayList<Orbiter>();
+        this.startingX = x;
+        this.startingY = y;
     }
 
     public Orbiter addNewOrbiter(){
@@ -68,5 +73,16 @@ public class Ball extends EmptyCircle {
                 orbiters.get(i).render(batch);
             }
         }
+    }
+
+    @Override
+    public void reset(){
+        this.position.x = this.startingX;
+        this.position.y = this.startingY;
+        this.scale.set(1,1);
+        this.body.setLinearVelocity(0,0);
+        this.body.setTransform(this.position.x / Constants.BOX2D_SCALE, this.position.y / Constants.BOX2D_SCALE, 0);
+
+
     }
 }

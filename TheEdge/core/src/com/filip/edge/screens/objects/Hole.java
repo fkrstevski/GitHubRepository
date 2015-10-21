@@ -11,7 +11,6 @@ import com.filip.edge.util.GamePreferences;
  */
 public class Hole extends EmptyCircle {
     public static final String TAG = Hole.class.getName();
-    private float currentScaleTime;
     private float currentTime;
     private float scaleTime;
     private float startupTime;
@@ -48,28 +47,28 @@ public class Hole extends EmptyCircle {
                 }
                 break;
             case ScalingUp:
-                currentScaleTime += deltaTime;
-                if (currentScaleTime > scaleTime) {
-                    currentScaleTime = 0;
+                currentTime += deltaTime;
+                if (currentTime > scaleTime) {
+                    currentTime = 0;
                     state = State.ScalingDown;
                 } else {
-                    this.scale.set(currentScaleTime / scaleTime, currentScaleTime / scaleTime);
-                    body.getFixtureList().get(0).getShape().setRadius(((currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if (currentScaleTime / scaleTime > 0.3f) {
+                    this.scale.set(currentTime / scaleTime, currentTime / scaleTime);
+                    body.getFixtureList().get(0).getShape().setRadius(((currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
+                    if (currentTime / scaleTime > 0.3f) {
                         body.setActive(true);
                     }
                 }
                 break;
 
             case ScalingDown:
-                currentScaleTime += deltaTime;
-                if (currentScaleTime > scaleTime) {
-                    currentScaleTime = 0;
+                currentTime += deltaTime;
+                if (currentTime > scaleTime) {
+                    currentTime = 0;
                     state = State.ScalingUp;
                 } else {
-                    this.scale.set(1 - currentScaleTime / scaleTime, 1 - currentScaleTime / scaleTime);
-                    body.getFixtureList().get(0).getShape().setRadius(((1 - currentScaleTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if (1 - currentScaleTime / scaleTime < 0.3f) {
+                    this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
+                    body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
+                    if (1 - currentTime / scaleTime < 0.3f) {
                         body.setActive(false);
                     }
                 }
@@ -86,6 +85,19 @@ public class Hole extends EmptyCircle {
                 super.render(batch);
                 break;
         }
+    }
+
+    @Override
+    public void reset() {
+        this.scale.set(0, 0);
+        this.body.getFixtureList().get(0).getShape().setRadius(0);
+        this.body.setActive(true);
+        this.currentTime = 0;
+    }
+
+    public void start(){
+        this.currentTime = 0;
+        this.state = State.StartingUp;
     }
 
     enum State {

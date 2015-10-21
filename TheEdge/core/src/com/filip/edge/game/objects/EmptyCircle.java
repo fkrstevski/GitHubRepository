@@ -16,4 +16,9 @@ public class EmptyCircle extends AbstractCircleButtonObject {
     public void fillInside(float size) {
 
     }
+
+    @Override
+    public void reset() {
+
+    }
 }

@@ -11,7 +11,7 @@ import com.filip.edge.util.GamePreferences;
  * Created by fkrstevski on 2015-09-29.
  */
 public class OrbiterPickup extends EmptyCircle {
-    public static final String TAG = Hole.class.getName();
+    public static final String TAG = OrbiterPickup.class.getName();
     private float currentDisappearTime;
     private float currentTime;
     private float scaleTime;
@@ -108,6 +108,21 @@ public class OrbiterPickup extends EmptyCircle {
         if(state != State.Gone) {
             super.render(batch);
         }
+    }
+
+    @Override
+    public void reset() {
+        this.scale.set(0,0);
+        this.body.getFixtureList().get(0).getShape().setRadius(0);
+        this.body.setActive(true);
+        this.currentTime = 0;
+        this.minScale = 0;
+    }
+
+    public void start(){
+        this.currentTime = 0;
+        this.scalingUp = true;
+        this.state = State.StartingUp;
     }
 
     enum State {

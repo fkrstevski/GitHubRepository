@@ -177,7 +177,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             Body body = b2world.createBody(bodyDef);
             level.ball.body = body;
             CircleShape circleShape = new CircleShape();
-            circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE); // TODO: fix 0.1 to be screen dependant
+            circleShape.setRadius((level.ball.radius * 0.1f) / Constants.BOX2D_SCALE);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = circleShape;
             fixtureDef.isSensor = true;

@@ -65,9 +65,6 @@ public class Level {
         // BALL RESET
         ball.reset();
 
-        // TODO: BALL ORBITER RESET
-
-
         // HOLES RESET
         for (int i = 0; i < holes.size(); ++i) {
             holes.get(i).reset();
@@ -128,8 +125,10 @@ public class Level {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
 
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
+        float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
 
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
         rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
@@ -196,8 +195,8 @@ public class Level {
                 localPoints.add(new Vector2(points.get(i).x - dis, points.get(i).y));
                 oscillators.add(new Follower( Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
-                        new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
-                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
+                        new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale,
+                                Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
                         Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
                         false, "CircleOscillator"
@@ -228,7 +227,7 @@ public class Level {
                 followers.add(new Follower(Constants.RED,
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
-                                Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale),
+                                Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth, false,
                         true, "CircleFollower"
@@ -245,7 +244,7 @@ public class Level {
                 levelPacer = new Follower(Constants.YELLOW,
                         Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
                         new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
-                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale),
+                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, false, true, true, "CirclePacer");
             }
@@ -300,7 +299,7 @@ public class Level {
             levelFollower = new Follower(Constants.RED,
                     Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
-                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale),
+                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                     Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                     points.get(0), new ArrayList<Vector2>(points), 1, true, false, true, "CircleFollower");
         }
@@ -312,11 +311,6 @@ public class Level {
             disappearingSpeed = Constants.DISAPPEARING_TIME[s.disappearSpeedIndex];
             disappearingIndex = 0;
         }
-
-        Gdx.app.log(TAG, "LEVEL = " + GamePreferences.instance.zone + "-" + GamePreferences.instance.stage);
-        Gdx.app.log(TAG, "LEVEL points = " + points.size());
-        Gdx.app.log(TAG, "LEVEL circles = " + circleShapes.size());
-        Gdx.app.log(TAG, "LEVEL rectangles = " + rectangleShapes.size());
     }
 
     public void update(float deltaTime) {

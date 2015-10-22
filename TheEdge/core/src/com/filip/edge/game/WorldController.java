@@ -367,8 +367,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
 
-                // TODO: BALL ORBITER RESET
-
                 // RESET STATE FOR PACER
                 if(this.level.hasPacerObject()) {
                     this.level.levelPacer.start();

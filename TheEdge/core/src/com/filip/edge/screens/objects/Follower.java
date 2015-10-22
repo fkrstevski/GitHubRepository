@@ -1,7 +1,9 @@
 package com.filip.edge.screens.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.filip.edge.game.Level.PropertyState;
 import com.filip.edge.game.objects.EmptyCircle;
@@ -70,6 +72,7 @@ public class Follower {
                     this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                     this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
                     this.vectorDirection.set(this.followObjectTo.x - this.followObjectFrom.x, this.followObjectTo.y - this.followObjectFrom.y);
+                    vectorDirection.nor();
                     this.followerObject.scale.set(0, 0);
                     this.followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
 
@@ -88,7 +91,10 @@ public class Follower {
 
                 break;
             case Active:
-                this.followerObject.body.setLinearVelocity(vectorDirection.nor().scl(this.followerObjectSpeed));
+                float xDirection = vectorDirection.x / ((vectorDirection.x + vectorDirection.y));
+                float yDirection = vectorDirection.y / ((vectorDirection.x + vectorDirection.y));
+                float finalVelocity = xDirection * this.followerObjectSpeed.x + yDirection * this.followerObjectSpeed.y;
+                this.followerObject.body.setLinearVelocity(vectorDirection.x * finalVelocity, vectorDirection.y * finalVelocity);
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
                     this.followerObject.body.setLinearVelocity(0,0);
                     this.followerObject.position.set(this.followObjectTo.x, this.followObjectTo.y);
@@ -106,6 +112,7 @@ public class Follower {
                         this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                         this.followObjectTo = pointsToFollow.get(this.followPointIndex + this.direction);
                         this.vectorDirection.set(this.followObjectTo.x - this.followObjectFrom.x, this.followObjectTo.y - this.followObjectFrom.y);
+                        vectorDirection.nor();
                     } else {
                         if (followPointIndex >= pointsToFollow.size() - 1 || followPointIndex < 0) {
                             this.followPointIndex = 0;
@@ -113,6 +120,7 @@ public class Follower {
                             this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                             this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
                             this.vectorDirection.set(this.followObjectTo.x - this.followObjectFrom.x, this.followObjectTo.y - this.followObjectFrom.y);
+                            vectorDirection.nor();
                             this.followerObject.body.setLinearVelocity(0,0);
                             this.followerObjectState = PropertyState.Teardown;
 
@@ -121,7 +129,8 @@ public class Follower {
                             this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                             this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
                             this.vectorDirection.set(this.followObjectTo.x - this.followObjectFrom.x, this.followObjectTo.y - this.followObjectFrom.y);
-                            this.followerObject.body.setLinearVelocity(new Vector2(0, 0));
+                            vectorDirection.nor();
+                            this.followerObject.body.setLinearVelocity(0, 0);
                             this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
                             this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
                         }

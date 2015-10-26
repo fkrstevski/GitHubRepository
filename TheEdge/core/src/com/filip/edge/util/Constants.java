@@ -58,6 +58,8 @@ public class Constants {
     public static final float[] ORBITER_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
     public static final float[] ORBITER_DISAPPEAR_TIME = {30, 25, 20, 15, 10, 8, 6, 4, 2, 1};
 
+    public static final int[] BALL_SPEED = { 300, 400, 500, 600 };
+
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);
     public static final Color YELLOW = new Color(244 / 255.0f, 206 / 255.0f, 58 / 255.0f, 0xff / 255.0f);

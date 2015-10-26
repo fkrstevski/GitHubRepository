@@ -50,7 +50,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float endTime;
     private float greenTime;
     private float levelScore;
-    private int orientationMultiplier;
 
     private static final int MAX_NUMBER_ORBITERS = 2;
     private boolean[] newlyVisibleOrbiters = new boolean[MAX_NUMBER_ORBITERS];
@@ -409,13 +408,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
-                if( Gdx.input.getRotation()  == 90) {
-                    this.orientationMultiplier = 1;
-                }
-                else {
-                    this.orientationMultiplier = -1;
-                }
-
                 this.game.showAds(true);
             }
 
@@ -571,10 +563,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
             float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
-            x = Gdx.input.getAccelerometerX() * this.orientationMultiplier;
-            y = Gdx.input.getAccelerometerY() * this.orientationMultiplier;
+            x = -Gdx.input.getAccelerometerX();
+            y = -Gdx.input.getAccelerometerY();
 
-            moveBall(y * 500 * horizontalScale * deltaTime, x * 500 * verticalScale * deltaTime);
+            moveBall(y * Constants.BALL_SPEED[GamePreferences.instance.zone] * horizontalScale * deltaTime,
+                     x * Constants.BALL_SPEED[GamePreferences.instance.zone] * verticalScale * deltaTime);
 
         }
     }

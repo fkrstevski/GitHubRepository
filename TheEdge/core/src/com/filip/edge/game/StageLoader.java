@@ -135,11 +135,18 @@ public class StageLoader {
 
                                                 // Check to see if the point index in the cell is 1 or 2 digits
                                                 int pointIndex;
-                                                if (Character.isDigit(cell.charAt(1))) {
-                                                    pointIndex = Integer.parseInt(cell.substring(0, 2));
-                                                } else {
-                                                    pointIndex = Integer.parseInt(cell.substring(0, 1));
+                                                int digitLength = 0;
+                                                if (Character.isDigit(cell.charAt(0))) {
+                                                    digitLength = 1;
+                                                    if (Character.isDigit(cell.charAt(1))) {
+                                                        digitLength = 2;
+                                                        if (Character.isDigit(cell.charAt(2))) {
+                                                            digitLength = 3;
+                                                        }
+                                                    }
                                                 }
+
+                                                pointIndex = Integer.parseInt(cell.substring(0, digitLength));
 
                                                 System.out.println("pointIndex = " + pointIndex);
                                                 points[pointIndex] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),

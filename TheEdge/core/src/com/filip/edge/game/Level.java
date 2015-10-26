@@ -1,14 +1,11 @@
 package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.filip.edge.game.objects.EmptyCircle;
-import com.filip.edge.screens.objects.AbstractButtonObject;
 import com.filip.edge.screens.objects.AbstractCircleButtonObject;
-import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
 import com.filip.edge.screens.objects.BackButton;
 import com.filip.edge.screens.objects.EndTarget;
 import com.filip.edge.screens.objects.Follower;
@@ -29,7 +26,7 @@ public class Level {
     public Ball ball;
     public BackButton backButton;
     public ArrayList<AbstractCircleButtonObject> circleShapes;
-    public ArrayList<AbstractRectangleButtonObject> rectangleShapes;
+    public ArrayList<MiddlePart> rectangleShapes;
     public AbstractCircleButtonObject endCircle;
     public EndTarget startCircleGreenIcon;
     public EndTarget startCircleYellowIcon;
@@ -100,9 +97,7 @@ public class Level {
 
         // SCALING RESET
         for (int i = 0; i < rectangleShapes.size(); ++i) {
-            if(rectangleShapes.get(i).disapears) {
-                rectangleShapes.get(i).reset();
-            }
+            rectangleShapes.get(i).reset();
         }
 
         // DISAPPEARING RESET
@@ -135,7 +130,7 @@ public class Level {
         float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
 
         circleShapes = new ArrayList<AbstractCircleButtonObject>();
-        rectangleShapes = new ArrayList<AbstractRectangleButtonObject>();
+        rectangleShapes = new ArrayList<MiddlePart>();
 
         holes = new ArrayList<Hole>();
         orbiterPickups = new ArrayList<OrbiterPickup>();
@@ -280,15 +275,20 @@ public class Level {
             Vector2 midpoint = new Vector2((p1.x + p2.x) / 2.0f, (p1.y + p2.y) / 2.0f);
             float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
-            AbstractRectangleButtonObject s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
+            MiddlePart s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
                     Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale,
                     midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE, true, "Rectangle");
             s.rotation = angle;
 
             if (points.get(i).disappears) {
-                s.disapears = true;
-                s.disappearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsStartupIndex];
-                s.disappearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsTimeIndex];
+                s.disappears = true;
+                s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
+                s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
+            }
+            if (points.get(i).appears) {
+                s.appears = true;
+                s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
+                s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
             }
 
             // Do not add multiple rectangles that are the same

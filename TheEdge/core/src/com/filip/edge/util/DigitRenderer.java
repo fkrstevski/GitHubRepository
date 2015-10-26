@@ -110,6 +110,6 @@ public class DigitRenderer {
     }
 
     public void renderStringCentered(String str, int y, SpriteBatch batch) {
-        this.renderString(str, Gdx.graphics.getWidth() / 2 + str.length() * digitWidth / 2, y, batch);
+        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f + str.length() * digitWidth * 0.5f + digitHeight * 0.5f), y, batch);
     }
 }

@@ -59,7 +59,7 @@ public class StageLoader {
     }
 
     public static void init() {
-        int[] numberOfStages = {10, 10, 10, 10};
+        int numberOfStages = 10;
         int numberOfZones = 4;
 
         String levelInstructions;
@@ -82,7 +82,7 @@ public class StageLoader {
             StringBuffer sb = new StringBuffer();
 
             for (int currentZone = 0; currentZone < numberOfZones; ++currentZone) {
-                for (int currentStage = 0; currentStage < numberOfStages[currentZone]; ++currentStage) {
+                for (int currentStage = 0; currentStage < numberOfStages; ++currentStage) {
                     String filename = "levels/Zone" + currentZone + "Stage" + currentStage + ".csv";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     levelInstructions = "";
@@ -200,8 +200,15 @@ public class StageLoader {
                                                     } else if (r.charAt(0) == 'D') {
                                                         points[pointIndex].disappears = true;
                                                         if (r.length() > 1) {
-                                                            points[pointIndex].disappearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                            points[pointIndex].disappearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                            points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                            points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                        }
+                                                    }
+                                                    else if (r.charAt(0) == 'A') {
+                                                        points[pointIndex].appears = true;
+                                                        if (r.length() > 1) {
+                                                            points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                            points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
                                                     }
                                                     else if (r.charAt(0) == 'P') {
@@ -260,12 +267,12 @@ public class StageLoader {
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%d,%d,%c,%d,%d,%c,%d,%d;",
+                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d,%c,%d,%d;",
                                     points[i].x, points[i].y,
                                     (points[i].hasAHole ? 't' : 'f'), points[i].holeStartupIndex, points[i].holeScaleIndex,
                                     (points[i].followerIsBackAndForth ? 't' : 'f'), points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
                                     (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
-                                    (points[i].disappears ? 't' : 'f'), points[i].disappearsStartupIndex, points[i].disappearsTimeIndex,
+                                    (points[i].disappears ? 't' : 'f'), (points[i].appears ? 't' : 'f'), points[i].disappearsAppearsStartupIndex, points[i].disappearsAppearsTimeIndex,
                                     (points[i].pacer ? 't' : 'f'), points[i].pacerStartupIndex, points[i].pacerSpeedIndex,
                                     (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex));
                             points[i] = null;
@@ -313,8 +320,8 @@ public class StageLoader {
         int height = Gdx.graphics.getHeight();
 
         for (int i = 0; i < linesInFile.length; i++) {
-            currentZone = i / (numberOfStages[currentZone] * 2);
-            currentStage = i % (numberOfStages[currentZone] * 2); // * 2, since we are moving 2 lines per each loop
+            currentZone = i / (numberOfStages * 3);
+            currentStage = i % (numberOfStages * 3); // * 3, since we are moving 3 lines per each loop
 
             Gdx.app.debug(TAG, "Zone = " + currentZone);
             Gdx.app.debug(TAG, "Stage = " + currentStage);
@@ -365,9 +372,9 @@ public class StageLoader {
                                     pointProperty[2].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
                                     pointProperty[5].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
                                     pointProperty[9].equalsIgnoreCase("t"), pointProperty[10].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
-                                    pointProperty[13].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
-                                    pointProperty[16].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
-                                    pointProperty[19].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])
+                                    pointProperty[13].equalsIgnoreCase("t"), pointProperty[14].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[15]), Integer.parseInt(pointProperty[16]),
+                                    pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19]),
+                                    pointProperty[20].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[21]), Integer.parseInt(pointProperty[22])
                             )
                     );
                 }

@@ -23,12 +23,6 @@ import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.GameOverScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
-import com.filip.edge.screens.objects.AbstractCircleButtonObject;
-import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
-import com.filip.edge.screens.objects.Follower;
-import com.filip.edge.screens.objects.Hole;
-import com.filip.edge.screens.objects.Orbiter;
-import com.filip.edge.screens.objects.OrbiterPickup;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
@@ -328,6 +322,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 fixtureDef1.isSensor = true;
                 body1.createFixture(fixtureDef1);
                 polygonShape.dispose();
+                level.rectangleShapes.get(i).reset();
             }
         }
     }
@@ -403,9 +398,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 // RESET STATE FOR SCALING
                 for (int i = 0; i < level.rectangleShapes.size(); ++i) {
-                    if(level.rectangleShapes.get(i).disapears) {
-                        level.rectangleShapes.get(i).start();
-                    }
+                    level.rectangleShapes.get(i).start();
                 }
 
                 this.game.showAds(true);

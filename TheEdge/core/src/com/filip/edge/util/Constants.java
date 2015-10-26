@@ -37,8 +37,8 @@ public class Constants {
     public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};
     public static float BOX2D_SCALE = 10;
 
-    public static final float[] DISAPPEARING_OBJECT_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 0.5f, 0.1f};
-    public static final float[] DISAPPEARING_OBJECT_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
+    public static final float[] DISAPPEARING_OBJECT_STARTTIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 1.5f, 5};
+    public static final float[] DISAPPEARING_OBJECT_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1, 0.5f};
 
     public static final float[] FOLLOWER_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 400 / BOX2D_SCALE};
     public static final float[] FOLLOWER_STARTTIME = {4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1, 0.5f, 0};
@@ -52,8 +52,8 @@ public class Constants {
     public static final float[] DISAPPEARING_TIME = {1.6f, 1.4f, 1.2f, 1, 0.8f, 0.6f, 0.4f, 0.2f, 0.1f, 0.05f};
     public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] HOLE_SCALE_TIME = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
+    public static final float[] HOLE_SCALE_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1, 0.5f};
 
     public static final float[] ORBITER_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
     public static final float[] ORBITER_DISAPPEAR_TIME = {30, 25, 20, 15, 10, 8, 6, 4, 2, 1};

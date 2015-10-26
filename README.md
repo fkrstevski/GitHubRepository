@@ -38,3 +38,6 @@ To Change iOS simulator
 - install the app on the simulator
 - xcrun simctl launch booted <app identifier or bundle id>
 - launch the app
+
+Try this for iOS simulators
+"./gradlew -Probovm.arch=x86_64 -Probovm.device.name=iPhone-5s launchIPhoneSimulator"

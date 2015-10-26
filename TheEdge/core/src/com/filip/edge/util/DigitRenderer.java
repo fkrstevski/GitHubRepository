@@ -18,7 +18,7 @@ public class DigitRenderer {
     public ArrayList<AbstractRectangleButtonObject> letters;
 
     public int digitWidth;
-    private int digitHeight;
+    public int digitHeight;
 
     private DigitRenderer() {
 

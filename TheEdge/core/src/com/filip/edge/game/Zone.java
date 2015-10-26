@@ -16,8 +16,8 @@ public class Zone {
         stages = new ArrayList<Stage>();
     }
 
-    public void AddStage(int stageID, ArrayList<LevelPoint> points, ArrayList<LevelProperty> properties) {
-        stages.add(new Stage(stageID, points, properties));
+    public void AddStage(int stageID, ArrayList<LevelPoint> points, ArrayList<LevelProperty> properties, String instructions) {
+        stages.add(new Stage(stageID, points, properties, instructions));
     }
 
     public Stage getStage(int stage) {

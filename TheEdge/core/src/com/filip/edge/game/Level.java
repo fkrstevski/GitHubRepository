@@ -17,6 +17,7 @@ import com.filip.edge.screens.objects.Ball;
 import com.filip.edge.screens.objects.MiddlePart;
 import com.filip.edge.screens.objects.OrbiterPickup;
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class Level {
     private float disappearingSpeed;
     private float disappearingTime;
     private int disappearingIndex;
+
+    public String levelInstructions;
 
     public int numberOfOrbitersFinishedWith;
 
@@ -123,6 +126,7 @@ public class Level {
 
     private void init() {
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
+        this.levelInstructions = StageLoader.getStageInstructions(GamePreferences.instance.zone, GamePreferences.instance.stage);
 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
@@ -416,6 +420,12 @@ public class Level {
         }
 
         ball.render(batch);
+
+        if(levelInstructions != ""){
+            DigitRenderer.instance.renderStringCentered(levelInstructions, Gdx.graphics.getHeight() -
+                    DigitRenderer.instance.digitHeight / 2 -
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+        }
     }
 
     public void renderBackButton(SpriteBatch batch) {

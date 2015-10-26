@@ -15,10 +15,12 @@ public class Stage {
     public int disappearsStartupTimeIndex;
     private int stageID;
     private ArrayList<LevelPoint> points;
+    public String instructions;
 
-    public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties) {
+    public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties, String instructions) {
         this.stageID = id;
         this.points = p;
+        this.instructions = instructions;
         for (int i = 0; i < properties.size(); ++i) {
             if (properties.get(i).set) {
                 if (properties.get(i).property == LevelProperties.Disappears) {

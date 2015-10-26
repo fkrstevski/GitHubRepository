@@ -59,8 +59,10 @@ public class StageLoader {
     }
 
     public static void init() {
-        int numberOfStages = 1;
+        int[] numberOfStages = {10, 10, 10, 10};
         int numberOfZones = 4;
+
+        String levelInstructions;
 
         ArrayList<LevelProperty> levelProperties = new ArrayList<LevelProperty>();
 
@@ -80,9 +82,10 @@ public class StageLoader {
             StringBuffer sb = new StringBuffer();
 
             for (int currentZone = 0; currentZone < numberOfZones; ++currentZone) {
-                for (int currentStage = 0; currentStage < numberOfStages; ++currentStage) {
+                for (int currentStage = 0; currentStage < numberOfStages[currentZone]; ++currentStage) {
                     String filename = "levels/Zone" + currentZone + "Stage" + currentStage + ".csv";
                     FileHandle fileHandle = Gdx.files.internal(filename);
+                    levelInstructions = "";
                     assert (fileHandle != null);
 
                     try {
@@ -101,6 +104,10 @@ public class StageLoader {
                                     if (!cell.isEmpty()) {
                                         if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E")) {
                                             // do nothing
+                                        }
+                                        // Instruction
+                                        else if(cell.charAt(0) == '#') {
+                                            levelInstructions = cell.substring(1, cell.length());
                                         }
                                         // if the first char in the cell is not an int, it means we are setting the level properties
                                         else if (!isInteger("" + cell.charAt(0))) {
@@ -223,8 +230,12 @@ public class StageLoader {
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        points = new LevelPoint[maxPoints];
+                        continue;
                     } catch (IOException e) {
                         e.printStackTrace();
+                        points = new LevelPoint[maxPoints];
+                        continue;
                     } finally {
                         if (br != null) {
                             try {
@@ -243,6 +254,8 @@ public class StageLoader {
                         }
                     }
 
+                    sb.append(nl);
+                    sb.append(levelInstructions);
                     sb.append(nl);
 
                     for (int i = 0; i < points.length; i++) {
@@ -300,8 +313,8 @@ public class StageLoader {
         int height = Gdx.graphics.getHeight();
 
         for (int i = 0; i < linesInFile.length; i++) {
-            currentZone = i / (numberOfStages * 2);
-            currentStage = i % (numberOfStages * 2); // * 2, since we are moving 2 lines per each loop
+            currentZone = i / (numberOfStages[currentZone] * 2);
+            currentStage = i % (numberOfStages[currentZone] * 2); // * 2, since we are moving 2 lines per each loop
 
             Gdx.app.debug(TAG, "Zone = " + currentZone);
             Gdx.app.debug(TAG, "Stage = " + currentStage);
@@ -325,6 +338,13 @@ public class StageLoader {
                 }
             }
 
+            i++; // move to instruction line
+
+            // Level instruction line
+            levelInstructions = linesInFile[i];
+            Gdx.app.debug(TAG, "Level instruction = " + levelInstructions);
+
+
             i++; // move to points line
             line = linesInFile[i];
             Gdx.app.debug(TAG, "line = " + line);
@@ -342,17 +362,17 @@ public class StageLoader {
                             new LevelPoint(
                                     Float.parseFloat(pointProperty[0]) * width,
                                     Float.parseFloat(pointProperty[1]) * height,
-                                    (pointProperty[2].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
-                                    (pointProperty[5].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
-                                    (pointProperty[9].equalsIgnoreCase("t") ? true : false), (pointProperty[10].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
-                                    (pointProperty[13].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
-                                    (pointProperty[16].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
-                                    (pointProperty[19].equalsIgnoreCase("t") ? true : false), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])
+                                    pointProperty[2].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[3]), Integer.parseInt(pointProperty[4]),
+                                    pointProperty[5].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
+                                    pointProperty[9].equalsIgnoreCase("t"), pointProperty[10].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
+                                    pointProperty[13].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[14]), Integer.parseInt(pointProperty[15]),
+                                    pointProperty[16].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[17]), Integer.parseInt(pointProperty[18]),
+                                    pointProperty[19].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[20]), Integer.parseInt(pointProperty[21])
                             )
                     );
                 }
             }
-            zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties);
+            zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties, levelInstructions);
         }
     }
 
@@ -370,5 +390,9 @@ public class StageLoader {
 
     public static ArrayList<LevelPoint> getPoints(int zone, int stage) {
         return zones.get(zone).getStage(stage).getPoints();
+    }
+
+    public static String getStageInstructions(int zone, int stage) {
+        return zones.get(zone).getStage(stage).instructions;
     }
 }

@@ -382,6 +382,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     level.followers.get(i).start();
                 }
 
+                // RESET STATE FOR HOLES
+                for (int i = 0; i < level.holes.size(); ++i) {
+                    level.holes.get(i).start();
+                }
+
                 // RESET STATE FOR OSCILLATORS
                 for (int i = 0; i < level.oscillators.size(); ++i) {
                     level.oscillators.get(i).start();

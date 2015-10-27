@@ -42,6 +42,9 @@ class LevelProperty {
 public class StageLoader {
     private static final String TAG = StageLoader.class.getName();
     private static ArrayList<Zone> zones;
+    private static final int MAX_POINTS = 600;
+    private static final int SHEET_WIDTH = 81;
+    private static final int SHEET_HEIGHT = 29;
 
     public static boolean isInteger(String s) {
         boolean isValidInteger = false;
@@ -69,11 +72,7 @@ public class StageLoader {
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-            final int maxPoints = 600;
-            final int sheetWidth = 81;
-            final int sheetHeight = 29;
-
-            LevelPoint[] points = new LevelPoint[maxPoints];
+            LevelPoint[] points = new LevelPoint[MAX_POINTS];
 
             BufferedReader br = null;
             String line = "";
@@ -136,8 +135,7 @@ public class StageLoader {
 
                                         } else {
                                             if (isInteger(cell)) { /* if the cell is an int the value, it means there is no additional properties */
-                                                points[Integer.parseInt(cell)] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
-                                                        sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
+                                                points[Integer.parseInt(cell)] = new LevelPoint(getXpoint(x), getYpoint(y));
                                             } else {
 
                                                 // Check to see if the point index in the cell is 1 or 2 digits
@@ -156,8 +154,7 @@ public class StageLoader {
                                                 pointIndex = Integer.parseInt(cell.substring(0, digitLength));
 
                                                 System.out.println("pointIndex = " + pointIndex);
-                                                points[pointIndex] = new LevelPoint(sheetWidth * 0.00065f + x / (sheetWidth * 1.13f),
-                                                        sheetHeight * 0.0066f + y / (sheetHeight * 1.43f));
+                                                points[pointIndex] = new LevelPoint(getXpoint(x), getYpoint(y));
 
                                                 String resultsArray[] = cell.split("^[0-9]{1,2}");
 
@@ -237,11 +234,11 @@ public class StageLoader {
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
-                        points = new LevelPoint[maxPoints];
+                        points = new LevelPoint[MAX_POINTS];
                         continue;
                     } catch (IOException e) {
                         e.printStackTrace();
-                        points = new LevelPoint[maxPoints];
+                        points = new LevelPoint[MAX_POINTS];
                         continue;
                     } finally {
                         if (br != null) {
@@ -381,6 +378,24 @@ public class StageLoader {
             }
             zones.get(currentZone).AddStage(currentStage, stagePoints, stageProperties, levelInstructions);
         }
+    }
+
+    private static float getXpoint(int xIndex) {
+        return SHEET_WIDTH * 0.00065f + xIndex / (SHEET_WIDTH * 1.13f);
+    }
+
+    private static float getYpoint(int yIndex) {
+        return SHEET_HEIGHT * 0.0066f + yIndex / (SHEET_HEIGHT * 1.43f);
+    }
+
+    public static float getDistanceBetweenTwoSideBySidePointsInX()
+    {
+        return (Math.abs(getXpoint(1) - getXpoint(0))) * Gdx.graphics.getWidth();
+    }
+
+    public static float getDistanceBetweenTwoSideBySidePointsInY()
+    {
+        return (Math.abs(getYpoint(1) - getYpoint(0))) * Gdx.graphics.getHeight();
     }
 
     public static Zone getZone(int zoneID) {

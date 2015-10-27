@@ -49,14 +49,17 @@ public class Level {
     public boolean disappearing;
     private float disappearingStartTime;
     private float disappearingSpeed;
+    private float scaledDisappearingSpeed;
     private float disappearingTime;
     private int disappearingIndex;
+    private Vector2 disappearingVectorDirection;
 
     public String levelInstructions;
 
     public int numberOfOrbitersFinishedWith;
 
     public Level() {
+        this.disappearingVectorDirection = new Vector2();
         init();
     }
 
@@ -116,6 +119,8 @@ public class Level {
                 rectangleShapes.get(i).visible = true;
                 rectangleShapes.get(i).body.setActive(true);
             }
+
+            calculateScaledDisappearingSpeed();
         }
     }
 
@@ -244,8 +249,8 @@ public class Level {
                         Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
                         new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
                                 Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
-                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                        points.get(i), localPoints, 1, false, true, true, "CirclePacer");
+                        Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                        points.get(i), localPoints, 1, false, true, false, "CirclePacer");
             }
         }
 
@@ -304,7 +309,7 @@ public class Level {
                     Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
-                    Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                    Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                     points.get(0), new ArrayList<Vector2>(points), 1, true, false, true, "CircleFollower");
         }
 
@@ -314,7 +319,19 @@ public class Level {
             disappearingStartTime = Constants.DISAPPEARING_STARTTIME[s.disappearsStartupTimeIndex];
             disappearingSpeed = Constants.DISAPPEARING_TIME[s.disappearSpeedIndex];
             disappearingIndex = 0;
+
+            calculateScaledDisappearingSpeed();
         }
+    }
+
+    private void calculateScaledDisappearingSpeed() {;
+        disappearingVectorDirection.set(circleShapes.get(disappearingIndex).position.x - circleShapes.get(disappearingIndex + 1).position.x,
+                circleShapes.get(disappearingIndex).position.y - circleShapes.get(disappearingIndex + 1).position.y);
+        disappearingVectorDirection.nor();
+        float xPart = Math.abs((disappearingSpeed) * disappearingVectorDirection.x) *
+                (StageLoader.getDistanceBetweenTwoSideBySidePointsInY() / StageLoader.getDistanceBetweenTwoSideBySidePointsInX());
+        float yPart = Math.abs((disappearingSpeed) * disappearingVectorDirection.y);
+        scaledDisappearingSpeed =  xPart + yPart;
     }
 
     public void update(float deltaTime) {
@@ -351,7 +368,7 @@ public class Level {
                     break;
 
                 case Active:
-                    if (disappearingTime > disappearingSpeed) {
+                    if (disappearingTime > scaledDisappearingSpeed) {
                         disappearingTime = 0;
                         if (disappearingIndex > 0 && disappearingIndex < circleShapes.size() - 1 /*do not remove the final circle*/) {
                             circleShapes.get(disappearingIndex).visible = false;
@@ -363,6 +380,9 @@ public class Level {
                         }
                         disappearingIndex++;
 
+                        if (disappearingIndex > 0 && disappearingIndex < circleShapes.size() - 1) {
+                            calculateScaledDisappearingSpeed();
+                        }
                     }
                     break;
             }

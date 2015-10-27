@@ -23,6 +23,7 @@ public class Constants {
     public static final int BALL_RADIUS = 20;
     public static final int END_CIRCLE_RADIUS = 50;
     public static final int INSIDE_CIRCLE_RADIUS = 25;
+    public static final int PACER_RADIUS = 40;
     public static final int HOLE_RADIUS = 22;
     public static final int OSCILLATOR_RADIUS = 15;
     public static final int ORBITER_PICKUP_RADIUS = 15;

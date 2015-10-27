@@ -49,7 +49,7 @@ public class Constants {
     public static final float[] OSCILLATOR_SPEED = {20 / BOX2D_SCALE, 40 / BOX2D_SCALE, 60 / BOX2D_SCALE, 80 / BOX2D_SCALE, 100 / BOX2D_SCALE, 120 / BOX2D_SCALE, 140 / BOX2D_SCALE, 160 / BOX2D_SCALE, 180 / BOX2D_SCALE, 200 / BOX2D_SCALE};
     public static final float[] OSCILLATOR_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
-    public static final float[] DISAPPEARING_TIME = {1.6f, 1.4f, 1.2f, 1, 0.8f, 0.6f, 0.4f, 0.2f, 0.1f, 0.05f};
+    public static final float[] DISAPPEARING_TIME = {0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f, 0.15f, 0.1f, 0.05f, 0.01f};
     public static final float[] DISAPPEARING_STARTTIME = {5.5f, 5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1};
 
     public static final float[] HOLE_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};

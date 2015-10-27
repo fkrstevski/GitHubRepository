@@ -38,7 +38,7 @@ public class TextureManager {
         if(shared) {
             if(r.startsWith("Circle")) {
                 if(sharedMiddleCirclePixmap == null) {
-                    sharedMiddleCirclePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+                    sharedMiddleCirclePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
                     pixmapCount++;
                     Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
                 }
@@ -46,7 +46,7 @@ public class TextureManager {
             }
             if(r.equalsIgnoreCase("Rectangle")) {
                 if(sharedMiddleRectanglePixmap == null) {
-                    sharedMiddleRectanglePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+                    sharedMiddleRectanglePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
                     pixmapCount++;
                     Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
                 }
@@ -54,7 +54,7 @@ public class TextureManager {
             }
             if(r.startsWith("Letter")) {
                 if(sharedLetterPixmap == null) {
-                    sharedLetterPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+                    sharedLetterPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
                     pixmapCount++;
                     Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
                 }
@@ -62,7 +62,7 @@ public class TextureManager {
             }
             if(r.endsWith("Digit")) {
                 if(sharedDigitPixmap == null) {
-                    sharedDigitPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+                    sharedDigitPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
                     pixmapCount++;
                     Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
                 }
@@ -70,7 +70,7 @@ public class TextureManager {
             }
         }
         else {
-            buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA4444);
+            buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
             pixmapCount++;
             Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
         }

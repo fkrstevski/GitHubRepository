@@ -310,7 +310,7 @@ public class Level {
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
                     Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                    points.get(0), new ArrayList<Vector2>(points), 1, true, false, true, "CircleFollower");
+                    points.get(0), new ArrayList<Vector2>(points), 1, true, false, false, "CircleFollower");
         }
 
         if (s.disappears) {

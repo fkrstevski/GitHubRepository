@@ -82,7 +82,7 @@ public class MiddlePart extends AbstractRectangleButtonObject {
 
             }
         }
-        else if(appears) {
+        else if(appears && disappearsAppearsStartupTime != -1 && disappearsAppearsTime != -1) {
             currentTime += deltaTime;
             switch (disappearingState) {
                 case Inactive:

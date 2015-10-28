@@ -206,8 +206,14 @@ public class StageLoader {
                                                     else if (r.charAt(0) == 'A') {
                                                         points[pointIndex].appears = true;
                                                         if (r.length() > 1) {
-                                                            points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                            points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                            if(r.substring(1, 2).startsWith("-")) {
+                                                                points[pointIndex].disappearsAppearsStartupIndex = -1;
+                                                                points[pointIndex].disappearsAppearsTimeIndex = -1;
+                                                            }
+                                                            else {
+                                                                points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                                points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                            }
                                                         }
                                                     }
                                                     else if (r.charAt(0) == 'P') {

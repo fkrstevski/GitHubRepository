@@ -293,8 +293,14 @@ public class Level {
             }
             if (points.get(i).appears) {
                 s.appears = true;
-                s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
-                s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
+                if(points.get(i).disappearsAppearsStartupIndex != -1 && points.get(i).disappearsAppearsTimeIndex != -1) {
+                    s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
+                    s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
+                }
+                else {
+                    s.disappearsAppearsStartupTime = -1;
+                    s.disappearsAppearsTime = -1;
+                }
             }
 
             // Do not add multiple rectangles that are the same

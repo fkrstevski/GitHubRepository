@@ -125,6 +125,7 @@ public class Level {
     }
 
     private void init() {
+        Gdx.app.log(TAG, "LEVEL init zone = " + GamePreferences.instance.zone + " stage = " + GamePreferences.instance.zone);
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
         this.levelInstructions = StageLoader.getStageInstructions(GamePreferences.instance.zone, GamePreferences.instance.stage);
 

@@ -63,13 +63,12 @@ public class StageLoader {
 
     public static void init() {
         int numberOfZones = 4;
-        int[] numberOfStages = new int[numberOfZones];
         String levelInstructions;
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             LevelPoint[] points = new LevelPoint[MAX_POINTS];
-
+            int[] numberOfStages = new int[numberOfZones];
             BufferedReader br = null;
             String line = "";
             String cvsSplitBy = ",";
@@ -288,6 +287,12 @@ public class StageLoader {
                 Gdx.app.log(TAG, "Zone " + currentZone + " has " + numberOfStages[currentZone] + " stages");
             }
 
+            for(int i = 0; i < numberOfZones; ++i) {
+                sb.append(numberOfStages[i] + ";");
+            }
+            sb.append(nl);
+
+
             FileHandle output = new FileHandle("TheEdge.output");
             // Delete the file first
             output.file().delete();
@@ -323,8 +328,20 @@ public class StageLoader {
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        for (int i = 0; i < linesInFile.length; i++) {
-            if(i < numberOfStages[0] * 3) {
+        int[] numberOfStages = new int[numberOfZones];
+
+        // Stages line - Stored in the last line
+        String stagesline = linesInFile[linesInFile.length - 1];
+        Gdx.app.debug(TAG, "Stages line = " + stagesline);
+        if (stagesline.length() > 0) {
+            String[] stagesString = stagesline.split(";");
+            for (int j = 0; j < stagesString.length; j++) {
+                numberOfStages[j] = Integer.parseInt(stagesString[j]);
+            }
+        }
+
+        for (int i = 0; i < linesInFile.length - 1; i++) {
+            if(i  < numberOfStages[0] * 3) {
                 currentZone = 0;
                 currentStage = i / 3;
             }

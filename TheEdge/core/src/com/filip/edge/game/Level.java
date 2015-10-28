@@ -234,7 +234,7 @@ public class Level {
                                 Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
                         Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, points.get(i).followerDirection, points.get(i).followerIsBackAndForth, false,
-                        true, "CircleFollower"
+                        true, "CircleFollowers"
 
                 ));
             }

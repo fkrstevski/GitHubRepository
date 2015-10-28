@@ -62,13 +62,9 @@ public class StageLoader {
     }
 
     public static void init() {
-        int numberOfStages = 10;
         int numberOfZones = 4;
-
+        int[] numberOfStages = new int[numberOfZones];
         String levelInstructions;
-
-        ArrayList<LevelProperty> levelProperties = new ArrayList<LevelProperty>();
-
         String nl = System.getProperty("line.separator");
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
@@ -81,11 +77,18 @@ public class StageLoader {
             StringBuffer sb = new StringBuffer();
 
             for (int currentZone = 0; currentZone < numberOfZones; ++currentZone) {
-                for (int currentStage = 0; currentStage < numberOfStages; ++currentStage) {
+                int currentStage = 0;
+                while (true) {
+                    ArrayList<LevelProperty> levelProperties = new ArrayList<LevelProperty>();
                     String filename = "levels/Zone" + currentZone + "Stage" + currentStage + ".csv";
                     FileHandle fileHandle = Gdx.files.internal(filename);
                     levelInstructions = "";
-                    assert (fileHandle != null);
+
+                    // Break from the while loop if the file does not exist.
+                    // It means we reach the end of the stages for the current zone.
+                    if (!fileHandle.exists()) {
+                        break;
+                    }
 
                     try {
 
@@ -278,7 +281,11 @@ public class StageLoader {
                         }
                     }
                     sb.append(nl);
+                    currentStage++;
                 }
+
+                numberOfStages[currentZone] = currentStage;
+                Gdx.app.log(TAG, "Zone " + currentZone + " has " + numberOfStages[currentZone] + " stages");
             }
 
             FileHandle output = new FileHandle("TheEdge.output");
@@ -317,9 +324,24 @@ public class StageLoader {
         int height = Gdx.graphics.getHeight();
 
         for (int i = 0; i < linesInFile.length; i++) {
-            currentZone = i / (numberOfStages * 3);
-            currentStage = i % (numberOfStages * 3); // * 3, since we are moving 3 lines per each loop
+            if(i < numberOfStages[0] * 3) {
+                currentZone = 0;
+                currentStage = i / 3;
+            }
+            else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3) {
+                currentZone = 1;
+                currentStage = (i - numberOfStages[0] * 3) / 3;
+            }
+            else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3 + numberOfStages[2] * 3) {
+                currentZone = 2;
+                currentStage = (i - numberOfStages[0] * 3 - numberOfStages[1] * 3) / 3;
+            }
+            else {
+                currentZone = 3;
+                currentStage = (i - numberOfStages[0] * 3 - numberOfStages[1] * 3 - numberOfStages[2] * 3) / 3;
+            }
 
+            Gdx.app.debug(TAG, "i = " + i);
             Gdx.app.debug(TAG, "Zone = " + currentZone);
             Gdx.app.debug(TAG, "Stage = " + currentStage);
 
@@ -343,11 +365,8 @@ public class StageLoader {
             }
 
             i++; // move to instruction line
-
-            // Level instruction line
             levelInstructions = linesInFile[i];
             Gdx.app.debug(TAG, "Level instruction = " + levelInstructions);
-
 
             i++; // move to points line
             line = linesInFile[i];
@@ -360,8 +379,6 @@ public class StageLoader {
             for (int j = 0; j < pointsInLine.length; j++) {
                 String[] pointProperty = pointsInLine[j].split(",");
                 if(pointProperty.length > 1) {
-                    Gdx.app.debug(TAG, "Point = x:" + pointProperty[0] + " y:" + pointProperty[1]);
-
                     stagePoints.add(
                             new LevelPoint(
                                     Float.parseFloat(pointProperty[0]) * width,

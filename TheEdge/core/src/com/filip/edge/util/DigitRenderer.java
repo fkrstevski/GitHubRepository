@@ -19,6 +19,7 @@ public class DigitRenderer {
 
     public int digitWidth;
     public int digitHeight;
+    private static final float EXTRA_SPACING = 1.1f;
 
     private DigitRenderer() {
 
@@ -77,7 +78,7 @@ public class DigitRenderer {
         while (number > 0){
             int digit = (int)(number % 10);
             AbstractRectangleButtonObject digitObject = digits.get(digit);
-            digitObject.position.set(x - count * digitWidth * 1.1f, y);
+            digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
             number /= 10;
             ++count;
@@ -91,7 +92,7 @@ public class DigitRenderer {
         for (int i = number.length() - 1; i >= 0; --i, ++count) {
             int digit = Character.getNumericValue(number.charAt(i));
             AbstractRectangleButtonObject digitObject = digits.get(digit);
-            digitObject.position.set(x - count * digitWidth * 1.1f, y);
+            digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
         }
     }
@@ -103,13 +104,13 @@ public class DigitRenderer {
             if (str.charAt(i) != ' ') {
                 int index = str.charAt(i) - 'A';
                 AbstractRectangleButtonObject digitObject = letters.get(index);
-                digitObject.position.set(x - count * digitWidth * 1.1f, y);
+                digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
                 digitObject.render(batch);
             }
         }
     }
 
     public void renderStringCentered(String str, int y, SpriteBatch batch) {
-        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f + str.length() * digitWidth * 0.5f + digitHeight * 0.5f), y, batch);
+        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f +  str.length() * digitWidth * EXTRA_SPACING * 0.5f), y, batch);
     }
 }

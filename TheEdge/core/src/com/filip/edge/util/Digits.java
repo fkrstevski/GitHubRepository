@@ -7,10 +7,10 @@ import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
  * Created by fkrstevski on 2015-09-21.
  */
 
-class ZeroDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = ZeroDigit.class.getSimpleName();
+class Digit0 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit0.class.getSimpleName();
 
-    public ZeroDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit0(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -28,10 +28,10 @@ class ZeroDigit extends AbstractRectangleButtonObject {
 }
 
 
-class OneDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = OneDigit.class.getSimpleName();
+class Digit1 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit1.class.getSimpleName();
 
-    public OneDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit1(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -42,10 +42,10 @@ class OneDigit extends AbstractRectangleButtonObject {
     }
 }
 
-class TwoDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = TwoDigit.class.getSimpleName();
+class Digit2 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit2.class.getSimpleName();
 
-    public TwoDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit2(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -62,10 +62,10 @@ class TwoDigit extends AbstractRectangleButtonObject {
     }
 }
 
-class ThreeDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = ThreeDigit.class.getSimpleName();
+class Digit3 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit3.class.getSimpleName();
 
-    public ThreeDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit3(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -82,10 +82,10 @@ class ThreeDigit extends AbstractRectangleButtonObject {
     }
 }
 
-class FourDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = FourDigit.class.getSimpleName();
+class Digit4 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit4.class.getSimpleName();
 
-    public FourDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit4(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -100,30 +100,10 @@ class FourDigit extends AbstractRectangleButtonObject {
     }
 }
 
-class FiveDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = FiveDigit.class.getSimpleName();
+class Digit5 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit5.class.getSimpleName();
 
-    public FiveDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor, true, TAG);
-    }
-
-    @Override
-    public void fillInside(float width) {
-        fillTopRect(Constants.WIDTH_IN_PIXELS);
-        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
-
-        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
-
-        fillBottomRect(Constants.WIDTH_IN_PIXELS);
-        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
-
-    }
-}
-
-class SixDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = SixDigit.class.getSimpleName();
-
-    public SixDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit5(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -135,33 +115,15 @@ class SixDigit extends AbstractRectangleButtonObject {
         fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
         fillBottomRect(Constants.WIDTH_IN_PIXELS);
-        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
         fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
 
     }
 }
 
-class SevenDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = SevenDigit.class.getSimpleName();
+class Digit6 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit6.class.getSimpleName();
 
-    public SevenDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
-        super(width, height, x, y, outsideColor, insideColor, true, TAG);
-    }
-
-    @Override
-    public void fillInside(float width) {
-        fillTopRect(Constants.WIDTH_IN_PIXELS);
-        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
-
-        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
-    }
-}
-
-
-class EightDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = EightDigit.class.getSimpleName();
-
-    public EightDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit6(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 
@@ -169,7 +131,6 @@ class EightDigit extends AbstractRectangleButtonObject {
     public void fillInside(float width) {
         fillTopRect(Constants.WIDTH_IN_PIXELS);
         fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
-        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
 
         fillMiddleRect(Constants.WIDTH_IN_PIXELS);
 
@@ -180,10 +141,49 @@ class EightDigit extends AbstractRectangleButtonObject {
     }
 }
 
-class NineDigit extends AbstractRectangleButtonObject {
-    public static final String TAG = NineDigit.class.getSimpleName();
+class Digit7 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit7.class.getSimpleName();
 
-    public NineDigit(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+    public Digit7(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
+    }
+
+    @Override
+    public void fillInside(float width) {
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+    }
+}
+
+
+class Digit8 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit8.class.getSimpleName();
+
+    public Digit8(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
+        super(width, height, x, y, outsideColor, insideColor, true, TAG);
+    }
+
+    @Override
+    public void fillInside(float width) {
+        fillTopRect(Constants.WIDTH_IN_PIXELS);
+        fillTopLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
+
+        fillMiddleRect(Constants.WIDTH_IN_PIXELS);
+
+        fillBottomRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomLeftRect(Constants.WIDTH_IN_PIXELS);
+        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+
+    }
+}
+
+class Digit9 extends AbstractRectangleButtonObject {
+    public static final String TAG = Digit9.class.getSimpleName();
+
+    public Digit9(float width, float height, float x, float y, Color outsideColor, Color insideColor) {
         super(width, height, x, y, outsideColor, insideColor, true, TAG);
     }
 

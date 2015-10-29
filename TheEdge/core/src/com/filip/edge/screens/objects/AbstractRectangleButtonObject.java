@@ -17,8 +17,6 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
 
     public AbstractRectangleButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(width, height, x, y, outsideColor, insideColor, shared, region);
-
-        init(width, height, x, y, outsideColor, insideColor, shared, region);
     }
 
     @Override

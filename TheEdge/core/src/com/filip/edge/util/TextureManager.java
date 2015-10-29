@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by fkrstevski on 2015-10-12.
  */
@@ -18,10 +21,8 @@ public class TextureManager {
 
     public TextureAtlas atlas;
     protected int textureRegion = 0;
-    protected Pixmap sharedMiddleCirclePixmap = null;
-    protected Pixmap sharedMiddleRectanglePixmap = null;
-    protected Pixmap sharedLetterPixmap = null;
-    protected Pixmap sharedDigitPixmap = null;
+
+    protected Map pixmapMap;
 
     private TextureManager() {
 
@@ -31,50 +32,25 @@ public class TextureManager {
         if(atlas == null) {
             atlas = new TextureAtlas();
         }
+
+        if(pixmapMap == null) {
+            pixmapMap = new HashMap();
+        }
     }
 
     public Pixmap getPixmap(float width, float height, boolean shared, String r) {
-        Pixmap buttonPixmap = null;
-        if(shared) {
-            if(r.startsWith("Circle")) {
-                if(sharedMiddleCirclePixmap == null) {
-                    sharedMiddleCirclePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
-                    pixmapCount++;
-                    Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
-                }
-                buttonPixmap = sharedMiddleCirclePixmap;
-            }
-            if(r.equalsIgnoreCase("Rectangle")) {
-                if(sharedMiddleRectanglePixmap == null) {
-                    sharedMiddleRectanglePixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
-                    pixmapCount++;
-                    Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
-                }
-                buttonPixmap = sharedMiddleRectanglePixmap;
-            }
-            if(r.startsWith("Letter")) {
-                if(sharedLetterPixmap == null) {
-                    sharedLetterPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
-                    pixmapCount++;
-                    Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
-                }
-                buttonPixmap = sharedLetterPixmap;
-            }
-            if(r.endsWith("Digit")) {
-                if(sharedDigitPixmap == null) {
-                    sharedDigitPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
-                    pixmapCount++;
-                    Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
-                }
-                buttonPixmap = sharedDigitPixmap;
-            }
+        Pixmap buttonPixmap;
+
+        if(pixmapMap.containsKey(r))
+        {
+            buttonPixmap = (Pixmap)pixmapMap.get(r);
         }
         else {
             buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
             pixmapCount++;
-            Gdx.app.log(TAG, "pixmaps = " + pixmapCount);
+            Gdx.app.log(TAG, r + " pixmaps = " + pixmapCount);
+            pixmapMap.put(r, buttonPixmap);
         }
-
         return buttonPixmap;
     }
 
@@ -86,7 +62,7 @@ public class TextureManager {
         if(atlas.findRegion(atlasRegion) == null) {
             atlas.addRegion(atlasRegion, new TextureRegion(new Texture(buttonPixmap)));
             textureCount++;
-            Gdx.app.log(TAG, "textures = " + textureCount);
+            Gdx.app.log(TAG, atlasRegion + " textures = " + textureCount);
         }
 
         return atlas.findRegion(atlasRegion).getTexture();

@@ -15,28 +15,29 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     protected Pixmap buttonPixmap = null;
     protected Texture texture = null;
-    protected String atlasRegion;
 
     public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         init(width, height, x, y, outsideColor, insideColor, shared, region);
     }
 
+    // Create a texture named r (eg. CirclePlay0)
+    // Using pixmap named r-1 (eg. CirclePlay)
+    // used to share pixmaps of objects that are the same size
     protected void init(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String r) {
         dimension.set(width, height);
         position.set(x, y);
 
-        buttonPixmap = TextureManager.instance.getPixmap(width, height, shared, r);
-
-        this.atlasRegion = (r.length() > 0 ? r : TextureManager.instance.getTextureRegion());
+        buttonPixmap = TextureManager.instance.getPixmap(width, height, shared, r.substring(0, r.length()-1));
 
         fillPixmap(width, height, outsideColor, insideColor);
 
-        texture = TextureManager.instance.addTextureRegion(this.atlasRegion, this.buttonPixmap);
+        texture = TextureManager.instance.addTextureRegion(r, this.buttonPixmap);
 
-        if (!shared) {
-            buttonPixmap.dispose();
-            buttonPixmap = null;
-        }
+        // TODO: Look into memory issues if we are not disposing this
+        //if (!shared) {
+        //    buttonPixmap.dispose();
+        //    buttonPixmap = null;
+        //}
 
         origin.set(dimension.x / 2, dimension.y / 2);
     }

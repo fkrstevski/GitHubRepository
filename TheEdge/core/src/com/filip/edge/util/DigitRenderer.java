@@ -33,16 +33,16 @@ public class DigitRenderer {
         digitHeight = (int) (Gdx.graphics.getWidth() * 0.054);
         digitWidth = (int) (digitHeight / Constants.DIGIT_ASPECT_RATIO);
 
-        digits.add(new ZeroDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new OneDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new TwoDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new ThreeDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new FourDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new FiveDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new SixDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new SevenDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new EightDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
-        digits.add(new NineDigit(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit0(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit1(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit2(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit3(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit4(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit5(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit6(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit7(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit8(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        digits.add(new Digit9(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
 
         letters.add(new LetterA(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
         letters.add(new LetterB(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));

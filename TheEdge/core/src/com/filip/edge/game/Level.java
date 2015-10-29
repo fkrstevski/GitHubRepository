@@ -157,15 +157,15 @@ public class Level {
 
         // Add Start Circle
         EndTarget st = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleStart");
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleE");
         circleShapes.add(st);
 
         startCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleStartGreen");
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleG");
         startCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getFirstPoint().x, this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleStartYellow");
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleY");
         startCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getFirstPoint().x, this.getFirstPoint().y, Constants.RED, Constants.WHITE, false, "CircleStartRed");
+                this.getFirstPoint().x, this.getFirstPoint().y, Constants.RED, Constants.WHITE, false, "CircleR");
         startCircle = startCircleRedIcon;
 
         // Add Middle Circles
@@ -204,7 +204,7 @@ public class Level {
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
                         Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        false, "CircleOscillator"
+                        false, "CircleOV"
                 ));
             }
 
@@ -220,7 +220,7 @@ public class Level {
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
                         Constants.OSCILLATOR_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         points.get(i), localPoints, 1, true, false,
-                        false, "CircleOscillator"
+                        false, "CircleOH"
                 ));
             }
 
@@ -257,19 +257,19 @@ public class Level {
 
         // Add EndCircle - for target collision
         endCircle = new EmptyCircle(Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE, false, "CircleEnd1");
+                this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE, false, "CircleEndTarget");
 
         // Add EndCircle - for boundary collision
         EndTarget et = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleEnd2");
+                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleE");
         circleShapes.add(et);
 
         finishCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleEndGreen");
+                this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleG");
         finishCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleEndYellow");
+                this.getLastPoint().x, this.getLastPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleY");
         finishCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
-                this.getLastPoint().x, this.getLastPoint().y, Constants.RED, Constants.WHITE, false, "CircleEndRed");
+                this.getLastPoint().x, this.getLastPoint().y, Constants.RED, Constants.WHITE, false, "CircleR");
 
         finishCircle = finishCircleRedIcon;
 

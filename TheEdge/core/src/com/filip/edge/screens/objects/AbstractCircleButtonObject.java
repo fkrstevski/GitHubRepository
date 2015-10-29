@@ -16,8 +16,6 @@ public abstract class AbstractCircleButtonObject extends AbstractButtonObject {
 
     public AbstractCircleButtonObject(float size, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(size, size, x, y, outsideColor, insideColor, shared, region);
-
-        this.init(size, size, x, y, outsideColor, insideColor, shared, region);
     }
 
     @Override

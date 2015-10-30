@@ -244,6 +244,11 @@ public class Level {
             if(points.get(i).pacer) {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 for (int j = i; j < points.size(); ++j) {
+                    // Stop the pacer when it finds a point that matches the end point
+                    if(points.get(j).epsilonEquals(points.get(points.size()-1), 0.1f)) {
+                        localPoints.add(points.get(j));
+                        break;
+                    }
                     localPoints.add(points.get(j));
                 }
                 levelPacer = new Follower(Constants.YELLOW,

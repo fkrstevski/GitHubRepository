@@ -429,10 +429,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 level.oscillators.get(i).scale((1 - endTime / Constants.END_TIME));
             }
 
-            if(this.endTime / Constants.END_TIME > 0.5f && level.numberOfOrbitersFinishedWith > 0) {
-                GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
-                level.numberOfOrbitersFinishedWith = 0;
-                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            if(this.endTime / Constants.END_TIME > 0.5f) {
+                //System.gc();
+                if(level.numberOfOrbitersFinishedWith > 0) {
+                    GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
+                    level.numberOfOrbitersFinishedWith = 0;
+                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
+                }
             }
 
             if (endTime > Constants.END_TIME) {
@@ -799,6 +802,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void fallOff() {
+        if(Constants.DEBUG_BUILD)
+        {
+            return;
+        }
+
         this.state = LevelState.OffTheEdge;
         if (this.level.hasFollowerObject()) {
             this.level.tearDownFollower();

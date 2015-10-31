@@ -42,6 +42,7 @@ public class Level {
 
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
+    public ArrayList<Follower> loopers;
     public ArrayList<Follower> oscillators;
     public ArrayList<OrbiterPickup> orbiterPickups;
     public Follower levelFollower;
@@ -86,6 +87,11 @@ public class Level {
         // FOLLOWERS RESET
         for (int i = 0; i < followers.size(); ++i) {
             followers.get(i).reset();
+        }
+
+        // LOOPERS RESET
+        for (int i = 0; i < loopers.size(); ++i) {
+            loopers.get(i).reset();
         }
 
         // PACER RESET
@@ -141,6 +147,7 @@ public class Level {
         holes = new ArrayList<Hole>();
         orbiterPickups = new ArrayList<OrbiterPickup>();
         followers = new ArrayList<Follower>();
+        loopers = new ArrayList<Follower>();
         oscillators = new ArrayList<Follower>();
 
         // Ball
@@ -198,7 +205,7 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x + dis, points.get(i).y));
                 localPoints.add(new Vector2(points.get(i).x - dis, points.get(i).y));
-                oscillators.add(new Follower( Constants.RED,
+                oscillators.add(new Follower(Follower.Type.VerticalOscillator, Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * verticalScale),
@@ -214,7 +221,7 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y + dis));
                 localPoints.add(new Vector2(points.get(i).x, points.get(i).y - dis));
-                oscillators.add(new Follower(Constants.RED,
+                oscillators.add(new Follower(Follower.Type.HorizontalOscillator, Constants.RED,
                         Constants.OSCILLATOR_STARTTIME[points.get(i).oscillatorStartupIndex],
                         new Vector2(Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale,
                                 Constants.OSCILLATOR_SPEED[points.get(i).oscillatorSpeedIndex] * horizontalScale),
@@ -229,7 +236,7 @@ public class Level {
                 ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
                 localPoints.add(points.get(i));
                 localPoints.add(points.get(i + points.get(i).followerDirection));
-                followers.add(new Follower(Constants.RED,
+                followers.add(new Follower(Follower.Type.AreaFollower, Constants.RED,
                         Constants.FOLLOWER_STARTTIME[points.get(i).followStartupIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * horizontalScale,
                                 Constants.FOLLOWER_SPEED[points.get(i).followSpeedIndex] * verticalScale),
@@ -251,7 +258,7 @@ public class Level {
                     }
                     localPoints.add(points.get(j));
                 }
-                levelPacer = new Follower(Constants.YELLOW,
+                levelPacer = new Follower(Follower.Type.Pacer, Constants.YELLOW,
                         Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
                         new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
                                 Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
@@ -317,7 +324,7 @@ public class Level {
         // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
         if (s.hasFollowerObject) {
-            levelFollower = new Follower(Constants.RED,
+            levelFollower = new Follower(Follower.Type.LevelFollower, Constants.RED,
                     Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
                     new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
                             Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
@@ -325,6 +332,7 @@ public class Level {
                     points.get(0), new ArrayList<Vector2>(points), 1, true, false, false, "CircleFollower");
         }
 
+        // Add disappearing stage
         if (s.disappears) {
             disappearingState = PropertyState.Inactive;
             disappearing = s.disappears;
@@ -333,6 +341,23 @@ public class Level {
             disappearingIndex = 0;
 
             calculateScaledDisappearingSpeed();
+        }
+
+        // Add loopers
+        if(s.loopers != null){
+            for (int looperIndex = 0; looperIndex < s.loopers.size(); ++looperIndex) {
+
+                ArrayList<Vector2> p= (ArrayList<Vector2>)(ArrayList<?>) (s.loopers.get(looperIndex).points);
+
+                loopers.add(new Follower(Follower.Type.Looper, Constants.PURPLE,
+                        Constants.FOLLOWER_STARTTIME[s.loopers.get(looperIndex).startupTimeIndex],
+                        new Vector2(Constants.FOLLOWER_SPEED[s.loopers.get(looperIndex).speedIndex] * horizontalScale,
+                                Constants.FOLLOWER_SPEED[s.loopers.get(looperIndex).speedIndex] * verticalScale),
+                        Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                        s.loopers.get(looperIndex).points.get(0), p, 1, false, false,
+                        true, "CircleLooper"
+                ));
+            }
         }
     }
 
@@ -359,6 +384,10 @@ public class Level {
 
         for (i = 0; i < followers.size(); ++i) {
             followers.get(i).update(deltaTime);
+        }
+
+        for (i = 0; i < loopers.size(); ++i) {
+            loopers.get(i).update(deltaTime);
         }
 
         for (i = 0; i < oscillators.size(); ++i) {
@@ -437,6 +466,10 @@ public class Level {
 
         for (i = 0; i < followers.size(); ++i) {
             followers.get(i).render(batch);
+        }
+
+        for (i = 0; i < loopers.size(); ++i) {
+            loopers.get(i).render(batch);
         }
 
         for (i = 0; i < oscillators.size(); ++i) {

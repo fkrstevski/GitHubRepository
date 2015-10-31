@@ -252,6 +252,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
 
+        // Loopers Physics Bodies
+        for (int i = 0; i < level.loopers.size(); ++i) {
+            if(level.loopers.get(i).followerObject.body == null) {
+                BodyDef followerBodyDef = new BodyDef();
+                followerBodyDef.type = BodyType.KinematicBody;
+                followerBodyDef.position.set(new Vector2(level.loopers.get(i).followerObject.position.x / Constants.BOX2D_SCALE, level.loopers.get(i).followerObject.position.y / Constants.BOX2D_SCALE));
+                Body followerBody = b2world.createBody(followerBodyDef);
+                followerBody.setActive(false);
+                level.loopers.get(i).followerObject.body = followerBody;
+                CircleShape circleShape = new CircleShape();
+                circleShape.setRadius((level.loopers.get(i).followerObject.radius) / Constants.BOX2D_SCALE);
+                FixtureDef fixtureFollowerDef = new FixtureDef();
+                fixtureFollowerDef.shape = circleShape;
+                fixtureFollowerDef.isSensor = true;
+                followerBody.createFixture(fixtureFollowerDef);
+                circleShape.dispose();
+            }
+        }
+
         for (int i = 0; i < level.oscillators.size(); ++i) {
             if(level.oscillators.get(i).followerObject.body == null) {
                 BodyDef followerBodyDef = new BodyDef();
@@ -376,6 +395,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     level.followers.get(i).start();
                 }
 
+                // RESET STATE FOR LOOPERS
+                for (int i = 0; i < level.loopers.size(); ++i) {
+                    level.loopers.get(i).start();
+                }
+
                 // RESET STATE FOR HOLES
                 for (int i = 0; i < level.holes.size(); ++i) {
                     level.holes.get(i).start();
@@ -423,6 +447,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             for (int i = 0; i < level.followers.size(); ++i) {
                 level.followers.get(i).scale((1 - endTime / Constants.END_TIME));
+            }
+
+            for (int i = 0; i < level.loopers.size(); ++i) {
+                level.loopers.get(i).scale((1 - endTime / Constants.END_TIME));
             }
 
             for (int i = 0; i < level.oscillators.size(); ++i) {
@@ -654,7 +682,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                             break;
                         }
                     }
-
+                    for (j = 0; j < level.loopers.size(); ++j) {
+                        if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
+                            level.loopers.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
+                            break;
+                        }
+                    }
                     for (j = 0; j < level.oscillators.size(); ++j) {
                         if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
@@ -682,7 +716,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                             break;
                         }
                     }
-
+                    for (j = 0; j < level.loopers.size(); ++j) {
+                        if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
+                            level.loopers.get(j).destroy();
+                            level.ball.orbiters.get(i).destroy();
+                            break;
+                        }
+                    }
                     for (j = 0; j < level.oscillators.size(); ++j) {
                         if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
@@ -727,6 +767,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
+                for (j = 0; j < level.loopers.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
+                        fallOff();
+                        break;
+                    }
+                }
+
                 for (j = 0; j < level.oscillators.size(); ++j) {
                     if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
@@ -762,6 +809,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 for (j = 0; j < level.followers.size(); ++j) {
                     if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
+                        fallOff();
+                        break;
+                    }
+                }
+
+                for (j = 0; j < level.loopers.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }

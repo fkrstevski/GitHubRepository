@@ -2,6 +2,21 @@ package com.filip.edge.game;
 
 import java.util.ArrayList;
 
+class Looper {
+    private static final String TAG = Looper.class.getName();
+
+    public int speedIndex;
+    public int startupTimeIndex;
+    public ArrayList<LevelPoint> points;
+
+    public Looper(int startupTimeIndex, int speedIndex, ArrayList<LevelPoint> points) {
+
+        this.speedIndex = speedIndex;
+        this.startupTimeIndex = startupTimeIndex;
+        this.points = points;
+    }
+}
+
 /**
  * Created by fkrstevski on 2015-02-09.
  */
@@ -16,6 +31,7 @@ public class Stage {
     private int stageID;
     private ArrayList<LevelPoint> points;
     public String instructions;
+    public ArrayList<Looper> loopers;
 
     public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties, String instructions) {
         this.stageID = id;
@@ -31,6 +47,19 @@ public class Stage {
                     hasFollowerObject = true;
                     followerStartupTimeIndex = properties.get(i).startupTime;
                     followerSpeedIndex = properties.get(i).speed;
+                }
+                else if (properties.get(i).property == LevelProperties.Looper) {
+                    if(loopers == null) {
+                        loopers = new ArrayList<Looper>();
+                    }
+
+                    ArrayList<LevelPoint> looperPoints = new ArrayList<LevelPoint>();
+                    String[] cells = properties.get(i).points.split("@");
+                    for (int pointIndex = 0; pointIndex < cells.length; ++pointIndex) {
+                        looperPoints.add(points.get(Integer.parseInt(cells[pointIndex])));
+                    }
+
+                    loopers.add(new Looper(properties.get(i).startupTime, properties.get(i).speed, looperPoints));
                 }
             }
         }

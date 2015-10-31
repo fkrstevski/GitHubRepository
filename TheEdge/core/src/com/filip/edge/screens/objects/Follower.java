@@ -34,11 +34,13 @@ public class Follower {
     private boolean oneTimeOnly;
     private Vector2 startingPosition;
     private int startingDirection;
+    private Type type;
 
     public boolean deactivate;
 
-    public Follower(Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly, boolean shared, String region) {
+    public Follower(Type t, Color color, float startUpTime, Vector2 speed, float size, Vector2 pos, ArrayList<Vector2> pointsToFollow, int dir, boolean backAndForth, boolean oneTimeOnly, boolean shared, String region) {
 
+        this.type = t;
         this.followerObjectTime = 0;
         this.followerObjectDisplayStartTime = startUpTime;
         this.followerObjectState = PropertyState.Inactive;
@@ -121,9 +123,14 @@ public class Follower {
                             this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
                             this.vectorDirection.set(this.followObjectTo.x - this.followObjectFrom.x, this.followObjectTo.y - this.followObjectFrom.y);
                             vectorDirection.nor();
-                            this.followerObject.body.setLinearVelocity(0,0);
-                            this.followerObjectState = PropertyState.Teardown;
+                            this.followerObject.body.setLinearVelocity(0, 0);
 
+                            if(this.type == Type.Looper) {
+                                this.followerObjectState = PropertyState.Active;
+                            }
+                            else {
+                                this.followerObjectState = PropertyState.Teardown;
+                            }
 
                         } else {
                             this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
@@ -200,5 +207,14 @@ public class Follower {
         this.followerObjectTime = 0;
         this.followerObjectState = PropertyState.Inactive;
 
+    }
+
+    public enum Type{
+        VerticalOscillator,
+        HorizontalOscillator,
+        Pacer,
+        LevelFollower,
+        AreaFollower,
+        Looper
     }
 }

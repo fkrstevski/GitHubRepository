@@ -15,7 +15,8 @@ import java.util.ArrayList;
 enum LevelProperties {
     None,
     Follower,
-    Disappears
+    Disappears,
+    Looper
 }
 
 class LevelProperty {
@@ -25,6 +26,7 @@ class LevelProperty {
     int speed;
     int zone;
     int stage;
+    String points;
 
     LevelProperty(LevelProperties p, int startup, int speed, int z, int s) {
         this.set = true;
@@ -33,6 +35,11 @@ class LevelProperty {
         this.speed = speed;
         this.zone = z;
         this.stage = s;
+    }
+
+    LevelProperty(LevelProperties p, int startup, int speed, int z, int s, String points) {
+        this(p, startup, speed, z, s);
+        this.points = points;
     }
 }
 
@@ -103,12 +110,18 @@ public class StageLoader {
                                 for (int i = 0; i < cells.length; ++i) {
                                     String cell = cells[i].toUpperCase();
                                     if (!cell.isEmpty()) {
-                                        if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E")) {
+                                        if (cell.equalsIgnoreCase("M") || cell.equalsIgnoreCase("Q") || cell.equalsIgnoreCase("E") || cell.equalsIgnoreCase("S")) {
                                             // do nothing
                                         }
                                         // Instruction
                                         else if(cell.charAt(0) == '#') {
                                             levelInstructions = cell.substring(1, cell.length());
+                                        }
+                                        else if(cell.charAt(0) == 'L') {
+                                            levelProperties.add(new LevelProperty(LevelProperties.Looper,
+                                                    Integer.parseInt(cell.substring(1, 2)),
+                                                    Integer.parseInt(cell.substring(2, 3)),
+                                                    currentZone, currentStage, cell.substring(4)));
                                         }
                                         // if the first char in the cell is not an int, it means we are setting the level properties
                                         else if (!isInteger("" + cell.charAt(0))) {
@@ -261,7 +274,7 @@ public class StageLoader {
                     if (levelProperties.size() > 0) {
                         for (LevelProperty property : levelProperties) {
                             if (property.zone == currentZone && property.stage == currentStage) {
-                                sb.append(String.format("%c,%b,%d,%d;", property.property.name().charAt(0), property.set, property.startupTime, property.speed));
+                                sb.append(String.format("%c,%b,%d,%d,%s;", property.property.name().charAt(0), property.set, property.startupTime, property.speed, property.points));
                             }
                         }
                     }
@@ -375,13 +388,25 @@ public class StageLoader {
             Gdx.app.debug(TAG, "Level line = " + line);
             if (line.length() > 0) {
                 String[] levelPropertiesString = line.split(";");
-
                 for (int j = 0; j < levelPropertiesString.length; j++) {
                     String[] propertyValue = levelPropertiesString[j].split(",");
                     if(propertyValue.length > 1) {
                         if (Boolean.parseBoolean(propertyValue[1])) {
-                            stageProperties.add(new LevelProperty(LevelProperties.valueOf((propertyValue[0].equalsIgnoreCase("f") ? "Follower" : "Disappears")),
-                                    Integer.parseInt(propertyValue[2]), Integer.parseInt(propertyValue[3]), currentZone, currentStage));
+                            LevelProperties type = LevelProperties.None;
+                            if(propertyValue[0].equalsIgnoreCase("f")) {
+                                type = LevelProperties.Follower;
+                            }
+                            else if (propertyValue[0].equalsIgnoreCase("d")) {
+                                type = LevelProperties.Disappears;
+                            }
+                            else if (propertyValue[0].equalsIgnoreCase("l")) {
+                                type = LevelProperties.Looper;
+                            }
+
+                            if(type != LevelProperties.None) {
+                                stageProperties.add(new LevelProperty(type, Integer.parseInt(propertyValue[2]),
+                                        Integer.parseInt(propertyValue[3]), currentZone, currentStage, propertyValue[4]));
+                            }
                         }
                     }
                 }

@@ -2,14 +2,14 @@ package com.filip.edge.game;
 
 import java.util.ArrayList;
 
-class Looper {
-    private static final String TAG = Looper.class.getName();
+class FollowerProperties {
+    private static final String TAG = FollowerProperties.class.getName();
 
     public int speedIndex;
     public int startupTimeIndex;
     public ArrayList<LevelPoint> points;
 
-    public Looper(int startupTimeIndex, int speedIndex, ArrayList<LevelPoint> points) {
+    public FollowerProperties(int startupTimeIndex, int speedIndex, ArrayList<LevelPoint> points) {
 
         this.speedIndex = speedIndex;
         this.startupTimeIndex = startupTimeIndex;
@@ -28,9 +28,9 @@ public class Stage {
     private int stageID;
     private ArrayList<LevelPoint> stagePoints;
     public String instructions;
-    public ArrayList<Looper> loopers;
-    public Looper pacer;
-    public Looper follower;
+    public ArrayList<FollowerProperties> loopers;
+    public FollowerProperties pacer;
+    public FollowerProperties follower;
 
     public Stage(int id, ArrayList<LevelPoint> p, ArrayList<LevelProperty> properties, String instructions) {
         this.stageID = id;
@@ -45,21 +45,21 @@ public class Stage {
                 } else if (properties.get(i).property == LevelProperties.Follower) {
                     if(follower == null) {
                         ArrayList<LevelPoint> followerPoints = parsePoints(properties.get(i).points);
-                        follower = new Looper(properties.get(i).startupTime, properties.get(i).speed, followerPoints);
+                        follower = new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, followerPoints);
                     }
                 }
                 else if (properties.get(i).property == LevelProperties.Looper) {
                     if(loopers == null) {
-                        loopers = new ArrayList<Looper>();
+                        loopers = new ArrayList<FollowerProperties>();
                     }
 
                     ArrayList<LevelPoint> looperPoints = parsePoints(properties.get(i).points);
-                    loopers.add(new Looper(properties.get(i).startupTime, properties.get(i).speed, looperPoints));
+                    loopers.add(new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, looperPoints));
                 }
                 else if (properties.get(i).property == LevelProperties.Pacer) {
                     if(pacer == null) {
                         ArrayList<LevelPoint> pacerPoints = parsePoints(properties.get(i).points);
-                        pacer = new Looper(properties.get(i).startupTime, properties.get(i).speed, pacerPoints);
+                        pacer = new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, pacerPoints);
                     }
                 }
             }

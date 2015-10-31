@@ -38,14 +38,15 @@ public class Level {
     public EndTarget finishCircle;
     public ArrayList<LevelPoint> points;
 
+    public Follower levelFollower;
     public Follower levelPacer;
+    public ArrayList<Follower> loopers;
 
     public ArrayList<Hole> holes;
     public ArrayList<Follower> followers;
-    public ArrayList<Follower> loopers;
     public ArrayList<Follower> oscillators;
     public ArrayList<OrbiterPickup> orbiterPickups;
-    public Follower levelFollower;
+
     public PropertyState disappearingState;
     public boolean disappearing;
     private float disappearingStartTime;
@@ -193,7 +194,7 @@ public class Level {
             }
 
             // Add a orbiter pickup to the hole
-            if(points.get(i).orbiterPickup) {
+            if (points.get(i).orbiterPickup) {
                 orbiterPickups.add(new OrbiterPickup(Constants.ORBITER_PICKUP_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, false, "CircleOrbiterPickup"));
@@ -246,25 +247,6 @@ public class Level {
 
                 ));
             }
-
-            // Add the pacer
-            if(points.get(i).pacer) {
-                ArrayList<Vector2> localPoints = new ArrayList<Vector2>();
-                for (int j = i; j < points.size(); ++j) {
-                    // Stop the pacer when it finds a point that matches the end point
-                    if(points.get(j).epsilonEquals(points.get(points.size()-1), 0.1f)) {
-                        localPoints.add(points.get(j));
-                        break;
-                    }
-                    localPoints.add(points.get(j));
-                }
-                levelPacer = new Follower(Follower.Type.Pacer, Constants.YELLOW,
-                        Constants.PACER_STARTTIME[points.get(i).pacerStartupIndex],
-                        new Vector2(Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * horizontalScale,
-                                Constants.PACER_SPEED[points.get(i).pacerSpeedIndex] * verticalScale),
-                        Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                        points.get(i), localPoints, 1, false, true, false, "CirclePacer");
-            }
         }
 
         // Add EndCircle - for target collision
@@ -305,11 +287,10 @@ public class Level {
             }
             if (points.get(i).appears) {
                 s.appears = true;
-                if(points.get(i).disappearsAppearsStartupIndex != -1 && points.get(i).disappearsAppearsTimeIndex != -1) {
+                if (points.get(i).disappearsAppearsStartupIndex != -1 && points.get(i).disappearsAppearsTimeIndex != -1) {
                     s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
                     s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
-                }
-                else {
+                } else {
                     s.disappearsAppearsStartupTime = -1;
                     s.disappearsAppearsTime = -1;
                 }
@@ -321,16 +302,7 @@ public class Level {
             }
         }
 
-        // Add follower
         Stage s = StageLoader.getZone(GamePreferences.instance.zone).getStage(GamePreferences.instance.stage);
-        if (s.hasFollowerObject) {
-            levelFollower = new Follower(Follower.Type.LevelFollower, Constants.RED,
-                    Constants.FOLLOWER_STARTTIME[s.followerStartupTimeIndex],
-                    new Vector2(Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * horizontalScale,
-                            Constants.FOLLOWER_SPEED[s.followerSpeedIndex] * verticalScale),
-                    Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
-                    points.get(0), new ArrayList<Vector2>(points), 1, true, false, false, "CircleFollower");
-        }
 
         // Add disappearing stage
         if (s.disappears) {
@@ -344,10 +316,10 @@ public class Level {
         }
 
         // Add loopers
-        if(s.loopers != null){
+        if (s.loopers != null) {
             for (int looperIndex = 0; looperIndex < s.loopers.size(); ++looperIndex) {
 
-                ArrayList<Vector2> p= (ArrayList<Vector2>)(ArrayList<?>) (s.loopers.get(looperIndex).points);
+                ArrayList<Vector2> p = (ArrayList<Vector2>) (ArrayList<?>) (s.loopers.get(looperIndex).points);
 
                 loopers.add(new Follower(Follower.Type.Looper, Constants.PURPLE,
                         Constants.FOLLOWER_STARTTIME[s.loopers.get(looperIndex).startupTimeIndex],
@@ -358,6 +330,32 @@ public class Level {
                         true, "CircleLooper"
                 ));
             }
+        }
+
+        // Add follower
+        if (s.follower != null) {
+            ArrayList<Vector2> p = (ArrayList<Vector2>) (ArrayList<?>) (s.follower.points);
+
+            levelFollower = new Follower(Follower.Type.LevelFollower, Constants.RED,
+                    Constants.FOLLOWER_STARTTIME[s.follower.startupTimeIndex],
+                    new Vector2(Constants.FOLLOWER_SPEED[s.follower.speedIndex] * horizontalScale,
+                            Constants.FOLLOWER_SPEED[s.follower.speedIndex] * verticalScale),
+                    Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                    s.follower.points.get(0), p, 1, true, false, false, "CircleFollower"
+            );
+        }
+
+        // Add the pacer
+        if (s.pacer != null) {
+            ArrayList<Vector2> p = (ArrayList<Vector2>) (ArrayList<?>) (s.pacer.points);
+
+            levelPacer = new Follower(Follower.Type.Pacer, Constants.YELLOW,
+                    Constants.PACER_STARTTIME[s.pacer.startupTimeIndex],
+                    new Vector2(Constants.PACER_SPEED[s.pacer.speedIndex] * horizontalScale,
+                            Constants.PACER_SPEED[s.pacer.speedIndex] * verticalScale),
+                    Constants.PACER_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                    s.pacer.points.get(0), p, 1, false, true, false, "CirclePacer"
+            );
         }
     }
 

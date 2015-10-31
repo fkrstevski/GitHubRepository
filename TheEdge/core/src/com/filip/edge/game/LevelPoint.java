@@ -21,9 +21,6 @@ public class LevelPoint extends Vector2 {
     public boolean appears;
     public int disappearsAppearsStartupIndex;
     public int disappearsAppearsTimeIndex;
-    public boolean pacer;
-    public int pacerStartupIndex;
-    public int pacerSpeedIndex;
     public boolean orbiterPickup;
     public int orbiterStartupIndex;
     public int orbiterDisappearIndex;
@@ -38,7 +35,6 @@ public class LevelPoint extends Vector2 {
                       boolean backAndForth, int followerDirection, int followStartupIndex, int followSpeedIndex,
                       boolean vertical, boolean horizontal, int oscillatorStartupIndex, int oscillatorSpeedIndex,
                       boolean disappears, boolean appears, int disappearsAppearsStartupIndex, int disappearsAppearsTimeIndex,
-                      boolean pacer, int pacerStartupIndex, int pacerSpeedIndex,
                       boolean orbiterPickup, int orbiterStartupIndex, int orbiterDisappearIndex) {
         super(x, y);
         this.hasAHole = h;
@@ -59,10 +55,6 @@ public class LevelPoint extends Vector2 {
         this.appears = appears;
         this.disappearsAppearsStartupIndex = disappearsAppearsStartupIndex;
         this.disappearsAppearsTimeIndex = disappearsAppearsTimeIndex;
-
-        this.pacer = pacer;
-        this.pacerStartupIndex = pacerStartupIndex;
-        this.pacerSpeedIndex = pacerSpeedIndex;
 
         this.orbiterPickup = orbiterPickup;
         this.orbiterStartupIndex = orbiterStartupIndex;

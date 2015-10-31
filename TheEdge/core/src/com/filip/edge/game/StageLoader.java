@@ -16,7 +16,8 @@ enum LevelProperties {
     None,
     Follower,
     Disappears,
-    Looper
+    Looper,
+    Pacer
 }
 
 class LevelProperty {
@@ -100,6 +101,7 @@ public class StageLoader {
 
                         br = new BufferedReader(new FileReader(filename));
                         int y = 0;
+                        Gdx.app.log(TAG, "ZONE = " + currentZone + " Stage = " + currentStage);
                         while ((line = br.readLine()) != null) {
 
                             // use comma as separator
@@ -117,37 +119,40 @@ public class StageLoader {
                                         else if(cell.charAt(0) == '#') {
                                             levelInstructions = cell.substring(1, cell.length());
                                         }
-                                        else if(cell.charAt(0) == 'L') {
-                                            levelProperties.add(new LevelProperty(LevelProperties.Looper,
-                                                    Integer.parseInt(cell.substring(1, 2)),
-                                                    Integer.parseInt(cell.substring(2, 3)),
-                                                    currentZone, currentStage, cell.substring(4)));
-                                        }
                                         // if the first char in the cell is not an int, it means we are setting the level properties
                                         else if (!isInteger("" + cell.charAt(0))) {
-                                            String results[] = cell.split("(?<=[0-9])(?=[a-zA-Z])");
-
-                                            for (String r : results) {
-                                                if (r.charAt(0) == 'F') {
-                                                    levelProperties.add(
-                                                            new LevelProperty(LevelProperties.Follower,
-                                                                    Integer.parseInt(r.substring(1, 2)),
-                                                                    Integer.parseInt(r.substring(2, 3)),
-                                                                    currentZone, currentStage
-                                                            )
-                                                    );
-                                                } else if (r.charAt(0) == 'D') {
-                                                    levelProperties.add(
-                                                            new LevelProperty(LevelProperties.Disappears,
-                                                                    Integer.parseInt(r.substring(1, 2)),
-                                                                    Integer.parseInt(r.substring(2, 3)),
-                                                                    currentZone, currentStage
-                                                            )
-                                                    );
-                                                }
+                                            if(cell.charAt(0) == 'L') {
+                                                levelProperties.add(new LevelProperty(LevelProperties.Looper,
+                                                        Integer.parseInt(cell.substring(1, 2)),
+                                                        Integer.parseInt(cell.substring(2, 3)),
+                                                        currentZone, currentStage, cell.substring(4)));
                                             }
-
-
+                                            else if (cell.charAt(0) == 'F') {
+                                                levelProperties.add(
+                                                        new LevelProperty(LevelProperties.Follower,
+                                                                Integer.parseInt(cell.substring(1, 2)),
+                                                                Integer.parseInt(cell.substring(2, 3)),
+                                                                currentZone, currentStage, cell.substring(4)
+                                                        )
+                                                );
+                                            } else if (cell.charAt(0) == 'D') {
+                                                levelProperties.add(
+                                                        new LevelProperty(LevelProperties.Disappears,
+                                                                Integer.parseInt(cell.substring(1, 2)),
+                                                                Integer.parseInt(cell.substring(2, 3)),
+                                                                currentZone, currentStage
+                                                        )
+                                                );
+                                            }
+                                            else if (cell.charAt(0) == 'P') {
+                                                levelProperties.add(
+                                                        new LevelProperty(LevelProperties.Pacer,
+                                                                Integer.parseInt(cell.substring(1, 2)),
+                                                                Integer.parseInt(cell.substring(2, 3)),
+                                                                currentZone, currentStage, cell.substring(4)
+                                                        )
+                                                );
+                                            }
                                         } else {
                                             if (isInteger(cell)) { /* if the cell is an int the value, it means there is no additional properties */
                                                 points[Integer.parseInt(cell)] = new LevelPoint(getXpoint(x), getYpoint(y));
@@ -229,13 +234,6 @@ public class StageLoader {
                                                             }
                                                         }
                                                     }
-                                                    else if (r.charAt(0) == 'P') {
-                                                        points[pointIndex].pacer = true;
-                                                        if (r.length() > 1) {
-                                                            points[pointIndex].pacerStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                            points[pointIndex].pacerSpeedIndex = (Integer.parseInt(r.substring(2, 3)));
-                                                        }
-                                                    }
                                                     else if (r.charAt(0) == 'O') {
                                                         points[pointIndex].orbiterPickup = true;
                                                         if (r.length() > 1) {
@@ -285,13 +283,12 @@ public class StageLoader {
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d,%c,%d,%d;",
+                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d;",
                                     points[i].x, points[i].y,
                                     (points[i].hasAHole ? 't' : 'f'), points[i].holeStartupIndex, points[i].holeScaleIndex,
                                     (points[i].followerIsBackAndForth ? 't' : 'f'), points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
                                     (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
                                     (points[i].disappears ? 't' : 'f'), (points[i].appears ? 't' : 'f'), points[i].disappearsAppearsStartupIndex, points[i].disappearsAppearsTimeIndex,
-                                    (points[i].pacer ? 't' : 'f'), points[i].pacerStartupIndex, points[i].pacerSpeedIndex,
                                     (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex));
                             points[i] = null;
                         } else {
@@ -402,6 +399,9 @@ public class StageLoader {
                             else if (propertyValue[0].equalsIgnoreCase("l")) {
                                 type = LevelProperties.Looper;
                             }
+                            else if (propertyValue[0].equalsIgnoreCase("p")) {
+                                type = LevelProperties.Pacer;
+                            }
 
                             if(type != LevelProperties.None) {
                                 stageProperties.add(new LevelProperty(type, Integer.parseInt(propertyValue[2]),
@@ -435,8 +435,7 @@ public class StageLoader {
                                     pointProperty[5].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
                                     pointProperty[9].equalsIgnoreCase("t"), pointProperty[10].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
                                     pointProperty[13].equalsIgnoreCase("t"), pointProperty[14].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[15]), Integer.parseInt(pointProperty[16]),
-                                    pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19]),
-                                    pointProperty[20].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[21]), Integer.parseInt(pointProperty[22])
+                                    pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19])
                             )
                     );
                 }
@@ -476,7 +475,7 @@ public class StageLoader {
     }
 
     public static ArrayList<LevelPoint> getPoints(int zone, int stage) {
-        return zones.get(zone).getStage(stage).getPoints();
+        return zones.get(zone).getStage(stage).getStagePoints();
     }
 
     public static String getStageInstructions(int zone, int stage) {

@@ -70,4 +70,12 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
     public abstract boolean isTouched(int x, int y);
 
     public abstract void reset();
+
+    @Override
+    public String toString() {
+        return super.toString() + "AbstractButtonObject{" +
+                "buttonPixmap=" + buttonPixmap +
+                ", texture=" + texture +
+                '}';
+    }
 }

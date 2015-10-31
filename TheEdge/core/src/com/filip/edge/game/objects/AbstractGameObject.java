@@ -44,4 +44,20 @@ public abstract class AbstractGameObject {
 
     public abstract void render(SpriteBatch batch);
 
+    @Override
+    public String toString() {
+        return "AbstractGameObject{" +
+                "position=" + position +
+                ", dimension=" + dimension +
+                ", origin=" + origin +
+                ", scale=" + scale +
+                ", rotation=" + rotation +
+                ", velocity=" + velocity +
+                ", terminalVelocity=" + terminalVelocity +
+                ", friction=" + friction +
+                ", acceleration=" + acceleration +
+                ", visible=" + visible +
+                ", body=" + body +
+                '}';
+    }
 }

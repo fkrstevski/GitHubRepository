@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.filip.edge.game.Level;
 
+import java.util.Objects;
+
 /**
  * Created by fkrstevski on 2015-02-12.
  */
@@ -21,6 +23,31 @@ public class MiddlePart extends AbstractRectangleButtonObject {
     Vector2 center;
 
     private Level.PropertyState disappearingState;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        MiddlePart that = (MiddlePart) o;
+        return Objects.equals(disappears, that.disappears) &&
+                Objects.equals(appears, that.appears) &&
+                Objects.equals(disappearsAppearsStartupTime, that.disappearsAppearsStartupTime) &&
+                Objects.equals(disappearsAppearsTime, that.disappearsAppearsTime) &&
+                Objects.equals(currentTime, that.currentTime) &&
+                Objects.equals(hx, that.hx) &&
+                Objects.equals(hy, that.hy) &&
+                Objects.equals(angle, that.angle) &&
+                Objects.equals(position, that.position) &&
+                (Objects.equals(rotation, that.rotation) || Objects.equals(rotation+180, that.rotation) || Objects.equals(rotation - 180, that.rotation)) &&
+                Objects.equals(center, that.center) &&
+                Objects.equals(disappearingState, that.disappearingState);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(disappears, appears, disappearsAppearsStartupTime, disappearsAppearsTime, currentTime, hx, hy, angle, position, rotation, center, disappearingState);
+    }
 
     public MiddlePart(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(width, height, x, y, outsideColor, insideColor, shared, region);
@@ -173,5 +200,22 @@ public class MiddlePart extends AbstractRectangleButtonObject {
             this.scale.set(0, 0);
             s.setAsBox(0, 0, center, angle);
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "MiddlePart{" +
+                "disappears=" + disappears +
+                ", appears=" + appears +
+                ", disappearsAppearsStartupTime=" + disappearsAppearsStartupTime +
+                ", disappearsAppearsTime=" + disappearsAppearsTime +
+                ", currentTime=" + currentTime +
+                ", hx=" + hx +
+                ", hy=" + hy +
+                ", angle=" + angle +
+                ", center=" + center +
+                ", disappearingState=" + disappearingState +
+                '}';
     }
 }

@@ -241,4 +241,11 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
     public void reset() {
 
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "AbstractRectangleButtonObject{" +
+                "bounds=" + bounds +
+                '}';
+    }
 }

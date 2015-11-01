@@ -98,17 +98,27 @@ public class DigitRenderer {
     }
 
     public void renderString(String str, int x, int y, SpriteBatch batch) {
+        renderString(str, x, y, batch, 1);
+    }
+
+    public void renderString(String str, int x, int y, SpriteBatch batch, float scale) {
         int count = 0;
         for (int i = str.length() - 1; i >= 0; --i, ++count) {
             // not space
             if (str.charAt(i) != ' ') {
                 int index = str.charAt(i) - 'A';
                 AbstractRectangleButtonObject digitObject = letters.get(index);
-                digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
+                digitObject.position.set(x - count * digitWidth * EXTRA_SPACING * scale, y);
+                digitObject.scale.set(scale, scale);
                 digitObject.render(batch);
             }
         }
     }
+
+    public void renderStringAtCenterXPoint(String str, int x, int y, SpriteBatch batch, float scale) {
+        this.renderString(str, (int)(x - digitWidth * 0.5f +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+    }
+
 
     public void renderStringCentered(String str, int y, SpriteBatch batch) {
         this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f +  str.length() * digitWidth * EXTRA_SPACING * 0.5f), y, batch);

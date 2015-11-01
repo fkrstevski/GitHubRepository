@@ -489,6 +489,11 @@ public class Level {
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
         }
+
+        if(GamePreferences.instance.zone == 0 && GamePreferences.instance.stage == 0) {
+            DigitRenderer.instance.renderStringAtCenterXPoint("MEET", (int) this.points.get(0).x, (int) (this.points.get(0).y - this.ball.radius * 6), batch, 0.6f);
+            DigitRenderer.instance.renderStringAtCenterXPoint("EDGY", (int) this.points.get(0).x, (int) (this.points.get(0).y - this.ball.radius * 3.7), batch, 0.6f);
+        }
     }
 
     public void renderBackButton(SpriteBatch batch) {

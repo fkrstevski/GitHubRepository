@@ -15,6 +15,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     protected Pixmap buttonPixmap = null;
     protected Texture texture = null;
+    protected int direction = 1;
 
     public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         init(width, height, x, y, outsideColor, insideColor, shared, region);
@@ -48,6 +49,15 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     public void render(SpriteBatch batch) {
         if (visible) {
+            if(this.body != null) {
+                if (this.body.getLinearVelocity().x < -1) {
+                    direction = -1;
+                }
+                else if (this.body.getLinearVelocity().x > 1) {
+                    direction = 1;
+                }
+            }
+
             batch.draw(texture,
                     position.x - origin.x,
                     position.y - origin.y,
@@ -55,7 +65,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
                     origin.y,
                     dimension.x,
                     dimension.y,
-                    scale.x,
+                    scale.x * direction,
                     scale.y,
                     rotation,
                     0,

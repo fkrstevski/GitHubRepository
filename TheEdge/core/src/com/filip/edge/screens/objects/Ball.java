@@ -31,6 +31,20 @@ public class Ball extends EmptyCircle {
         addNewOrbiter();
     }
 
+    @Override
+    public void fillInside(float size) {
+        buttonPixmap.setColor(Color.WHITE);
+        buttonPixmap.fillCircle((int) (size * 0.7f), (int) (size * 0.6f), (int) (size / 10));
+        buttonPixmap.fillCircle((int) (size * 0.3f), (int) (size * 0.6f), (int) (size / 10));
+        buttonPixmap.setColor(Color.BLACK);
+        buttonPixmap.fillCircle((int) (size * 0.75f), (int) (size *0.6f), (int) (size / 20));
+        buttonPixmap.fillCircle((int) (size * 0.35f), (int) (size *0.6f), (int) (size / 20));
+
+        buttonPixmap.setColor(Color.RED);
+        buttonPixmap.fillTriangle(0, (int) (size / 2), (int)size, (int) (size / 2), (int) (size / 2), 0);
+
+    }
+
     private Orbiter addNewOrbiter(){
         int width = Gdx.graphics.getWidth();
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
@@ -87,6 +101,7 @@ public class Ball extends EmptyCircle {
         this.position.x = this.startingX;
         this.position.y = this.startingY;
         this.scale.set(1,1);
+        this.direction = 1;
         this.body.setLinearVelocity(0,0);
         this.body.setTransform(this.position.x / Constants.BOX2D_SCALE, this.position.y / Constants.BOX2D_SCALE, 0);
 

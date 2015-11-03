@@ -433,6 +433,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             // Move the ball and orbiters into the end point
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
+            if((int)((endTime / Constants.END_TIME) * 10) % 2 == 0) {
+                this.level.ball.direction = 1;
+            }
+            else {
+                this.level.ball.direction = -1;
+            }
             for(int i = 0; i < this.level.ball.orbiters.size(); ++i) {
                 this.level.ball.orbiters.get(i).position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
             }
@@ -587,6 +593,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
             float verticalScale = height / Constants.BASE_SCREEN_HEIGHT;
+
             x = -Gdx.input.getAccelerometerX();
             y = -Gdx.input.getAccelerometerY();
 
@@ -835,6 +842,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void levelComplete() {
         this.state = LevelState.LevelComplete;
+        this.level.ball.body.setLinearVelocity(0,0);
         this.level.startCircle = this.level.startCircleGreenIcon;
         this.level.finishCircle = this.level.finishCircleGreenIcon;
         this.level.numberOfOrbitersFinishedWith = 0;

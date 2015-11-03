@@ -32,17 +32,54 @@ public class Ball extends EmptyCircle {
     }
 
     @Override
+    public void fillPixmap(float width, float height, Color outsideColor, Color insideColor) {
+        // Ears
+        //buttonPixmap.setColor(outsideColor);
+        //buttonPixmap.fillTriangle((int) (width * 0.1f), (int) (width / 2), (int) (width / 2), (int) (width / 2), (int) (width * 0.1f), (int) width);
+        //buttonPixmap.fillTriangle((int) (width * 0.9f), (int) (width / 2), (int) (width / 2), (int) (width / 2), (int) (width * 0.9f), (int) width);
+
+        // Head
+        super.fillPixmap(width, height, outsideColor, insideColor);
+    }
+
+    @Override
     public void fillInside(float size) {
-        buttonPixmap.setColor(Color.WHITE);
-        buttonPixmap.fillCircle((int) (size * 0.7f), (int) (size * 0.6f), (int) (size / 10));
-        buttonPixmap.fillCircle((int) (size * 0.3f), (int) (size * 0.6f), (int) (size / 10));
+
+        /*// Right Eyebrow
         buttonPixmap.setColor(Color.BLACK);
-        buttonPixmap.fillCircle((int) (size * 0.75f), (int) (size *0.6f), (int) (size / 20));
+        buttonPixmap.fillCircle((int) (size * 0.7f), (int) (size * 0.7f), (int) (size / 10));
+        buttonPixmap.setColor(Constants.BLACK);
+        buttonPixmap.fillCircle((int) (size * 0.7f), (int) (size * 0.6f), (int) (size / 6.5));
+
+        // Left Eyebrow
+        buttonPixmap.setColor(Color.BLACK);
+        buttonPixmap.fillCircle((int) (size * 0.3f), (int) (size * 0.7f), (int) (size / 10));
+        buttonPixmap.setColor(Constants.BLACK);
+        buttonPixmap.fillCircle((int) (size * 0.3f), (int) (size * 0.6f), (int) (size / 6.5));*/
+
+        buttonPixmap.setColor(Color.WHITE);
+        // Right Eye
+        buttonPixmap.fillCircle((int) (size * 0.7f), (int) (size * 0.6f), (int) (size / 10));
+        // Left Eye
+        buttonPixmap.fillCircle((int) (size * 0.3f), (int) (size * 0.6f), (int) (size / 10));
+
+        buttonPixmap.setColor(Color.BLACK);
+        // Right Eye Ball
+        buttonPixmap.fillCircle((int) (size * 0.75f), (int) (size * 0.6f), (int) (size / 20));
+        // Left Eye Ball
         buttonPixmap.fillCircle((int) (size * 0.35f), (int) (size *0.6f), (int) (size / 20));
 
-        buttonPixmap.setColor(Color.RED);
-        buttonPixmap.fillTriangle(0, (int) (size / 2), (int)size, (int) (size / 2), (int) (size / 2), 0);
+        // Mean look
+        //buttonPixmap.setColor(Constants.BLACK);
+        //buttonPixmap.fillRectangle((int) (size * 0.1f), (int) (size * 0.65f), (int) (size * .8f), (int) (size * .15f));
 
+        // Bandanna
+        buttonPixmap.setColor(Color.RED);
+        buttonPixmap.fillTriangle(0, (int) (size / 2), (int) size, (int) (size / 2), (int) (size / 2), 0);
+
+        // Beek
+        //buttonPixmap.setColor(Color.ORANGE);
+        //buttonPixmap.fillTriangle((int) (size * 0.25f), (int) (size * .4f), (int) (size * 0.75f), (int) (size * .4f), (int) (size / 2), (int) (size * 0.25f));
     }
 
     private Orbiter addNewOrbiter(){

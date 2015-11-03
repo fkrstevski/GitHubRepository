@@ -15,7 +15,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     protected Pixmap buttonPixmap = null;
     protected Texture texture = null;
-    protected int direction = 1;
+    public int direction = 1;
 
     public AbstractButtonObject(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         init(width, height, x, y, outsideColor, insideColor, shared, region);

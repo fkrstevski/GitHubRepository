@@ -272,33 +272,36 @@ public class Level {
             Vector2 p1 = points.get(i);
             Vector2 p2 = points.get(i + 1);
 
-            Vector2 midpoint = new Vector2((p1.x + p2.x) / 2.0f, (p1.y + p2.y) / 2.0f);
-            float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
+            if(!p1.epsilonEquals(p2, 0.01f)) {
 
-            MiddlePart s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
-                    Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale,
-                    midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE, true, "Rectangle");
-            s.rotation = angle;
+                Vector2 midpoint = new Vector2((p1.x + p2.x) / 2.0f, (p1.y + p2.y) / 2.0f);
+                float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
-            if (points.get(i).disappears) {
-                s.disappears = true;
-                s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
-                s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
-            }
-            if (points.get(i).appears) {
-                s.appears = true;
-                if (points.get(i).disappearsAppearsStartupIndex != -1 && points.get(i).disappearsAppearsTimeIndex != -1) {
+                MiddlePart s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
+                        Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale,
+                        midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE, true, "Rectangle");
+                s.rotation = angle;
+
+                if (points.get(i).disappears) {
+                    s.disappears = true;
                     s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
                     s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
-                } else {
-                    s.disappearsAppearsStartupTime = -1;
-                    s.disappearsAppearsTime = -1;
                 }
-            }
+                if (points.get(i).appears) {
+                    s.appears = true;
+                    if (points.get(i).disappearsAppearsStartupIndex != -1 && points.get(i).disappearsAppearsTimeIndex != -1) {
+                        s.disappearsAppearsStartupTime = Constants.DISAPPEARING_OBJECT_STARTTIME[points.get(i).disappearsAppearsStartupIndex];
+                        s.disappearsAppearsTime = Constants.DISAPPEARING_OBJECT_TIME[points.get(i).disappearsAppearsTimeIndex];
+                    } else {
+                        s.disappearsAppearsStartupTime = -1;
+                        s.disappearsAppearsTime = -1;
+                    }
+                }
 
-            // Do not add multiple rectangles that are the same
-            if (!rectangleShapes.contains(s)) {
-                rectangleShapes.add(s);
+                // Do not add multiple rectangles that are the same
+                if (!rectangleShapes.contains(s)) {
+                    rectangleShapes.add(s);
+                }
             }
         }
 

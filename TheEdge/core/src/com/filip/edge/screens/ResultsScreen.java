@@ -38,6 +38,14 @@ public class ResultsScreen extends AbstractGameScreen {
     private TextField txtEmail;
     private boolean scoreSubmitted;
     private String email;
+    private boolean displayError;
+    private String error;
+
+    private TextButton btnSubmitOutside;
+    private TextButton btnSubmit;
+    private TextButton.TextButtonStyle textOutsideButtonStyle;
+    private TextButton.TextButtonStyle textOutsideButtonStyleRed;
+    private TextButton.TextButtonStyle textInsideButtonStyle;
 
     private OrthographicCamera camera;
 
@@ -50,6 +58,7 @@ public class ResultsScreen extends AbstractGameScreen {
         super(game);
         this.game = game;
         this.email = "ENTER YOUR EMAIL";
+        this.displayError = false;
     }
 
     @Override
@@ -63,18 +72,14 @@ public class ResultsScreen extends AbstractGameScreen {
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         stage.act(deltaTime);
         stage.draw();
 
         game.batch.setProjectionMatrix(camera.combined);
-        //Gdx.app.log(TAG, "Sprite Batch begin");
         game.batch.begin();
 
         DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch);
         DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5), game.batch);
-
-        //DigitRenderer.instance.renderStringCentered(email, (int) (Gdx.graphics.getHeight() * 0.35 ), game.batch);
 
         String score = "" + GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
@@ -83,8 +88,23 @@ public class ResultsScreen extends AbstractGameScreen {
         if (scoreSubmitted == true) {
             GamePreferences.instance.scoreNeedsToBeSubmitted = false;
             GamePreferences.instance.currentScore = Constants.MAX_SCORE;
+            GamePreferences.instance.numberOfDeaths = 0;
             GamePreferences.instance.save();
             game.setScreen(new MenuScreen(game));
+        }
+
+        if(this.displayError) {
+            DigitRenderer.instance.renderStringCentered(error, Gdx.graphics.getHeight() -
+                    DigitRenderer.instance.digitHeight / 2 -
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, game.batch);
+
+            btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+            btnSubmit.setStyle(textOutsideButtonStyleRed);
+
+        }
+        else {
+            btnSubmitOutside.setStyle(textOutsideButtonStyle);
+            btnSubmit.setStyle(textInsideButtonStyle);
         }
 
         game.batch.setShader(null);
@@ -113,12 +133,13 @@ public class ResultsScreen extends AbstractGameScreen {
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
+        pixmap.dispose();
 
         // Store the default libgdx font under the name "default".
         skin.add("default", new BitmapFont());
 
         // Outside button style
-        TextButton.TextButtonStyle textOutsideButtonStyle = new TextButton.TextButtonStyle();
+        textOutsideButtonStyle = new TextButton.TextButtonStyle();
         textOutsideButtonStyle.up = skin.newDrawable("white", Constants.WHITE);
         textOutsideButtonStyle.down = skin.newDrawable("white", Constants.WHITE);
         textOutsideButtonStyle.checked = skin.newDrawable("white", Constants.WHITE);
@@ -126,7 +147,15 @@ public class ResultsScreen extends AbstractGameScreen {
         textOutsideButtonStyle.font = skin.getFont("default");
         skin.add("defaultOutside", textOutsideButtonStyle);
 
-        TextButton.TextButtonStyle textInsideButtonStyle = new TextButton.TextButtonStyle();
+        textOutsideButtonStyleRed = new TextButton.TextButtonStyle();
+        textOutsideButtonStyleRed.up = skin.newDrawable("white", Constants.RED);
+        textOutsideButtonStyleRed.down = skin.newDrawable("white", Constants.RED);
+        textOutsideButtonStyleRed.checked = skin.newDrawable("white", Constants.RED);
+        textOutsideButtonStyleRed.over = skin.newDrawable("white", Constants.RED);
+        textOutsideButtonStyleRed.font = skin.getFont("default");
+        skin.add("defaultOutsideRed", textOutsideButtonStyleRed);
+
+        textInsideButtonStyle = new TextButton.TextButtonStyle();
         Color insideColor = new Color(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
@@ -155,13 +184,13 @@ public class ResultsScreen extends AbstractGameScreen {
         tStyle.fontColor = insideColor;
         skin.add("default", tStyle);
 
-        final TextButton btnSubmitOutside = new TextButton("", skin, "defaultOutside");
+        btnSubmitOutside = new TextButton("", skin, "defaultOutside");
         btnSubmitWidth = (int) (Gdx.graphics.getWidth() * 0.31);
         btnSubmitHeight = (int) (Gdx.graphics.getHeight() * 0.16);
         btnSubmitOutside.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 3 - btnSubmitHeight / 2);
         btnSubmitOutside.setSize(btnSubmitWidth, btnSubmitHeight);
 
-        final TextButton btnSubmit = new TextButton("", skin, "defaultInside");
+        btnSubmit = new TextButton("", skin, "defaultInside");
         btnSubmitWidth = (int) (Gdx.graphics.getWidth() * 0.3);
         btnSubmitHeight = (int) (Gdx.graphics.getHeight() * 0.15);
         btnSubmit.setPosition(Gdx.graphics.getWidth() / 2 - btnSubmitWidth / 2, Gdx.graphics.getHeight() / 3 - btnSubmitHeight / 2);
@@ -171,10 +200,19 @@ public class ResultsScreen extends AbstractGameScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 btnSubmitClicked();
             }
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
         });
 
-
-        txtEmail = new TextField("Enter your email:", skin);
+        if(GamePreferences.instance.email.isEmpty()) {
+            txtEmail = new TextField("Enter your email:", skin);
+        }
+        else {
+            txtEmail = new TextField(GamePreferences.instance.email, skin);
+        }
         //txtEmail = new TextField(this.email, skin);
         txtEmailWidth = (int) (Gdx.graphics.getWidth() * 0.95);
         txtEmailHeight = (int) (Gdx.graphics.getWidth() * 0.08);
@@ -199,8 +237,11 @@ public class ResultsScreen extends AbstractGameScreen {
                 boolean matchFound = m.matches();
                 if (matchFound) {
                     btnSubmit.setTouchable(Touchable.enabled);
+                    displayError = false;
                 } else {
                     btnSubmit.setTouchable(Touchable.disabled);
+                    displayError = true;
+                    error = "INVALID EMAIL";
                 }
             }
 
@@ -214,34 +255,48 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     public void btnSubmitClicked() {
-        Map<String, String> parameters = new HashMap<String, String>();
-        Date date = new Date(TimeUtils.millis());
-        parameters.put("name", txtEmail.getText());
-        parameters.put("score", "" + GamePreferences.instance.currentScore);
-        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-        request.setUrl("http://www.absolutegames.ca/httptest.php");
+        displayError = false;
+        GamePreferences.instance.getUserID();
+        if(!GamePreferences.instance.userID.isEmpty()) {
+            Map<String, String> parameters = new HashMap<String, String>();
+            parameters.put("userID", "" + GamePreferences.instance.userID);
+            parameters.put("name", txtEmail.getText());
+            parameters.put("score", "" + GamePreferences.instance.currentScore);
+            parameters.put("deaths", "" + GamePreferences.instance.numberOfDeaths);
+            Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+            request.setUrl("http://www.absolutegames.ca/httptest.php");
 
-        request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
-        request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
-                Gdx.app.log("Result ", httpResponse.getResultAsString());
-                scoreSubmitted = true;
-            }
+            Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
+                @Override
+                public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
+                    Gdx.app.log("Result ", httpResponse.getResultAsString());
+                    scoreSubmitted = true;
+                    GamePreferences.instance.email = txtEmail.getText();
+                    GamePreferences.instance.save();
+                }
 
-            @Override
-            public void failed(Throwable t) {
-                Gdx.app.error("Failed ", t.getMessage());
-            }
+                @Override
+                public void failed(Throwable t) {
+                    Gdx.app.error("Failed ", t.getMessage());
+                    displayError = true;
+                    error = "NO CONNECTION";
+                }
 
-            @Override
-            public void cancelled() {
-
-            }
-        });
+                @Override
+                public void cancelled() {
+                    displayError = true;
+                    error = "NO CONNECTION";
+                }
+            });
+        }
+        else{
+            displayError = true;
+            error = "NO CONNECTION";
+        }
     }
 
     @Override

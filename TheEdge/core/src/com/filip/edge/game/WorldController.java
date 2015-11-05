@@ -869,6 +869,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             return;
         }
 
+        GamePreferences.instance.numberOfDeaths++;
+        GamePreferences.instance.save();
+
         this.state = LevelState.OffTheEdge;
         if (this.level.hasFollowerObject()) {
             this.level.tearDownFollower();

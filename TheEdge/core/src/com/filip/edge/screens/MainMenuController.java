@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 import com.filip.edge.util.CameraHelper;
+import com.filip.edge.util.GamePreferences;
 
 public class MainMenuController extends InputAdapter implements Disposable {
 
@@ -24,6 +25,7 @@ public class MainMenuController extends InputAdapter implements Disposable {
         cameraHelper = new CameraHelper();
         initMenu();
         zoomTime = 0;
+        GamePreferences.instance.getUserID();
     }
 
     private void initMenu() {

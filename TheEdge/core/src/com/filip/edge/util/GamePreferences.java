@@ -38,10 +38,10 @@ public class GamePreferences {
         prefs = Gdx.app.getPreferences(Constants.PREFERENCES);
 
         // Clear preferences every time the game runs on the desktop
-        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+        //if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             prefs.clear();
             prefs.flush();
-        }
+        //}
     }
 
     public void load() {
@@ -53,7 +53,7 @@ public class GamePreferences {
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
         level = prefs.getInteger("level", 0);
         stage = prefs.getInteger("stage", 0);
-        zone = prefs.getInteger("zone", 0);
+        zone = prefs.getInteger("zone", 2);
         userID = prefs.getString("userID", "");
         email = prefs.getString("email", "");
         currentScore = prefs.getLong("currentScore", Constants.MAX_SCORE);

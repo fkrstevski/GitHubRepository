@@ -98,6 +98,9 @@ public class Hole extends EmptyCircle {
     public void start(){
         this.currentTime = 0;
         this.state = State.StartingUp;
+        this.scale.set(0, 0);
+        this.body.getFixtureList().get(0).getShape().setRadius(0);
+        this.body.setActive(false);
     }
 
     enum State {

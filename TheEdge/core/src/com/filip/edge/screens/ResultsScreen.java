@@ -260,7 +260,7 @@ public class ResultsScreen extends AbstractGameScreen {
         if(!GamePreferences.instance.userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
             parameters.put("userID", "" + GamePreferences.instance.userID);
-            parameters.put("name", txtEmail.getText());
+            parameters.put("email", txtEmail.getText());
             parameters.put("score", "" + GamePreferences.instance.currentScore);
             parameters.put("deaths", "" + GamePreferences.instance.numberOfDeaths);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);

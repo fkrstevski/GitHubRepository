@@ -660,9 +660,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     @Override
     public void endContact(Contact contact) {
         if (contact.getFixtureB().getBody() == level.ball.body) {
+            for(int j = 0; j < level.ball.orbiters.size(); ++j){
+                if (contact.getFixtureA().getBody() == level.ball.orbiters.get(j).body) {
+                    return;
+                }
+            }
             numberOfContacts--;
         }
         else if (contact.getFixtureA().getBody() == level.ball.body) {
+            for(int j = 0; j < level.ball.orbiters.size(); ++j){
+                if (contact.getFixtureB().getBody() == level.ball.orbiters.get(j).body) {
+                    return;
+                }
+            }
             numberOfContacts--;
         }
     }
@@ -675,10 +685,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
                     level.ball.orbiters.get(i).destroy();
+                    this.visibleOrbiters--;
                 }
                 else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
                     level.ball.orbiters.get(i).destroy();
+                    this.visibleOrbiters--;
                 }
 
                 else {
@@ -686,6 +698,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -693,6 +706,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
                             level.loopers.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -700,6 +714,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -709,10 +724,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
                     level.ball.orbiters.get(i).destroy();
+                    this.visibleOrbiters--;
                 }
                 else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
                     level.ball.orbiters.get(i).destroy();
+                    this.visibleOrbiters--;
                 }
 
                 else {
@@ -720,6 +737,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -727,6 +745,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
                             level.loopers.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -734,6 +753,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                         if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
                             level.ball.orbiters.get(i).destroy();
+                            this.visibleOrbiters--;
                             break;
                         }
                     }
@@ -744,6 +764,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Ball collision -> fixture B
         if (contact.getFixtureB().getBody() == level.ball.body) {
+            // early out if we contact our orbiters
+            for(j = 0; j < level.ball.orbiters.size(); ++j){
+                if (contact.getFixtureA().getBody() == level.ball.orbiters.get(j).body) {
+                    return;
+                }
+            }
             numberOfContacts++;
             if (contact.getFixtureA().getBody() == level.endCircle.body) {
                 levelComplete();
@@ -791,6 +817,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         // Ball collision -> fixture A
         else if (contact.getFixtureA().getBody() == level.ball.body) {
+            // early out if we contact our orbiters
+            for(j = 0; j < level.ball.orbiters.size(); ++j){
+                if (contact.getFixtureB().getBody() == level.ball.orbiters.get(j).body) {
+                    return;
+                }
+            }
             numberOfContacts++;
             if (contact.getFixtureB().getBody() == level.endCircle.body) {
                 levelComplete();

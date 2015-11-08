@@ -40,8 +40,8 @@ public class Orbiter extends EmptyCircle {
         int width = Gdx.graphics.getWidth();
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
         angle += Constants.ORBITER_ANGULAR_VELOCITY * deltaTime;
-        float xPos = this.ball.position.x + (ball.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
-        float yPos = this.ball.position.y + (ball.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
+        float xPos = this.ball.position.x + (ball.radius / 2 + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
+        float yPos = this.ball.position.y + (ball.radius / 2 + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
         this.position.set(xPos, yPos);
         this.body.setTransform(xPos / Constants.BOX2D_SCALE, yPos / Constants.BOX2D_SCALE, 0);
 

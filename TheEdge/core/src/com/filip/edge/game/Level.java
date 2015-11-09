@@ -58,9 +58,16 @@ public class Level {
 
     public String levelInstructions;
 
+    private int creditsIndex;
+    private float creditTime;
+    private static final float CREDIT_MAX_TIME = 2f;
+    private boolean displayCredits;
+
     public int numberOfOrbitersFinishedWith;
 
     public Level() {
+        this.creditsIndex = -1;
+        this.displayCredits = this.lastStage();
         this.disappearingVectorDirection = new Vector2();
         init();
     }
@@ -439,6 +446,23 @@ public class Level {
         }
     }
 
+    public void updateCredits(float deltaTime) {
+        if(this.displayCredits) {
+            this.creditTime += deltaTime;
+            if(this.creditTime > CREDIT_MAX_TIME) {
+                this.creditTime = 0;
+                this.creditsIndex++;
+                if(this.creditsIndex > Constants.NUMBER_OF_CREDITS - 1){
+                    this.displayCredits = false;
+                }
+            }
+        }
+    }
+
+    public boolean lastStage() {
+        return GamePreferences.instance.zone == StageLoader.getNumberOfZones() - 1 && GamePreferences.instance.stage == StageLoader.getZoneStages(GamePreferences.instance.zone) - 1;
+    }
+
     public void render(SpriteBatch batch) {
         int i;
         for (i = circleShapes.size() - 1; i >= 0; --i) {
@@ -491,6 +515,16 @@ public class Level {
             DigitRenderer.instance.renderStringCentered(levelInstructions, Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+        }
+        if(this.displayCredits && this.creditsIndex != -1){
+            DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][0], Gdx.graphics.getHeight() -
+                    DigitRenderer.instance.digitHeight / 2 -
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS -
+                    DigitRenderer.instance.digitHeight - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+            DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][1], Gdx.graphics.getHeight() -
+                    DigitRenderer.instance.digitHeight / 2 -
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+
         }
 
         if(GamePreferences.instance.zone == 0 && GamePreferences.instance.stage == 0) {

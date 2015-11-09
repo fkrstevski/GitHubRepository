@@ -2,6 +2,9 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     public static boolean DEBUG_BUILD = false;
 
@@ -75,9 +78,21 @@ public class Constants {
 
     public static final Color[] ZONE_COLORS = {BLUE, TURQUOISE, PURPLE, GREY};
 
-    public static long MAX_SCORE = 1000000000000000000L;
-    public static int SCORE_DECREMENT_FOR_COLLISION = 10000;
-    public static int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
+    public static final long MAX_SCORE = 1000000000000000000L;
+    public static final int SCORE_DECREMENT_FOR_COLLISION = 10000;
+    public static final int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
 
-    public static int WIDTH_IN_PIXELS = 3;
+    public static final int WIDTH_IN_PIXELS = 3;
+
+    public static final int NUMBER_OF_CREDITS = 6;
+
+    public static String [][] CREDIT_ARRAY = new String[NUMBER_OF_CREDITS][2];
+    static {
+        CREDIT_ARRAY[0][0] = "ARTISTIC DIRECTION";  CREDIT_ARRAY[0][1] = "MATTHEW SECRIST";
+        CREDIT_ARRAY[1][0] = "EVERYTHINGER";        CREDIT_ARRAY[1][1] = "ALIMA RAHMAN";
+        CREDIT_ARRAY[2][0] = "LEAD CUTENESS";       CREDIT_ARRAY[2][1] = "KALI KRSTEVSKA";
+        CREDIT_ARRAY[3][0] = "SPECIAL THANKS";      CREDIT_ARRAY[3][1] = "SEBASTIEN RAHMAN";
+        CREDIT_ARRAY[4][0] = "SPECIAL THANKS";      CREDIT_ARRAY[4][1] = "LAN NGUYEN";
+        CREDIT_ARRAY[5][0] = "CEO OF EVERYTHING";   CREDIT_ARRAY[5][1] = "DEEPAK GANDHI";
+    }
 }

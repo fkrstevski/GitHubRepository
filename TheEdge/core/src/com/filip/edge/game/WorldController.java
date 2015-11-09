@@ -352,6 +352,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         handleDebugInput(deltaTime);
 
+        level.updateCredits(deltaTime);
+
         if (state == LevelState.Countdown) {
             this.readyTime += deltaTime;
             this.readyTimeRatio = this.readyTime / READY_TIME;

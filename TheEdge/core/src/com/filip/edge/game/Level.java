@@ -60,7 +60,8 @@ public class Level {
 
     private int creditsIndex;
     private float creditTime;
-    private static final float CREDIT_MAX_TIME = 2f;
+    private static final float CREDIT_MAX_TIME = 4f;
+    private static final float CREDIT_PAUSE_TIME = 1f;
     private boolean displayCredits;
 
     public int numberOfOrbitersFinishedWith;
@@ -449,7 +450,7 @@ public class Level {
     public void updateCredits(float deltaTime) {
         if(this.displayCredits) {
             this.creditTime += deltaTime;
-            if(this.creditTime > CREDIT_MAX_TIME) {
+            if(this.creditTime > CREDIT_MAX_TIME + CREDIT_PAUSE_TIME) {
                 this.creditTime = 0;
                 this.creditsIndex++;
                 if(this.creditsIndex > Constants.NUMBER_OF_CREDITS - 1){
@@ -516,7 +517,7 @@ public class Level {
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
         }
-        if(this.displayCredits && this.creditsIndex != -1){
+        if(this.displayCredits && this.creditsIndex != -1 && creditTime < CREDIT_MAX_TIME){
             DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][0], Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS -

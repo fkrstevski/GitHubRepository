@@ -60,7 +60,7 @@ public class Constants {
     public static final float[] HOLE_SCALE_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1, 0.5f};
 
     public static final float[] ORBITER_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
-    public static final float[] ORBITER_DISAPPEAR_TIME = {30, 25, 20, 15, 10, 8, 6, 4, 2, 1};
+    public static final float[] ORBITER_DISAPPEAR_TIME = {45, 40, 35, 30, 25, 20, 15, 10, 8, 6};
 
     public static final int[] BALL_SPEED = { 300, 400, 500, 600 };
 

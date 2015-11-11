@@ -36,6 +36,7 @@ public class ResultsScreen extends AbstractGameScreen {
     private DirectedGame game;
     private Stage stage;
     private TextField txtEmail;
+    private String score;
     private boolean scoreSubmitted;
     private String email;
     private boolean displayError;
@@ -82,7 +83,7 @@ public class ResultsScreen extends AbstractGameScreen {
         DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch);
         DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5), game.batch);
 
-        String score = "" + GamePreferences.instance.currentScore;
+        score = "" + GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
         DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
 
@@ -90,14 +91,6 @@ public class ResultsScreen extends AbstractGameScreen {
             DigitRenderer.instance.renderStringCentered(error, Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, game.batch);
-
-            btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
-            btnSubmit.setStyle(textOutsideButtonStyleRed);
-
-        }
-        else {
-            btnSubmitOutside.setStyle(textOutsideButtonStyle);
-            btnSubmit.setStyle(textInsideButtonStyle);
         }
 
         game.batch.setShader(null);
@@ -241,9 +234,13 @@ public class ResultsScreen extends AbstractGameScreen {
                 if (matchFound) {
                     btnSubmit.setTouchable(Touchable.enabled);
                     displayError = false;
+                    btnSubmitOutside.setStyle(textOutsideButtonStyle);
+                    btnSubmit.setStyle(textInsideButtonStyle);
                 } else {
                     btnSubmit.setTouchable(Touchable.disabled);
                     displayError = true;
+                    btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                    btnSubmit.setStyle(textOutsideButtonStyleRed);
                     error = "INVALID EMAIL";
                 }
             }
@@ -259,6 +256,8 @@ public class ResultsScreen extends AbstractGameScreen {
 
     public void btnSubmitClicked() {
         displayError = false;
+        btnSubmitOutside.setStyle(textOutsideButtonStyle);
+        btnSubmit.setStyle(textInsideButtonStyle);
         GamePreferences.instance.getUserID();
         if(!GamePreferences.instance.userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
@@ -286,18 +285,24 @@ public class ResultsScreen extends AbstractGameScreen {
                 public void failed(Throwable t) {
                     Gdx.app.error("Failed ", t.getMessage());
                     displayError = true;
+                    btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                    btnSubmit.setStyle(textOutsideButtonStyleRed);
                     error = "NO CONNECTION";
                 }
 
                 @Override
                 public void cancelled() {
                     displayError = true;
+                    btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                    btnSubmit.setStyle(textOutsideButtonStyleRed);
                     error = "NO CONNECTION";
                 }
             });
         }
         else{
             displayError = true;
+            btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+            btnSubmit.setStyle(textOutsideButtonStyleRed);
             error = "NO CONNECTION";
         }
     }

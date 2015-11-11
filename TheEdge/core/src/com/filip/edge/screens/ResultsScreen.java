@@ -40,6 +40,7 @@ public class ResultsScreen extends AbstractGameScreen {
     private String email;
     private boolean displayError;
     private String error;
+    private static final String ENTER_EMAIL = "ENTER YOUR EMAIL:";
 
     private TextButton btnSubmitOutside;
     private TextButton btnSubmit;
@@ -57,7 +58,7 @@ public class ResultsScreen extends AbstractGameScreen {
     public ResultsScreen(DirectedGame game) {
         super(game);
         this.game = game;
-        this.email = "ENTER YOUR EMAIL";
+        this.email = ENTER_EMAIL;
         this.displayError = false;
     }
 
@@ -208,7 +209,7 @@ public class ResultsScreen extends AbstractGameScreen {
         });
 
         if(GamePreferences.instance.email.isEmpty()) {
-            txtEmail = new TextField("Enter your email:", skin);
+            txtEmail = new TextField(ENTER_EMAIL, skin);
         }
         else {
             txtEmail = new TextField(GamePreferences.instance.email, skin);
@@ -223,8 +224,10 @@ public class ResultsScreen extends AbstractGameScreen {
         txtEmail.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                txtEmail.setText("");
-                email = "";
+                if(txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
+                    txtEmail.setText("");
+                    email = "";
+                }
                 return true;
             }
         });

@@ -44,6 +44,8 @@ local.properties
 .loadpath
 .externalToolBuilders/
 *.launch
+/ios/robovm-build
+
 
 ## NetBeans
 **/nbproject/private/

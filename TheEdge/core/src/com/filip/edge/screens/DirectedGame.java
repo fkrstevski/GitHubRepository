@@ -11,27 +11,41 @@ public abstract class DirectedGame implements ApplicationListener {
     protected IActivityRequestHandler activityRequestHandler;
     private boolean init;
     private AbstractGameScreen currScreen;
+    private AbstractGameScreen nextScreen;
 
     public DirectedGame(IActivityRequestHandler activityRequestHandler) {
         this.activityRequestHandler = activityRequestHandler;
     }
 
+    public AbstractGameScreen getCurrScreen() {
+        return this.currScreen;
+    }
+
     public void setScreen(AbstractGameScreen screen) {
         if (!init) {
-
-            Gdx.app.log(TAG, " create Sprite Batch 1");
             batch = new SpriteBatch();
-            Gdx.app.log(TAG, " create Sprite Batch 2");
             init = true;
         }
+
+        nextScreen = screen;
+        nextScreen.show();
+        nextScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        nextScreen.render(0);
+
+        if (this.currScreen != null) {
+            this.currScreen.pause();
+        }
+
+        nextScreen.pause();
+
         if (this.currScreen != null) {
             this.currScreen.hide();
         }
-        this.currScreen = screen;
-        if (this.currScreen != null) {
-            this.currScreen.show();
-            this.currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }
+
+        nextScreen.resume();
+
+        this.currScreen = nextScreen;
+
         Gdx.input.setInputProcessor(currScreen.getInputProcessor());
     }
 

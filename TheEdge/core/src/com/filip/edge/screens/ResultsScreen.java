@@ -85,14 +85,6 @@ public class ResultsScreen extends AbstractGameScreen {
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
         DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
 
-        if (scoreSubmitted == true) {
-            GamePreferences.instance.scoreNeedsToBeSubmitted = false;
-            GamePreferences.instance.currentScore = Constants.MAX_SCORE;
-            GamePreferences.instance.numberOfDeaths = 0;
-            GamePreferences.instance.save();
-            game.setScreen(new MenuScreen(game));
-        }
-
         if(this.displayError) {
             DigitRenderer.instance.renderStringCentered(error, Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
@@ -109,6 +101,14 @@ public class ResultsScreen extends AbstractGameScreen {
 
         game.batch.setShader(null);
         game.batch.end();
+
+        if (scoreSubmitted == true) {
+            GamePreferences.instance.scoreNeedsToBeSubmitted = false;
+            GamePreferences.instance.currentScore = Constants.MAX_SCORE;
+            GamePreferences.instance.numberOfDeaths = 0;
+            GamePreferences.instance.save();
+            game.setScreen(new MenuScreen(game));
+        }
     }
 
     @Override

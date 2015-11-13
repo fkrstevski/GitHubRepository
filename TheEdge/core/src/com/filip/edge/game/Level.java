@@ -188,6 +188,7 @@ public class Level {
         for (int i = 1; i < this.getNumberOfPoints() - 1; ++i) {
             EmptyCircle m = new EmptyCircle(Constants.INSIDE_CIRCLE_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                     points.get(i).x, points.get(i).y, Constants.WHITE, Constants.TRANSPARENT, true, "Circle");
+            m.scale.set(points.get(i).extraCircleScale, points.get(i).extraCircleScale);
 
             // Do not add multiple circles that are the same
             if (!circleShapes.contains(m)) {
@@ -286,7 +287,7 @@ public class Level {
                 float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
 
                 MiddlePart s = new MiddlePart(Vector2.dst(p1.x, p1.y, p2.x, p2.y),
-                        Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale,
+                        Constants.RECTANGLE_WIDTH * this.getLevelMultiplier() * horizontalScale * points.get(i).extraRectangleScale,
                         midpoint.x, midpoint.y, Constants.WHITE, Constants.TURQUOISE, true, "Rectangle");
                 s.rotation = angle;
 

@@ -271,6 +271,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
 
+        // Oscillators Physics Bodies
         for (int i = 0; i < level.oscillators.size(); ++i) {
             if(level.oscillators.get(i).followerObject.body == null) {
                 BodyDef followerBodyDef = new BodyDef();
@@ -315,7 +316,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 Body body1 = b2world.createBody(bodyDef1);
                 level.circleShapes.get(i).body = body1;
                 CircleShape circleShape1 = new CircleShape();
-                circleShape1.setRadius((level.circleShapes.get(i).radius) / Constants.BOX2D_SCALE);
+                circleShape1.setRadius((level.circleShapes.get(i).radius * level.circleShapes.get(i).scale.x) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureDef1 = new FixtureDef();
                 fixtureDef1.shape = circleShape1;
                 fixtureDef1.isSensor = true;

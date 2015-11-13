@@ -241,6 +241,14 @@ public class StageLoader {
                                                             points[pointIndex].orbiterDisappearIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
                                                     }
+                                                    else if (r.charAt(0) == 'S') {
+                                                        if (r.charAt(1) == 'C') {
+                                                            points[pointIndex].extraCircleScale = (Float.parseFloat(r.substring(2, r.length())));
+                                                        }
+                                                        else if (r.charAt(1) == 'R') {
+                                                            points[pointIndex].extraRectangleScale = (Float.parseFloat(r.substring(2, r.length())));
+                                                        }
+                                                    }
                                                 }
                                             }
 
@@ -283,13 +291,14 @@ public class StageLoader {
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d;",
+                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d,%f,%f;",
                                     points[i].x, points[i].y,
                                     (points[i].hasAHole ? 't' : 'f'), points[i].holeStartupIndex, points[i].holeScaleIndex,
                                     (points[i].followerIsBackAndForth ? 't' : 'f'), points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
                                     (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
                                     (points[i].disappears ? 't' : 'f'), (points[i].appears ? 't' : 'f'), points[i].disappearsAppearsStartupIndex, points[i].disappearsAppearsTimeIndex,
-                                    (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex));
+                                    (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex,
+                                    points[i].extraCircleScale, points[i].extraRectangleScale ));
                             points[i] = null;
                         } else {
                             break;
@@ -435,7 +444,8 @@ public class StageLoader {
                                     pointProperty[5].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[6]), Integer.parseInt(pointProperty[7]), Integer.parseInt(pointProperty[8]),
                                     pointProperty[9].equalsIgnoreCase("t"), pointProperty[10].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
                                     pointProperty[13].equalsIgnoreCase("t"), pointProperty[14].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[15]), Integer.parseInt(pointProperty[16]),
-                                    pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19])
+                                    pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19]),
+                                    Float.parseFloat(pointProperty[20]), Float.parseFloat(pointProperty[21])
                             )
                     );
                 }

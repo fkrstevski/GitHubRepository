@@ -188,7 +188,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 body.setActive(false);
                 level.ball.orbiters.get(i).body = body;
                 CircleShape circleShape = new CircleShape();
-                circleShape.setRadius((level.ball.orbiters.get(i).radius) / Constants.BOX2D_SCALE);
+                circleShape.setRadius((level.ball.orbiters.get(i).radius / 2) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = circleShape;
                 fixtureDef.isSensor = true;
@@ -797,21 +797,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 for (j = 0; j < level.followers.size(); ++j) {
-                    if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.loopers.size(); ++j) {
-                    if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.oscillators.size(); ++j) {
-                    if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
@@ -850,21 +850,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 for (j = 0; j < level.followers.size(); ++j) {
-                    if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.loopers.size(); ++j) {
-                    if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.oscillators.size(); ++j) {
-                    if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
+                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }

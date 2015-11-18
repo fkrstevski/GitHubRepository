@@ -69,7 +69,7 @@ public class Follower {
             case Inactive:
 
                 if (this.followerObjectTime > this.followerObjectDisplayStartTime) {
-                    this.followerObject.body.setActive(true);
+                    this.followerObject.body.setActive(false);
                     this.followerObjectTime = 0;
                     this.followObjectFrom = pointsToFollow.get(this.followPointIndex);
                     this.followObjectTo = pointsToFollow.get(this.followPointIndex + 1);
@@ -79,7 +79,6 @@ public class Follower {
                     this.followerObject.body.getFixtureList().get(0).getShape().setRadius(0);
 
                     this.followerObjectState = PropertyState.Buildup;
-                    this.followerObject.body.setActive(true);
                 }
                 break;
             case Buildup:
@@ -90,7 +89,9 @@ public class Follower {
                 this.followerObject.scale.set(this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME,
                         this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);
                 this.followerObject.body.getFixtureList().get(0).getShape().setRadius(((this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * this.followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE);
-
+                if (followerObjectTime / FOLLOW_OBJECT_SCALE_TIME > Constants.COLLISION_ACTIVATION_PERCENT) {
+                    this.followerObject.body.setActive(true);
+                }
                 break;
             case Active:
                 float xDirection = vectorDirection.x / ((vectorDirection.x + vectorDirection.y));
@@ -158,6 +159,9 @@ public class Follower {
 
                     this.followerObject.scale.set(1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME, 1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME);
                     this.followerObject.body.getFixtureList().get(0).getShape().setRadius((((1 - this.followerObjectTime / FOLLOW_OBJECT_SCALE_TIME) * this.followObjectOriginalSize / 2.0f) / Constants.BOX2D_SCALE));
+                    if (1 - followerObjectTime / FOLLOW_OBJECT_SCALE_TIME < Constants.COLLISION_ACTIVATION_PERCENT) {
+                        this.followerObject.body.setActive(false);
+                    }
                 }
                 break;
             case Gone:
@@ -206,7 +210,6 @@ public class Follower {
     public void start() {
         this.followerObjectTime = 0;
         this.followerObjectState = PropertyState.Inactive;
-
     }
 
     public enum Type{

@@ -41,6 +41,8 @@ public class Constants {
     public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};
     public static float BOX2D_SCALE = 10;
 
+    public static float COLLISION_ACTIVATION_PERCENT = 0.5f;
+
     public static final float[] DISAPPEARING_OBJECT_STARTTIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 1.5f, 5};
     public static final float[] DISAPPEARING_OBJECT_TIME = {5, 4.5f, 4, 3.5f, 3, 2.5f, 2, 1.5f, 1, 0.5f};
 

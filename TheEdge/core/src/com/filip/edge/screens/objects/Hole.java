@@ -54,7 +54,7 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(currentTime / scaleTime, currentTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if (currentTime / scaleTime > 0.3f) {
+                    if (currentTime / scaleTime > Constants.COLLISION_ACTIVATION_PERCENT) {
                         body.setActive(true);
                     }
                 }
@@ -68,7 +68,7 @@ public class Hole extends EmptyCircle {
                 } else {
                     this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if (1 - currentTime / scaleTime < 0.3f) {
+                    if (1 - currentTime / scaleTime < Constants.COLLISION_ACTIVATION_PERCENT) {
                         body.setActive(false);
                     }
                 }

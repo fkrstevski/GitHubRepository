@@ -103,7 +103,7 @@ public class Follower {
                     this.followerObject.position.set(this.followObjectTo.x, this.followObjectTo.y);
                     this.followerObject.body.setTransform(this.followObjectTo.x / Constants.BOX2D_SCALE, this.followObjectTo.y / Constants.BOX2D_SCALE, 0);
                     this.followPointIndex += this.direction;
-
+                    
                     if (this.backAndForth) {
                         if (this.followPointIndex == 0 || this.followPointIndex == pointsToFollow.size() - 1) {
                             this.direction *= -1;
@@ -127,7 +127,14 @@ public class Follower {
                             this.followerObject.body.setLinearVelocity(0, 0);
 
                             if(this.type == Type.Looper) {
-                                this.followerObjectState = PropertyState.Active;
+                                // if the first and last point are the same loop them
+                                if(pointsToFollow.get(0).equals(pointsToFollow.get(pointsToFollow.size() -1))){
+                                    this.followerObjectState = PropertyState.Active;
+                                }
+                                // otherwise just restart the looper
+                                else {
+                                    this.followerObjectState = PropertyState.Teardown;
+                                }
                             }
                             else {
                                 this.followerObjectState = PropertyState.Teardown;

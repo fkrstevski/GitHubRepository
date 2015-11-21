@@ -5,14 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.filip.edge.game.objects.EmptyCircle;
-import com.filip.edge.screens.objects.AbstractCircleButtonObject;
-import com.filip.edge.screens.objects.BackButton;
-import com.filip.edge.screens.objects.EndTarget;
-import com.filip.edge.screens.objects.Follower;
-import com.filip.edge.screens.objects.Hole;
-import com.filip.edge.screens.objects.Ball;
-import com.filip.edge.screens.objects.MiddlePart;
-import com.filip.edge.screens.objects.OrbiterPickup;
+import com.filip.edge.screens.objects.*;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
@@ -46,6 +39,7 @@ public class Level {
     public ArrayList<Follower> followers;
     public ArrayList<Follower> oscillators;
     public ArrayList<OrbiterPickup> orbiterPickups;
+    public ArrayList<GoldPickup> goldPickups;
 
     public PropertyState disappearingState;
     public boolean disappearing;
@@ -86,6 +80,11 @@ public class Level {
         // ORBITER PICKUP RESET
         for (int i = 0; i < orbiterPickups.size(); ++i) {
             orbiterPickups.get(i).reset();
+        }
+
+        // GOLD RESET
+        for (int i = 0; i < goldPickups.size(); ++i) {
+            goldPickups.get(i).reset();
         }
 
         // OSCILLATOR RESET
@@ -158,6 +157,7 @@ public class Level {
         followers = new ArrayList<Follower>();
         loopers = new ArrayList<Follower>();
         oscillators = new ArrayList<Follower>();
+        goldPickups = new ArrayList<GoldPickup>();
 
         // Ball
         ball = new Ball(Constants.BALL_RADIUS * 2 * horizontalScale,
@@ -174,14 +174,18 @@ public class Level {
         // Add Start Circle
         EndTarget st = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleE");
+        st.scale.set(points.get(0).extraCircleScale, points.get(0).extraCircleScale);
         circleShapes.add(st);
 
         startCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getFirstPoint().x, this.getFirstPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleG");
+        startCircleGreenIcon.scale.set(points.get(0).extraCircleScale, points.get(0).extraCircleScale);
         startCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getFirstPoint().x, this.getFirstPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleY");
+        startCircleYellowIcon.scale.set(points.get(0).extraCircleScale, points.get(0).extraCircleScale);
         startCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getFirstPoint().x, this.getFirstPoint().y, Constants.RED, Constants.WHITE, false, "CircleR");
+        startCircleRedIcon.scale.set(points.get(0).extraCircleScale, points.get(0).extraCircleScale);
         startCircle = startCircleRedIcon;
 
         // Add Middle Circles
@@ -207,6 +211,12 @@ public class Level {
                 orbiterPickups.add(new OrbiterPickup(Constants.ORBITER_PICKUP_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
                         this.points.get(i).x, this.points.get(i).y,
                         this.points.get(i).orbiterStartupIndex, this.points.get(i).orbiterDisappearIndex, false, "CircleOrbiterPickup"));
+            }
+
+            // Add gold
+            if (points.get(i).gold) {
+                goldPickups.add(new GoldPickup(Constants.GOLD_BODY_RADIUS * 2 * this.getLevelMultiplier() * horizontalScale,
+                        this.points.get(i).x, this.points.get(i).y, false, "CircleGold"));
             }
 
             // Add a vertical oscillator to the point
@@ -261,18 +271,23 @@ public class Level {
         // Add EndCircle - for target collision
         endCircle = new EmptyCircle(Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE, false, "CircleEndTarget");
+        endCircle.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
 
         // Add EndCircle - for boundary collision
         EndTarget et = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleE");
+        et.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
         circleShapes.add(et);
 
         finishCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleG");
+        finishCircleGreenIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
         finishCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleY");
+        finishCircleYellowIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
         finishCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.RED, Constants.WHITE, false, "CircleR");
+        finishCircleRedIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
 
         finishCircle = finishCircleRedIcon;
 
@@ -392,6 +407,10 @@ public class Level {
             orbiterPickups.get(i).update(deltaTime);
         }
 
+        for (i = 0; i < goldPickups.size(); ++i) {
+            goldPickups.get(i).update(deltaTime);
+        }
+
         for (i = 0; i < followers.size(); ++i) {
             followers.get(i).update(deltaTime);
         }
@@ -489,6 +508,10 @@ public class Level {
 
         for (i = 0; i < orbiterPickups.size(); ++i) {
             orbiterPickups.get(i).render(batch);
+        }
+
+        for (i = 0; i < goldPickups.size(); ++i) {
+            goldPickups.get(i).render(batch);
         }
 
         for (i = 0; i < followers.size(); ++i) {

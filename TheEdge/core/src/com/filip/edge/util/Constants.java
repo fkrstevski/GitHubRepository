@@ -30,6 +30,8 @@ public class Constants {
     public static final int HOLE_RADIUS = 22;
     public static final int OSCILLATOR_RADIUS = 15;
     public static final int ORBITER_PICKUP_RADIUS = 15;
+    public static final int GOLD_PICKUP_RADIUS = 5;
+    public static final int GOLD_BODY_RADIUS = 25;
     public static final int ORBITER_PICKUP_BODY_RADIUS = 25;
     public static final int ORBITER_OFFSET = 0;
     public static final int ORBITER_ANGULAR_VELOCITY = 20;
@@ -39,7 +41,10 @@ public class Constants {
     public static final int MAX_LEVELS = 1;
     public static final int OSCILLATION_DISTANCE = 50;
     public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};
-    public static float BOX2D_SCALE = 10;
+    public static final float BOX2D_SCALE = 10;
+
+    public static final int EXTRA_ORBITER_WORTH = 1000;
+    public static final int GOLD_WORTH = 100;
 
     public static float COLLISION_ACTIVATION_PERCENT = 0.5f;
 

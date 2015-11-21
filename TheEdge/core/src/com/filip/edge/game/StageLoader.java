@@ -237,9 +237,18 @@ public class StageLoader {
                                                     else if (r.charAt(0) == 'O') {
                                                         points[pointIndex].orbiterPickup = true;
                                                         if (r.length() > 1) {
-                                                            points[pointIndex].orbiterStartupIndex = (Integer.parseInt(r.substring(1, 2)));
-                                                            points[pointIndex].orbiterDisappearIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                            if(r.substring(1, 2).startsWith("-")) {
+                                                                points[pointIndex].orbiterStartupIndex = -1;
+                                                                points[pointIndex].orbiterDisappearIndex = -1;
+                                                            }
+                                                            else {
+                                                                points[pointIndex].orbiterStartupIndex = (Integer.parseInt(r.substring(1, 2)));
+                                                                points[pointIndex].orbiterDisappearIndex = (Integer.parseInt(r.substring(2, 3)));
+                                                            }
                                                         }
+                                                    }
+                                                    else if (r.charAt(0) == 'G') {
+                                                        points[pointIndex].gold = true;
                                                     }
                                                     else if (r.charAt(0) == 'S') {
                                                         if (r.charAt(1) == 'C') {
@@ -291,14 +300,15 @@ public class StageLoader {
 
                     for (int i = 0; i < points.length; i++) {
                         if (points[i] != null) {
-                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d,%f,%f;",
+                            sb.append(String.format("%.04f,%.04f,%c,%d,%d,%c,%d,%d,%d,%c,%c,%d,%d,%c,%c,%d,%d,%c,%d,%d,%f,%f,%c;",
                                     points[i].x, points[i].y,
                                     (points[i].hasAHole ? 't' : 'f'), points[i].holeStartupIndex, points[i].holeScaleIndex,
                                     (points[i].followerIsBackAndForth ? 't' : 'f'), points[i].followerDirection, points[i].followStartupIndex, points[i].followSpeedIndex,
                                     (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
                                     (points[i].disappears ? 't' : 'f'), (points[i].appears ? 't' : 'f'), points[i].disappearsAppearsStartupIndex, points[i].disappearsAppearsTimeIndex,
                                     (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex,
-                                    points[i].extraCircleScale, points[i].extraRectangleScale ));
+                                    points[i].extraCircleScale, points[i].extraRectangleScale ,
+                                    (points[i].gold ? 't' : 'f')));
                             points[i] = null;
                         } else {
                             break;
@@ -445,7 +455,8 @@ public class StageLoader {
                                     pointProperty[9].equalsIgnoreCase("t"), pointProperty[10].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[11]), Integer.parseInt(pointProperty[12]),
                                     pointProperty[13].equalsIgnoreCase("t"), pointProperty[14].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[15]), Integer.parseInt(pointProperty[16]),
                                     pointProperty[17].equalsIgnoreCase("t"), Integer.parseInt(pointProperty[18]), Integer.parseInt(pointProperty[19]),
-                                    Float.parseFloat(pointProperty[20]), Float.parseFloat(pointProperty[21])
+                                    Float.parseFloat(pointProperty[20]), Float.parseFloat(pointProperty[21]),
+                                    pointProperty[22].equalsIgnoreCase("t")
                             )
                     );
                 }

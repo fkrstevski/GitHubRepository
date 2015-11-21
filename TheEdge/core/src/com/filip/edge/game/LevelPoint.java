@@ -24,6 +24,7 @@ public class LevelPoint extends Vector2 {
     public boolean orbiterPickup;
     public int orbiterStartupIndex;
     public int orbiterDisappearIndex;
+    public boolean gold;
 
     public float extraCircleScale;
     public float extraRectangleScale;
@@ -41,7 +42,8 @@ public class LevelPoint extends Vector2 {
                       boolean vertical, boolean horizontal, int oscillatorStartupIndex, int oscillatorSpeedIndex,
                       boolean disappears, boolean appears, int disappearsAppearsStartupIndex, int disappearsAppearsTimeIndex,
                       boolean orbiterPickup, int orbiterStartupIndex, int orbiterDisappearIndex,
-                      float extraCircleScale, float extraRectangleScale) {
+                      float extraCircleScale, float extraRectangleScale,
+                      boolean gold) {
         super(x, y);
         this.hasAHole = h;
         this.holeStartupIndex = holeStartupIndex;
@@ -68,5 +70,7 @@ public class LevelPoint extends Vector2 {
 
         this.extraCircleScale = extraCircleScale;
         this.extraRectangleScale = extraRectangleScale;
+
+        this.gold = gold;
     }
 }

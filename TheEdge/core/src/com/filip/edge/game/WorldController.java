@@ -215,6 +215,24 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
 
+        // Gold Physics Bodies
+        for (int i = 0; i < level.goldPickups.size(); ++i) {
+            if(level.goldPickups.get(i).body == null) {
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.type = BodyType.StaticBody;
+                bodyDef.position.set(new Vector2(level.goldPickups.get(i).position.x / Constants.BOX2D_SCALE, level.goldPickups.get(i).position.y / Constants.BOX2D_SCALE));
+                Body body = b2world.createBody(bodyDef);
+                level.goldPickups.get(i).body = body;
+                CircleShape circleShape = new CircleShape();
+                circleShape.setRadius((Constants.GOLD_BODY_RADIUS) / Constants.BOX2D_SCALE);
+                FixtureDef fixtureDef = new FixtureDef();
+                fixtureDef.shape = circleShape;
+                fixtureDef.isSensor = true;
+                body.createFixture(fixtureDef);
+                circleShape.dispose();
+            }
+        }
+
         // Hole Physics Bodies
         for (int i = 0; i < level.holes.size(); ++i) {
             if(level.holes.get(i).body == null) {
@@ -416,6 +434,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 // RESET STATE FOR ORBITER PICKUPS
                 for (int i = 0; i < level.orbiterPickups.size(); ++i) {
                     level.orbiterPickups.get(i).start();
+                }
+
+                // RESET STATE FOR GOLD
+                for (int i = 0; i < level.goldPickups.size(); ++i) {
+                    level.goldPickups.get(i).start();
                 }
 
                 // RESET STATE FOR DISAPPEARING
@@ -796,6 +819,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
+                for (j = 0; j < level.goldPickups.size(); ++j) {
+                    if (contact.getFixtureA().getBody() == level.goldPickups.get(j).body) {
+                        level.goldPickups.get(j).pickedUp();
+                        pickupGold();
+                        break;
+                    }
+                }
+
                 for (j = 0; j < level.followers.size(); ++j) {
                     if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
@@ -849,6 +880,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
 
+                for (j = 0; j < level.goldPickups.size(); ++j) {
+                    if (contact.getFixtureB().getBody() == level.goldPickups.get(j).body) {
+                        level.goldPickups.get(j).pickedUp();
+                        pickupGold();
+                        break;
+                    }
+                }
+
                 for (j = 0; j < level.followers.size(); ++j) {
                     if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
@@ -891,11 +930,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void addOrbiters() {
         if(visibleOrbiters > MAX_NUMBER_ORBITERS - 1) {
             Gdx.app.error(TAG, "CANNOT ADD ANY MORE ORBITERS");
+            GamePreferences.instance.currentScore += Constants.EXTRA_ORBITER_WORTH;
         }
         else {
             newlyVisibleOrbiters[this.visibleOrbiters] = true;
             this.visibleOrbiters++;
         }
+    }
+
+    private void pickupGold() {
+        GamePreferences.instance.currentScore += Constants.GOLD_WORTH;
     }
 
     private void fallOff() {

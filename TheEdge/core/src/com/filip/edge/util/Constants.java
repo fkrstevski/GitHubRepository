@@ -43,9 +43,6 @@ public class Constants {
     public static final float[] LEVEL_MULTIPLIERS = {0.9f, 0.75f};
     public static final float BOX2D_SCALE = 10;
 
-    public static final int EXTRA_ORBITER_WORTH = 1000;
-    public static final int GOLD_WORTH = 100;
-
     public static float COLLISION_ACTIVATION_PERCENT = 0.5f;
 
     public static final float[] DISAPPEARING_OBJECT_STARTTIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 1.5f, 5};
@@ -88,6 +85,8 @@ public class Constants {
     public static final long MAX_SCORE = 1000000000000000000L;
     public static final int SCORE_DECREMENT_FOR_COLLISION = 10000;
     public static final int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
+    public static final int EXTRA_ORBITER_WORTH = 1000;
+    public static final int GOLD_WORTH = 100;
 
     public static final int WIDTH_IN_PIXELS = 3;
 

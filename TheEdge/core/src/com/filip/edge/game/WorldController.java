@@ -527,7 +527,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             // Update the score
             // need to do something fishy since current score is a long and subtracting
             // a small float might not update the actual value
-            levelScore += deltaTime * 100 ;
+            levelScore += deltaTime * 400 ;
             if (levelScore > 1) {
                 GamePreferences.instance.currentScore -= (int) levelScore;
                 levelScore = levelScore % 1;

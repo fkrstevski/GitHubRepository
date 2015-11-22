@@ -3,7 +3,6 @@ package com.filip.edge.screens.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
@@ -87,21 +86,19 @@ public class Ball extends EmptyCircle {
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
         Orbiter orbiter = null;
         if(orbiters.size() == 0) {
-            float angle = 0;
-            float xpos = this.position.x + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
-            float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
+            float xpos = this.position.x;
+            float ypos = this.position.y;
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
-                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
+                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, true, false, "CircleOrbiter");
             orbiter.visible = false;
             orbiters.add(orbiter);
 
         }
         else if(orbiters.size() == 1) {
-            float angle = orbiters.get(0).angle + MathUtils.PI;
-            float xpos = this.position.x + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.cos(angle);
-            float ypos = this.position.y + (this.radius + Constants.ORBITER_OFFSET * horizontalScale) * MathUtils.sin(angle);
+            float xpos = this.position.x;
+            float ypos = this.position.y;
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
-                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, angle, false, "CircleOrbiter");
+                    xpos, ypos, Constants.GREEN, Constants.GREEN, this, false, false, "CircleOrbiter");
             orbiter.visible = false;
             orbiters.add(orbiter);
         }

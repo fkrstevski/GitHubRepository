@@ -78,9 +78,9 @@ public class GamePreferences {
     public void getUserID() {
         if(userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
-            parameters.put("data", "data from game");
+            parameters.put("extraData", "data from game");
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("http://www.absolutegames.ca/userID.php");
+            request.setUrl("http://www.absolutegames.ca/TheEdgeGetUserID.php");
 
             request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
             request.setHeader("Content-Type", "application/x-www-form-urlencoded");

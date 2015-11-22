@@ -53,7 +53,7 @@ public class MainMenuController extends InputAdapter implements Disposable {
         if (mainMenu.playButton.isTouched(screenX, screenY)) {
             this.mainMenu.state = MainMenu.MainMenuState.ZoomInToPlay;
         } else if (mainMenu.infoButton.isTouched(screenX, screenY)) {
-            Gdx.net.openURI("http://www.absolutegames.ca/scores.php");
+            Gdx.net.openURI("http://www.absolutegames.ca/TheEdgeShowScores.php");
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
             if (this.game.activityRequestHandler != null) {
                 this.game.activityRequestHandler.showScores();

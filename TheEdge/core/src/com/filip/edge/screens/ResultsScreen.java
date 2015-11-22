@@ -163,7 +163,6 @@ public class ResultsScreen extends AbstractGameScreen {
 
         TextField.TextFieldStyle tStyle = new TextField.TextFieldStyle();
 
-
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UnscreenMK.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Gdx.graphics.getWidth() / 20;
@@ -244,7 +243,6 @@ public class ResultsScreen extends AbstractGameScreen {
                     error = "INVALID EMAIL";
                 }
             }
-
         });
 
         this.stage.addActor(txtEmail);
@@ -264,9 +262,11 @@ public class ResultsScreen extends AbstractGameScreen {
             parameters.put("userID", "" + GamePreferences.instance.userID);
             parameters.put("email", txtEmail.getText());
             parameters.put("score", "" + GamePreferences.instance.currentScore);
-            parameters.put("deaths", "" + GamePreferences.instance.numberOfDeaths);
+            parameters.put("tries", "1,1,1,2,1,3,1,44,1,1,1,1,3,4,5,6");
+            parameters.put("times", "1.2, 2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9");
+            parameters.put("extraData", "data from game");
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("http://www.absolutegames.ca/httptest.php");
+            request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitScore.php");
 
             request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
             request.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -276,9 +276,18 @@ public class ResultsScreen extends AbstractGameScreen {
                 public void handleHttpResponse(Net.HttpResponse httpResponse) {
                     Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
                     Gdx.app.log("Result ", httpResponse.getResultAsString());
-                    scoreSubmitted = true;
-                    GamePreferences.instance.email = txtEmail.getText();
-                    GamePreferences.instance.save();
+
+                    if(httpResponse.getStatus().getStatusCode() == 200) {
+                        scoreSubmitted = true;
+                        GamePreferences.instance.email = txtEmail.getText();
+                        GamePreferences.instance.save();
+                    }
+                    else {
+                        displayError = true;
+                        btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                        btnSubmit.setStyle(textOutsideButtonStyleRed);
+                        error = "SUBMISSION ERROR";
+                    }
                 }
 
                 @Override

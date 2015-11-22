@@ -46,8 +46,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float levelScore;
 
     private static final int MAX_NUMBER_ORBITERS = 2;
-    private boolean[] newlyVisibleOrbiters = new boolean[MAX_NUMBER_ORBITERS];
-    private int visibleOrbiters;
+    private boolean Orbiter1Visible = false;
+    private boolean Orbiter2Visible = false;
 
     public WorldController(DirectedGame game) {
         Box2D.init();
@@ -102,7 +102,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void resetLevel() {
         levelScore = 0;
-        visibleOrbiters = 0;
+        Orbiter1Visible = false;
+        Orbiter2Visible = false;
         level.reset();
     }
 
@@ -110,7 +111,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         //this.game.startMethodTracing("initLevel");
 
         levelScore = 0;
-        visibleOrbiters = 0;
+        Orbiter1Visible = false;
+        Orbiter2Visible = false;
         level = new Level();
 
         if (b2world != null) {
@@ -188,7 +190,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 body.setActive(false);
                 level.ball.orbiters.get(i).body = body;
                 CircleShape circleShape = new CircleShape();
-                circleShape.setRadius((level.ball.orbiters.get(i).radius / 2) / Constants.BOX2D_SCALE);
+                circleShape.setRadius((level.ball.orbiters.get(i).radius * 0.8f) / Constants.BOX2D_SCALE);
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = circleShape;
                 fixtureDef.isSensor = true;
@@ -542,11 +544,17 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 // We can only set the orbit's body active outside of the
                 // step for the physics world
-                for (int i = 0; i < MAX_NUMBER_ORBITERS; ++i) {
-                    if (newlyVisibleOrbiters[i]) {
-                        newlyVisibleOrbiters[i] = false;
-                        this.level.ball.orbiters.get(i).visible = true;
-                        this.level.ball.orbiters.get(i).body.setActive(true);
+                if(Orbiter1Visible) {
+                    this.level.ball.orbiters.get(0).visible = true;
+                    if(!this.level.ball.orbiters.get(1).body.isActive()) {
+                        this.level.ball.orbiters.get(0).body.setActive(true);
+                    }
+                }
+
+                if(Orbiter2Visible) {
+                    this.level.ball.orbiters.get(1).visible = true;
+                    if(!this.level.ball.orbiters.get(0).body.isActive()) {
+                        this.level.ball.orbiters.get(1).body.setActive(true);
                     }
                 }
 
@@ -595,7 +603,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void handleInputGame(float deltaTime) {
         if (Gdx.app.getType() == ApplicationType.Desktop) {
             // Camera Controls (move)
-            float ballMoveSpeed = (10000 / Constants.BOX2D_SCALE * Gdx.graphics.getWidth() / Constants.BASE_SCREEN_WIDTH) * deltaTime;
+            float ballMoveSpeed = (15000 / Constants.BOX2D_SCALE * Gdx.graphics.getWidth() / Constants.BASE_SCREEN_WIDTH) * deltaTime;
             float camMoveSpeedAccelerationFactor = 5;
             if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
                 ballMoveSpeed *= camMoveSpeedAccelerationFactor;
@@ -710,37 +718,32 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (contact.getFixtureB().getBody() == level.ball.orbiters.get(i).body) {
                 if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
-                    level.ball.orbiters.get(i).destroy();
-                    this.visibleOrbiters--;
+                    doOrbiterCollision(i);
                 }
                 else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
-                    level.ball.orbiters.get(i).destroy();
-                    this.visibleOrbiters--;
+                    doOrbiterCollision(i);
                 }
 
                 else {
                     for (j = 0; j < level.followers.size(); ++j) {
                         if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
                     for (j = 0; j < level.loopers.size(); ++j) {
                         if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
                             level.loopers.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
                     for (j = 0; j < level.oscillators.size(); ++j) {
                         if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
@@ -749,37 +752,32 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             if (contact.getFixtureA().getBody() == level.ball.orbiters.get(i).body) {
                 if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
-                    level.ball.orbiters.get(i).destroy();
-                    this.visibleOrbiters--;
+                    doOrbiterCollision(i);
                 }
                 else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
-                    level.ball.orbiters.get(i).destroy();
-                    this.visibleOrbiters--;
+                    doOrbiterCollision(i);
                 }
 
                 else {
                     for (j = 0; j < level.followers.size(); ++j) {
                         if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
                     for (j = 0; j < level.loopers.size(); ++j) {
                         if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
                             level.loopers.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
                     for (j = 0; j < level.oscillators.size(); ++j) {
                         if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                             level.oscillators.get(j).destroy();
-                            level.ball.orbiters.get(i).destroy();
-                            this.visibleOrbiters--;
+                            doOrbiterCollision(i);
                             break;
                         }
                     }
@@ -828,21 +826,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 for (j = 0; j < level.followers.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
+                    if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.loopers.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
+                    if (contact.getFixtureA().getBody() == level.loopers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.oscillators.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
+                    if (contact.getFixtureA().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
@@ -889,21 +887,21 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 for (j = 0; j < level.followers.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
+                    if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.loopers.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
+                    if (contact.getFixtureB().getBody() == level.loopers.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
                 }
 
                 for (j = 0; j < level.oscillators.size(); ++j) {
-                    if (visibleOrbiters == 0 && contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
+                    if (contact.getFixtureB().getBody() == level.oscillators.get(j).followerObject.body) {
                         fallOff();
                         break;
                     }
@@ -912,6 +910,22 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
 
+    }
+
+    private void doOrbiterCollision(int i) {
+        level.ball.orbiters.get(i).destroy();
+        if(i == 0) {
+            Orbiter1Visible = false;
+            if(level.ball.orbiters.get(1).visible){
+                Orbiter2Visible = true;
+            }
+        }
+        else if (i == 1) {
+            Orbiter2Visible = false;
+            if(level.ball.orbiters.get(0).visible){
+                Orbiter1Visible = true;
+            }
+        }
     }
 
     private void levelComplete() {
@@ -928,13 +942,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void addOrbiters() {
-        if(visibleOrbiters > MAX_NUMBER_ORBITERS - 1) {
-            Gdx.app.error(TAG, "CANNOT ADD ANY MORE ORBITERS");
-            GamePreferences.instance.currentScore += Constants.EXTRA_ORBITER_WORTH;
+        if(!Orbiter1Visible){
+            Orbiter1Visible = true;
+        }
+        else if(!Orbiter2Visible) {
+            Orbiter2Visible = true;
         }
         else {
-            newlyVisibleOrbiters[this.visibleOrbiters] = true;
-            this.visibleOrbiters++;
+            GamePreferences.instance.currentScore += Constants.EXTRA_ORBITER_WORTH;
         }
     }
 

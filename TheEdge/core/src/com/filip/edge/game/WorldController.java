@@ -84,6 +84,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 GamePreferences.instance.zone++;
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1) {
                     state = LevelState.GameBeat;
+                    GamePreferences.instance.zone = 0;
                     GamePreferences.instance.scoreNeedsToBeSubmitted = true;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();

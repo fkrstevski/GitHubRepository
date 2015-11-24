@@ -97,9 +97,7 @@ public class ResultsScreen extends AbstractGameScreen {
         game.batch.end();
 
         if (scoreSubmitted == true) {
-            GamePreferences.instance.scoreNeedsToBeSubmitted = false;
-            GamePreferences.instance.currentScore = Constants.MAX_SCORE;
-            GamePreferences.instance.numberOfDeaths = 0;
+            GamePreferences.instance.reset();
             GamePreferences.instance.save();
             game.setScreen(new MenuScreen(game));
         }
@@ -117,7 +115,7 @@ public class ResultsScreen extends AbstractGameScreen {
         camera.setToOrtho(true); // flip y-axis
         camera.update();
 
-        GamePreferences.instance.load();
+        //GamePreferences.instance.load();
 
         this.stage = new Stage();
         Skin skin = new Skin();
@@ -262,8 +260,8 @@ public class ResultsScreen extends AbstractGameScreen {
             parameters.put("userID", "" + GamePreferences.instance.userID);
             parameters.put("email", txtEmail.getText());
             parameters.put("score", "" + GamePreferences.instance.currentScore);
-            parameters.put("tries", "1,1,1,2,1,3,1,44,1,1,1,1,3,4,5,6");
-            parameters.put("times", "1.2, 2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9");
+            parameters.put("tries", GamePreferences.instance.tries);
+            parameters.put("times", GamePreferences.instance.times);
             parameters.put("extraData", "data from game");
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
             request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitScore.php");

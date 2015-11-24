@@ -7,7 +7,9 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.net.HttpParametersUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GamePreferences {
@@ -16,26 +18,35 @@ public class GamePreferences {
 
     public static final GamePreferences instance = new GamePreferences();
 
+    // These are saved in the preferences
+    // ---------------BEGIN----------------
     public boolean sound;
     public boolean music;
-    public boolean scoreNeedsToBeSubmitted;
     public float volSound;
     public float volMusic;
-    public long currentScore;
-    public int numberOfDeaths;
     public String userID;
     public String email;
-
-
+    // these need to be reset when a score is successfully submitted or game is over
+    public boolean scoreNeedsToBeSubmitted;
+    public long currentScore;
+    public String tries;
+    public String times;
     public int level;
     public int stage;
     public int zone;
+    // ---------------END----------------
+
+    // Used to help store info, need to be reset
+    public List<Integer> levelTries;
+    public List<Integer> levelTimes;
 
     private Preferences prefs;
 
     // singleton: prevent instantiation from other classes
     private GamePreferences() {
         prefs = Gdx.app.getPreferences(Constants.PREFERENCES);
+        levelTries = new ArrayList<Integer>();
+        levelTimes = new ArrayList<Integer>();
 
         // Clear preferences every time the game runs on the desktop
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
@@ -44,8 +55,19 @@ public class GamePreferences {
         }
     }
 
+    public void reset(){
+        scoreNeedsToBeSubmitted = false;
+        currentScore = Constants.MAX_SCORE;
+        tries = "";
+        times = "";
+        level = 0;
+        stage = 0;
+        zone = 0;
+        levelTries.clear();
+        levelTimes.clear();
+    }
+
     public void load() {
-        numberOfDeaths = prefs.getInteger("numberOfDeaths", 0);
         sound = prefs.getBoolean("sound", true);
         music = prefs.getBoolean("music", true);
         scoreNeedsToBeSubmitted = prefs.getBoolean("scoreNeedsToBeSubmitted", false);
@@ -56,13 +78,46 @@ public class GamePreferences {
         zone = prefs.getInteger("zone", 0);
         userID = prefs.getString("userID", "");
         email = prefs.getString("email", "");
+        tries = prefs.getString("tries", "");
+        times = prefs.getString("times", "");
+
+        Gdx.app.log(TAG, "LOAD Times = " + times);
+
+        if(!tries.isEmpty()) {
+            String[] triesPerLevelArray = tries.split(",");
+            for (int x = 0; x < triesPerLevelArray.length; ++x) {
+                levelTries.add(Integer.parseInt(triesPerLevelArray[x]));
+            }
+        }
+
+        if(!times.isEmpty()) {
+            String[] timePerLevelArray = times.split(",");
+            for (int x = 0; x < timePerLevelArray.length; ++x) {
+                levelTimes.add(Integer.parseInt(timePerLevelArray[x]));
+            }
+        }
+
         currentScore = prefs.getLong("currentScore", Constants.MAX_SCORE);
     }
 
     public void save() {
-        prefs.putInteger("numberOfDeaths", numberOfDeaths);
         prefs.putString("userID", userID);
         prefs.putString("email", email);
+
+        String levelTriesAsString = levelTries.toString().replaceAll(" ", "");
+
+        tries = levelTriesAsString.substring(1, levelTriesAsString.length()-1);
+        Gdx.app.log(TAG, "SAVE TRIES = " + tries);
+
+        prefs.putString("tries", tries);
+
+        String levelTimesAsString = levelTimes.toString().replaceAll(" ", "");
+
+        times = levelTimesAsString.substring(1, levelTimesAsString.length()-1);
+        Gdx.app.log(TAG, "SAVE TIMES = " + times);
+
+        prefs.putString("times", times);
+
         prefs.putBoolean("sound", sound);
         prefs.putBoolean("music", music);
         prefs.putBoolean("scoreNeedsToBeSubmitted", scoreNeedsToBeSubmitted);

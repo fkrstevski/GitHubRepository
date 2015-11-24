@@ -60,6 +60,8 @@ public class Level {
 
     public int numberOfOrbitersFinishedWith;
 
+    public int currentLevel;
+
     public Level() {
         this.creditsIndex = -1;
         this.displayCredits = this.lastStage();
@@ -68,7 +70,6 @@ public class Level {
     }
 
     public void reset(){
-
         // BALL RESET
         ball.reset();
 
@@ -139,7 +140,20 @@ public class Level {
     }
 
     private void init() {
-        Gdx.app.log(TAG, "LEVEL init zone = " + GamePreferences.instance.zone + " stage = " + GamePreferences.instance.zone);
+        Gdx.app.log(TAG, "LEVEL init zone = " + GamePreferences.instance.zone + " stage = " + GamePreferences.instance.stage);
+
+        currentLevel = GamePreferences.instance.stage;
+        for(int i = GamePreferences.instance.zone - 1; i >= 0; --i ){
+            currentLevel += StageLoader.getZone(i).getNumberOfStages();
+        }
+        Gdx.app.log(TAG, "LEVEL init levelNumber = " + currentLevel);
+        Gdx.app.log(TAG, "LEVEL init GamePreferences.instance.levelTries.size() = " + GamePreferences.instance.levelTries.size());
+
+        if(GamePreferences.instance.levelTries.size() == currentLevel){
+            GamePreferences.instance.levelTries.add(currentLevel, 1);
+            GamePreferences.instance.save();
+        }
+
         this.points = StageLoader.getPoints(GamePreferences.instance.zone, GamePreferences.instance.stage);
         this.levelInstructions = StageLoader.getStageInstructions(GamePreferences.instance.zone, GamePreferences.instance.stage);
 

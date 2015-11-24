@@ -31,10 +31,7 @@ public class GameOverScreen extends AbstractGameScreen {
     public GameOverScreen(DirectedGame game) {
         super(game);
         this.game = game;
-        GamePreferences.instance.currentScore = Constants.MAX_SCORE;
-        GamePreferences.instance.zone = 0;
-        GamePreferences.instance.stage = 0;
-        GamePreferences.instance.level = 0;
+        GamePreferences.instance.reset();
         GamePreferences.instance.save();
     }
 
@@ -73,7 +70,7 @@ public class GameOverScreen extends AbstractGameScreen {
         camera.setToOrtho(true); // flip y-axis
         camera.update();
 
-        GamePreferences.instance.load();
+        //GamePreferences.instance.load();
 
         this.stage = new Stage();
         Skin skin = new Skin();

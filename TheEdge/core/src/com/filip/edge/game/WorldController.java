@@ -45,9 +45,13 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private float greenTime;
     private float levelScore;
 
+    private float levelTime;
+
     private static final int MAX_NUMBER_ORBITERS = 2;
     private boolean Orbiter1Visible = false;
     private boolean Orbiter2Visible = false;
+
+    private boolean startMovement;
 
     public WorldController(DirectedGame game) {
         Box2D.init();
@@ -80,7 +84,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 GamePreferences.instance.zone++;
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1) {
                     state = LevelState.GameBeat;
-                    GamePreferences.instance.zone = 0;
                     GamePreferences.instance.scoreNeedsToBeSubmitted = true;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
@@ -104,6 +107,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         levelScore = 0;
         Orbiter1Visible = false;
         Orbiter2Visible = false;
+        startMovement = false;
         level.reset();
     }
 
@@ -113,6 +117,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         levelScore = 0;
         Orbiter1Visible = false;
         Orbiter2Visible = false;
+        startMovement = false;
         level = new Level();
 
         if (b2world != null) {
@@ -403,6 +408,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
 
+                levelTime = 0;
+
                 // RESET STATE FOR PACER
                 if(this.level.hasPacerObject()) {
                     this.level.levelPacer.start();
@@ -526,6 +533,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
             }
         } else if (state == LevelState.Gameplay) {
+
+            levelTime+=deltaTime;
+
             // Update the score
             // need to do something fishy since current score is a long and subtracting
             // a small float might not update the actual value
@@ -631,9 +641,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             x = -Gdx.input.getAccelerometerX();
             y = -Gdx.input.getAccelerometerY();
 
-            moveBall(y * Constants.BALL_SPEED[GamePreferences.instance.zone] * horizontalScale * deltaTime,
-                     x * Constants.BALL_SPEED[GamePreferences.instance.zone] * verticalScale * deltaTime);
+            if (startMovement == false) {
+                if( x > 1 || x < -1 || y > 1 || y < -1) {
+                    startMovement = true;
+                }
+            }
+            else {
+                moveBall(y * Constants.BALL_SPEED[GamePreferences.instance.zone] * horizontalScale * deltaTime,
+                        x * Constants.BALL_SPEED[GamePreferences.instance.zone] * verticalScale * deltaTime);
 
+            }
         }
     }
 
@@ -939,6 +956,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.numberOfOrbitersFinishedWith++;
             }
         }
+
+        GamePreferences.instance.levelTimes.add(level.currentLevel, (int)(levelTime * 10));
+        GamePreferences.instance.save();
     }
 
     private void addOrbiters() {
@@ -963,7 +983,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             return;
         }
 
-        GamePreferences.instance.numberOfDeaths++;
+        int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
+        GamePreferences.instance.levelTries.set(level.currentLevel, thisTry+1);
         GamePreferences.instance.save();
 
         this.state = LevelState.OffTheEdge;

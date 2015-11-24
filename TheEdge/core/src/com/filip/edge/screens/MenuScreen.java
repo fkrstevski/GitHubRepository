@@ -48,7 +48,7 @@ public class MenuScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
-        GamePreferences.instance.load();
+        //GamePreferences.instance.load();
         worldController = new MainMenuController(game);
         worldRenderer = new MainMenuRenderer(worldController);
         Gdx.input.setCatchBackKey(true);

@@ -140,6 +140,7 @@ public class GamePreferences {
             parameters.put("times", GamePreferences.instance.times);
             parameters.put("extraData", "data from game");
             parameters.put("version", "" + Constants.GAME_VERSION);
+            parameters.put("isProduction", "" + Constants.PRODUCTION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
             request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitInProgressScore.php");
 
@@ -168,9 +169,8 @@ public class GamePreferences {
     public void getUserID() {
         if(userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
-            parameters.put("version", "" + Constants.GAME_VERSION);
-            parameters.put("score", "" + GamePreferences.instance.currentScore);
             parameters.put("extraData", "data from game");
+            parameters.put("isProduction", "" + Constants.PRODUCTION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
             request.setUrl("http://www.absolutegames.ca/TheEdgeGetUserID.php");
 

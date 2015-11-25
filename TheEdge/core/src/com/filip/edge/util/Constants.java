@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-    public static boolean DEBUG_BUILD = false;
-
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";
 
     public static final int GAME_VERSION = 1;
+    public static final boolean PRODUCTION = false;
+    public static boolean DEBUG_BUILD = false;
 
     // iOS Leaderboard
     public static final String IOS_LEADERBOARD_ID = "1212";
@@ -100,7 +100,5 @@ public class Constants {
         CREDIT_ARRAY[1][0] = "EVERYTHINGER";        CREDIT_ARRAY[1][1] = "ALIMA RAHMAN";
         CREDIT_ARRAY[2][0] = "LEAD CUTENESS";       CREDIT_ARRAY[2][1] = "KALI KRSTEVSKA";
         CREDIT_ARRAY[3][0] = "SPECIAL THANKS";      CREDIT_ARRAY[3][1] = "SEBASTIEN RAHMAN";
-        CREDIT_ARRAY[4][0] = "SPECIAL THANKS";      CREDIT_ARRAY[4][1] = "LAN NGUYEN";
-        CREDIT_ARRAY[5][0] = "CEO OF EVERYTHING";   CREDIT_ARRAY[5][1] = "DEEPAK GANDHI";
     }
 }

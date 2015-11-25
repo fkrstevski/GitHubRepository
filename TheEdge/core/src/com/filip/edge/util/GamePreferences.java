@@ -142,7 +142,7 @@ public class GamePreferences {
             parameters.put("version", "" + Constants.GAME_VERSION);
             parameters.put("isProduction", "" + Constants.PRODUCTION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitInProgressScore.php");
+            request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeSubmitInProgressScore.php");
 
             request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
             request.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -172,7 +172,7 @@ public class GamePreferences {
             parameters.put("extraData", "data from game");
             parameters.put("isProduction", "" + Constants.PRODUCTION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("http://www.absolutegames.ca/TheEdgeGetUserID.php");
+            request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeGetUserID.php");
 
             request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
             request.setHeader("Content-Type", "application/x-www-form-urlencoded");

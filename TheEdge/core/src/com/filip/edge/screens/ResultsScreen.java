@@ -266,7 +266,7 @@ public class ResultsScreen extends AbstractGameScreen {
             parameters.put("version", "" + Constants.GAME_VERSION);
             parameters.put("isProduction", "" + Constants.PRODUCTION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitScore.php");
+            request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeSubmitScore.php");
 
             request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
             request.setHeader("Content-Type", "application/x-www-form-urlencoded");

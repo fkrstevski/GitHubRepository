@@ -4,8 +4,10 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -27,6 +29,9 @@ import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -72,6 +77,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void init() {
         cameraHelper = new CameraHelper();
         initLevel();
+        GamePreferences.instance.submitData();
     }
 
     public void nextLevel() {
@@ -960,6 +966,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         GamePreferences.instance.levelTimes.add(level.currentLevel, (int)(levelTime * 10));
         GamePreferences.instance.save();
+        GamePreferences.instance.submitData();
     }
 
     private void addOrbiters() {
@@ -987,6 +994,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
         GamePreferences.instance.levelTries.set(level.currentLevel, thisTry+1);
         GamePreferences.instance.save();
+        GamePreferences.instance.submitData();
 
         this.state = LevelState.OffTheEdge;
         if (this.level.hasFollowerObject()) {

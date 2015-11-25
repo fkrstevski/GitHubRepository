@@ -15,6 +15,11 @@ public class DesktopLauncher {
 		//config.height = 760;
         //config.width = 1024;
 
+		// iPhone 5
+		config.height = 640;
+		config.width = 1136;
+
+
 		// old iPhone
 		//config.height = 320;
 		//config.width = 480;

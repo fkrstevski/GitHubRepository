@@ -263,6 +263,7 @@ public class ResultsScreen extends AbstractGameScreen {
             parameters.put("tries", GamePreferences.instance.tries);
             parameters.put("times", GamePreferences.instance.times);
             parameters.put("extraData", "data from game");
+            parameters.put("version", "" + Constants.GAME_VERSION);
             Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
             request.setUrl("http://www.absolutegames.ca/TheEdgeSubmitScore.php");
 

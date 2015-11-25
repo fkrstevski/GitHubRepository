@@ -11,6 +11,8 @@ public class Constants {
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";
 
+    public static final int GAME_VERSION = 1;
+
     // iOS Leaderboard
     public static final String IOS_LEADERBOARD_ID = "1212";
 

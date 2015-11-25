@@ -185,4 +185,19 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
             gcManager.reportScore(Constants.IOS_LEADERBOARD_ID, score);
         }
     }
+
+    @Override
+    public void showAchievements(){
+        if (this.isSignedIn)
+        {
+            gcManager.showAchievementsView();
+        }
+    }
+
+    @Override
+    public void unlockAchievement(String achievementID) {
+        if (this.isSignedIn) {
+            System.out.println("unlockAchievement " + achievementID);
+        }
+    }
 }

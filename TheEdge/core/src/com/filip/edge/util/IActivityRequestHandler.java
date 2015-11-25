@@ -14,11 +14,11 @@ public interface IActivityRequestHandler {
     public boolean isSignedIn();
 
     public void submitScore(long score);
-    //public void unlockAchievement(int stars);
+    public void unlockAchievement(String achievementID);
 
     //gets the scores/achievements and displays them threw googles default widget
     public void showScores();
-    //public void showAchievements();
+    public void showAchievements();
 
 
     public void startMethodTracing(String name);

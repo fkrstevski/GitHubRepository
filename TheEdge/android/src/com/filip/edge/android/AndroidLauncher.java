@@ -14,16 +14,16 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.filip.edge.EdgeGame;
 import com.filip.edge.util.IActivityRequestHandler;
-import com.google.android.gms.ads.AdRequest;
+/*import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.AdView;*/
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
     private GameHelper gameHelper;
     private static final String AD_UNIT_ID = "ca-app-pub-0265459346558615/8626109621";
-    AdView adView;
+    //AdView adView;
 
     private final int SHOW_ADS = 1;
     private final int HIDE_ADS = 0;
@@ -34,12 +34,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             switch (msg.what) {
                 case SHOW_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW AD!");
-                    adView.setVisibility(View.VISIBLE);
+                    //adView.setVisibility(View.VISIBLE);
                     break;
                 }
                 case HIDE_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! HIDE AD!");
-                    adView.setVisibility(View.GONE);
+                    //adView.setVisibility(View.GONE);
                     break;
                 }
             }
@@ -69,12 +69,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-        adView = new AdView(this);
-        adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId(AD_UNIT_ID);
-        startAdvertising();
+        //adView = new AdView(this);
+        //adView.setAdSize(AdSize.BANNER);
+        //adView.setAdUnitId(AD_UNIT_ID);
+        //startAdvertising();
 
-        layout.addView(adView, adParams);
+       // layout.addView(adView, adParams);
 
         setContentView(layout);
 
@@ -89,8 +89,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     private void startAdvertising() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //adView.loadAd(adRequest);
     }
 
     /*@Override
@@ -137,18 +137,18 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void onResume() {
         super.onResume();
-        if (adView != null) adView.resume();
+        //if (adView != null) adView.resume();
     }
 
     @Override
     public void onPause() {
-        if (adView != null) adView.pause();
+        //if (adView != null) adView.pause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        if (adView != null) adView.destroy();
+        //if (adView != null) adView.destroy();
         super.onDestroy();
     }
 
@@ -156,13 +156,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void login() {
         try {
             runOnUiThread(new Runnable() {
-                //@Override
+                @Override
                 public void run() {
                     gameHelper.beginUserInitiatedSignIn();
                 }
             });
         } catch (Exception e) {
-            Gdx.app.log("MyTemplateGame", "Log in failed: " + e.getMessage() + ".");
+            Gdx.app.log("The Edge", "Log in failed: " + e.getMessage() + ".");
         }
     }
 
@@ -170,13 +170,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void logOut() {
         try {
             runOnUiThread(new Runnable() {
-                //@Override
+                @Override
                 public void run() {
                     gameHelper.signOut();
                 }
             });
         } catch (Exception e) {
-            Gdx.app.log("MyTemplateGame", "Log out failed: " + e.getMessage() + ".");
+            Gdx.app.log("The Edge", "Log out failed: " + e.getMessage() + ".");
         }
     }
 
@@ -189,16 +189,17 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void submitScore(long score) {
         if (isSignedIn()) {
             Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);
-            //startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), 9002);
         } else {
             // Maybe sign in here then redirect to submitting score?
         }
     }
 
-
-    public void unlockAchievements(String achievementID) {
+    @Override
+    public void unlockAchievement(String achievementID) {
         if (isSignedIn()) {
-            //Games.Achievements.unlock(gameHelper.getApiClient(), achievementID);
+            Games.Achievements.unlock(gameHelper.getApiClient(), achievementID);
+        }else {
+            // Maybe sign in here
         }
     }
 
@@ -212,13 +213,22 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public void showAchievements(){
+        if (isSignedIn() == true) {
+            startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), 9003);
+        } else {
+            // Maybe sign in here
+        }
+    }
+
+    @Override
     public void onSignInFailed() {
-        Gdx.app.log("MyTemplateGame", "Sign in fail");
+        Gdx.app.log("The Edge", "Sign in fail");
     }
 
     @Override
     public void onSignInSucceeded() {
-        Gdx.app.log("MyTemplateGame", "SignedIn");
+        Gdx.app.log("The Edge", "SignedIn");
     }
     /*
 	@Override

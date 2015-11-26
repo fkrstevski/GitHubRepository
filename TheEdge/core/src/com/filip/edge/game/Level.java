@@ -362,7 +362,7 @@ public class Level {
 
                 ArrayList<Vector2> p = (ArrayList<Vector2>) (ArrayList<?>) (s.loopers.get(looperIndex).points);
 
-                loopers.add(new Follower(Follower.Type.Looper, Constants.PURPLE,
+                loopers.add(new Follower(Follower.Type.Looper, Constants.RED,
                         Constants.FOLLOWER_STARTTIME[s.loopers.get(looperIndex).startupTimeIndex],
                         new Vector2(Constants.FOLLOWER_SPEED[s.loopers.get(looperIndex).speedIndex] * horizontalScale,
                                 Constants.FOLLOWER_SPEED[s.loopers.get(looperIndex).speedIndex] * verticalScale),

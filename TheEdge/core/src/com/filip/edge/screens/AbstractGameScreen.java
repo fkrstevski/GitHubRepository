@@ -25,12 +25,12 @@ public abstract class AbstractGameScreen implements Screen {
 
     public abstract InputProcessor getInputProcessor();
 
+    public void interstitialClosed() { }
+
     public void resume() {
-        Assets.instance.init(new AssetManager());
     }
 
     public void dispose() {
-        Assets.instance.dispose();
     }
 
 }

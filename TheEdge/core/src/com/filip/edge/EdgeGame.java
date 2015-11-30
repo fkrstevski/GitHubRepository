@@ -34,6 +34,9 @@ public class EdgeGame extends DirectedGame {
         // Load preferences for audio settings and start playing music
         GamePreferences.instance.load();
 
+        // Set Monetization method
+        GamePreferences.instance.adType = GamePreferences.AdType.NONE.getValue();
+
         TextureManager.instance.load();
 
         DigitRenderer.instance.load();

@@ -13,20 +13,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.filip.edge.EdgeGame;
+import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
-/*import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;*/
+import com.google.android.gms.ads.*;
+import com.google.android.gms.games.Game;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
+
+    public static final String TAG = AndroidLauncher.class.getName();
     private GameHelper gameHelper;
-    private static final String AD_UNIT_ID = "ca-app-pub-0265459346558615/8626109621";
-    //AdView adView;
+    private AdView adView;
+    private InterstitialAd interstitialAd;
+    private EdgeGame game;
 
     private final int SHOW_ADS = 1;
     private final int HIDE_ADS = 0;
+    private final int SHOW_INTERSTITIAL_AD = 2;
 
     protected Handler handler = new Handler() {
         @Override
@@ -34,13 +38,25 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             switch (msg.what) {
                 case SHOW_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW AD!");
-                    //adView.setVisibility(View.VISIBLE);
+                    adView.setVisibility(View.VISIBLE);
+                    //startAdvertising();
                     break;
                 }
                 case HIDE_ADS: {
                     Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! HIDE AD!");
-                    //adView.setVisibility(View.GONE);
+                    adView.setVisibility(View.GONE);
                     break;
+                }
+                case SHOW_INTERSTITIAL_AD: {
+                    Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW INTERSTITIAL AD!");
+                    if (interstitialAd.isLoaded()) {
+                        interstitialAd.show();
+                    }
+                    else {
+                        if(game.getCurrScreen() != null) {
+                            game.getCurrScreen().interstitialClosed();
+                        }
+                    }
                 }
             }
         }
@@ -58,25 +74,47 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
         RelativeLayout layout = new RelativeLayout(this);
-
-        View gameView = initializeForView(new EdgeGame(this), config);
+        game = new EdgeGame(this);
+        View gameView = initializeForView(game, config);
         layout.addView(gameView);
 
         // Add the AdMob view
         RelativeLayout.LayoutParams adParams =
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-        adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-        //adView = new AdView(this);
-        //adView.setAdSize(AdSize.BANNER);
-        //adView.setAdUnitId(AD_UNIT_ID);
-        //startAdvertising();
+        adView = new AdView(this);
+        adView.setAdSize(AdSize.SMART_BANNER);
+        adView.setAdUnitId(getString(R.string.banner_ad_unit_id));
+        adView.setVisibility(View.GONE);
+        startAdvertising();
 
-       // layout.addView(adView, adParams);
+        layout.addView(adView, adParams);
 
         setContentView(layout);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitialAd();
+                if(game.getCurrScreen() != null) {
+                    game.getCurrScreen().interstitialClosed();
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                if(game.getCurrScreen() != null) {
+                    game.getCurrScreen().interstitialClosed();
+                }
+            }
+        });
+
+        requestNewInterstitialAd();
 
         /*GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         globalTracker=analytics.newTracker(R.xml.global_tracker)**/
@@ -88,9 +126,18 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     }
 
+    private void requestNewInterstitialAd() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("2502D554C3E469427B643A3BB7F2E807")
+                .build();
+
+        interstitialAd.loadAd(adRequest);
+    }
+
+
     private void startAdvertising() {
-        //AdRequest adRequest = new AdRequest.Builder().build();
-        //adView.loadAd(adRequest);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("2502D554C3E469427B643A3BB7F2E807").build();
+        adView.loadAd(adRequest);
     }
 
     /*@Override
@@ -101,7 +148,17 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showAds(boolean show) {
-        handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+        if(GamePreferences.instance.getAdType() == GamePreferences.AdType.ADMOB){
+            handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+        }
+        else {
+            Gdx.app.log(TAG, "ANDROID: No Add will be shown");
+        }
+    }
+
+    @Override
+    public void showInterstitialAd(){
+        handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
     }
 
     @Override
@@ -137,18 +194,18 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void onResume() {
         super.onResume();
-        //if (adView != null) adView.resume();
+        if (adView != null) adView.resume();
     }
 
     @Override
     public void onPause() {
-        //if (adView != null) adView.pause();
+        if (adView != null) adView.pause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        //if (adView != null) adView.destroy();
+        if (adView != null) adView.destroy();
         super.onDestroy();
     }
 

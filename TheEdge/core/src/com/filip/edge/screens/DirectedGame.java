@@ -55,6 +55,12 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
+    public void showInterstitialAd() {
+        if(this.activityRequestHandler != null) {
+            this.activityRequestHandler.showInterstitialAd();
+        }
+    }
+
     public void submitScore(long score) {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.submitScore(score);

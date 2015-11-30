@@ -60,7 +60,6 @@ public class WorldRenderer implements Disposable {
 
         batch.begin();
         worldController.level.renderBackButton(batch);
-        worldController.level.render(batch);
         if(worldController.state != WorldController.LevelState.GameOver){
             renderGuiScore(batch);
         }
@@ -68,6 +67,10 @@ public class WorldRenderer implements Disposable {
         if (Constants.DEBUG_BUILD) {
             renderGuiLevel(batch);
             renderGuiFpsCounter(batch);
+        }
+        if(worldController.state != WorldController.LevelState.InterstitialAd &&
+                worldController.state != WorldController.LevelState.InterstitialAdClosed) {
+            worldController.level.render(batch);
         }
 
         batch.setShader(null);

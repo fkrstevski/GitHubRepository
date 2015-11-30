@@ -44,6 +44,11 @@ public class GameScreen extends AbstractGameScreen {
     }
 
     @Override
+    public void interstitialClosed() {
+        worldController.state = WorldController.LevelState.InterstitialAdClosed;
+    }
+
+    @Override
     public void resize(int width, int height) {
         worldRenderer.resize(width, height);
     }

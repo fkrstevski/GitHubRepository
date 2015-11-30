@@ -21,6 +21,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 {
     private GameCenterManager gcManager;
     private boolean isSignedIn;
+    private EdgeGame game;
 
     public static void main(String[] argv)
     {
@@ -34,7 +35,8 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.multisample = GLKViewDrawableMultisample._4X;
-        IOSApplication app = new IOSApplication(new EdgeGame(this), config);
+        game = new EdgeGame(this);
+        IOSApplication app = new IOSApplication(game, config);
         return app;
     }
 
@@ -151,6 +153,15 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     public void showAds(boolean show) {
         System.out.println("showAds");
     }
+
+    @Override
+    public void showInterstitialAd(){
+        System.out.println("showInterstitialAd");
+        if(game.getCurrScreen() != null) {
+            game.getCurrScreen().interstitialClosed();
+        }
+    }
+
 
     @Override
     public void startMethodTracing(String name){

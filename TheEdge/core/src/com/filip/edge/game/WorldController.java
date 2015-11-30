@@ -21,10 +21,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.filip.edge.screens.DirectedGame;
-import com.filip.edge.screens.GameOverScreen;
-import com.filip.edge.screens.MenuScreen;
-import com.filip.edge.screens.ResultsScreen;
+import com.filip.edge.screens.*;
 import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
@@ -58,6 +55,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private boolean startMovement;
 
+    static final float showInterstitialAdTimeBefore = 1f;
+    static final float showInterstitialAdTimeAfter = 0.1f;
+    float currentAdTime;
+    boolean adShown;
+
     public WorldController(DirectedGame game) {
         Box2D.init();
         this.game = game;
@@ -67,6 +69,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.greenTime = 0;
         this.readyTimeRatio = this.readyTime / READY_TIME;
         this.state = LevelState.Countdown;
+        this.currentAdTime = 0;
+        this.adShown = false;
         init();
 
         this.level.startCircle = this.level.startCircleRedIcon;
@@ -118,10 +122,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         level.reset();
     }
 
-    private void initLevel() {
+    public void initLevel() {
         //this.game.startMethodTracing("initLevel");
 
         levelScore = 0;
+        this.adShown = false;
         Orbiter1Visible = false;
         Orbiter2Visible = false;
         startMovement = false;
@@ -396,7 +401,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             b2world.step(deltaTime, 8, 3);
 
             if (this.level.startCircle != null && this.level.startCircle != this.level.startCircleRedIcon && this.readyTimeRatio >= 0.0f && this.readyTimeRatio < 0.5f) {
-                this.game.showAds(false);
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
@@ -414,6 +418,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.greenTime = 0;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
+                adShown = false;
+                this.game.showAds(false);
 
                 levelTime = 0;
 
@@ -467,7 +473,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     level.rectangleShapes.get(i).start();
                 }
 
-                this.game.showAds(true);
+                //this.game.showAds(true);
             }
 
         } else if (state == LevelState.LevelComplete) {
@@ -520,7 +526,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                nextLevel();
+                if(GamePreferences.instance.getAdType() == GamePreferences.AdType.NONE) {
+                    nextLevel();
+                }
+                else {
+                    state = LevelState.InterstitialAd;
+                }
             }
         } else if (state == LevelState.OffTheEdge) {
             this.endTime += deltaTime;
@@ -585,6 +596,24 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (this.numberOfContacts == 0) {
                     fallOff();
                 }
+            }
+        }
+        else if (state == LevelState.InterstitialAd) {
+            if(!adShown) {
+                currentAdTime+=deltaTime;
+                if(currentAdTime > showInterstitialAdTimeBefore) {
+                    currentAdTime = 0;
+                    adShown = true;
+                    game.showInterstitialAd();
+                }
+            }
+        }
+        else if (state == LevelState.InterstitialAdClosed) {
+            currentAdTime+=deltaTime;
+            if(currentAdTime > showInterstitialAdTimeAfter) {
+                currentAdTime = 0;
+                state = LevelState.Countdown;
+                this.nextLevel();
             }
         }
     }
@@ -688,6 +717,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void backToMenu() {
+        game.showAds(false);
         // switch to menu screen
         game.setScreen(new MenuScreen(game));
     }
@@ -990,7 +1020,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             return;
         }
-
+        this.game.showAds(true);
         int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
         GamePreferences.instance.levelTries.set(level.currentLevel, thisTry+1);
         GamePreferences.instance.save();
@@ -1024,6 +1054,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         LevelComplete,
         OffTheEdge,
         GameOver,
-        GameBeat
+        GameBeat,
+        InterstitialAd,
+        InterstitialAdClosed
     }
 }

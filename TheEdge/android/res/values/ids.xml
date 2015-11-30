@@ -2,4 +2,6 @@
 <resources>
     <string name="app_id">53370080718</string>
     <string name="leaderboard_id">CgkIzpvr6MYBEAIQBg</string>
+    <string name="banner_ad_unit_id">ca-app-pub-0265459346558615/3497574820</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-0265459346558615/4974308028</string>
 </resources>

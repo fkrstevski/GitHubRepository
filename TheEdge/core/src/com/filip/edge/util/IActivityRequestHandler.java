@@ -3,25 +3,25 @@ package com.filip.edge.util;
 public interface IActivityRequestHandler {
     //for google analytcis
     //public void setTrackerScreenName(String path);
-    //for andmod ads
-    public void showAds(boolean show);
 
-    //for google play services
-    public void login();
+    // Ads
+    void showAds(boolean show);
+    void showInterstitialAd();
 
-    public void logOut();
+    // for google play services
+    void login();
+    void logOut();
+    boolean isSignedIn();
 
-    public boolean isSignedIn();
+    // Leaderboards
+    void showScores();
+    void submitScore(long score);
 
-    public void submitScore(long score);
-    public void unlockAchievement(String achievementID);
+    // Achievements
+    void unlockAchievement(String achievementID);
+    void showAchievements();
 
-    //gets the scores/achievements and displays them threw googles default widget
-    public void showScores();
-    public void showAchievements();
-
-
-    public void startMethodTracing(String name);
-
-    public void stopMethodTracing();
+    // Method tracing
+    void startMethodTracing(String name);
+    void stopMethodTracing();
 }

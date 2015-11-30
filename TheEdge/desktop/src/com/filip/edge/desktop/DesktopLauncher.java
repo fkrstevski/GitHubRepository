@@ -1,10 +1,14 @@
 package com.filip.edge.desktop;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.filip.edge.EdgeGame;
+import com.filip.edge.util.IActivityRequestHandler;
 
-public class DesktopLauncher {
+public class DesktopLauncher implements IActivityRequestHandler {
+	public static EdgeGame game;
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		// iPhone 6
@@ -23,6 +27,64 @@ public class DesktopLauncher {
 		// old iPhone
 		//config.height = 320;
 		//config.width = 480;
-		new LwjglApplication(new EdgeGame(null), config);
+
+		DesktopLauncher dl = new DesktopLauncher();
+		game = new EdgeGame(dl);
+		new LwjglApplication(game, config);
+	}
+
+	@Override
+	public void showAds(boolean show) {
+
+	}
+	@Override
+	public void showInterstitialAd(){
+		if(game.getCurrScreen() != null) {
+			game.getCurrScreen().interstitialClosed();
+		}
+	}
+
+	// for google play services
+	@Override
+	public void login(){
+
+	}
+	@Override
+	public void logOut(){
+
+	}
+	@Override
+	public boolean isSignedIn(){
+		return false;
+	}
+
+	// Leaderboards
+	@Override
+	public void showScores(){
+
+	}
+	@Override
+	public void submitScore(long score){
+
+	}
+
+	// Achievements
+	@Override
+	public void unlockAchievement(String achievementID){
+
+	}
+	@Override
+	public void showAchievements(){
+
+	}
+
+	// Method tracing
+	@Override
+	public void startMethodTracing(String name){
+
+	}
+	@Override
+	public void stopMethodTracing(){
+
 	}
 }

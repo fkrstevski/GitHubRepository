@@ -68,8 +68,7 @@ public class WorldRenderer implements Disposable {
             renderGuiLevel(batch);
             renderGuiFpsCounter(batch);
         }
-        if(worldController.state != WorldController.LevelState.InterstitialAd &&
-                worldController.state != WorldController.LevelState.InterstitialAdClosed) {
+        if(worldController.state != WorldController.LevelState.InterstitialAd) {
             worldController.level.render(batch);
         }
 
@@ -113,22 +112,16 @@ public class WorldRenderer implements Disposable {
         fontGameOver.draw(batch, level, x, y);
     }
 
-    private void renderGuiGameOver(SpriteBatch batch) {
-        float x = camera.viewportWidth / 2;
-        float y = camera.viewportHeight / 2;
-
-        BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
-        fontGameOver.setColor(Constants.RED);
-        fontGameOver.draw(batch, "GAME OVER", x, y);
-    }
-
     private void renderGuiScore(SpriteBatch batch) {
+        int y = (int)(DigitRenderer.instance.digitHeight / 2) +
+                DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
+        int x = (int) (camera.viewportWidth - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
         if (GamePreferences.instance.currentScore == Constants.MAX_SCORE) {
             score = "" + GamePreferences.instance.currentScore;
             String scoreSub = score.substring((int) (score.length() - this.worldController.readyTimeRatio * score.length()));
-            DigitRenderer.instance.renderNumber(scoreSub, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
+            DigitRenderer.instance.renderNumber(scoreSub, x, y, batch);
         } else {
-            DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (camera.viewportWidth - camera.viewportWidth / 54), (int) (camera.viewportHeight / 33 * Constants.DIGIT_ASPECT_RATIO), batch);
+            DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, x, y, batch);
         }
     }
 

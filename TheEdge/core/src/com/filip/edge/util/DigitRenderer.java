@@ -26,11 +26,10 @@ public class DigitRenderer {
     }
 
     public void load() {
-        int height = Gdx.graphics.getHeight();
         digits = new ArrayList<AbstractRectangleButtonObject>();
         letters = new ArrayList<AbstractRectangleButtonObject>();
 
-        digitHeight = (int) (Gdx.graphics.getWidth() * 0.054);
+        digitHeight = (int) (Gdx.graphics.getWidth() * 0.044);
         digitWidth = (int) (digitHeight / Constants.DIGIT_ASPECT_RATIO);
 
         digits.add(new Digit0(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
@@ -116,11 +115,11 @@ public class DigitRenderer {
     }
 
     public void renderStringAtCenterXPoint(String str, int x, int y, SpriteBatch batch, float scale) {
-        this.renderString(str, (int)(x - digitWidth * 0.5f +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+        this.renderString(str, (int)(x - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 
 
-    public void renderStringCentered(String str, int y, SpriteBatch batch) {
-        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f +  str.length() * digitWidth * EXTRA_SPACING * 0.5f), y, batch);
+    public void renderStringCentered(String str, int y, SpriteBatch batch, float scale) {
+        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 }

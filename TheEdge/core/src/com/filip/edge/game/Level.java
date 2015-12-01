@@ -181,8 +181,8 @@ public class Level {
         backButton = new BackButton(width * 0.05f,   // size
                 (int) (width * 0.03),    // x
                 (int) (width * 0.03),     // y
-                Constants.WHITE,         // outside color
-                Constants.ZONE_COLORS[GamePreferences.instance.zone],
+                Constants.TRANSPARENT,         // outside color
+                Constants.WHITE,
                 false, "CircleBack" + GamePreferences.instance.zone);      // inside color
 
         // Add Start Circle
@@ -552,17 +552,17 @@ public class Level {
 
         if(levelInstructions != ""){
             DigitRenderer.instance.renderStringCentered(levelInstructions, Gdx.graphics.getHeight() -
-                    DigitRenderer.instance.digitHeight / 2 -
-                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+                    (int)(DigitRenderer.instance.digitHeight / 2) -
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch, 1);
         }
         if(this.displayCredits && this.creditsIndex != -1 && creditTime < CREDIT_MAX_TIME){
             DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][0], Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS -
-                    DigitRenderer.instance.digitHeight - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+                    DigitRenderer.instance.digitHeight - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch, 1);
             DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][1], Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
-                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch);
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch, 1);
 
         }
 

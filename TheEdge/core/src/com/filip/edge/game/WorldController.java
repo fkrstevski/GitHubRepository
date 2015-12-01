@@ -55,8 +55,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private boolean startMovement;
 
-    static final float showInterstitialAdTimeBefore = 1f;
-    static final float showInterstitialAdTimeAfter = 0.1f;
+    static final float showInterstitialAdTime = 1f;
     float currentAdTime;
     boolean adShown;
 
@@ -601,19 +600,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         else if (state == LevelState.InterstitialAd) {
             if(!adShown) {
                 currentAdTime+=deltaTime;
-                if(currentAdTime > showInterstitialAdTimeBefore) {
-                    currentAdTime = 0;
+                if(currentAdTime > showInterstitialAdTime / 2.0f) {
                     adShown = true;
                     game.showInterstitialAd();
                 }
             }
-        }
-        else if (state == LevelState.InterstitialAdClosed) {
-            currentAdTime+=deltaTime;
-            if(currentAdTime > showInterstitialAdTimeAfter) {
-                currentAdTime = 0;
-                state = LevelState.Countdown;
-                this.nextLevel();
+            else {
+                currentAdTime+=deltaTime;
+                if(currentAdTime > showInterstitialAdTime) {
+                    currentAdTime = 0;
+                    adShown = false;
+                    state = LevelState.Countdown;
+                    this.nextLevel();
+                }
             }
         }
     }
@@ -1055,7 +1054,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         OffTheEdge,
         GameOver,
         GameBeat,
-        InterstitialAd,
-        InterstitialAdClosed
+        InterstitialAd
     }
 }

@@ -52,7 +52,7 @@ public class GameOverScreen extends AbstractGameScreen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        DigitRenderer.instance.renderStringCentered("GAME OVER", (int) (Gdx.graphics.getHeight() / 1.5), game.batch);
+        DigitRenderer.instance.renderStringCentered("GAME OVER", (int) (Gdx.graphics.getHeight() / 1.5), game.batch, 1);
 
         game.batch.setShader(null);
         game.batch.end();

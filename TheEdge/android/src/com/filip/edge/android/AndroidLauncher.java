@@ -37,18 +37,18 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_ADS: {
-                    Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW AD!");
+                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! SHOW AD!");
                     adView.setVisibility(View.VISIBLE);
                     //startAdvertising();
                     break;
                 }
                 case HIDE_ADS: {
-                    Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! HIDE AD!");
+                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! HIDE AD!");
                     adView.setVisibility(View.GONE);
                     break;
                 }
                 case SHOW_INTERSTITIAL_AD: {
-                    Gdx.app.debug("TS", "!!!!!!!!!!!!!!!!!!! SHOW INTERSTITIAL AD!");
+                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! SHOW INTERSTITIAL AD!");
                     if (interstitialAd.isLoaded()) {
                         interstitialAd.show();
                     }
@@ -82,7 +82,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         RelativeLayout.LayoutParams adParams =
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-        adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
         adView = new AdView(this);

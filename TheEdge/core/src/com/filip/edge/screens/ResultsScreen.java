@@ -80,8 +80,8 @@ public class ResultsScreen extends AbstractGameScreen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch);
-        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5), game.batch);
+        DigitRenderer.instance.renderStringCentered("THE END", (int) (Gdx.graphics.getHeight() * 0.1), game.batch, 1);
+        DigitRenderer.instance.renderStringCentered("SUBMIT", (int) (Gdx.graphics.getHeight() / 1.5), game.batch, 1);
 
         score = "" + GamePreferences.instance.currentScore;
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
@@ -90,7 +90,7 @@ public class ResultsScreen extends AbstractGameScreen {
         if(this.displayError) {
             DigitRenderer.instance.renderStringCentered(error, Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
-                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, game.batch);
+                    DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, game.batch, 1);
         }
 
         game.batch.setShader(null);

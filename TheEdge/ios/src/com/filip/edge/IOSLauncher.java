@@ -1,12 +1,12 @@
 package com.filip.edge;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.IActivityRequestHandler;
 
-import org.robovm.apple.foundation.NSAutoreleasePool;
-import org.robovm.apple.foundation.NSError;
+import org.robovm.apple.foundation.*;
 import org.robovm.apple.gamekit.GKAchievement;
 import org.robovm.apple.gamekit.GKLeaderboard;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;
@@ -14,14 +14,21 @@ import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
 import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
+import org.robovm.pods.google.GGLContextMobileAds;
+import org.robovm.pods.google.mobileads.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class IOSLauncher extends IOSApplication.Delegate implements IActivityRequestHandler, GameCenterListener
 {
     private GameCenterManager gcManager;
     private boolean isSignedIn;
     private EdgeGame game;
+    private IOSApplication app;
+
+    private static final boolean USE_TEST_DEVICES = true;
+    private GADBannerView adview;
 
     public static void main(String[] argv)
     {
@@ -36,7 +43,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.multisample = GLKViewDrawableMultisample._4X;
         game = new EdgeGame(this);
-        IOSApplication app = new IOSApplication(game, config);
+        app = new IOSApplication(game, config);
         return app;
     }
 
@@ -44,10 +51,46 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     public boolean didFinishLaunching(UIApplication application, UIApplicationLaunchOptions launchOptions)
     {
         boolean r = super.didFinishLaunching(application, launchOptions);
-
         gcManager = new GameCenterManager(application.getKeyWindow(), this);
 
+        try {
+            GGLContextMobileAds.getSharedInstance().configure();
+        }
+        catch (NSErrorException e){
+            System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
+        }
+
         return r;
+    }
+
+    @Override
+    public void didBecomeActive (UIApplication application) {
+        adview = new GADBannerView(GADAdSize.SmartBannerLandscape());
+        adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
+        adview.setHidden(true);
+        adview.setRootViewController(app.getUIViewController());
+        app.getUIViewController().getView().addSubview(adview);
+
+        GADRequest request = new GADRequest();
+        if (USE_TEST_DEVICES) {
+            request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
+            System.out.println("Test devices: " + request.getTestDevices());
+        }
+
+        adview.setDelegate(new GADBannerViewDelegateAdapter() {
+            @Override
+            public void didReceiveAd(GADBannerView view) {
+                super.didReceiveAd(view);
+            }
+
+            @Override
+            public void didFailToReceiveAd(GADBannerView view,
+                                           GADRequestError error) {
+                super.didFailToReceiveAd(view, error);
+            }
+        });
+
+        adview.loadRequest(request);
     }
 
     @Override
@@ -151,7 +194,8 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showAds(boolean show) {
-        System.out.println("showAds");
+        System.out.println("showAds " + show);
+        adview.setHidden(!show);
     }
 
     @Override

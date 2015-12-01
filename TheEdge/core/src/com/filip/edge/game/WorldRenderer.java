@@ -69,7 +69,7 @@ public class WorldRenderer implements Disposable {
                 renderGuiLevel(batch);
                 renderGuiFpsCounter(batch);
             }
-            if(worldController.state != WorldController.LevelState.InterstitialAd) {
+            if(worldController.state != WorldController.LevelState.Transition) {
                 worldController.level.render(batch);
             }
         }

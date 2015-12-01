@@ -112,7 +112,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 else {
                     GamePreferences.instance.save();
                     colorChange = true;
-                    state = LevelState.InterstitialAd; //TODO: make this a transition state
+                    state = LevelState.Transition;
                     clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
 
                     //Early out
@@ -124,7 +124,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Save the scores
         GamePreferences.instance.save();
-        state = LevelState.InterstitialAd;
+        state = LevelState.Transition;
     }
 
     private void resetLevel() {
@@ -606,7 +606,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
             }
         }
-        else if (state == LevelState.InterstitialAd) {
+        else if (state == LevelState.Transition) {
 
             if(colorChange) {
                 if(GamePreferences.instance.zone >= 0) {
@@ -1084,6 +1084,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         OffTheEdge,
         GameOver,
         GameBeat,
-        InterstitialAd
+        Transition
     }
 }

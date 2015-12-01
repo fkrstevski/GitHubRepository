@@ -99,7 +99,7 @@ public class ResultsScreen extends AbstractGameScreen {
         if (scoreSubmitted == true) {
             GamePreferences.instance.reset();
             GamePreferences.instance.save();
-            game.setScreen(new MenuScreen(game));
+            game.setScreen(new MenuScreen(game, false));
         }
     }
 

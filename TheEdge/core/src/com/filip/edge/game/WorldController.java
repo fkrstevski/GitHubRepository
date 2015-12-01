@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.net.HttpParametersUtils;
@@ -59,6 +60,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     float currentAdTime;
     boolean adShown;
 
+    public boolean colorChange;
+    public Color clearColor;
+
     public WorldController(DirectedGame game) {
         Box2D.init();
         this.game = game;
@@ -70,6 +74,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.state = LevelState.Countdown;
         this.currentAdTime = 0;
         this.adShown = false;
+        this.colorChange = false;
+        this.clearColor = new Color();
         init();
 
         this.level.startCircle = this.level.startCircleRedIcon;
@@ -93,24 +99,32 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 GamePreferences.instance.zone++;
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1) {
                     state = LevelState.GameBeat;
-                    GamePreferences.instance.zone = 0;
                     GamePreferences.instance.scoreNeedsToBeSubmitted = true;
+                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
+                    colorChange = true;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
                     this.game.submitScore(GamePreferences.instance.currentScore);
-                    game.setScreen(new ResultsScreen(game));
 
                     // Early out
                     return;
                 }
+                else {
+                    GamePreferences.instance.save();
+                    colorChange = true;
+                    state = LevelState.InterstitialAd; //TODO: make this a transition state
+                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
+
+                    //Early out
+                    return;
+                }
             }
         }
+        colorChange = false;
 
         // Save the scores
         GamePreferences.instance.save();
-
-        Gdx.app.debug(TAG, "Zone = " + GamePreferences.instance.zone + " Stage = " + GamePreferences.instance.stage + " Level = " + GamePreferences.instance.level);
-        initLevel();
+        state = LevelState.InterstitialAd;
     }
 
     private void resetLevel() {
@@ -525,12 +539,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.level.startCircle = this.level.startCircleRedIcon;
                 this.level.finishCircle = this.level.finishCircleRedIcon;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                if(GamePreferences.instance.getAdType() == GamePreferences.AdType.NONE) {
-                    nextLevel();
-                }
-                else {
-                    state = LevelState.InterstitialAd;
-                }
+                nextLevel();
             }
         } else if (state == LevelState.OffTheEdge) {
             this.endTime += deltaTime;
@@ -598,11 +607,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
         else if (state == LevelState.InterstitialAd) {
+
+            if(colorChange) {
+                if(GamePreferences.instance.zone >= 0) {
+                    clearColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentAdTime / showInterstitialAdTime);
+                }
+            }
+
             if(!adShown) {
                 currentAdTime+=deltaTime;
                 if(currentAdTime > showInterstitialAdTime / 2.0f) {
                     adShown = true;
-                    game.showInterstitialAd();
+                    if(GamePreferences.instance.getAdType() != GamePreferences.AdType.NONE) {
+                        game.showInterstitialAd();
+                    }
                 }
             }
             else {
@@ -611,8 +629,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     currentAdTime = 0;
                     adShown = false;
                     state = LevelState.Countdown;
-                    this.nextLevel();
+                    this.initLevel();
                 }
+            }
+        }
+        else if (state == LevelState.GameBeat) {
+
+            clearColor.lerp(Constants.ZONE_COLORS[0], currentAdTime / showInterstitialAdTime);
+
+            currentAdTime+=deltaTime;
+            if(currentAdTime > showInterstitialAdTime) {
+                currentAdTime = 0;
+                GamePreferences.instance.zone = 0;
+                game.setScreen(new ResultsScreen(game));
             }
         }
     }
@@ -718,7 +747,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     private void backToMenu() {
         game.showAds(false);
         // switch to menu screen
-        game.setScreen(new MenuScreen(game));
+        game.setScreen(new MenuScreen(game, false));
     }
 
     @Override
@@ -836,7 +865,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     }
                 }
             }
-
         }
 
         // Ball collision -> fixture B
@@ -993,7 +1021,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
 
-        GamePreferences.instance.levelTimes.add(level.currentLevel, (int)(levelTime * 10));
+        if(level.currentLevel == GamePreferences.instance.levelTimes.size()) {
+            GamePreferences.instance.levelTimes.add(level.currentLevel, (int) (levelTime * 10));
+        }
         GamePreferences.instance.save();
         GamePreferences.instance.submitData();
     }

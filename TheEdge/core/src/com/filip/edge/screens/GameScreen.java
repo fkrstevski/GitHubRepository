@@ -25,11 +25,20 @@ public class GameScreen extends AbstractGameScreen {
     public void render(float deltaTime) {
         // Do not update game world when paused.
         if (!paused) {
-            // Sets the clear screen color
-            Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+            if(worldController.colorChange) {
+                Gdx.gl.glClearColor(worldController.clearColor.r,
+                        worldController.clearColor.g,
+                        worldController.clearColor.b,
+                        worldController.clearColor.a);
+            }
+            else {
+                // Sets the clear screen color
+                Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
+                        Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
+                        Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
+                        Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+            }
+
 
             // Clears the screen
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

@@ -51,7 +51,7 @@ public class EdgeGame extends DirectedGame {
             setScreen(new ResultsScreen(this));
         } else {
             // Start game at menu screen
-            setScreen(new MenuScreen(this));
+            setScreen(new MenuScreen(this, true));
         }
     }
 

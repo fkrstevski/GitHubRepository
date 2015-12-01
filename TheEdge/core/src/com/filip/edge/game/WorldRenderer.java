@@ -59,17 +59,19 @@ public class WorldRenderer implements Disposable {
         worldController.cameraHelper.applyTo(camera);
 
         batch.begin();
-        worldController.level.renderBackButton(batch);
-        if(worldController.state != WorldController.LevelState.GameOver){
-            renderGuiScore(batch);
-        }
+        if(worldController.state != WorldController.LevelState.GameBeat) {
+            worldController.level.renderBackButton(batch);
+            if(worldController.state != WorldController.LevelState.GameOver){
+                renderGuiScore(batch);
+            }
 
-        if (Constants.DEBUG_BUILD) {
-            renderGuiLevel(batch);
-            renderGuiFpsCounter(batch);
-        }
-        if(worldController.state != WorldController.LevelState.InterstitialAd) {
-            worldController.level.render(batch);
+            if (Constants.DEBUG_BUILD) {
+                renderGuiLevel(batch);
+                renderGuiFpsCounter(batch);
+            }
+            if(worldController.state != WorldController.LevelState.InterstitialAd) {
+                worldController.level.render(batch);
+            }
         }
 
         batch.setShader(null);

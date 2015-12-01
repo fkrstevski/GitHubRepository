@@ -2,6 +2,7 @@ package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
@@ -12,22 +13,36 @@ public class MenuScreen extends AbstractGameScreen {
 
     private MainMenuController worldController;
     private MainMenuRenderer worldRenderer;
+    private Color startingColor;
+    private static final float colorLerpTime = 1;
+    private float currentTime;
 
     private boolean paused;
 
-    public MenuScreen(DirectedGame game) {
+    public MenuScreen(DirectedGame game, boolean lerpColor) {
         super(game);
+        if(lerpColor) {
+            startingColor = new Color(Constants.WHITE);
+        }
+        else {
+            startingColor = Constants.ZONE_COLORS[GamePreferences.instance.zone];
+        }
     }
 
     @Override
     public void render(float deltaTime) {
         // Do not update game world when paused.
         if (!paused) {
+            currentTime += deltaTime;
+            if(currentTime < colorLerpTime){
+                startingColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentTime / colorLerpTime);
+            }
+
             // Sets the clear screen color
-            Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
-                    Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+            Gdx.gl.glClearColor(startingColor.r,
+                    startingColor.g,
+                    startingColor.b,
+                    startingColor.a);
 
             // Clears the screen
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

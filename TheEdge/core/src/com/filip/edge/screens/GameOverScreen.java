@@ -146,7 +146,7 @@ public class GameOverScreen extends AbstractGameScreen {
     }
 
     public void btnSubmitClicked() {
-        game.setScreen(new MenuScreen(game));
+        game.setScreen(new MenuScreen(game, false));
     }
 
     @Override

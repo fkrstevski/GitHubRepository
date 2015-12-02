@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
     package="com.filip.edge.android"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -28,7 +29,8 @@
         </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
-            android:theme="@android:style/Theme.Translucent"
+            android:theme="@style/MyBannerTheme"
+            tools:replace="android:theme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
     </application>
 

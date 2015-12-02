@@ -34,6 +34,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     private static final boolean USE_TEST_DEVICES = true;
     private GADBannerView adview;
+    private GADInterstitial interstitial;
 
     public static void main(String[] argv)
     {
@@ -105,7 +106,36 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
             float bannerWidth = (float) screenSize.getWidth();
             float bannerHeight = (float) (screenSize.getHeight() * 0.15);
             adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
+
+            initializeInterstitialAd();
         }
+    }
+
+    public void initializeInterstitialAd() {
+        interstitial = new GADInterstitial("ca-app-pub-0265459346558615/3563123625");
+        interstitial.setDelegate(new GADInterstitialDelegateAdapter() {
+            @Override
+            public void didReceiveAd (GADInterstitial ad) {
+                System.out.println("Did receive ad.");
+            }
+
+            @Override
+            public void didDismissScreen(GADInterstitial ad) {
+                initializeInterstitialAd();
+            }
+
+            @Override
+            public void didFailToReceiveAd (GADInterstitial ad, GADRequestError error) {
+                System.out.println(error.description());
+                System.out.println(error.getErrorCode());
+            }
+        });
+
+        GADRequest request = new GADRequest();
+        if (USE_TEST_DEVICES) {
+            request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
+        }
+        interstitial.loadRequest(request);
     }
 
     @Override
@@ -218,6 +248,9 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     @Override
     public void showInterstitialAd(){
         System.out.println("showInterstitialAd");
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            interstitial.present(app.getUIViewController());
+        }
     }
 
 

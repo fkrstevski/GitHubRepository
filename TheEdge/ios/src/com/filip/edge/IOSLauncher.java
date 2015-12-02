@@ -1,17 +1,22 @@
 package com.filip.edge;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
 
+import org.robovm.apple.coregraphics.CGRect;
+import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.*;
 import org.robovm.apple.gamekit.GKAchievement;
 import org.robovm.apple.gamekit.GKLeaderboard;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
+import org.robovm.apple.uikit.UIScreen;
 import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
 import org.robovm.pods.google.GGLContextMobileAds;
@@ -53,11 +58,12 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         boolean r = super.didFinishLaunching(application, launchOptions);
         gcManager = new GameCenterManager(application.getKeyWindow(), this);
 
-        try {
-            GGLContextMobileAds.getSharedInstance().configure();
-        }
-        catch (NSErrorException e){
-            System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            try {
+                GGLContextMobileAds.getSharedInstance().configure();
+            } catch (NSErrorException e) {
+                System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
+            }
         }
 
         return r;
@@ -65,32 +71,41 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void didBecomeActive (UIApplication application) {
-        adview = new GADBannerView(GADAdSize.SmartBannerLandscape());
-        adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
-        adview.setHidden(true);
-        adview.setRootViewController(app.getUIViewController());
-        app.getUIViewController().getView().addSubview(adview);
+        super.didBecomeActive(application);
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            adview = new GADBannerView(GADAdSize.SmartBannerLandscape());
+            adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
+            adview.setHidden(true);
+            adview.setRootViewController(app.getUIViewController());
+            app.getUIViewController().getView().addSubview(adview);
 
-        GADRequest request = new GADRequest();
-        if (USE_TEST_DEVICES) {
-            request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
-            System.out.println("Test devices: " + request.getTestDevices());
+            GADRequest request = new GADRequest();
+            if (USE_TEST_DEVICES) {
+                request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
+                System.out.println("Test devices: " + request.getTestDevices());
+            }
+
+            adview.setDelegate(new GADBannerViewDelegateAdapter() {
+                @Override
+                public void didReceiveAd(GADBannerView view) {
+                    super.didReceiveAd(view);
+                }
+
+                @Override
+                public void didFailToReceiveAd(GADBannerView view,
+                                               GADRequestError error) {
+                    super.didFailToReceiveAd(view, error);
+                }
+            });
+
+            adview.loadRequest(request);
+
+            // Make height a little bigger
+            final CGSize screenSize = UIScreen.getMainScreen().getBounds().getSize();
+            float bannerWidth = (float) screenSize.getWidth();
+            float bannerHeight = (float) (screenSize.getHeight() * 0.15);
+            adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
         }
-
-        adview.setDelegate(new GADBannerViewDelegateAdapter() {
-            @Override
-            public void didReceiveAd(GADBannerView view) {
-                super.didReceiveAd(view);
-            }
-
-            @Override
-            public void didFailToReceiveAd(GADBannerView view,
-                                           GADRequestError error) {
-                super.didFailToReceiveAd(view, error);
-            }
-        });
-
-        adview.loadRequest(request);
     }
 
     @Override
@@ -195,15 +210,14 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     @Override
     public void showAds(boolean show) {
         System.out.println("showAds " + show);
-        adview.setHidden(!show);
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            adview.setHidden(!show);
+        }
     }
 
     @Override
     public void showInterstitialAd(){
         System.out.println("showInterstitialAd");
-        if(game.getCurrScreen() != null) {
-            game.getCurrScreen().interstitialClosed();
-        }
     }
 
 

@@ -53,11 +53,6 @@ public class GameScreen extends AbstractGameScreen {
     }
 
     @Override
-    public void interstitialClosed() {
-
-    }
-
-    @Override
     public void resize(int width, int height) {
         worldRenderer.resize(width, height);
     }

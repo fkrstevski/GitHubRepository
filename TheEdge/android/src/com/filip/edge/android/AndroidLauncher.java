@@ -52,11 +52,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                     if (interstitialAd.isLoaded()) {
                         interstitialAd.show();
                     }
-                    else {
-                        if(game.getCurrScreen() != null) {
-                            game.getCurrScreen().interstitialClosed();
-                        }
-                    }
                 }
             }
         }
@@ -78,43 +73,40 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         View gameView = initializeForView(game, config);
         layout.addView(gameView);
 
-        // Add the AdMob view
-        RelativeLayout.LayoutParams adParams =
-                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
-        adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            // Add the AdMob view
+            RelativeLayout.LayoutParams adParams =
+                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+            adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-        adView = new AdView(this);
-        adView.setAdSize(AdSize.SMART_BANNER);
-        adView.setAdUnitId(getString(R.string.banner_ad_unit_id));
-        adView.setVisibility(View.GONE);
-        startAdvertising();
+            adView = new AdView(this);
+            adView.setAdSize(AdSize.SMART_BANNER);
+            adView.setAdUnitId(getString(R.string.banner_ad_unit_id));
+            adView.setVisibility(View.GONE);
+            startAdvertising();
 
-        layout.addView(adView, adParams);
+            layout.addView(adView, adParams);
+
+            interstitialAd = new InterstitialAd(this);
+            interstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitialAd();
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+
+                }
+            });
+
+            requestNewInterstitialAd();
+        }
 
         setContentView(layout);
-
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitialAd();
-                if(game.getCurrScreen() != null) {
-                    game.getCurrScreen().interstitialClosed();
-                }
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                if(game.getCurrScreen() != null) {
-                    game.getCurrScreen().interstitialClosed();
-                }
-            }
-        });
-
-        requestNewInterstitialAd();
 
         /*GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         globalTracker=analytics.newTracker(R.xml.global_tracker)**/
@@ -127,17 +119,21 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     private void requestNewInterstitialAd() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("2502D554C3E469427B643A3BB7F2E807")
-                .build();
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("2502D554C3E469427B643A3BB7F2E807")
+                    .build();
 
-        interstitialAd.loadAd(adRequest);
+            interstitialAd.loadAd(adRequest);
+        }
     }
 
 
     private void startAdvertising() {
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("2502D554C3E469427B643A3BB7F2E807").build();
-        adView.loadAd(adRequest);
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice("2502D554C3E469427B643A3BB7F2E807").build();
+            adView.loadAd(adRequest);
+        }
     }
 
     /*@Override
@@ -148,7 +144,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showAds(boolean show) {
-        if(GamePreferences.instance.getAdType() == GamePreferences.AdType.ADMOB){
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB){
             handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
         }
         else {
@@ -158,7 +154,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showInterstitialAd(){
-        handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
+        }
     }
 
     @Override
@@ -194,18 +192,24 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void onResume() {
         super.onResume();
-        if (adView != null) adView.resume();
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            if (adView != null) adView.resume();
+        }
     }
 
     @Override
     public void onPause() {
-        if (adView != null) adView.pause();
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            if (adView != null) adView.pause();
+        }
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        if (adView != null) adView.destroy();
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            if (adView != null) adView.destroy();
+        }
         super.onDestroy();
     }
 

@@ -16,6 +16,7 @@ import com.filip.edge.util.IActivityRequestHandler;
 import com.filip.edge.util.TextureManager;
 
 public class EdgeGame extends DirectedGame {
+    public static final GamePreferences.AdType adType = GamePreferences.AdType.ADMOB;
     public EdgeGame(IActivityRequestHandler activityRequestHandler) {
         super(activityRequestHandler);
     }
@@ -33,9 +34,6 @@ public class EdgeGame extends DirectedGame {
 
         // Load preferences for audio settings and start playing music
         GamePreferences.instance.load();
-
-        // Set Monetization method
-        GamePreferences.instance.adType = GamePreferences.AdType.NONE.getValue();
 
         TextureManager.instance.load();
 

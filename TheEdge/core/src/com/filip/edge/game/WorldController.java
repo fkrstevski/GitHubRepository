@@ -618,9 +618,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 currentAdTime+=deltaTime;
                 if(currentAdTime > showInterstitialAdTime / 2.0f) {
                     adShown = true;
-                    if(GamePreferences.instance.getAdType() != GamePreferences.AdType.NONE) {
-                        game.showInterstitialAd();
-                    }
+                    game.showInterstitialAd();
                 }
             }
             else {

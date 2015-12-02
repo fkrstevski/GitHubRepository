@@ -39,9 +39,7 @@ public class DesktopLauncher implements IActivityRequestHandler {
 	}
 	@Override
 	public void showInterstitialAd(){
-		if(game.getCurrScreen() != null) {
-			game.getCurrScreen().interstitialClosed();
-		}
+
 	}
 
 	// for google play services

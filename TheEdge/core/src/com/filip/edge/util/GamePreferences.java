@@ -45,7 +45,6 @@ public class GamePreferences {
     public int level;
     public int stage;
     public int zone;
-    public int adType;
     // ---------------END----------------
 
     // Used to help store info, need to be reset
@@ -88,8 +87,6 @@ public class GamePreferences {
         level = prefs.getInteger("level", 0);
         stage = prefs.getInteger("stage", 0);
         zone = prefs.getInteger("zone", 0);
-        // This should always default to NONE
-        adType = prefs.getInteger("adType", AdType.NONE.getValue());
         userID = prefs.getString("userID", "");
         email = prefs.getString("email", "");
         tries = prefs.getString("tries", "");
@@ -140,7 +137,6 @@ public class GamePreferences {
         prefs.putInteger("level", level);
         prefs.putInteger("stage", stage);
         prefs.putInteger("zone", zone);
-        prefs.putInteger("adType", adType);
         prefs.putLong("currentScore", currentScore);
         prefs.flush();
     }
@@ -212,9 +208,5 @@ public class GamePreferences {
                 }
             });
         }
-    }
-
-    public AdType getAdType(){
-        return AdType.values()[adType];
     }
 }

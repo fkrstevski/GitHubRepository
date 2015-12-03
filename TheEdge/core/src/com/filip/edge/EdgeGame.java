@@ -16,7 +16,7 @@ import com.filip.edge.util.IActivityRequestHandler;
 import com.filip.edge.util.TextureManager;
 
 public class EdgeGame extends DirectedGame {
-    public static final GamePreferences.AdType adType = GamePreferences.AdType.ADMOB;
+    public static final GamePreferences.AdType adType = GamePreferences.AdType.NONE;
     public EdgeGame(IActivityRequestHandler activityRequestHandler) {
         super(activityRequestHandler);
     }

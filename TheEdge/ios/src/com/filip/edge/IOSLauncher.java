@@ -31,6 +31,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     private boolean isSignedIn;
     private EdgeGame game;
     private IOSApplication app;
+    private boolean adsInitialized = false;
 
     private static final boolean USE_TEST_DEVICES = true;
     private GADBannerView adview;
@@ -74,40 +75,44 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     public void didBecomeActive (UIApplication application) {
         super.didBecomeActive(application);
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
-            adview = new GADBannerView(GADAdSize.SmartBannerLandscape());
-            adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
-            adview.setHidden(true);
-            adview.setRootViewController(app.getUIViewController());
-            app.getUIViewController().getView().addSubview(adview);
 
-            GADRequest request = new GADRequest();
-            if (USE_TEST_DEVICES) {
-                request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
-                System.out.println("Test devices: " + request.getTestDevices());
+            if(!adsInitialized) {
+                adsInitialized = true;
+                adview = new GADBannerView(GADAdSize.SmartBannerLandscape());
+                adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
+                adview.setHidden(true);
+                adview.setRootViewController(app.getUIViewController());
+                app.getUIViewController().getView().addSubview(adview);
+
+                GADRequest request = new GADRequest();
+                if (USE_TEST_DEVICES) {
+                    request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
+                    System.out.println("Test devices: " + request.getTestDevices());
+                }
+
+                adview.setDelegate(new GADBannerViewDelegateAdapter() {
+                    @Override
+                    public void didReceiveAd(GADBannerView view) {
+                        super.didReceiveAd(view);
+                    }
+
+                    @Override
+                    public void didFailToReceiveAd(GADBannerView view,
+                                                   GADRequestError error) {
+                        super.didFailToReceiveAd(view, error);
+                    }
+                });
+
+                adview.loadRequest(request);
+
+                // Make height a little bigger
+                final CGSize screenSize = UIScreen.getMainScreen().getBounds().getSize();
+                float bannerWidth = (float) screenSize.getWidth();
+                float bannerHeight = (float) (screenSize.getHeight() * 0.15);
+                adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
+
+                initializeInterstitialAd();
             }
-
-            adview.setDelegate(new GADBannerViewDelegateAdapter() {
-                @Override
-                public void didReceiveAd(GADBannerView view) {
-                    super.didReceiveAd(view);
-                }
-
-                @Override
-                public void didFailToReceiveAd(GADBannerView view,
-                                               GADRequestError error) {
-                    super.didFailToReceiveAd(view, error);
-                }
-            });
-
-            adview.loadRequest(request);
-
-            // Make height a little bigger
-            final CGSize screenSize = UIScreen.getMainScreen().getBounds().getSize();
-            float bannerWidth = (float) screenSize.getWidth();
-            float bannerHeight = (float) (screenSize.getHeight() * 0.15);
-            adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
-
-            initializeInterstitialAd();
         }
     }
 
@@ -239,7 +244,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showAds(boolean show) {
-        System.out.println("showAds " + show);
+        System.out.println("@@@@@@@@@@@@@@@@@@@showAds " + show);
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             adview.setHidden(!show);
         }

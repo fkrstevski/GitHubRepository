@@ -92,7 +92,7 @@ public class Constants {
 
     public static final int WIDTH_IN_PIXELS = 3;
 
-    public static final int NUMBER_OF_CREDITS = 6;
+    public static final int NUMBER_OF_CREDITS = 4;
 
     public static String [][] CREDIT_ARRAY = new String[NUMBER_OF_CREDITS][2];
     static {

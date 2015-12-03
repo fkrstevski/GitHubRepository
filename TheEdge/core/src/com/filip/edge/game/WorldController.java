@@ -4,11 +4,9 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.net.HttpParametersUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -27,9 +25,6 @@ import com.filip.edge.util.AudioManager;
 import com.filip.edge.util.CameraHelper;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -56,7 +51,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private boolean startMovement;
 
-    static final float showInterstitialAdTime = 1f;
+    static final float transitionTime = 0.5f;
     float currentAdTime;
     boolean adShown;
 
@@ -610,20 +605,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             if(colorChange) {
                 if(GamePreferences.instance.zone >= 0) {
-                    clearColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentAdTime / showInterstitialAdTime);
+                    clearColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentAdTime / transitionTime);
                 }
             }
 
             if(!adShown) {
                 currentAdTime+=deltaTime;
-                if(currentAdTime > showInterstitialAdTime / 2.0f) {
+                if(currentAdTime > transitionTime / 2.0f) {
                     adShown = true;
                     game.showInterstitialAd();
                 }
             }
             else {
                 currentAdTime+=deltaTime;
-                if(currentAdTime > showInterstitialAdTime) {
+                if(currentAdTime > transitionTime) {
                     currentAdTime = 0;
                     adShown = false;
                     state = LevelState.Countdown;
@@ -633,10 +628,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else if (state == LevelState.GameBeat) {
 
-            clearColor.lerp(Constants.ZONE_COLORS[0], currentAdTime / showInterstitialAdTime);
+            clearColor.lerp(Constants.ZONE_COLORS[0], currentAdTime / transitionTime);
 
             currentAdTime+=deltaTime;
-            if(currentAdTime > showInterstitialAdTime) {
+            if(currentAdTime > transitionTime) {
                 currentAdTime = 0;
                 GamePreferences.instance.zone = 0;
                 game.setScreen(new ResultsScreen(game));

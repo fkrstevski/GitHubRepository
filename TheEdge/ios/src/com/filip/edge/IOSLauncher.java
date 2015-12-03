@@ -111,12 +111,14 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 float bannerHeight = (float) (screenSize.getHeight() * 0.15);
                 adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
 
+                System.out.println("didBecomeActive !adsInitialized");
                 initializeInterstitialAd();
             }
         }
     }
 
     public void initializeInterstitialAd() {
+        System.out.println("initialize Interstitial Ad");
         interstitial = new GADInterstitial("ca-app-pub-0265459346558615/3563123625");
         interstitial.setDelegate(new GADInterstitialDelegateAdapter() {
             @Override
@@ -126,6 +128,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
             @Override
             public void didDismissScreen(GADInterstitial ad) {
+                System.out.println("did Dismiss Screen");
                 initializeInterstitialAd();
             }
 
@@ -252,7 +255,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showInterstitialAd(){
-        System.out.println("showInterstitialAd");
+        System.out.println("show Interstitial Ad");
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
         }

@@ -7,6 +7,8 @@ import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.Gdx;
@@ -31,6 +33,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private final int SHOW_ADS = 1;
     private final int HIDE_ADS = 0;
     private final int SHOW_INTERSTITIAL_AD = 2;
+    private Animation bannerSlideDownAnimation;
+    private Animation bannerSlideUpAnimation;
 
     protected Handler handler = new Handler() {
         @Override
@@ -39,12 +43,14 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 case SHOW_ADS: {
                     Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! SHOW AD!");
                     adView.setVisibility(View.VISIBLE);
+                    adView.startAnimation(bannerSlideDownAnimation);
                     //startAdvertising();
                     break;
                 }
                 case HIDE_ADS: {
                     Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! HIDE AD!");
                     adView.setVisibility(View.GONE);
+                    adView.startAnimation(bannerSlideUpAnimation);
                     break;
                 }
                 case SHOW_INTERSTITIAL_AD: {
@@ -80,6 +86,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
             adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+
+            bannerSlideDownAnimation = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_top);
+            bannerSlideDownAnimation.setDuration(500);
+
+            bannerSlideUpAnimation = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_top);
+            bannerSlideUpAnimation.setDuration(500);
 
             adView = new AdView(this);
             adView.setAdSize(AdSize.SMART_BANNER);

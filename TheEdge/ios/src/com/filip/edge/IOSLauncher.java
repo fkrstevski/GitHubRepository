@@ -65,7 +65,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 GGLContextMobileAds.getSharedInstance().configure();
             } catch (NSErrorException e) {
                 System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
-            }
+             }
         }
 
         return r;
@@ -82,6 +82,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 adview.setAdUnitID("ca-app-pub-0265459346558615/1087335221");
                 adview.setHidden(true);
                 adview.setRootViewController(app.getUIViewController());
+                //adview.animate(1, Animation);
                 app.getUIViewController().getView().addSubview(adview);
 
                 GADRequest request = new GADRequest();

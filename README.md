@@ -70,3 +70,18 @@ New version
 - Update version number in iTunesConnect (from 1.0 to 1.1 for example)
 - Update robovm.properties version number (from 1.0 to 1.1 for example) 
 
+Testing for Android
+--------------------------
+
+1. Generate signed APK
+- Open RoobVM, from the main menu select "Build" --> "Generate Signed APK"
+- Create a keystore or use one from before
+- Specify the location of the apk, and generate
+2. Add new app to Android developer console
+- Fill in Store listing
+- Add Aplha testing apk
+- Add testers
+- Publish app
+
+
+

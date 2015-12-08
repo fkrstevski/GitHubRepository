@@ -21,9 +21,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Pool;
+import com.filip.edge.screens.objects.ScoreUpdateObject;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
@@ -35,11 +39,21 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera camera;
     private WorldController worldController;
     private Box2DDebugRenderer b2debugRenderer;
+    protected ShaderProgram redShader;
+    protected ShaderProgram greenShader;
 
     private String score;
 
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
+        String vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
+
+        String redFragmentShader = Gdx.files.internal("shaders/redPixelShader.glsl").readString();
+        redShader = new ShaderProgram(vertexShader,redFragmentShader);
+
+        String greenFragmentShader = Gdx.files.internal("shaders/greenPixelShader.glsl").readString();
+        greenShader = new ShaderProgram(vertexShader,greenFragmentShader);
+
         init();
     }
 
@@ -63,6 +77,7 @@ public class WorldRenderer implements Disposable {
             worldController.level.renderBackButton(batch);
             if(worldController.state != WorldController.LevelState.GameOver){
                 renderGuiScore(batch);
+                renderScoreUpdates(batch);
             }
 
             if (Constants.DEBUG_BUILD) {
@@ -125,6 +140,25 @@ public class WorldRenderer implements Disposable {
         } else {
             DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, x, y, batch);
         }
+    }
+
+    private void renderScoreUpdates(SpriteBatch batch){
+        ScoreUpdateObject item;
+        for (int i = this.worldController.activeScoreUpdates.size; --i >= 0;) {
+            item = this.worldController.activeScoreUpdates.get(i);
+            if (item.isAlive == true) {
+                if(item.score < 0) {
+                    batch.setShader(redShader);
+                    redShader.setUniformf("u_alpha", 1 - item.alpha);
+                }
+                else {
+                    batch.setShader(greenShader);
+                    greenShader.setUniformf("u_alpha", 1 - item.alpha);
+                }
+                DigitRenderer.instance.renderNumber(Math.abs((long)item.score), (int)item.currentPosition.x, (int)item.currentPosition.y, batch);
+            }
+        }
+        batch.setShader(null);
     }
 
     public void resize(int width, int height) {

@@ -19,12 +19,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Pool;
 import com.filip.edge.screens.*;
-import com.filip.edge.util.AudioManager;
-import com.filip.edge.util.CameraHelper;
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
+import com.filip.edge.screens.objects.ScoreUpdateObject;
+import com.filip.edge.util.*;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -57,6 +57,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     public boolean colorChange;
     public Color clearColor;
+
+    public final Array<ScoreUpdateObject> activeScoreUpdates = new Array<ScoreUpdateObject>();
+    private final Pool<ScoreUpdateObject> scoreUpdateObjectPool = new Pool<ScoreUpdateObject>() {
+        @Override
+        protected ScoreUpdateObject newObject() {
+            return new ScoreUpdateObject();
+        }
+    };
 
     public WorldController(DirectedGame game) {
         Box2D.init();
@@ -400,6 +408,18 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         level.updateCredits(deltaTime);
 
+        ScoreUpdateObject item;
+        for (int i = activeScoreUpdates.size; --i >= 0;) {
+            item = activeScoreUpdates.get(i);
+            if (item.isAlive == false) {
+                activeScoreUpdates.removeIndex(i);
+                scoreUpdateObjectPool.free(item);
+            }
+            else {
+                item.update(deltaTime);
+            }
+        }
+
         if (state == LevelState.Countdown) {
             this.readyTime += deltaTime;
             this.readyTimeRatio = this.readyTime / READY_TIME;
@@ -519,13 +539,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 level.oscillators.get(i).scale((1 - endTime / Constants.END_TIME));
             }
 
+            if(level.numberOfOrbitersFinishedWith > 0) {
+                GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
+                addScoreUpdate(Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith);
+                level.numberOfOrbitersFinishedWith = 0;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            }
+
             if(this.endTime / Constants.END_TIME > 0.5f) {
                 //System.gc();
-                if(level.numberOfOrbitersFinishedWith > 0) {
-                    GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
-                    level.numberOfOrbitersFinishedWith = 0;
-                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                }
             }
 
             if (endTime > Constants.END_TIME) {
@@ -542,7 +564,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             level.ball.scale.set(level.ball.scale.x * (1 - endTime / Constants.END_TIME), level.ball.scale.y * (1 - endTime / Constants.END_TIME));
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
-                GamePreferences.instance.currentScore -= Constants.SCORE_DECREMENT_FOR_COLLISION;
                 if (GamePreferences.instance.currentScore <= 0) {
                     GameOver();
                 } else {
@@ -1009,7 +1030,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.level.finishCircle = this.level.finishCircleGreenIcon;
         this.level.numberOfOrbitersFinishedWith = 0;
         for (int i = 0; i < this.level.ball.orbiters.size(); ++i) {
-            if(this.level.ball.orbiters.get(i).body.isActive()) {
+            if(this.level.ball.orbiters.get(i).visible) {
                 this.level.numberOfOrbitersFinishedWith++;
             }
         }
@@ -1030,11 +1051,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
         else {
             GamePreferences.instance.currentScore += Constants.EXTRA_ORBITER_WORTH;
+            addScoreUpdate(Constants.EXTRA_ORBITER_WORTH);
         }
     }
 
     private void pickupGold() {
-        GamePreferences.instance.currentScore += Constants.GOLD_WORTH;
+        if(this.state == LevelState.Gameplay) {
+            GamePreferences.instance.currentScore += Constants.GOLD_WORTH;
+            addScoreUpdate(Constants.GOLD_WORTH);
+        }
     }
 
     private void fallOff() {
@@ -1043,10 +1068,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             return;
         }
         this.game.showAds(true);
-        int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
-        GamePreferences.instance.levelTries.set(level.currentLevel, thisTry+1);
-        GamePreferences.instance.save();
-        GamePreferences.instance.submitData();
+        GamePreferences.instance.currentScore += Constants.SCORE_DECREMENT_FOR_COLLISION;
+        if(GamePreferences.instance.currentScore < 0)
+        {
+            GamePreferences.instance.currentScore = 0;
+        }
+        if(level.currentLevel == GamePreferences.instance.levelTries.size()) {
+            int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
+            GamePreferences.instance.levelTries.set(level.currentLevel, thisTry + 1);
+            GamePreferences.instance.save();
+            GamePreferences.instance.submitData();
+        }
+
+        addScoreUpdate(Constants.SCORE_DECREMENT_FOR_COLLISION);
 
         this.state = LevelState.OffTheEdge;
         if (this.level.hasFollowerObject()) {
@@ -1058,6 +1092,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         this.level.startCircle = this.level.startCircleRedIcon;
         this.level.finishCircle = this.level.finishCircleRedIcon;
+    }
+
+    public void addScoreUpdate(int score) {
+        // SCORE UPDATES
+        ScoreUpdateObject scoreUpdateObject = scoreUpdateObjectPool.obtain();
+        int y = (int)(DigitRenderer.instance.digitHeight / 2) +
+                DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
+        int x = (int) (Gdx.graphics.getWidth() - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        scoreUpdateObject.init(score, x, y + 50, x, y);
+        activeScoreUpdates.add(scoreUpdateObject);
     }
 
     @Override

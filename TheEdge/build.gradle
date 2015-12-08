@@ -40,6 +40,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        compile "de.tomgrill.gdxtwitter:gdx-twitter-desktop:0.1.0-SNAPSHOT"
     }
 }
 
@@ -64,6 +65,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         compile 'com.google.android.gms:play-services-ads:8.1.0'
+        compile "de.tomgrill.gdxtwitter:gdx-twitter-android:0.1.0-SNAPSHOT"
     }
 }
 
@@ -81,6 +83,7 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         compile "org.robovm:robopods-google-mobile-ads-ios:1.9.0"
+        compile "de.tomgrill.gdxtwitter:gdx-twitter-ios:0.1.0-SNAPSHOT"
         compile fileTree(dir: 'libs', include: '*.jar')
     }
 }
@@ -93,6 +96,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile "de.tomgrill.gdxtwitter:gdx-twitter-core:0.1.0-SNAPSHOT"
     }
 }
 

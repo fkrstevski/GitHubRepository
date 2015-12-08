@@ -32,6 +32,16 @@
             android:theme="@style/MyBannerTheme"
             tools:replace="android:theme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="de.tomgrill.gdxtwitter.android.AndroidTwitterAuthIntent"
+                android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="gdx-twitter" android:host="twitter" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

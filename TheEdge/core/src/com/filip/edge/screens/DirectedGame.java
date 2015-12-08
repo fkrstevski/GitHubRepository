@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.util.IActivityRequestHandler;
+import com.filip.edge.util.MyTwitterConfig;
+import de.tomgrill.gdxtwitter.core.TwitterAPI;
 
 public abstract class DirectedGame implements ApplicationListener {
     private static final String TAG = DirectedGame.class.getName();

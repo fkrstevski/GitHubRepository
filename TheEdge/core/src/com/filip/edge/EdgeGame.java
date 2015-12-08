@@ -3,17 +3,25 @@ package com.filip.edge;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.HttpStatus;
+import com.badlogic.gdx.utils.Base64Coder;
 import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
 import com.filip.edge.screens.GameScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
-import com.filip.edge.util.AudioManager;
-import com.filip.edge.util.DigitRenderer;
-import com.filip.edge.util.GamePreferences;
-import com.filip.edge.util.IActivityRequestHandler;
-import com.filip.edge.util.TextureManager;
+import com.filip.edge.util.*;
+import de.tomgrill.gdxtwitter.core.TwitterAPI;
+import de.tomgrill.gdxtwitter.core.TwitterConfig;
+import de.tomgrill.gdxtwitter.core.TwitterResponseListener;
+import de.tomgrill.gdxtwitter.core.TwitterSystem;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class EdgeGame extends DirectedGame {
     public static final GamePreferences.AdType adType = GamePreferences.AdType.NONE;
@@ -45,6 +53,8 @@ public class EdgeGame extends DirectedGame {
             this.activityRequestHandler.login();
         }
 
+        TwitterManager.instance.load();
+
         if (GamePreferences.instance.scoreNeedsToBeSubmitted) {
             setScreen(new ResultsScreen(this));
         } else {
@@ -52,5 +62,7 @@ public class EdgeGame extends DirectedGame {
             setScreen(new MenuScreen(this, true));
         }
     }
+
+
 
 }

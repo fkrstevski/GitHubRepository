@@ -47,9 +47,9 @@ public class MainMenuRenderer implements Disposable {
     }
 
     public void render(SpriteBatch batch) {
-        worldController.cameraHelper.applyTo(camera);
-
-        buffer.begin();
+        if(ScreenshotFactory.needsToGetScreenshot()) {
+            buffer.begin();
+        }
         // Sets the clear screen color
         Gdx.gl.glClearColor(worldController.startingColor.r,
                 worldController.startingColor.g,
@@ -58,21 +58,23 @@ public class MainMenuRenderer implements Disposable {
 
         // Clears the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
+        worldController.cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         renderWorld(batch);
+        batch.setProjectionMatrix(cameraGUI.combined);
         renderGui(batch);
         batch.setShader(null);
         batch.end();
 
         if(ScreenshotFactory.needsToGetScreenshot()) {
             ScreenshotFactory.saveScreenshot();
-        }
-        buffer.end();
+            buffer.end();
 
-        batch.begin();
-        batch.draw(buffer.getColorBufferTexture(), 0, 0);
-        batch.end();
+            batch.begin();
+            batch.draw(buffer.getColorBufferTexture(), 0, 0);
+            batch.end();
+        }
     }
 
     private void renderWorld(SpriteBatch batch) {

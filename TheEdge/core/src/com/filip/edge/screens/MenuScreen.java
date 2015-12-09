@@ -26,8 +26,6 @@ public class MenuScreen extends AbstractGameScreen {
     public void render(float deltaTime) {
         // Do not update game world when paused.
         if (!paused) {
-            // Clears the screen
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             // Render game world to screen
             worldRenderer.render(game.batch);
 

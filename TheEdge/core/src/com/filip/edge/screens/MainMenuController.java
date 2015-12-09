@@ -3,9 +3,10 @@ package com.filip.edge.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
-import com.filip.edge.util.CameraHelper;
-import com.filip.edge.util.GamePreferences;
+
+import com.filip.edge.util.*;
 
 public class MainMenuController extends InputAdapter implements Disposable {
 
@@ -16,9 +17,19 @@ public class MainMenuController extends InputAdapter implements Disposable {
     private DirectedGame game;
     private float zoomTime;
 
-    public MainMenuController(DirectedGame game) {
+    public Color startingColor;
+    private static final float colorLerpTime = 1;
+    private float currentTime;
+
+    public MainMenuController(DirectedGame game, boolean lerpColor) {
         this.game = game;
         init();
+        if(lerpColor) {
+            startingColor = new Color(Constants.WHITE);
+        }
+        else {
+            startingColor = Constants.ZONE_COLORS[GamePreferences.instance.zone];
+        }
     }
 
     private void init() {
@@ -33,6 +44,11 @@ public class MainMenuController extends InputAdapter implements Disposable {
     }
 
     public void update(float deltaTime) {
+        currentTime += deltaTime;
+        if(currentTime < colorLerpTime){
+            startingColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentTime / colorLerpTime);
+        }
+
         mainMenu.update(deltaTime);
         cameraHelper.update(deltaTime);
 
@@ -54,17 +70,25 @@ public class MainMenuController extends InputAdapter implements Disposable {
             this.mainMenu.state = MainMenu.MainMenuState.ZoomInToPlay;
         } else if (mainMenu.infoButton.isTouched(screenX, screenY)) {
             //Gdx.net.openURI("http://www.absolutegames.ca/TheEdgeShowScores.php");
-            GamePreferences.instance.zone = 0;
+
+            // Used to beat the game early
+            /*GamePreferences.instance.zone = 0;
             GamePreferences.instance.stage = 0;
             GamePreferences.instance.scoreNeedsToBeSubmitted = true;
             // Make sure we save the highest score ASAP
             GamePreferences.instance.save();
             this.game.submitScore(GamePreferences.instance.currentScore);
-            game.setScreen(new ResultsScreen(game));
+            game.setScreen(new ResultsScreen(game));*/
+
+            TwitterManager.instance.uploadPhoto();
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
-            if (this.game.activityRequestHandler != null) {
+            /*if (this.game.activityRequestHandler != null) {
                 this.game.activityRequestHandler.showScores();
-            }
+            }*/
+            TwitterManager.instance.uploadStatus("Hi");
+        }
+        else {
+            ScreenshotFactory.getScreenShot();
         }
         return false;
     }

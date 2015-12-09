@@ -17,10 +17,12 @@ import java.nio.ByteBuffer;
  * Created by fkrstevski on 2015-12-07.
  */
 public class ScreenshotFactory {
+    private static final String TAG = ScreenshotFactory.class.getName();
     private static boolean needToGetScreenshot = false;
 
     public static void getScreenShot() {
         needToGetScreenshot = true;
+        Gdx.app.log(TAG, "Get Screenshot");
     }
 
     public static boolean needsToGetScreenshot(){
@@ -28,6 +30,7 @@ public class ScreenshotFactory {
     }
 
     public static void saveScreenshot(){
+        Gdx.app.log(TAG, "Save Screenshot");
         needToGetScreenshot = false;
         //Then retrieve the Pixmap from the buffer.
         Pixmap pm = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

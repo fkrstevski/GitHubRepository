@@ -18,9 +18,12 @@
 package com.filip.edge.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -31,14 +34,20 @@ import com.filip.edge.screens.objects.ScoreUpdateObject;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
+import com.filip.edge.util.ScreenshotFactory;
 
 public class WorldRenderer implements Disposable {
-
     private static final String TAG = WorldRenderer.class.getName();
 
     private OrthographicCamera camera;
     private WorldController worldController;
+
+    // Used to correctly get the unoptimized framebuffer for iOS
+    // It used to give a screenshot of just a white image on iOS
+    private FrameBuffer buffer;
+
     private Box2DDebugRenderer b2debugRenderer;
+
     protected ShaderProgram redShader;
     protected ShaderProgram greenShader;
 
@@ -62,6 +71,9 @@ public class WorldRenderer implements Disposable {
         camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         camera.setToOrtho(true); // flip y-axis
         camera.update();
+
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+
         b2debugRenderer = new Box2DDebugRenderer();
     }
 
@@ -70,6 +82,26 @@ public class WorldRenderer implements Disposable {
     }
 
     private void renderWorld(SpriteBatch batch) {
+        if(ScreenshotFactory.needsToGetScreenshot()) {
+            buffer.begin();
+        }
+
+        if(worldController.colorChange) {
+            Gdx.gl.glClearColor(worldController.clearColor.r,
+                    worldController.clearColor.g,
+                    worldController.clearColor.b,
+                    worldController.clearColor.a);
+        }
+        else {
+            // Sets the clear screen color
+            Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
+                    Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
+                    Constants.ZONE_COLORS[GamePreferences.instance.zone].b,
+                    Constants.ZONE_COLORS[GamePreferences.instance.zone].a);
+        }
+
+        // Clears the screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         worldController.cameraHelper.applyTo(camera);
 
         batch.begin();
@@ -91,6 +123,15 @@ public class WorldRenderer implements Disposable {
 
         batch.setShader(null);
         batch.end();
+
+        if(ScreenshotFactory.needsToGetScreenshot()) {
+            ScreenshotFactory.saveScreenshot();
+            buffer.end();
+
+            batch.begin();
+            batch.draw(buffer.getColorBufferTexture(), 0, 0);
+            batch.end();
+        }
 
         if (worldController.renderPhysics) {
             b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));

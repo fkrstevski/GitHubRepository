@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.DigitRenderer;
 import com.filip.edge.util.GamePreferences;
+import com.filip.edge.util.ScreenshotFactory;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +53,10 @@ public class ResultsScreen extends AbstractGameScreen {
 
     private OrthographicCamera camera;
 
+    // Used to correctly get the unoptimized framebuffer for iOS
+    // It used to give a screenshot of just a white image on iOS
+    private FrameBuffer buffer;
+
     private int btnSubmitWidth;
     private int btnSubmitHeight;
     private int txtEmailWidth;
@@ -61,10 +67,15 @@ public class ResultsScreen extends AbstractGameScreen {
         this.game = game;
         this.email = ENTER_EMAIL;
         this.displayError = false;
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
     @Override
     public void render(float deltaTime) {
+        if(ScreenshotFactory.needsToGetScreenshot()) {
+            buffer.begin();
+        }
+
         // Sets the clear screen color
         Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                 Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
@@ -95,6 +106,15 @@ public class ResultsScreen extends AbstractGameScreen {
 
         game.batch.setShader(null);
         game.batch.end();
+
+        if(ScreenshotFactory.needsToGetScreenshot()) {
+            ScreenshotFactory.saveScreenshot();
+            buffer.end();
+
+            game.batch.begin();
+            game.batch.draw(buffer.getColorBufferTexture(), 0, 0);
+            game.batch.end();
+        }
 
         if (scoreSubmitted == true) {
             GamePreferences.instance.reset();
@@ -251,68 +271,77 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     public void btnSubmitClicked() {
-        displayError = false;
-        btnSubmitOutside.setStyle(textOutsideButtonStyle);
-        btnSubmit.setStyle(textInsideButtonStyle);
-        GamePreferences.instance.getUserID();
-        if(!GamePreferences.instance.userID.isEmpty()) {
-            Map<String, String> parameters = new HashMap<String, String>();
-            parameters.put("userID", "" + GamePreferences.instance.userID);
-            parameters.put("email", txtEmail.getText());
-            parameters.put("score", "" + GamePreferences.instance.currentScore);
-            parameters.put("tries", GamePreferences.instance.tries);
-            parameters.put("times", GamePreferences.instance.times);
-            parameters.put("extraData", "data from game");
-            parameters.put("version", "" + Constants.GAME_VERSION);
-            parameters.put("isProduction", "" + Constants.PRODUCTION);
-            Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-            request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeSubmitScore.php");
-
-            request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
-            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
-                @Override
-                public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
-                    Gdx.app.log("Result ", httpResponse.getResultAsString());
-
-                    if(httpResponse.getStatus().getStatusCode() == 200) {
-                        scoreSubmitted = true;
-                        GamePreferences.instance.email = txtEmail.getText();
-                        GamePreferences.instance.save();
-                    }
-                    else {
-                        displayError = true;
-                        btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
-                        btnSubmit.setStyle(textOutsideButtonStyleRed);
-                        error = "SUBMISSION ERROR";
-                    }
-                }
-
-                @Override
-                public void failed(Throwable t) {
-                    Gdx.app.error("Failed ", t.getMessage());
-                    displayError = true;
-                    btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
-                    btnSubmit.setStyle(textOutsideButtonStyleRed);
-                    error = "NO CONNECTION";
-                }
-
-                @Override
-                public void cancelled() {
-                    displayError = true;
-                    btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
-                    btnSubmit.setStyle(textOutsideButtonStyleRed);
-                    error = "NO CONNECTION";
-                }
-            });
-        }
-        else{
+        ScreenshotFactory.getScreenShot();
+        if(txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
+            btnSubmit.setTouchable(Touchable.disabled);
             displayError = true;
             btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
             btnSubmit.setStyle(textOutsideButtonStyleRed);
-            error = "NO CONNECTION";
+            error = "PLEASE ENTER YOUR EMAIL";
+        }
+        else {
+
+            displayError = false;
+            btnSubmitOutside.setStyle(textOutsideButtonStyle);
+            btnSubmit.setStyle(textInsideButtonStyle);
+            GamePreferences.instance.getUserID();
+            if (!GamePreferences.instance.userID.isEmpty()) {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("userID", "" + GamePreferences.instance.userID);
+                parameters.put("email", txtEmail.getText());
+                parameters.put("score", "" + GamePreferences.instance.currentScore);
+                parameters.put("tries", GamePreferences.instance.tries);
+                parameters.put("times", GamePreferences.instance.times);
+                parameters.put("extraData", "data from game");
+                parameters.put("version", "" + Constants.GAME_VERSION);
+                parameters.put("isProduction", "" + Constants.PRODUCTION);
+                Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+                request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeSubmitScore.php");
+
+                request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+                request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
+                    @Override
+                    public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                        Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
+                        Gdx.app.log("Result ", httpResponse.getResultAsString());
+
+                        if (httpResponse.getStatus().getStatusCode() == 200) {
+                            scoreSubmitted = true;
+                            GamePreferences.instance.email = txtEmail.getText();
+                            GamePreferences.instance.save();
+                        } else {
+                            displayError = true;
+                            btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                            btnSubmit.setStyle(textOutsideButtonStyleRed);
+                            error = "SUBMISSION ERROR";
+                        }
+                    }
+
+                    @Override
+                    public void failed(Throwable t) {
+                        Gdx.app.error("Failed ", t.getMessage());
+                        displayError = true;
+                        btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                        btnSubmit.setStyle(textOutsideButtonStyleRed);
+                        error = "NO CONNECTION";
+                    }
+
+                    @Override
+                    public void cancelled() {
+                        displayError = true;
+                        btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                        btnSubmit.setStyle(textOutsideButtonStyleRed);
+                        error = "NO CONNECTION";
+                    }
+                });
+            } else {
+                displayError = true;
+                btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
+                btnSubmit.setStyle(textOutsideButtonStyleRed);
+                error = "NO CONNECTION";
+            }
         }
     }
 

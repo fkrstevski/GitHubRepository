@@ -72,15 +72,15 @@ public class MainMenuController extends InputAdapter implements Disposable {
             //Gdx.net.openURI("http://www.absolutegames.ca/TheEdgeShowScores.php");
 
             // Used to beat the game early
-            /*GamePreferences.instance.zone = 0;
+            GamePreferences.instance.zone = 0;
             GamePreferences.instance.stage = 0;
             GamePreferences.instance.scoreNeedsToBeSubmitted = true;
             // Make sure we save the highest score ASAP
             GamePreferences.instance.save();
             this.game.submitScore(GamePreferences.instance.currentScore);
-            game.setScreen(new ResultsScreen(game));*/
+            game.setScreen(new ResultsScreen(game));
 
-            TwitterManager.instance.uploadPhoto();
+            //TwitterManager.instance.uploadPhoto();
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
             /*if (this.game.activityRequestHandler != null) {
                 this.game.activityRequestHandler.showScores();

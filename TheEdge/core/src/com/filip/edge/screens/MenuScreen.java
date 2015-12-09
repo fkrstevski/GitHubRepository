@@ -13,19 +13,37 @@ public class MenuScreen extends AbstractGameScreen {
 
     private MainMenuController worldController;
     private MainMenuRenderer worldRenderer;
+    private Color startingColor;
+    private static final float colorLerpTime = 1;
+    private float currentTime;
 
-    private boolean lerpColor;
     private boolean paused;
 
     public MenuScreen(DirectedGame game, boolean lerpColor) {
         super(game);
-        this.lerpColor = lerpColor;
+        if(lerpColor) {
+            startingColor = new Color(Constants.WHITE);
+        }
+        else {
+            startingColor = Constants.ZONE_COLORS[GamePreferences.instance.zone];
+        }
     }
 
     @Override
     public void render(float deltaTime) {
         // Do not update game world when paused.
         if (!paused) {
+            currentTime += deltaTime;
+            if(currentTime < colorLerpTime){
+                startingColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentTime / colorLerpTime);
+            }
+
+            // Sets the clear screen color
+            Gdx.gl.glClearColor(startingColor.r,
+                    startingColor.g,
+                    startingColor.b,
+                    startingColor.a);
+
             // Clears the screen
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             // Render game world to screen
@@ -46,7 +64,7 @@ public class MenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         //GamePreferences.instance.load();
-        worldController = new MainMenuController(game, lerpColor);
+        worldController = new MainMenuController(game);
         worldRenderer = new MainMenuRenderer(worldController);
         Gdx.input.setCatchBackKey(true);
     }

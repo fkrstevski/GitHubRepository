@@ -17,38 +17,44 @@ import java.nio.ByteBuffer;
  * Created by fkrstevski on 2015-12-07.
  */
 public class ScreenshotFactory {
-    private static boolean needToGetScreenshot = false;
-
-    public static void getScreenShot() {
-        needToGetScreenshot = true;
-    }
-
-    public static boolean needsToGetScreenshot(){
-        return needToGetScreenshot;
-    }
 
     public static void saveScreenshot(){
-        needToGetScreenshot = false;
-        //Then retrieve the Pixmap from the buffer.
-        Pixmap pm = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        try{
+            Gdx.files.local("shot.png").delete();
+            FileHandle fh;
+            do
+            {
+                fh = new FileHandle(Gdx.files.getLocalStoragePath() + "shot.png");
+            }
+            while (fh.exists());
+            Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // Flip the pixmap upside down
-        ByteBuffer pixels = pm.getPixels();
-        int numBytes = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() * 4;
-        byte[] lines = new byte[numBytes];
-        int numBytesPerLine = Gdx.graphics.getWidth() * 4;
-        for (int i = 0; i < Gdx.graphics.getHeight(); i++) {
-            pixels.position((Gdx.graphics.getHeight() - i - 1) * numBytesPerLine);
-            pixels.get(lines, i * numBytesPerLine, numBytesPerLine);
+            PixmapIO.writePNG(fh, pixmap);
+            pixmap.dispose();
+        }catch (Exception e){
         }
-        pixels.clear();
-        pixels.put(lines);
-        pixels.clear();
-
-        Gdx.files.local("shot.png").delete();
-        //Save the pixmap as png to the disk.
-        FileHandle levelTexture = Gdx.files.local("shot.png");
-        PixmapIO.writePNG(levelTexture, pm);
-        pm.dispose();
     }
+
+    private static Pixmap getScreenshot(int x, int y, int w, int h, boolean yDown){
+        final Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(x, y, w, h);
+
+        if (yDown) {
+            // Flip the pixmap upside down
+            ByteBuffer pixels = pixmap.getPixels();
+            int numBytes = w * h * 4;
+            byte[] lines = new byte[numBytes];
+            int numBytesPerLine = w * 4;
+            for (int i = 0; i < h; i++) {
+                pixels.position((h - i - 1) * numBytesPerLine);
+                pixels.get(lines, i * numBytesPerLine, numBytesPerLine);
+            }
+            pixels.clear();
+            pixels.put(lines);
+            pixels.clear();
+        }
+
+        return pixmap;
+    }
+
+
 }

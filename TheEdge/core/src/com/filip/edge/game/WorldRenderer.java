@@ -108,8 +108,8 @@ public class WorldRenderer implements Disposable {
         if(worldController.state != WorldController.LevelState.GameBeat) {
             worldController.level.renderBackButton(batch);
             if(worldController.state != WorldController.LevelState.GameOver){
-                renderGuiScore(batch);
                 renderScoreUpdates(batch);
+                renderGuiScore(batch);
             }
 
             if (Constants.DEBUG_BUILD) {

@@ -1,5 +1,6 @@
 package com.filip.edge.android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,11 @@ import com.google.android.gms.ads.*;
 import com.google.android.gms.games.Game;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
+
+import com.heyzap.sdk.ads.HeyzapAds;
+import com.heyzap.sdk.ads.IncentivizedAd;
+import com.heyzap.sdk.ads.VideoAd;
+
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
 
@@ -69,6 +75,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.numSamples = 4;
         //initialize(new EdgeGame(this), config);
+
+        Activity activity = this; // must be an Activity
+        HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c", activity);
+
+        // As early as possible, and after showing each video ad, call fetch
+        VideoAd.fetch();
+        // As early as possible, and after showing a rewarded video, call fetch
+        IncentivizedAd.fetch();
+
+        //HeyzapAds.startTestActivity(activity);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -161,7 +177,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
         }
         else {
-            Gdx.app.log(TAG, "ANDROID: No Add will be shown");
+            if(show){
+                com.heyzap.sdk.ads.InterstitialAd.display(this);
+            }
         }
     }
 
@@ -169,6 +187,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void showInterstitialAd(){
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
+        }
+        else {
+            if (VideoAd.isAvailable()) {
+                VideoAd.display(this);
+            }
         }
     }
 

@@ -21,6 +21,10 @@ import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
 import org.robovm.pods.google.GGLContextMobileAds;
 import org.robovm.pods.google.mobileads.*;
+import org.robovm.pods.heyzap.ads.HZIncentivizedAd;
+import org.robovm.pods.heyzap.ads.HZInterstitialAd;
+import org.robovm.pods.heyzap.ads.HZVideoAd;
+import org.robovm.pods.heyzap.ads.HeyzapAds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +70,10 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
             } catch (NSErrorException e) {
                 System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
              }
+        }
+        else {
+            HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c");
+            //HeyzapAds.presentMediationDebugViewController();
         }
 
         return r;
@@ -115,6 +123,10 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 System.out.println("didBecomeActive !adsInitialized");
                 initializeInterstitialAd();
             }
+        }
+        else {
+            HZVideoAd.fetch();
+            HZIncentivizedAd.fetch();
         }
     }
 
@@ -252,6 +264,11 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             adview.setHidden(!show);
         }
+        else {
+            if(show) {
+                HZInterstitialAd.show();
+            }
+        }
     }
 
     @Override
@@ -259,6 +276,9 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         System.out.println("show Interstitial Ad");
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
+        }
+        else {
+            HZVideoAd.show();
         }
     }
 

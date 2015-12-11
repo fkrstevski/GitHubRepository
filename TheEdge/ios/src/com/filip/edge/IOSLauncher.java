@@ -259,26 +259,53 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
-    public void showAds(boolean show) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@showAds " + show);
+    public void showBannerAds(boolean show) {
+        System.out.println("IOSLauncher: showBannerAds " + show);
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             adview.setHidden(!show);
         }
         else {
-            if(show) {
-                HZInterstitialAd.show();
-            }
+
         }
     }
 
     @Override
     public void showInterstitialAd(){
-        System.out.println("show Interstitial Ad");
+        System.out.println("IOSLauncher: showInterstitialAd");
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
         }
         else {
-            HZVideoAd.show();
+            HZInterstitialAd.show();
+        }
+    }
+
+    @Override
+    public void showVideoAd(){
+        System.out.println("IOSLauncher: showVideoAd");
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            interstitial.present(app.getUIViewController());
+        }
+        else {
+            if(HZVideoAd.isAvailable()) {
+                HZVideoAd.show();
+            }
+            else {
+                System.out.println("IOSLauncher: showVideoAd - NO AD AVAILABLE");
+            }
+        }
+    }
+
+    @Override
+    public void showRewardVideoAd(){
+        System.out.println("IOSLauncher: showRewardVideoAd");
+        if(EdgeGame.adType != GamePreferences.AdType.ADMOB) {
+            if(HZIncentivizedAd.isAvailable()) {
+                HZIncentivizedAd.show();
+            }
+            else {
+                System.out.println("IOSLauncher: showRewardVideoAd - NO AD AVAILABLE");
+            }
         }
     }
 

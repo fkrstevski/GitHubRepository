@@ -5,8 +5,10 @@ public interface IActivityRequestHandler {
     //public void setTrackerScreenName(String path);
 
     // Ads
-    void showAds(boolean show);
+    void showBannerAds(boolean show);
     void showInterstitialAd();
+    void showVideoAd();
+    void showRewardVideoAd();
 
     // for google play services
     void login();

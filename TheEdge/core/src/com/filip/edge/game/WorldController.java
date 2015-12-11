@@ -447,7 +447,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
                 adShown = false;
-                this.game.showAds(false);
+                this.game.showBannerAds(false);
 
                 levelTime = 0;
 
@@ -759,7 +759,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void backToMenu() {
-        game.showAds(false);
+        game.showBannerAds(false);
         // switch to menu screen
         game.setScreen(new MenuScreen(game, false));
     }
@@ -1067,7 +1067,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             return;
         }
-        this.game.showAds(true);
+        this.game.showBannerAds(true);
         GamePreferences.instance.currentScore += Constants.SCORE_DECREMENT_FOR_COLLISION;
         if(GamePreferences.instance.currentScore < 0)
         {

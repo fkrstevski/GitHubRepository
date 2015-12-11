@@ -172,25 +172,54 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }*/
 
     @Override
-    public void showAds(boolean show) {
+    public void showBannerAds(boolean show) {
+        System.out.println("AndroidLauncher: showBannerAds");
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB){
             handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
         }
         else {
-            if(show){
+
+        }
+    }
+
+    @Override
+    public void showInterstitialAd(){
+        System.out.println("AndroidLauncher: showInterstitialAd");
+        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+            handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
+        }
+        else {
+            if (com.heyzap.sdk.ads.InterstitialAd.isAvailable()) {
                 com.heyzap.sdk.ads.InterstitialAd.display(this);
             }
         }
     }
 
     @Override
-    public void showInterstitialAd(){
+    public void showVideoAd(){
+        System.out.println("AndroidLauncher: showVideoAd");
         if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
         }
         else {
-            if (VideoAd.isAvailable()) {
+            if(VideoAd.isAvailable()) {
                 VideoAd.display(this);
+            }
+            else {
+                System.out.println("AndroidLauncher: showVideoAd - NO AD AVAILABLE");
+            }
+        }
+    }
+
+    @Override
+    public void showRewardVideoAd(){
+        System.out.println("AndroidLauncher: showRewardVideoAd");
+        if(EdgeGame.adType != GamePreferences.AdType.ADMOB) {
+            if(IncentivizedAd.isAvailable()) {
+                IncentivizedAd.display(this);
+            }
+            else {
+                System.out.println("AndroidLauncher: showRewardVideoAd - NO AD AVAILABLE");
             }
         }
     }

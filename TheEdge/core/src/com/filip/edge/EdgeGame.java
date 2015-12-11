@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class EdgeGame extends DirectedGame {
+    private static final String TAG = EdgeGame.class.getName();
     public static final GamePreferences.AdType adType = GamePreferences.AdType.NONE;
     public EdgeGame(IActivityRequestHandler activityRequestHandler) {
         super(activityRequestHandler);
@@ -63,6 +64,43 @@ public class EdgeGame extends DirectedGame {
         }
     }
 
+    public void onCompleteRewardVideoAd(String tag) {
+        Gdx.app.log(TAG, "onCompleteRewardVideoAd " + tag);
+    }
 
+    public void onIncompleteRewardVideoAd(String tag) {
+        Gdx.app.log(TAG, "onIncompleteRewardVideoAd " + tag);
+    }
 
+    public void onShowAd(String tag) {
+        Gdx.app.log(TAG, "onShowAd " + tag);
+    }
+
+    public void onClickAd(String tag) {
+        Gdx.app.log(TAG, "onClickAd " + tag);
+    }
+
+    public void onHideAd(String tag) {
+        Gdx.app.log(TAG, "onHideAd " + tag);
+    }
+
+    public void onFailedToShowAd(String tag) {
+        Gdx.app.log(TAG, "onFailedToShowAd " + tag);
+    }
+
+    public void onReceivedAd(String tag) {
+        Gdx.app.log(TAG, "onReceivedAd " + tag);
+    }
+
+    public void onFailedToReceiveAd(String tag) {
+        Gdx.app.log(TAG, "onFailedToReceiveAd " + tag);
+    }
+
+    public void onAudioStartedForAd() {
+        Gdx.app.log(TAG, "onAudioStartedForAd");
+    }
+
+    public void onAudioFinishedForAd() {
+        Gdx.app.log(TAG, "onAudioFinishedForAd");
+    }
 }

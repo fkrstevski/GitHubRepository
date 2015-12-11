@@ -634,7 +634,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 currentAdTime+=deltaTime;
                 if(currentAdTime > transitionTime / 2.0f) {
                     adShown = true;
-                    game.showInterstitialAd();
+                    game.showRewardVideoAd();
                 }
             }
             else {

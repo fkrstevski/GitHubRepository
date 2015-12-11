@@ -76,16 +76,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         config.numSamples = 4;
         //initialize(new EdgeGame(this), config);
 
-        Activity activity = this; // must be an Activity
-        HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c", activity);
-
-        // As early as possible, and after showing each video ad, call fetch
-        VideoAd.fetch();
-        // As early as possible, and after showing a rewarded video, call fetch
-        IncentivizedAd.fetch();
-
-        //HeyzapAds.startTestActivity(activity);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -133,6 +123,79 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             });
 
             requestNewInterstitialAd();
+        }
+        else {
+            Activity activity = this; // must be an Activity
+            HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c", activity);
+
+            VideoAd.fetch();
+            IncentivizedAd.fetch();
+
+            HeyzapAds.OnStatusListener adListener = new HeyzapAds.OnStatusListener() {
+                @Override
+                public void onShow(String s) {
+                    game.onShowAd(s);
+                }
+
+                @Override
+                public void onClick(String s) {
+                    game.onClickAd(s);
+                }
+
+                @Override
+                public void onHide(String s) {
+                    VideoAd.fetch();
+                    IncentivizedAd.fetch();
+                    game.onHideAd(s);
+                }
+
+                @Override
+                public void onFailedToShow(String s) {
+                    VideoAd.fetch();
+                    IncentivizedAd.fetch();
+                    game.onFailedToShowAd(s);
+                }
+
+                @Override
+                public void onAvailable(String s) {
+                    game.onReceivedAd(s);
+                }
+
+                @Override
+                public void onFailedToFetch(String s) {
+                    VideoAd.fetch();
+                    IncentivizedAd.fetch();
+                    game.onFailedToReceiveAd(s);
+                }
+
+                @Override
+                public void onAudioStarted() {
+                    game.onAudioStartedForAd();
+                }
+
+                @Override
+                public void onAudioFinished() {
+                    game.onAudioFinishedForAd();
+                }
+            };
+
+            com.heyzap.sdk.ads.InterstitialAd.setOnStatusListener(adListener);
+            VideoAd.setOnStatusListener(adListener);
+            IncentivizedAd.setOnStatusListener(adListener);
+
+            IncentivizedAd.setOnIncentiveResultListener(new HeyzapAds.OnIncentiveResultListener() {
+                @Override
+                public void onComplete(String tag) {
+                    game.onCompleteRewardVideoAd(tag);
+                }
+
+                @Override
+                public void onIncomplete(String tag) {
+                    game.onIncompleteRewardVideoAd(tag);
+                }
+            });
+
+            //HeyzapAds.startTestActivity(activity);
         }
 
         setContentView(layout);

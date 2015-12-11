@@ -21,10 +21,7 @@ import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
 import org.robovm.pods.google.GGLContextMobileAds;
 import org.robovm.pods.google.mobileads.*;
-import org.robovm.pods.heyzap.ads.HZIncentivizedAd;
-import org.robovm.pods.heyzap.ads.HZInterstitialAd;
-import org.robovm.pods.heyzap.ads.HZVideoAd;
-import org.robovm.pods.heyzap.ads.HeyzapAds;
+import org.robovm.pods.heyzap.ads.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,6 +124,112 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         else {
             HZVideoAd.fetch();
             HZIncentivizedAd.fetch();
+
+            final HZAdsDelegateAdapter adsDelegate = new HZAdsDelegateAdapter() {
+                @Override
+                public void didShowAd(String tag) {
+                    game.onShowAd(tag);
+                }
+
+                @Override
+                public void didFailToShowAd(String tag, NSError error) {
+                    System.out.print(error);
+                    HZVideoAd.fetch();
+                    HZIncentivizedAd.fetch();
+                    game.onFailedToShowAd(tag);
+                }
+
+                @Override
+                public void didReceiveAd(String tag) {
+                    game.onReceivedAd(tag);
+                }
+
+                @Override
+                public void didFailToReceiveAd(String tag) {
+                    HZVideoAd.fetch();
+                    HZIncentivizedAd.fetch();
+                    game.onFailedToReceiveAd(tag);
+                }
+
+                @Override
+                public void didClickAd(String tag) {
+                    game.onClickAd(tag);
+                }
+
+                @Override
+                public void didHideAd(String tag) {
+                    HZVideoAd.fetch();
+                    HZIncentivizedAd.fetch();
+                    game.onHideAd(tag);
+                }
+
+                @Override
+                public void willStartAudio() {
+                    game.onAudioStartedForAd();
+                }
+
+                @Override
+                public void didFinishAudio() {
+                    game.onAudioFinishedForAd();
+                }
+            };
+
+            HZInterstitialAd.setDelegate(adsDelegate);
+            HZVideoAd.setDelegate(adsDelegate);
+
+            HZIncentivizedAdDelegateAdapter incentivizedAdDelegateAdapter = new HZIncentivizedAdDelegateAdapter() {
+                @Override
+                public void didCompleteAd(String tag) {
+                    game.onCompleteRewardVideoAd(tag);
+                }
+
+                @Override
+                public void didFailToCompleteAd(String tag) {
+                    game.onIncompleteRewardVideoAd(tag);
+                }
+
+                @Override
+                public void didShowAd(String tag) {
+                    adsDelegate.didShowAd(tag);
+                }
+
+                @Override
+                public void didFailToShowAd(String tag, NSError error) {
+                    adsDelegate.didFailToShowAd(tag, error);
+                }
+
+                @Override
+                public void didReceiveAd(String tag) {
+                    adsDelegate.didReceiveAd(tag);
+                }
+
+                @Override
+                public void didFailToReceiveAd(String tag) {
+                    adsDelegate.didFailToReceiveAd(tag);
+                }
+
+                @Override
+                public void didClickAd(String tag) {
+                    adsDelegate.didClickAd(tag);
+                }
+
+                @Override
+                public void didHideAd(String tag) {
+                    adsDelegate.didHideAd(tag);
+                }
+
+                @Override
+                public void willStartAudio() {
+                    adsDelegate.willStartAudio();
+                }
+
+                @Override
+                public void didFinishAudio() {
+                    adsDelegate.didFinishAudio();
+                }
+            };
+
+            HZIncentivizedAd.setDelegate(incentivizedAdDelegateAdapter);
         }
     }
 

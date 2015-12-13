@@ -39,7 +39,7 @@ public class MiddlePart extends AbstractRectangleButtonObject {
                 Objects.equals(hy, that.hy) &&
                 Objects.equals(angle, that.angle) &&
                 Objects.equals(position, that.position) &&
-                (Objects.equals(rotation, that.rotation) || Objects.equals(rotation+180, that.rotation) || Objects.equals(rotation - 180, that.rotation)) &&
+                (Objects.equals(rotation, that.rotation) || Objects.equals(rotation + 180, that.rotation) || Objects.equals(rotation - 180, that.rotation)) &&
                 Objects.equals(center, that.center) &&
                 Objects.equals(disappearingState, that.disappearingState);
     }
@@ -108,8 +108,7 @@ public class MiddlePart extends AbstractRectangleButtonObject {
                     }
 
             }
-        }
-        else if(appears && disappearsAppearsStartupTime != -1 && disappearsAppearsTime != -1) {
+        } else if (appears && disappearsAppearsStartupTime != -1 && disappearsAppearsTime != -1) {
             currentTime += deltaTime;
             switch (disappearingState) {
                 case Inactive:
@@ -170,14 +169,14 @@ public class MiddlePart extends AbstractRectangleButtonObject {
 
     @Override
     public void reset() {
-        if(disappears) {    
+        if (disappears) {
             currentTime = 0;
             Fixture f = body.getFixtureList().get(0);
             PolygonShape s = (PolygonShape) f.getShape();
             this.scale.set(1, 1);
             s.setAsBox(hx, hy, center, angle);
         }
-        if(appears) {
+        if (appears) {
             currentTime = 0;
             Fixture f = body.getFixtureList().get(0);
             PolygonShape s = (PolygonShape) f.getShape();
@@ -186,13 +185,11 @@ public class MiddlePart extends AbstractRectangleButtonObject {
         }
     }
 
-    public void start()
-    {
-        if(disappears) {
+    public void start() {
+        if (disappears) {
             this.currentTime = 0;
             this.disappearingState = Level.PropertyState.Inactive;
-        }
-        else if (appears) {
+        } else if (appears) {
             this.currentTime = 0;
             this.disappearingState = Level.PropertyState.Inactive;
             Fixture f = body.getFixtureList().get(0);

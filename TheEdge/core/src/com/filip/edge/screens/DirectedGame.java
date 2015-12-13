@@ -56,19 +56,19 @@ public abstract class DirectedGame implements ApplicationListener {
     }
 
     public void showInterstitialAd() {
-        if(this.activityRequestHandler != null) {
+        if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showInterstitialAd();
         }
     }
 
     public void showVideoAd() {
-        if(this.activityRequestHandler != null) {
+        if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showVideoAd();
         }
     }
 
     public void showRewardVideoAd() {
-        if(this.activityRequestHandler != null) {
+        if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showRewardVideoAd();
         }
     }
@@ -79,13 +79,13 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
-    public void startMethodTracing(String name){
+    public void startMethodTracing(String name) {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.startMethodTracing(name);
         }
     }
 
-    public void stopMethodTracing(){
+    public void stopMethodTracing() {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.stopMethodTracing();
         }

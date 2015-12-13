@@ -13,6 +13,7 @@ import com.filip.edge.util.*;
 public class EdgeGame extends DirectedGame {
     private static final String TAG = EdgeGame.class.getName();
     public static final GamePreferences.AdType adType = GamePreferences.AdType.NONE;
+
     public EdgeGame(IActivityRequestHandler activityRequestHandler) {
         super(activityRequestHandler);
     }

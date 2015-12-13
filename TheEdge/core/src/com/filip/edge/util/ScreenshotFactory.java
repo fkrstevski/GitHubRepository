@@ -23,17 +23,17 @@ public class ScreenshotFactory {
         Gdx.app.log(TAG, "Get Screenshot");
     }
 
-    public static boolean needsToGetScreenshot(){
+    public static boolean needsToGetScreenshot() {
         return needToGetScreenshot;
     }
 
-    public static void saveScreenshot(){
+    public static void saveScreenshot() {
         Gdx.app.log(TAG, "Save Screenshot");
         needToGetScreenshot = false;
         //Then retrieve the Pixmap from the buffer.
         Pixmap pm = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        if(flipY) {
+        if (flipY) {
             // Flip the pixmap upside down
             ByteBuffer pixels = pm.getPixels();
             int numBytes = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() * 4;

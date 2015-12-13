@@ -78,8 +78,8 @@ public class DigitRenderer {
 
     public void renderNumber(long number, int x, int y, SpriteBatch batch) {
         int count = 0;
-        while (number > 0){
-            int digit = (int)(number % 10);
+        while (number > 0) {
+            int digit = (int) (number % 10);
             AbstractRectangleButtonObject digitObject = digits.get(digit);
             digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
@@ -91,16 +91,16 @@ public class DigitRenderer {
     public void renderTime(long number, int x, int y, SpriteBatch batch) {
         int count = 0;
 
-        x = x + (int)((digitWidth * EXTRA_SPACING)* 1.5f );
+        x = x + (int) ((digitWidth * EXTRA_SPACING) * 1.5f);
 
-        while (number > 0){
-            if(count == 1) {
+        while (number > 0) {
+            if (count == 1) {
                 AbstractRectangleButtonObject digitObject = symbols.get(0); // Period
                 digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
                 digitObject.render(batch);
                 ++count;
             }
-            int digit = (int)(number % 10);
+            int digit = (int) (number % 10);
             AbstractRectangleButtonObject digitObject = digits.get(digit);
             digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
@@ -108,7 +108,7 @@ public class DigitRenderer {
             ++count;
         }
 
-        if(count == 1) {
+        if (count == 1) {
             AbstractRectangleButtonObject digitObject = symbols.get(0); // Period
             digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
@@ -142,11 +142,10 @@ public class DigitRenderer {
             // not space
             if (str.charAt(i) != ' ') {
                 AbstractRectangleButtonObject digitObject;
-                if(StageLoader.isInteger(str.charAt(i) + "")) {
+                if (StageLoader.isInteger(str.charAt(i) + "")) {
                     int digit = Character.getNumericValue(str.charAt(i));
                     digitObject = digits.get(digit);
-                }
-                else {
+                } else {
                     int index = str.charAt(i) - 'A';
                     digitObject = letters.get(index);
                 }
@@ -159,11 +158,11 @@ public class DigitRenderer {
     }
 
     public void renderStringAtCenterXPoint(String str, int x, int y, SpriteBatch batch, float scale) {
-        this.renderString(str, (int)(x - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+        this.renderString(str, (int) (x - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 
 
     public void renderStringCentered(String str, int y, SpriteBatch batch, float scale) {
-        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+        this.renderString(str, (int) (Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 }

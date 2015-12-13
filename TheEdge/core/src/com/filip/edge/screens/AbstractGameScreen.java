@@ -23,7 +23,9 @@ public abstract class AbstractGameScreen implements Screen {
 
     public abstract InputProcessor getInputProcessor();
 
-    public void resume() {}
+    public void resume() {
+    }
 
-    public void dispose() {}
+    public void dispose() {
+    }
 }

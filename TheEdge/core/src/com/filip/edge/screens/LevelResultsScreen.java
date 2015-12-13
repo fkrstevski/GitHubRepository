@@ -18,7 +18,7 @@ import com.filip.edge.util.*;
 /**
  * Created by fkrstevski on 2015-12-11.
  */
-public class LevelResultsScreen extends AbstractGameScreen{
+public class LevelResultsScreen extends AbstractGameScreen {
     private DirectedGame game;
     private Stage stage;
 
@@ -71,18 +71,16 @@ public class LevelResultsScreen extends AbstractGameScreen{
         this.game = game;
         this.colorChange = colorChange;
         clearColor = new Color();
-        if(this.colorChange) {
+        if (this.colorChange) {
             clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone - 1]);
-        }
-        else
-        {
+        } else {
             clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone]);
         }
 
         String vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
 
         String fontFragmentShader = Gdx.files.internal("shaders/fontPixelShader.glsl").readString();
-        fontShader = new ShaderProgram(vertexShader,fontFragmentShader);
+        fontShader = new ShaderProgram(vertexShader, fontFragmentShader);
 
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
@@ -132,7 +130,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
         btnTweet = new TextButton("", skin, "defaultOutside");
         btnTweetWidth = (int) (Gdx.graphics.getWidth() * 0.32);
         btnTweetHeight = (int) (Gdx.graphics.getHeight() * 0.16);
-        btnTweet.setPosition(Gdx.graphics.getWidth() * 0.5f - btnTweetWidth / 2,  DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        btnTweet.setPosition(Gdx.graphics.getWidth() * 0.5f - btnTweetWidth / 2, DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
         btnTweet.setSize(btnTweetWidth, btnTweetHeight);
         btnTweet.addListener(new ClickListener() {
             @Override
@@ -141,7 +139,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
             }
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
@@ -158,7 +156,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
             }
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
@@ -175,7 +173,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
             }
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
@@ -192,13 +190,13 @@ public class LevelResultsScreen extends AbstractGameScreen{
             }
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
 
         bgScreenshotWidth = (int) (Gdx.graphics.getWidth() * 0.5);
-        bgScreenshotHeight = (int)(bgScreenshotWidth * Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
+        bgScreenshotHeight = (int) (bgScreenshotWidth * Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
 
         Pixmap p = new Pixmap(
                 bgScreenshotWidth,
@@ -225,7 +223,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
         Gdx.input.setCatchBackKey(true);
     }
 
-    public void btnTweetClicked(){
+    public void btnTweetClicked() {
         TwitterManager.instance.uploadPhoto("Results Screen Tweet #lookslikeitsworking");
     }
 
@@ -236,15 +234,15 @@ public class LevelResultsScreen extends AbstractGameScreen{
     @Override
     public void render(float deltaTime) {
 
-        if(!gottenScreenshot) {
+        if (!gottenScreenshot) {
             ScreenshotFactory.getScreenShot(true);
             gottenScreenshot = true;
         }
 
-        if(colorChange) {
-            if(GamePreferences.instance.zone >= 0) {
-                currentAdTime+=deltaTime;
-                if(currentAdTime > transitionTime) {
+        if (colorChange) {
+            if (GamePreferences.instance.zone >= 0) {
+                currentAdTime += deltaTime;
+                if (currentAdTime > transitionTime) {
                     currentAdTime = 0;
                     colorChange = false;
                 }
@@ -252,7 +250,7 @@ public class LevelResultsScreen extends AbstractGameScreen{
             }
         }
 
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             buffer.begin();
         }
 
@@ -266,14 +264,14 @@ public class LevelResultsScreen extends AbstractGameScreen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(deltaTime);
-        if(!ScreenshotFactory.needsToGetScreenshot()) {
+        if (!ScreenshotFactory.needsToGetScreenshot()) {
             stage.draw();
         }
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        int y = (int)(DigitRenderer.instance.digitHeight / 2) +
+        int y = (int) (DigitRenderer.instance.digitHeight / 2) +
                 DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
         int x = (int) (camera.viewportWidth - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
 
@@ -307,31 +305,31 @@ public class LevelResultsScreen extends AbstractGameScreen{
         fontShader.setUniformf("u_red", clearColor.r);
         fontShader.setUniformf("u_green", clearColor.g);
         fontShader.setUniformf("u_blue", clearColor.b);
-        DigitRenderer.instance.renderStringAtCenterXPoint("VIDEO", (int)(btnVideo.getX() + btnVideoWidth /2) , Gdx.graphics.getHeight() - (int)(btnVideo.getY() + btnVideoHeight /2), game.batch, 1);
-        DigitRenderer.instance.renderStringAtCenterXPoint("TWEET", (int)(btnTweet.getX() + btnTweetWidth /2), Gdx.graphics.getHeight() - (int)(btnTweet.getY() + btnTweetHeight /2), game.batch, 1);
-        DigitRenderer.instance.renderStringAtCenterXPoint("NEXT LEVEL", (int)(btnNext.getX() + btnNextWidth /2), Gdx.graphics.getHeight() - (int)(btnNext.getY() + btnNextHeight /2), game.batch, 1);
+        DigitRenderer.instance.renderStringAtCenterXPoint("VIDEO", (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight / 2), game.batch, 1);
+        DigitRenderer.instance.renderStringAtCenterXPoint("TWEET", (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight / 2), game.batch, 1);
+        DigitRenderer.instance.renderStringAtCenterXPoint("NEXT LEVEL", (int) (btnNext.getX() + btnNextWidth / 2), Gdx.graphics.getHeight() - (int) (btnNext.getY() + btnNextHeight / 2), game.batch, 1);
         game.batch.setShader(null);
 
-        if(!ScreenshotFactory.needsToGetScreenshot()) {
+        if (!ScreenshotFactory.needsToGetScreenshot()) {
             backButton.render(game.batch);
         }
 
         game.batch.draw(levelBGTexture,
                 Gdx.graphics.getWidth() - bgScreenshotWidth - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
                 Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight / 2,
-                bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS)*2,
-                bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS)*2);
+                bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 2,
+                bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 2);
 
         game.batch.draw(levelTexture,
                 Gdx.graphics.getWidth() - bgScreenshotWidth - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS + DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
                 Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight / 2 + DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
-                bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS)*4,
-                bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS)*4);
+                bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 4,
+                bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 4);
 
         game.batch.setShader(null);
         game.batch.end();
 
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             ScreenshotFactory.saveScreenshot();
             buffer.end();
 

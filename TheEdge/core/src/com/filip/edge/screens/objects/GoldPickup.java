@@ -29,7 +29,7 @@ public class GoldPickup extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if(deactivate) {
+        if (deactivate) {
             deactivate = false;
             body.setActive(false);
         }
@@ -54,7 +54,7 @@ public class GoldPickup extends EmptyCircle {
 
     @Override
     public void render(SpriteBatch batch) {
-        if(state != State.Gone) {
+        if (state != State.Gone) {
             super.render(batch);
         }
     }
@@ -66,13 +66,13 @@ public class GoldPickup extends EmptyCircle {
         this.body.setActive(true);
     }
 
-    public void start(){
+    public void start() {
         this.currentTime = 0;
         this.state = State.ScalingUp;
         this.scale.set(0, 0);
     }
 
-    public void pickedUp(){
+    public void pickedUp() {
         this.state = State.Gone;
         deactivate = true;
     }

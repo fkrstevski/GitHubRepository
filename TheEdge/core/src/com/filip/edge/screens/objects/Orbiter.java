@@ -20,10 +20,9 @@ public class Orbiter extends EmptyCircle {
         super(size, x, y, outsideColor, insideColor, shared, region);
         this.ball = ball;
         this.startingAngle = angle;
-        if(vertical) {
+        if (vertical) {
             this.scale.set(1, 0.3f);
-        }
-        else {
+        } else {
             this.scale.set(0.3f, 1);
         }
     }
@@ -32,7 +31,7 @@ public class Orbiter extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if(deactivate) {
+        if (deactivate) {
             this.body.setActive(false);
             deactivate = false;
             this.visible = false;

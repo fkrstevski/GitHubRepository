@@ -18,9 +18,11 @@ public class GamePreferences {
     public static final String TAG = GamePreferences.class.getName();
 
     public static final GamePreferences instance = new GamePreferences();
+
     public enum AdType {
         NONE(0), ADMOB(1);
         private final int value;
+
         private AdType(int value) {
             this.value = value;
         }
@@ -67,7 +69,7 @@ public class GamePreferences {
         }
     }
 
-    public void reset(){
+    public void reset() {
         scoreNeedsToBeSubmitted = false;
         currentScore = Constants.MAX_SCORE;
         tries = "";
@@ -95,14 +97,14 @@ public class GamePreferences {
 
         Gdx.app.log(TAG, "LOAD Times = " + times);
 
-        if(!tries.isEmpty()) {
+        if (!tries.isEmpty()) {
             String[] triesPerLevelArray = tries.split(",");
             for (int x = 0; x < triesPerLevelArray.length; ++x) {
                 levelTries.add(Integer.parseInt(triesPerLevelArray[x]));
             }
         }
 
-        if(!times.isEmpty()) {
+        if (!times.isEmpty()) {
             String[] timePerLevelArray = times.split(",");
             for (int x = 0; x < timePerLevelArray.length; ++x) {
                 levelTimes.add(Integer.parseInt(timePerLevelArray[x]));
@@ -118,14 +120,14 @@ public class GamePreferences {
 
         String levelTriesAsString = levelTries.toString().replaceAll(" ", "");
 
-        tries = levelTriesAsString.substring(1, levelTriesAsString.length()-1);
+        tries = levelTriesAsString.substring(1, levelTriesAsString.length() - 1);
         Gdx.app.log(TAG, "SAVE TRIES = " + tries);
 
         prefs.putString("tries", tries);
 
         String levelTimesAsString = levelTimes.toString().replaceAll(" ", "");
 
-        times = levelTimesAsString.substring(1, levelTimesAsString.length()-1);
+        times = levelTimesAsString.substring(1, levelTimesAsString.length() - 1);
         Gdx.app.log(TAG, "SAVE TIMES = " + times);
 
         prefs.putString("times", times);
@@ -142,9 +144,9 @@ public class GamePreferences {
         prefs.flush();
     }
 
-    public void submitData(){
+    public void submitData() {
         GamePreferences.instance.getUserID();
-        if(!GamePreferences.instance.userID.isEmpty()) {
+        if (!GamePreferences.instance.userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
             parameters.put("userID", "" + GamePreferences.instance.userID);
             parameters.put("score", "" + GamePreferences.instance.currentScore);
@@ -179,7 +181,7 @@ public class GamePreferences {
     }
 
     public void getUserID() {
-        if(userID.isEmpty()) {
+        if (userID.isEmpty()) {
             Map<String, String> parameters = new HashMap<String, String>();
             parameters.put("extraData", "data from game");
             parameters.put("isProduction", "" + Constants.PRODUCTION);
@@ -211,12 +213,11 @@ public class GamePreferences {
         }
     }
 
-    public int getCurrentLevel()
-    {
+    public int getCurrentLevel() {
         int currentLevel = GamePreferences.instance.stage;
-        for(int i = GamePreferences.instance.zone - 1; i >= 0; --i ){
+        for (int i = GamePreferences.instance.zone - 1; i >= 0; --i) {
             currentLevel += StageLoader.getZone(i).getNumberOfStages();
         }
-        return  currentLevel;
+        return currentLevel;
     }
 }

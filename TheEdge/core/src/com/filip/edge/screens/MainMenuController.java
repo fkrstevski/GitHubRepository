@@ -25,10 +25,9 @@ public class MainMenuController extends InputAdapter implements Disposable {
     public MainMenuController(DirectedGame game, boolean lerpColor) {
         this.game = game;
         init();
-        if(lerpColor) {
+        if (lerpColor) {
             startingColor = new Color(Constants.WHITE);
-        }
-        else {
+        } else {
             startingColor = Constants.ZONE_COLORS[GamePreferences.instance.zone];
         }
     }
@@ -46,7 +45,7 @@ public class MainMenuController extends InputAdapter implements Disposable {
 
     public void update(float deltaTime) {
         currentTime += deltaTime;
-        if(currentTime < colorLerpTime){
+        if (currentTime < colorLerpTime) {
             startingColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentTime / colorLerpTime);
         }
 

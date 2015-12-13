@@ -66,7 +66,7 @@ public class Ball extends EmptyCircle {
         // Right Eye Ball
         buttonPixmap.fillCircle((int) (size * 0.75f), (int) (size * 0.6f), (int) (size / 20));
         // Left Eye Ball
-        buttonPixmap.fillCircle((int) (size * 0.35f), (int) (size *0.6f), (int) (size / 20));
+        buttonPixmap.fillCircle((int) (size * 0.35f), (int) (size * 0.6f), (int) (size / 20));
 
         // Mean look
         //buttonPixmap.setColor(Constants.BLACK);
@@ -81,11 +81,11 @@ public class Ball extends EmptyCircle {
         //buttonPixmap.fillTriangle((int) (size * 0.25f), (int) (size * .4f), (int) (size * 0.75f), (int) (size * .4f), (int) (size / 2), (int) (size * 0.25f));
     }
 
-    private Orbiter addNewOrbiter(){
+    private Orbiter addNewOrbiter() {
         int width = Gdx.graphics.getWidth();
         float horizontalScale = width / Constants.BASE_SCREEN_WIDTH;
         Orbiter orbiter = null;
-        if(orbiters.size() == 0) {
+        if (orbiters.size() == 0) {
             float xpos = this.position.x;
             float ypos = this.position.y;
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
@@ -93,16 +93,14 @@ public class Ball extends EmptyCircle {
             orbiter.visible = false;
             orbiters.add(orbiter);
 
-        }
-        else if(orbiters.size() == 1) {
+        } else if (orbiters.size() == 1) {
             float xpos = this.position.x;
             float ypos = this.position.y;
             orbiter = new Orbiter(Constants.ORBITER_RADIUS * 2 * Constants.LEVEL_MULTIPLIERS[GamePreferences.instance.level] * horizontalScale,
                     xpos, ypos, Constants.GREEN, Constants.GREEN, this, false, false, "CircleOrbiter");
             orbiter.visible = false;
             orbiters.add(orbiter);
-        }
-        else {
+        } else {
             Gdx.app.error(TAG, "CANNOT ADD ANY MORE ORBITERS");
         }
 
@@ -122,7 +120,7 @@ public class Ball extends EmptyCircle {
 
         // Render the orbiters first
         for (int i = 0; i < orbiters.size(); ++i) {
-            if(orbiters.get(i).visible) {
+            if (orbiters.get(i).visible) {
                 orbiters.get(i).render(batch);
             }
         }
@@ -131,12 +129,12 @@ public class Ball extends EmptyCircle {
     }
 
     @Override
-    public void reset(){
+    public void reset() {
         this.position.x = this.startingX;
         this.position.y = this.startingY;
-        this.scale.set(1,1);
+        this.scale.set(1, 1);
         this.direction = 1;
-        this.body.setLinearVelocity(0,0);
+        this.body.setLinearVelocity(0, 0);
         this.body.setTransform(this.position.x / Constants.BOX2D_SCALE, this.position.y / Constants.BOX2D_SCALE, 0);
 
         for (int i = 0; i < orbiters.size(); ++i) {

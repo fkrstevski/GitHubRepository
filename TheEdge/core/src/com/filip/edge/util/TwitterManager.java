@@ -27,10 +27,10 @@ public class TwitterManager {
     }
 
     public void load() {
-        if(twitterAPI == null) {
+        if (twitterAPI == null) {
             TwitterSystem twitterSystem = new TwitterSystem(new MyTwitterConfig());
 
-            twitterAPI=twitterSystem.getTwitterAPI();
+            twitterAPI = twitterSystem.getTwitterAPI();
             twitterAPI.setTokenAndSecret("1213562396-xqtnrInv9YW1d0jU9nqe3UIIUDPJmaUgMfgVW5A", "7d2BSsX1bS7Rzg7epZk9J6YxyP9oQS2WBriWRiJ5ANXkZ");
 
             autoSignIn();
@@ -41,7 +41,7 @@ public class TwitterManager {
         return (twitterAPI != null && twitterAPI.isLoaded() && twitterAPI.isSignedin());
     }
 
-    public void autoSignIn(){
+    public void autoSignIn() {
         if (twitterAPI.isLoaded() && !twitterAPI.isSignedin()) {
             twitterAPI.signin(false, new TwitterResponseListener() {
                 @Override
@@ -71,7 +71,7 @@ public class TwitterManager {
         }
     }
 
-    public void signinUserWithGUI(){
+    public void signinUserWithGUI() {
         twitterAPI.signin(true, new TwitterResponseListener() {
 
             @Override
@@ -104,8 +104,8 @@ public class TwitterManager {
 
         String mediaIdString = media_id;
         TwitterRequest tweetTextRequest = new TwitterRequest(TwitterRequestType.POST, "https://api.twitter.com/1.1/statuses/update.json");
-        tweetTextRequest.put("status",   status );
-        tweetTextRequest.put("media_ids", mediaIdString );
+        tweetTextRequest.put("status", status);
+        tweetTextRequest.put("media_ids", mediaIdString);
 
         twitterAPI.newAPIRequest(tweetTextRequest, new TwitterResponseListener() {
             @Override
@@ -131,7 +131,7 @@ public class TwitterManager {
         });
     }
 
-    public void uploadStatus(String message){
+    public void uploadStatus(String message) {
         TwitterRequest tweetTextRequest = new TwitterRequest(TwitterRequestType.POST, "https://api.twitter.com/1.1/statuses/update.json");
         tweetTextRequest.put("status", message);
 
@@ -185,29 +185,29 @@ public class TwitterManager {
         if (length > Integer.MAX_VALUE) {
             // File is too large
         }
-        byte[] bytes = new byte[(int)length];
+        byte[] bytes = new byte[(int) length];
 
         int offset = 0;
         int numRead = 0;
         while (offset < bytes.length
-                && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+                && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
             offset += numRead;
         }
 
         if (offset < bytes.length) {
-            throw new IOException("Could not completely read file "+file.getName());
+            throw new IOException("Could not completely read file " + file.getName());
         }
 
         is.close();
         return bytes;
     }
 
-    public void uploadPhoto(final String message){
+    public void uploadPhoto(final String message) {
         FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + "shot.png");
         Gdx.app.log(TAG, "file exist " + file.exists());
 
         TwitterRequest tr = new TwitterRequest(TwitterRequestType.POST, "https://upload.twitter.com/1.1/media/upload.json");
-        tr.put("media_data",  generateImageData(file));
+        tr.put("media_data", generateImageData(file));
         twitterAPI.newAPIRequest(tr, new TwitterResponseListener() {
 
             @Override
@@ -220,7 +220,7 @@ public class TwitterManager {
             public void success(String data) {
                 System.out.println("success: " + data);
                 JsonValue root = new JsonReader().parse(data);
-                String media_id =  root.get(1).asString();
+                String media_id = root.get(1).asString();
                 Gdx.app.log(TAG, "parsed media id " + media_id);
                 uploadTwitterPhoto(message, media_id);
 

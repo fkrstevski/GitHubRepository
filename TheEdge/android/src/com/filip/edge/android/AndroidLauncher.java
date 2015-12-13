@@ -82,7 +82,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         View gameView = initializeForView(game, config);
         layout.addView(gameView);
 
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             // Add the AdMob view
             RelativeLayout.LayoutParams adParams =
                     new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -120,8 +120,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             });
 
             requestNewInterstitialAd();
-        }
-        else {
+        } else {
             Activity activity = this; // must be an Activity
             HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c", activity);
 
@@ -208,7 +207,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     private void requestNewInterstitialAd() {
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice("2502D554C3E469427B643A3BB7F2E807")
                     .build();
@@ -219,7 +218,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 
     private void startAdvertising() {
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             AdRequest adRequest = new AdRequest.Builder().addTestDevice("2502D554C3E469427B643A3BB7F2E807").build();
             adView.loadAd(adRequest);
         }
@@ -234,21 +233,19 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void showBannerAds(boolean show) {
         System.out.println("AndroidLauncher: showBannerAds");
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB){
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
-        }
-        else {
+        } else {
 
         }
     }
 
     @Override
-    public void showInterstitialAd(){
+    public void showInterstitialAd() {
         System.out.println("AndroidLauncher: showInterstitialAd");
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
-        }
-        else {
+        } else {
             if (com.heyzap.sdk.ads.InterstitialAd.isAvailable()) {
                 com.heyzap.sdk.ads.InterstitialAd.display(this);
             }
@@ -256,41 +253,38 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    public void showVideoAd(){
+    public void showVideoAd() {
         System.out.println("AndroidLauncher: showVideoAd");
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
-        }
-        else {
-            if(VideoAd.isAvailable()) {
+        } else {
+            if (VideoAd.isAvailable()) {
                 VideoAd.display(this);
-            }
-            else {
+            } else {
                 System.out.println("AndroidLauncher: showVideoAd - NO AD AVAILABLE");
             }
         }
     }
 
     @Override
-    public void showRewardVideoAd(){
+    public void showRewardVideoAd() {
         System.out.println("AndroidLauncher: showRewardVideoAd");
-        if(EdgeGame.adType != GamePreferences.AdType.ADMOB) {
-            if(IncentivizedAd.isAvailable()) {
+        if (EdgeGame.adType != GamePreferences.AdType.ADMOB) {
+            if (IncentivizedAd.isAvailable()) {
                 IncentivizedAd.display(this);
-            }
-            else {
+            } else {
                 System.out.println("AndroidLauncher: showRewardVideoAd - NO AD AVAILABLE");
             }
         }
     }
 
     @Override
-    public void startMethodTracing(String name){
+    public void startMethodTracing(String name) {
         android.os.Debug.startMethodTracing(name);
     }
 
     @Override
-    public void stopMethodTracing(){
+    public void stopMethodTracing() {
         android.os.Debug.stopMethodTracing();
     }
 
@@ -317,14 +311,14 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void onResume() {
         super.onResume();
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             if (adView != null) adView.resume();
         }
     }
 
     @Override
     public void onPause() {
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             if (adView != null) adView.pause();
         }
         super.onPause();
@@ -332,7 +326,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void onDestroy() {
-        if(EdgeGame.adType == GamePreferences.AdType.ADMOB) {
+        if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             if (adView != null) adView.destroy();
         }
         super.onDestroy();
@@ -384,7 +378,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     public void unlockAchievement(String achievementID) {
         if (isSignedIn()) {
             Games.Achievements.unlock(gameHelper.getApiClient(), achievementID);
-        }else {
+        } else {
             // Maybe sign in here
         }
     }
@@ -399,7 +393,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    public void showAchievements(){
+    public void showAchievements() {
         if (isSignedIn() == true) {
             startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), 9003);
         } else {
@@ -417,11 +411,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         Gdx.app.log("The Edge", "SignedIn");
     }
     /*
-	@Override
-public void rateGame()
-{
-String str ="https://play.google.com/store/apps/details?id=com.csharks.thrustcopter";
-startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
-}
-	 */
+    @Override
+    public void rateGame()
+    {
+        String str ="https://play.google.com/store/apps/details?id=com.csharks.thrustcopter";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
+    }
+	*/
 }

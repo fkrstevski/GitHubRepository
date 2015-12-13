@@ -54,7 +54,7 @@ public class WorldRenderer implements Disposable {
         String vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
 
         String fontFragmentShader = Gdx.files.internal("shaders/fontPixelShader.glsl").readString();
-        fontShader = new ShaderProgram(vertexShader,fontFragmentShader);
+        fontShader = new ShaderProgram(vertexShader, fontFragmentShader);
 
         init();
     }
@@ -75,17 +75,16 @@ public class WorldRenderer implements Disposable {
     }
 
     private void renderWorld(SpriteBatch batch) {
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             buffer.begin();
         }
 
-        if(worldController.colorChange) {
+        if (worldController.colorChange) {
             Gdx.gl.glClearColor(worldController.clearColor.r,
                     worldController.clearColor.g,
                     worldController.clearColor.b,
                     worldController.clearColor.a);
-        }
-        else {
+        } else {
             // Sets the clear screen color
             Gdx.gl.glClearColor(Constants.ZONE_COLORS[GamePreferences.instance.zone].r,
                     Constants.ZONE_COLORS[GamePreferences.instance.zone].g,
@@ -98,8 +97,8 @@ public class WorldRenderer implements Disposable {
         worldController.cameraHelper.applyTo(camera);
 
         batch.begin();
-        if(worldController.state != WorldController.LevelState.GameBeat) {
-            if(!ScreenshotFactory.needsToGetScreenshot()) {
+        if (worldController.state != WorldController.LevelState.GameBeat) {
+            if (!ScreenshotFactory.needsToGetScreenshot()) {
                 renderNonScreenshotStuff(batch);
             }
 
@@ -109,7 +108,7 @@ public class WorldRenderer implements Disposable {
         batch.setShader(null);
         batch.end();
 
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             ScreenshotFactory.saveScreenshot();
             buffer.end();
 
@@ -126,7 +125,7 @@ public class WorldRenderer implements Disposable {
 
     private void renderNonScreenshotStuff(SpriteBatch batch) {
         worldController.level.renderBackButton(batch);
-        if(worldController.state != WorldController.LevelState.GameOver){
+        if (worldController.state != WorldController.LevelState.GameOver) {
             renderScoreUpdates(batch);
             renderGuiScore(batch);
         }
@@ -170,7 +169,7 @@ public class WorldRenderer implements Disposable {
     }
 
     private void renderGuiScore(SpriteBatch batch) {
-        int y = (int)(DigitRenderer.instance.digitHeight / 2) +
+        int y = (int) (DigitRenderer.instance.digitHeight / 2) +
                 DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
         int x = (int) (camera.viewportWidth - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
         if (GamePreferences.instance.currentScore == Constants.MAX_SCORE) {
@@ -182,25 +181,24 @@ public class WorldRenderer implements Disposable {
         }
     }
 
-    private void renderScoreUpdates(SpriteBatch batch){
+    private void renderScoreUpdates(SpriteBatch batch) {
         ScoreUpdateObject item;
-        for (int i = this.worldController.activeScoreUpdates.size; --i >= 0;) {
+        for (int i = this.worldController.activeScoreUpdates.size; --i >= 0; ) {
             item = this.worldController.activeScoreUpdates.get(i);
             if (item.isAlive == true) {
                 batch.setShader(fontShader);
-                if(item.score < 0) {
+                if (item.score < 0) {
                     fontShader.setUniformf("u_alpha", (1 - item.alpha));
                     fontShader.setUniformf("u_red", Constants.RED.r);
                     fontShader.setUniformf("u_green", Constants.RED.g);
                     fontShader.setUniformf("u_blue", Constants.RED.b);
-                }
-                else {
+                } else {
                     fontShader.setUniformf("u_alpha", (1 - item.alpha));
                     fontShader.setUniformf("u_red", Constants.GREEN.r);
                     fontShader.setUniformf("u_green", Constants.GREEN.g);
                     fontShader.setUniformf("u_blue", Constants.GREEN.b);
                 }
-                DigitRenderer.instance.renderNumber(Math.abs((long)item.score), (int)item.currentPosition.x, (int)item.currentPosition.y, batch);
+                DigitRenderer.instance.renderNumber(Math.abs((long) item.score), (int) item.currentPosition.x, (int) item.currentPosition.y, batch);
             }
         }
         batch.setShader(null);

@@ -97,11 +97,11 @@ public class Follower {
                 float finalVelocity = xDirection * this.followerObjectSpeed.x + yDirection * this.followerObjectSpeed.y;
                 this.followerObject.body.setLinearVelocity(vectorDirection.x * finalVelocity, vectorDirection.y * finalVelocity);
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
-                    this.followerObject.body.setLinearVelocity(0,0);
+                    this.followerObject.body.setLinearVelocity(0, 0);
                     this.followerObject.position.set(this.followObjectTo.x, this.followObjectTo.y);
                     this.followerObject.body.setTransform(this.followObjectTo.x / Constants.BOX2D_SCALE, this.followObjectTo.y / Constants.BOX2D_SCALE, 0);
                     this.followPointIndex += this.direction;
-                    
+
                     if (this.backAndForth) {
                         if (this.followPointIndex == 0 || this.followPointIndex == pointsToFollow.size() - 1) {
                             this.direction *= -1;
@@ -124,17 +124,16 @@ public class Follower {
                             vectorDirection.nor();
                             this.followerObject.body.setLinearVelocity(0, 0);
 
-                            if(this.type == Type.Looper) {
+                            if (this.type == Type.Looper) {
                                 // if the first and last point are the same loop them
-                                if(pointsToFollow.get(0).equals(pointsToFollow.get(pointsToFollow.size() -1))){
+                                if (pointsToFollow.get(0).equals(pointsToFollow.get(pointsToFollow.size() - 1))) {
                                     this.followerObjectState = PropertyState.Active;
                                 }
                                 // otherwise just restart the looper
                                 else {
                                     this.followerObjectState = PropertyState.Teardown;
                                 }
-                            }
-                            else {
+                            } else {
                                 this.followerObjectState = PropertyState.Teardown;
                             }
 
@@ -153,9 +152,9 @@ public class Follower {
                 break;
             case Teardown:
                 if (followerObjectTime > FOLLOW_OBJECT_SCALE_TIME) {
-                    if(!oneTimeOnly) {
+                    if (!oneTimeOnly) {
                         this.followerObjectTime = 0;
-                        this.followerObject.body.setLinearVelocity(0,0);
+                        this.followerObject.body.setLinearVelocity(0, 0);
                         this.followerObject.position.set(this.followObjectFrom.x, this.followObjectFrom.y);
                         this.followerObject.body.setTransform(this.followObjectFrom.x / Constants.BOX2D_SCALE, this.followObjectFrom.y / Constants.BOX2D_SCALE, 0);
                         this.followerObjectState = PropertyState.Buildup;
@@ -170,7 +169,7 @@ public class Follower {
                 }
                 break;
             case Gone:
-                if(deactivate) {
+                if (deactivate) {
                     this.followerObject.body.setActive(false);
                     deactivate = false;
                 }
@@ -204,7 +203,7 @@ public class Follower {
         this.followPointIndex = 0;
         this.direction = this.startingDirection;
 
-        this.vectorDirection.set(0,0);
+        this.vectorDirection.set(0, 0);
 
         this.followerObject.position.x = this.startingPosition.x;
         this.followerObject.position.y = this.startingPosition.y;
@@ -217,7 +216,7 @@ public class Follower {
         this.followerObjectState = PropertyState.Inactive;
     }
 
-    public enum Type{
+    public enum Type {
         VerticalOscillator,
         HorizontalOscillator,
         Pacer,

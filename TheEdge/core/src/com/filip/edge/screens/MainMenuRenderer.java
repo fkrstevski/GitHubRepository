@@ -45,7 +45,7 @@ public class MainMenuRenderer implements Disposable {
     }
 
     public void render(SpriteBatch batch) {
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             buffer.begin();
         }
         // Sets the clear screen color
@@ -65,7 +65,7 @@ public class MainMenuRenderer implements Disposable {
         batch.setShader(null);
         batch.end();
 
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             ScreenshotFactory.saveScreenshot();
             buffer.end();
 

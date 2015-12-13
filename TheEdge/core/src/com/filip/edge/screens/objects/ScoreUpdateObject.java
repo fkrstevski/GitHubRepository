@@ -35,22 +35,21 @@ public class ScoreUpdateObject implements Poolable {
 
     @Override
     public void reset() {
-        this.currentPosition.set(0,0);
-        this.endPosition.set(0,0);
+        this.currentPosition.set(0, 0);
+        this.endPosition.set(0, 0);
         this.score = 0;
         this.alpha = 1;
         this.currentTime = 0;
         this.isAlive = false;
     }
 
-    public void update (float delta) {
-        if(this.isAlive) {
-            this.currentTime+=delta;
-            if(this.currentTime > UPDATE_TIME) {
+    public void update(float delta) {
+        if (this.isAlive) {
+            this.currentTime += delta;
+            if (this.currentTime > UPDATE_TIME) {
                 this.isAlive = false;
-            }
-            else {
-                this.alpha = currentTime/UPDATE_TIME;
+            } else {
+                this.alpha = currentTime / UPDATE_TIME;
                 this.currentPosition.lerp(this.endPosition, this.alpha);
             }
         }

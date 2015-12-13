@@ -95,7 +95,7 @@ public class Hole extends EmptyCircle {
         this.currentTime = 0;
     }
 
-    public void start(){
+    public void start() {
         this.currentTime = 0;
         this.state = State.StartingUp;
         this.scale.set(0, 0);

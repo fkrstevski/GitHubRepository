@@ -66,7 +66,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
     @Override
     public void render(float deltaTime) {
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             buffer.begin();
         }
 
@@ -92,7 +92,7 @@ public class ResultsScreen extends AbstractGameScreen {
         int scoreLength = score.length() * DigitRenderer.instance.digitWidth;
         DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, (int) (Gdx.graphics.getWidth() / 2 + scoreLength / 2), (int) (Gdx.graphics.getHeight() * 0.2), game.batch);
 
-        if(this.displayError) {
+        if (this.displayError) {
             DigitRenderer.instance.renderStringCentered(error, Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, game.batch, 1);
@@ -101,7 +101,7 @@ public class ResultsScreen extends AbstractGameScreen {
         game.batch.setShader(null);
         game.batch.end();
 
-        if(ScreenshotFactory.needsToGetScreenshot()) {
+        if (ScreenshotFactory.needsToGetScreenshot()) {
             ScreenshotFactory.saveScreenshot();
             buffer.end();
 
@@ -207,15 +207,14 @@ public class ResultsScreen extends AbstractGameScreen {
             }
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
 
-        if(GamePreferences.instance.email.isEmpty()) {
+        if (GamePreferences.instance.email.isEmpty()) {
             txtEmail = new TextField(ENTER_EMAIL, skin);
-        }
-        else {
+        } else {
             txtEmail = new TextField(GamePreferences.instance.email, skin);
         }
         //txtEmail = new TextField(this.email, skin);
@@ -228,7 +227,7 @@ public class ResultsScreen extends AbstractGameScreen {
         txtEmail.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
+                if (txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
                     txtEmail.setText("");
                     email = "";
                 }
@@ -265,14 +264,13 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     public void btnSubmitClicked() {
-        if(txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
+        if (txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
             btnSubmit.setTouchable(Touchable.disabled);
             displayError = true;
             btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
             btnSubmit.setStyle(textOutsideButtonStyleRed);
             error = "PLEASE ENTER YOUR EMAIL";
-        }
-        else {
+        } else {
 
             displayError = false;
             btnSubmitOutside.setStyle(textOutsideButtonStyle);

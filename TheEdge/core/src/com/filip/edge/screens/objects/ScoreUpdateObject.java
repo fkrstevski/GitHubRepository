@@ -1,11 +1,7 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.DigitRenderer;
-import com.filip.edge.util.GamePreferences;
 
 /**
  * Created by fkrstevski on 2015-12-06.

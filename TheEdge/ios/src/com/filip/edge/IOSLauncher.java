@@ -1,16 +1,15 @@
 package com.filip.edge;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
-
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
-import org.robovm.apple.foundation.*;
+import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.foundation.NSError;
+import org.robovm.apple.foundation.NSErrorException;
 import org.robovm.apple.gamekit.GKAchievement;
 import org.robovm.apple.gamekit.GKLeaderboard;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;

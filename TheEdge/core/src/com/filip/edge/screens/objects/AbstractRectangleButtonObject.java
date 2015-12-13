@@ -2,10 +2,6 @@ package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.filip.edge.game.Level;
 import com.filip.edge.util.Constants;
 
 /**

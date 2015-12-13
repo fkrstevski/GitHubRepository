@@ -3,25 +3,12 @@ package com.filip.edge;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.net.HttpStatus;
-import com.badlogic.gdx.utils.Base64Coder;
 import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
-import com.filip.edge.screens.GameScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.*;
-import de.tomgrill.gdxtwitter.core.TwitterAPI;
-import de.tomgrill.gdxtwitter.core.TwitterConfig;
-import de.tomgrill.gdxtwitter.core.TwitterResponseListener;
-import de.tomgrill.gdxtwitter.core.TwitterSystem;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class EdgeGame extends DirectedGame {
     private static final String TAG = EdgeGame.class.getName();

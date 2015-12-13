@@ -2,10 +2,6 @@ package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
 
 public class MenuScreen extends AbstractGameScreen {
 

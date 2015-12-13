@@ -2,9 +2,6 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.graphics.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants {
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";

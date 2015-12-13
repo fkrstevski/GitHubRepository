@@ -2,7 +2,6 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.JsonReader;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * Created by fkrstevski on 2015-12-08.

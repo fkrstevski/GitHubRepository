@@ -2,12 +2,8 @@ package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
-import com.filip.edge.game.Level;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
-
-import java.util.ArrayList;
 
 /**
  * Created by fkrstevski on 2015-10-10.

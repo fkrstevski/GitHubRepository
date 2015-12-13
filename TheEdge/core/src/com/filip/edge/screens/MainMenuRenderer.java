@@ -1,18 +1,16 @@
 package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.filip.edge.game.Assets;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.ScreenshotFactory;
-
-import java.nio.ByteBuffer;
 
 /**
  * Created by fkrstevski on 2015-02-12.

@@ -5,8 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
-
-import com.filip.edge.util.*;
+import com.filip.edge.util.CameraHelper;
+import com.filip.edge.util.Constants;
+import com.filip.edge.util.GamePreferences;
 
 public class MainMenuController extends InputAdapter implements Disposable {
 

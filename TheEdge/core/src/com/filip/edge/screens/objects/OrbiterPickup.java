@@ -1,11 +1,8 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
 
 /**
  * Created by fkrstevski on 2015-09-29.

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.filip.edge.game.StageLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,8 +80,8 @@ public class GamePreferences {
     }
 
     public void load() {
-        sound = prefs.getBoolean("sound", true);
-        music = prefs.getBoolean("music", true);
+        sound = prefs.getBoolean("sound", false);
+        music = prefs.getBoolean("music", false);
         scoreNeedsToBeSubmitted = prefs.getBoolean("scoreNeedsToBeSubmitted", false);
         volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
@@ -208,5 +209,14 @@ public class GamePreferences {
                 }
             });
         }
+    }
+
+    public int getCurrentLevel()
+    {
+        int currentLevel = GamePreferences.instance.stage;
+        for(int i = GamePreferences.instance.zone - 1; i >= 0; --i ){
+            currentLevel += StageLoader.getZone(i).getNumberOfStages();
+        }
+        return  currentLevel;
     }
 }

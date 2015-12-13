@@ -51,12 +51,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private boolean startMovement;
 
+    public Color clearColor;
+    public boolean colorChange;
     static final float transitionTime = 0.5f;
     float currentAdTime;
-    boolean adShown;
 
-    public boolean colorChange;
-    public Color clearColor;
+    private boolean gottenScreenshot;
 
     public final Array<ScoreUpdateObject> activeScoreUpdates = new Array<ScoreUpdateObject>();
     private final Pool<ScoreUpdateObject> scoreUpdateObjectPool = new Pool<ScoreUpdateObject>() {
@@ -75,10 +75,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.greenTime = 0;
         this.readyTimeRatio = this.readyTime / READY_TIME;
         this.state = LevelState.Countdown;
-        this.currentAdTime = 0;
-        this.adShown = false;
-        this.colorChange = false;
         this.clearColor = new Color();
+        this.gottenScreenshot = false;
+
         init();
 
         this.level.startCircle = this.level.startCircleRedIcon;
@@ -114,20 +113,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
                 else {
                     GamePreferences.instance.save();
-                    colorChange = true;
-                    state = LevelState.Transition;
-                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
-
+                    game.setScreen(new LevelResultsScreen(game, true));
                     //Early out
                     return;
                 }
             }
         }
-        colorChange = false;
 
         // Save the scores
         GamePreferences.instance.save();
-        state = LevelState.Transition;
+        game.setScreen(new LevelResultsScreen(game, false));
     }
 
     private void resetLevel() {
@@ -135,6 +130,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         Orbiter1Visible = false;
         Orbiter2Visible = false;
         startMovement = false;
+        gottenScreenshot = false;
         level.reset();
     }
 
@@ -142,10 +138,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         //this.game.startMethodTracing("initLevel");
 
         levelScore = 0;
-        this.adShown = false;
         Orbiter1Visible = false;
         Orbiter2Visible = false;
         startMovement = false;
+        gottenScreenshot = false;
         level = new Level();
 
         if (b2world != null) {
@@ -446,8 +442,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.greenTime = 0;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
-                adShown = false;
-                this.game.showBannerAds(false);
 
                 levelTime = 0;
 
@@ -500,8 +494,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 for (int i = 0; i < level.rectangleShapes.size(); ++i) {
                     level.rectangleShapes.get(i).start();
                 }
-
-                //this.game.showAds(true);
             }
 
         } else if (state == LevelState.LevelComplete) {
@@ -547,6 +539,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
 
             if(this.endTime / Constants.END_TIME > 0.5f) {
+                if(!gottenScreenshot){
+                    ScreenshotFactory.getScreenShot(false);
+                    gottenScreenshot = true;
+                }
                 //System.gc();
             }
 
@@ -619,31 +615,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 if (this.numberOfContacts == 0) {
                     fallOff();
-                }
-            }
-        }
-        else if (state == LevelState.Transition) {
-
-            if(colorChange) {
-                if(GamePreferences.instance.zone >= 0) {
-                    clearColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentAdTime / transitionTime);
-                }
-            }
-
-            if(!adShown) {
-                currentAdTime+=deltaTime;
-                if(currentAdTime > transitionTime / 2.0f) {
-                    adShown = true;
-                    game.showRewardVideoAd();
-                }
-            }
-            else {
-                currentAdTime+=deltaTime;
-                if(currentAdTime > transitionTime) {
-                    currentAdTime = 0;
-                    adShown = false;
-                    state = LevelState.Countdown;
-                    this.initLevel();
                 }
             }
         }
@@ -759,7 +730,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void backToMenu() {
-        game.showBannerAds(false);
         // switch to menu screen
         game.setScreen(new MenuScreen(game, false));
     }
@@ -1035,8 +1005,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             }
         }
 
-        if(level.currentLevel == GamePreferences.instance.levelTimes.size()) {
-            GamePreferences.instance.levelTimes.add(level.currentLevel, (int) (levelTime * 10));
+        if(GamePreferences.instance.getCurrentLevel() == GamePreferences.instance.levelTimes.size()) {
+            GamePreferences.instance.levelTimes.add(GamePreferences.instance.getCurrentLevel(), (int) (levelTime * 10));
         }
         GamePreferences.instance.save();
         GamePreferences.instance.submitData();
@@ -1067,15 +1037,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         {
             return;
         }
-        this.game.showBannerAds(true);
         GamePreferences.instance.currentScore += Constants.SCORE_DECREMENT_FOR_COLLISION;
         if(GamePreferences.instance.currentScore < 0)
         {
             GamePreferences.instance.currentScore = 0;
         }
-        if(level.currentLevel == GamePreferences.instance.levelTries.size()) {
-            int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
-            GamePreferences.instance.levelTries.set(level.currentLevel, thisTry + 1);
+        int currentLevel = GamePreferences.instance.getCurrentLevel();
+
+        if(currentLevel == GamePreferences.instance.levelTries.size() - 1) {
+            int thisTry = GamePreferences.instance.levelTries.get(currentLevel);
+            GamePreferences.instance.levelTries.set(currentLevel, thisTry + 1);
             GamePreferences.instance.save();
             GamePreferences.instance.submitData();
         }
@@ -1120,7 +1091,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         LevelComplete,
         OffTheEdge,
         GameOver,
-        GameBeat,
-        Transition
+        GameBeat
     }
 }

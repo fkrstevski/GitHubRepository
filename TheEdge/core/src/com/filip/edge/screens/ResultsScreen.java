@@ -271,7 +271,6 @@ public class ResultsScreen extends AbstractGameScreen {
     }
 
     public void btnSubmitClicked() {
-        ScreenshotFactory.getScreenShot();
         if(txtEmail.getText().compareToIgnoreCase(ENTER_EMAIL) == 0) {
             btnSubmit.setTouchable(Touchable.disabled);
             displayError = true;

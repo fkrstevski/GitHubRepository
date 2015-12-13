@@ -20,8 +20,8 @@ public class DesktopLauncher implements IActivityRequestHandler {
         //config.width = 1024;
 
 		// iPhone 5
-		config.height = 640;
-		config.width = 1136;
+		//config.height = 640;
+		//config.width = 1136;
 
 
 		// old iPhone

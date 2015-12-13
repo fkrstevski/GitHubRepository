@@ -82,14 +82,11 @@ public class MainMenuController extends InputAdapter implements Disposable {
 
             //TwitterManager.instance.uploadPhoto();
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
-            /*if (this.game.activityRequestHandler != null) {
+            if (this.game.activityRequestHandler != null) {
                 this.game.activityRequestHandler.showScores();
-            }*/
-            TwitterManager.instance.uploadStatus("Hi");
+            }
         }
-        else {
-            ScreenshotFactory.getScreenShot();
-        }
+
         return false;
     }
 

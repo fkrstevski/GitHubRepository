@@ -48,8 +48,7 @@ public class WorldRenderer implements Disposable {
 
     private Box2DDebugRenderer b2debugRenderer;
 
-    protected ShaderProgram redShader;
-    protected ShaderProgram greenShader;
+    protected ShaderProgram fontShader;
 
     private String score;
 
@@ -57,11 +56,8 @@ public class WorldRenderer implements Disposable {
         this.worldController = worldController;
         String vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
 
-        String redFragmentShader = Gdx.files.internal("shaders/redPixelShader.glsl").readString();
-        redShader = new ShaderProgram(vertexShader,redFragmentShader);
-
-        String greenFragmentShader = Gdx.files.internal("shaders/greenPixelShader.glsl").readString();
-        greenShader = new ShaderProgram(vertexShader,greenFragmentShader);
+        String fontFragmentShader = Gdx.files.internal("shaders/fontPixelShader.glsl").readString();
+        fontShader = new ShaderProgram(vertexShader,fontFragmentShader);
 
         init();
     }
@@ -106,19 +102,11 @@ public class WorldRenderer implements Disposable {
 
         batch.begin();
         if(worldController.state != WorldController.LevelState.GameBeat) {
-            worldController.level.renderBackButton(batch);
-            if(worldController.state != WorldController.LevelState.GameOver){
-                renderScoreUpdates(batch);
-                renderGuiScore(batch);
+            if(!ScreenshotFactory.needsToGetScreenshot()) {
+                renderNonScreenshotStuff(batch);
             }
 
-            if (Constants.DEBUG_BUILD) {
-                renderGuiLevel(batch);
-                renderGuiFpsCounter(batch);
-            }
-            if(worldController.state != WorldController.LevelState.Transition) {
-                worldController.level.render(batch);
-            }
+            worldController.level.render(batch);
         }
 
         batch.setShader(null);
@@ -130,11 +118,25 @@ public class WorldRenderer implements Disposable {
 
             batch.begin();
             batch.draw(buffer.getColorBufferTexture(), 0, 0);
+            renderNonScreenshotStuff(batch);
             batch.end();
         }
 
         if (worldController.renderPhysics) {
             b2debugRenderer.render(worldController.b2world, camera.combined.scl(Constants.BOX2D_SCALE));
+        }
+    }
+
+    private void renderNonScreenshotStuff(SpriteBatch batch) {
+        worldController.level.renderBackButton(batch);
+        if(worldController.state != WorldController.LevelState.GameOver){
+            renderScoreUpdates(batch);
+            renderGuiScore(batch);
+        }
+
+        if (Constants.DEBUG_BUILD) {
+            renderGuiLevel(batch);
+            renderGuiFpsCounter(batch);
         }
     }
 
@@ -188,13 +190,18 @@ public class WorldRenderer implements Disposable {
         for (int i = this.worldController.activeScoreUpdates.size; --i >= 0;) {
             item = this.worldController.activeScoreUpdates.get(i);
             if (item.isAlive == true) {
+                batch.setShader(fontShader);
                 if(item.score < 0) {
-                    batch.setShader(redShader);
-                    redShader.setUniformf("u_alpha", 1 - item.alpha);
+                    fontShader.setUniformf("u_alpha", (1 - item.alpha));
+                    fontShader.setUniformf("u_red", Constants.RED.r);
+                    fontShader.setUniformf("u_green", Constants.RED.g);
+                    fontShader.setUniformf("u_blue", Constants.RED.b);
                 }
                 else {
-                    batch.setShader(greenShader);
-                    greenShader.setUniformf("u_alpha", 1 - item.alpha);
+                    fontShader.setUniformf("u_alpha", (1 - item.alpha));
+                    fontShader.setUniformf("u_red", Constants.GREEN.r);
+                    fontShader.setUniformf("u_green", Constants.GREEN.g);
+                    fontShader.setUniformf("u_blue", Constants.GREEN.b);
                 }
                 DigitRenderer.instance.renderNumber(Math.abs((long)item.score), (int)item.currentPosition.x, (int)item.currentPosition.y, batch);
             }

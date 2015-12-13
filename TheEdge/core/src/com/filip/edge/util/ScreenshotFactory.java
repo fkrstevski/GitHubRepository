@@ -19,9 +19,12 @@ import java.nio.ByteBuffer;
 public class ScreenshotFactory {
     private static final String TAG = ScreenshotFactory.class.getName();
     private static boolean needToGetScreenshot = false;
+    private static boolean flipY = false;
 
-    public static void getScreenShot() {
+
+    public static void getScreenShot(boolean y) {
         needToGetScreenshot = true;
+        flipY = y;
         Gdx.app.log(TAG, "Get Screenshot");
     }
 
@@ -35,18 +38,20 @@ public class ScreenshotFactory {
         //Then retrieve the Pixmap from the buffer.
         Pixmap pm = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // Flip the pixmap upside down
-        ByteBuffer pixels = pm.getPixels();
-        int numBytes = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() * 4;
-        byte[] lines = new byte[numBytes];
-        int numBytesPerLine = Gdx.graphics.getWidth() * 4;
-        for (int i = 0; i < Gdx.graphics.getHeight(); i++) {
-            pixels.position((Gdx.graphics.getHeight() - i - 1) * numBytesPerLine);
-            pixels.get(lines, i * numBytesPerLine, numBytesPerLine);
+        if(flipY) {
+            // Flip the pixmap upside down
+            ByteBuffer pixels = pm.getPixels();
+            int numBytes = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() * 4;
+            byte[] lines = new byte[numBytes];
+            int numBytesPerLine = Gdx.graphics.getWidth() * 4;
+            for (int i = 0; i < Gdx.graphics.getHeight(); i++) {
+                pixels.position((Gdx.graphics.getHeight() - i - 1) * numBytesPerLine);
+                pixels.get(lines, i * numBytesPerLine, numBytesPerLine);
+            }
+            pixels.clear();
+            pixels.put(lines);
+            pixels.clear();
         }
-        pixels.clear();
-        pixels.put(lines);
-        pixels.clear();
 
         Gdx.files.local("shot.png").delete();
         //Save the pixmap as png to the disk.

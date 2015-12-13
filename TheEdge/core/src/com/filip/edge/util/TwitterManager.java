@@ -204,7 +204,7 @@ public class TwitterManager {
         return bytes;
     }
 
-    public void uploadPhoto( ){
+    public void uploadPhoto(final String message){
         FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + "shot.png");
         Gdx.app.log(TAG, "file exist " + file.exists());
 
@@ -224,7 +224,7 @@ public class TwitterManager {
                 JsonValue root = new JsonReader().parse(data);
                 String media_id =  root.get(1).asString();
                 Gdx.app.log(TAG, "parsed media id " + media_id);
-                uploadTwitterPhoto("super tweet msg", media_id);
+                uploadTwitterPhoto(message, media_id);
 
             }
 

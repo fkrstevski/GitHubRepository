@@ -59,7 +59,12 @@ public class MainMenuController extends InputAdapter implements Disposable {
             zoomTime += deltaTime;
             if (zoomTime > MAX_ZOOM_TIME) {
                 this.mainMenu.state = MainMenu.MainMenuState.Done;
-                game.setScreen(new GameScreen(game));
+                if(GamePreferences.instance.showingLevelResults) {
+                    game.setScreen(new LevelResultsScreen(game, false));
+                }
+                else {
+                    game.setScreen(new GameScreen(game));
+                }
             }
         }
     }

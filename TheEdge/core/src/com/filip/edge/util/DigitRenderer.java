@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.screens.objects.MiddlePart;
 
 import java.util.ArrayList;
 
@@ -74,6 +75,8 @@ public class DigitRenderer {
         letters.add(new LetterZ(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
 
         symbols.add(new Period(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        symbols.add(new Plus(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        symbols.add(new Minus(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
     }
 
     public void renderNumber(long number, int x, int y, SpriteBatch batch) {
@@ -145,7 +148,17 @@ public class DigitRenderer {
                 if (StageLoader.isInteger(str.charAt(i) + "")) {
                     int digit = Character.getNumericValue(str.charAt(i));
                     digitObject = digits.get(digit);
-                } else {
+                }
+                else if (str.charAt(i) == '.') {
+                    digitObject = symbols.get(0);
+                }
+                else if (str.charAt(i) == '+') {
+                    digitObject = symbols.get(1);
+                }
+                else if (str.charAt(i) == '-') {
+                    digitObject = symbols.get(2);
+                }
+                else {
                     int index = str.charAt(i) - 'A';
                     digitObject = letters.get(index);
                 }

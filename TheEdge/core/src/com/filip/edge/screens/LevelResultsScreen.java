@@ -1,5 +1,6 @@
 package com.filip.edge.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
@@ -7,18 +8,22 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.filip.edge.screens.objects.BackButton;
+import com.filip.edge.screens.objects.ScoreUpdateObject;
+import com.filip.edge.screens.objects.ScoreUpdateObjectListener;
 import com.filip.edge.util.*;
 
 /**
  * Created by fkrstevski on 2015-12-11.
  */
-public class LevelResultsScreen extends AbstractGameScreen {
+public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdateObjectListener {
     private DirectedGame game;
     private Stage stage;
 
@@ -66,6 +71,8 @@ public class LevelResultsScreen extends AbstractGameScreen {
     private Texture levelTexture;
     private boolean gottenScreenshot;
 
+    private ScoreUpdateObject scoreUpdateObject;
+
     public LevelResultsScreen(DirectedGame game, boolean colorChange) {
         super(game);
         this.game = game;
@@ -84,10 +91,13 @@ public class LevelResultsScreen extends AbstractGameScreen {
 
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
-        FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + "shot.png");
+        FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + Constants.SCREENSHOT_LEVEL);
 
         levelTexture = new Texture(file);
         gottenScreenshot = false;
+
+        scoreUpdateObject = new ScoreUpdateObject();
+        scoreUpdateObject.setListener(this);
     }
 
     @Override
@@ -186,6 +196,10 @@ public class LevelResultsScreen extends AbstractGameScreen {
         btnNext.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                GamePreferences.instance.completedLevelTweet = false;
+                GamePreferences.instance.completedLevelVideoReward = false;
+                GamePreferences.instance.showingLevelResults = false;
+                GamePreferences.instance.save();
                 game.setScreen(new GameScreen(game));
             }
 
@@ -209,8 +223,12 @@ public class LevelResultsScreen extends AbstractGameScreen {
 
         this.stage.addActor(btnNext);
         this.stage.addActor(btnBack);
-        this.stage.addActor(btnTweet);
-        this.stage.addActor(btnVideo);
+        if(!GamePreferences.instance.completedLevelTweet) {
+            this.stage.addActor(btnTweet);
+        }
+        if(!GamePreferences.instance.completedLevelVideoReward) {
+            this.stage.addActor(btnVideo);
+        }
 
         // Backbutton
         backButton = new BackButton(Gdx.graphics.getWidth() * 0.05f,   // size
@@ -224,18 +242,64 @@ public class LevelResultsScreen extends AbstractGameScreen {
     }
 
     public void btnTweetClicked() {
-        TwitterManager.instance.uploadPhoto("Results Screen Tweet #lookslikeitsworking");
+        TwitterManager.instance.uploadPhoto("Results Screen Tweet #lookslikeitsworking", Constants.SCREENSHOT_LEVEL_RESULT);
+
+        // TODO need to be moved to when the tweet is successful
+        addScoreUpdate(Constants.TWEET_REWARD);
+        GamePreferences.instance.completedLevelTweet = true;
+        GamePreferences.instance.save();
     }
 
     public void btnVideoClicked() {
         game.showRewardVideoAd();
     }
 
+    public void giveVideoReward(){
+        addScoreUpdate(Constants.VIDEO_REWARD);
+        GamePreferences.instance.completedLevelVideoReward = true;
+        GamePreferences.instance.save();
+    }
+
+    public void addScoreUpdate(int score) {
+        int y = (int) (DigitRenderer.instance.digitHeight / 2) +
+                DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
+        int x = (int) (Gdx.graphics.getWidth() - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        scoreUpdateObject.init(score, x, y + 50, x, y);
+    }
+
+    @Override
+    public void scoreUpdateObjectFinished(int score) {
+        GamePreferences.instance.currentScore += score;
+        GamePreferences.instance.save();
+
+        if(GamePreferences.instance.completedLevelTweet) {
+            for(Actor actor : stage.getActors()) {
+                if(actor.equals(btnTweet)) {
+                    actor.addAction(Actions.removeActor());
+                    break;
+                }
+            }
+        }
+
+        if(GamePreferences.instance.completedLevelVideoReward) {
+            for(Actor actor : stage.getActors()) {
+                if(actor.equals(btnVideo)) {
+                    actor.addAction(Actions.removeActor());
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void render(float deltaTime) {
 
+        if(this.scoreUpdateObject.isAlive) {
+            scoreUpdateObject.update(deltaTime);
+        }
+
         if (!gottenScreenshot) {
-            ScreenshotFactory.getScreenShot(true);
+            ScreenshotFactory.getScreenShot(true, Constants.SCREENSHOT_LEVEL_RESULT);
             gottenScreenshot = true;
         }
 
@@ -270,6 +334,23 @@ public class LevelResultsScreen extends AbstractGameScreen {
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+
+        if (scoreUpdateObject.isAlive == true) {
+            game.batch.setShader(fontShader);
+            if (scoreUpdateObject.score < 0) {
+                fontShader.setUniformf("u_alpha", (1 - scoreUpdateObject.alpha));
+                fontShader.setUniformf("u_red", Constants.RED.r);
+                fontShader.setUniformf("u_green", Constants.RED.g);
+                fontShader.setUniformf("u_blue", Constants.RED.b);
+            } else {
+                fontShader.setUniformf("u_alpha", (1 - scoreUpdateObject.alpha));
+                fontShader.setUniformf("u_red", Constants.GREEN.r);
+                fontShader.setUniformf("u_green", Constants.GREEN.g);
+                fontShader.setUniformf("u_blue", Constants.GREEN.b);
+            }
+            DigitRenderer.instance.renderNumber(Math.abs((long) scoreUpdateObject.score), (int) scoreUpdateObject.currentPosition.x, (int) scoreUpdateObject.currentPosition.y, game.batch);
+            game.batch.setShader(null);
+        }
 
         int y = (int) (DigitRenderer.instance.digitHeight / 2) +
                 DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
@@ -312,17 +393,24 @@ public class LevelResultsScreen extends AbstractGameScreen {
 
         if (!ScreenshotFactory.needsToGetScreenshot()) {
             backButton.render(game.batch);
+            if(!GamePreferences.instance.completedLevelVideoReward) {
+                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.VIDEO_REWARD, (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight * 1.3), game.batch, 1);
+            }
+
+            if(!GamePreferences.instance.completedLevelTweet) {
+                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.TWEET_REWARD, (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3), game.batch, 1);
+            }
         }
 
         game.batch.draw(levelBGTexture,
                 Gdx.graphics.getWidth() - bgScreenshotWidth - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
-                Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight / 2,
+                Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight * 0.65f,
                 bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 2,
                 bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 2);
 
         game.batch.draw(levelTexture,
                 Gdx.graphics.getWidth() - bgScreenshotWidth - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS + DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
-                Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight / 2 + DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
+                Gdx.graphics.getHeight() * 0.5f - bgScreenshotHeight * 0.65f + DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS,
                 bgScreenshotWidth - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 4,
                 bgScreenshotHeight - (DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS) * 4);
 
@@ -336,6 +424,13 @@ public class LevelResultsScreen extends AbstractGameScreen {
             game.batch.begin();
             game.batch.draw(buffer.getColorBufferTexture(), 0, 0);
             backButton.render(game.batch);
+            if(!GamePreferences.instance.completedLevelVideoReward) {
+                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.VIDEO_REWARD, (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight * 1.3), game.batch, 1);
+            }
+
+            if(!GamePreferences.instance.completedLevelTweet) {
+                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.TWEET_REWARD, (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3), game.batch, 1);
+            }
             game.batch.end();
         }
     }

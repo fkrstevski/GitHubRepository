@@ -15,11 +15,14 @@ public class ScreenshotFactory {
     private static final String TAG = ScreenshotFactory.class.getName();
     private static boolean needToGetScreenshot = false;
     private static boolean flipY = false;
+    private static String fileName = "";
 
 
-    public static void getScreenShot(boolean y) {
+    public static void getScreenShot(boolean y, String fn) {
         needToGetScreenshot = true;
         flipY = y;
+        fileName = fn;
+
         Gdx.app.log(TAG, "Get Screenshot");
     }
 
@@ -48,9 +51,9 @@ public class ScreenshotFactory {
             pixels.clear();
         }
 
-        Gdx.files.local("shot.png").delete();
+        Gdx.files.local(fileName).delete();
         //Save the pixmap as png to the disk.
-        FileHandle levelTexture = Gdx.files.local("shot.png");
+        FileHandle levelTexture = Gdx.files.local(fileName);
         PixmapIO.writePNG(levelTexture, pm);
         pm.dispose();
     }

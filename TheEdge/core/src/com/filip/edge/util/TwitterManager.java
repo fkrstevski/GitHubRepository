@@ -202,8 +202,8 @@ public class TwitterManager {
         return bytes;
     }
 
-    public void uploadPhoto(final String message) {
-        FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + "shot.png");
+    public void uploadPhoto(final String message, String image) {
+        FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + image);
         Gdx.app.log(TAG, "file exist " + file.exists());
 
         TwitterRequest tr = new TwitterRequest(TwitterRequestType.POST, "https://upload.twitter.com/1.1/media/upload.json");

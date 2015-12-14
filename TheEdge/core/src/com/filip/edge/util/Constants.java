@@ -86,6 +86,11 @@ public class Constants {
     public static final int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
     public static final int EXTRA_ORBITER_WORTH = 10000;
     public static final int GOLD_WORTH = 100;
+    public static final int VIDEO_REWARD = 10000;
+    public static final int TWEET_REWARD = 1000;
+
+    public static final String SCREENSHOT_LEVEL = "level.png";
+    public static final String SCREENSHOT_LEVEL_RESULT = "levelResult.png";
 
     public static final int WIDTH_IN_PIXELS = 3;
 

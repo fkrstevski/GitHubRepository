@@ -44,7 +44,14 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         int width = (int) (dimension.x);
         int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
         int digitPartWidth = width / widthInPixels;
-        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, height / 2, digitPartWidth, height / 2);
+        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, height / 2, digitPartWidth, height / 2 );
+    }
+
+    public void fillCenterTop80(int widthInPixels) {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / widthInPixels;
+        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, height / 2 - digitPartWidth / 2, digitPartWidth, height / 2 - digitPartWidth / 2);
     }
 
     public void fillCenterBottom(int widthInPixels) {
@@ -52,6 +59,13 @@ public abstract class AbstractRectangleButtonObject extends AbstractButtonObject
         int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
         int digitPartWidth = width / widthInPixels;
         buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, 0, digitPartWidth, height / 2);
+    }
+
+    public void fillCenterBottom80(int widthInPixels) {
+        int width = (int) (dimension.x);
+        int height = (int) (width * Constants.DIGIT_ASPECT_RATIO);
+        int digitPartWidth = width / widthInPixels;
+        buttonPixmap.fillRectangle(width / 2 - digitPartWidth / 2, digitPartWidth, digitPartWidth, height / 2 - digitPartWidth / 2);
     }
 
     public void fillTopRect(int widthInPixels) {

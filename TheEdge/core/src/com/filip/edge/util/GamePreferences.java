@@ -40,6 +40,9 @@ public class GamePreferences {
     public float volMusic;
     public String userID;
     public String email;
+    public boolean showingLevelResults;
+    public boolean completedLevelTweet;
+    public boolean completedLevelVideoReward;
     // these need to be reset when a score is successfully submitted or game is over
     public boolean scoreNeedsToBeSubmitted;
     public long currentScore;
@@ -94,6 +97,9 @@ public class GamePreferences {
         email = prefs.getString("email", "");
         tries = prefs.getString("tries", "");
         times = prefs.getString("times", "");
+        showingLevelResults = prefs.getBoolean("lr", false);
+        completedLevelTweet = prefs.getBoolean("tweet", false);
+        completedLevelVideoReward = prefs.getBoolean("video", false);
 
         Gdx.app.log(TAG, "LOAD Times = " + times);
 
@@ -131,6 +137,10 @@ public class GamePreferences {
         Gdx.app.log(TAG, "SAVE TIMES = " + times);
 
         prefs.putString("times", times);
+
+        prefs.putBoolean("lr", showingLevelResults);
+        prefs.putBoolean("tweet", completedLevelTweet);
+        prefs.putBoolean("video", completedLevelVideoReward);
 
         prefs.putBoolean("sound", sound);
         prefs.putBoolean("music", music);

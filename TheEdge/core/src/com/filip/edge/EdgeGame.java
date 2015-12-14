@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.filip.edge.game.Assets;
 import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.DirectedGame;
+import com.filip.edge.screens.LevelResultsScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.*;
@@ -54,6 +55,9 @@ public class EdgeGame extends DirectedGame {
 
     public void onCompleteRewardVideoAd(String tag) {
         Gdx.app.log(TAG, "onCompleteRewardVideoAd " + tag);
+        if(getCurrScreen() instanceof LevelResultsScreen){
+            ((LevelResultsScreen) getCurrScreen()).giveVideoReward();
+        }
     }
 
     public void onIncompleteRewardVideoAd(String tag) {

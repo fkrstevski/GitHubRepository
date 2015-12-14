@@ -101,7 +101,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     // Early out
                     return;
                 } else {
+                    GamePreferences.instance.showingLevelResults = true;
+                    GamePreferences.instance.completedLevelTweet = false;
+                    GamePreferences.instance.completedLevelVideoReward = false;
                     GamePreferences.instance.save();
+
                     game.setScreen(new LevelResultsScreen(game, true));
                     //Early out
                     return;
@@ -110,6 +114,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // Save the scores
+        GamePreferences.instance.showingLevelResults = true;
+        GamePreferences.instance.completedLevelTweet = false;
+        GamePreferences.instance.completedLevelVideoReward = false;
         GamePreferences.instance.save();
         game.setScreen(new LevelResultsScreen(game, false));
     }
@@ -525,7 +532,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             if (this.endTime / Constants.END_TIME > 0.5f) {
                 if (!gottenScreenshot) {
-                    ScreenshotFactory.getScreenShot(false);
+                    ScreenshotFactory.getScreenShot(false, Constants.SCREENSHOT_LEVEL);
                     gottenScreenshot = true;
                 }
                 //System.gc();

@@ -1,23 +1,29 @@
 package com.filip.edge;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.filip.edge.util.Constants;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
+import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
-import org.robovm.apple.foundation.NSAutoreleasePool;
-import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSErrorException;
+import org.robovm.apple.foundation.*;
 import org.robovm.apple.gamekit.GKAchievement;
 import org.robovm.apple.gamekit.GKLeaderboard;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;
+import org.robovm.apple.social.SLComposeViewController;
+import org.robovm.apple.social.SLComposeViewControllerResult;
+import org.robovm.apple.social.SLServiceType;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
+import org.robovm.apple.uikit.UIImage;
 import org.robovm.apple.uikit.UIScreen;
 import org.robovm.bindings.gamecenter.GameCenterListener;
 import org.robovm.bindings.gamecenter.GameCenterManager;
+import org.robovm.objc.block.VoidBlock1;
 import org.robovm.pods.google.GGLContextMobileAds;
 import org.robovm.pods.google.mobileads.*;
 import org.robovm.pods.heyzap.ads.*;
@@ -336,6 +342,49 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     @Override
     public void logOut() {
 
+    }
+
+    @Override
+    public void showTweetSheet(String message, String png){
+        if( SLComposeViewController.isAvailable(SLServiceType.Twitter) ) {
+            SLComposeViewController twitterPostVC = new SLComposeViewController(SLServiceType.Twitter);
+
+            twitterPostVC.addImage(new UIImage(NSData.read(Gdx.files.local(png).file())));
+            twitterPostVC.setInitialText(message);
+            twitterPostVC.addURL(new NSURL("http://www.theedgecontest.com"));
+
+            twitterPostVC.setCompletionHandler(
+                new VoidBlock1<SLComposeViewControllerResult>() {
+                    @Override
+                    public void invoke(SLComposeViewControllerResult slComposeViewControllerResult) {
+                        if(slComposeViewControllerResult == SLComposeViewControllerResult.Done) {
+                            game.onCompleteTweet();
+                        }
+                    }
+                }
+            );
+
+            app.getUIViewController().presentViewController(twitterPostVC, true, null);
+        }
+        else {
+            Gdx.app.error("IOSLAUNCGER", "NO   SLComposeViewController.isAvailable(SLServiceType.Twitter) ");
+
+            GDXButtonDialog bDialog = game.dialogs.newDialog(GDXButtonDialog.class);
+            bDialog.setTitle("Twitter");
+            bDialog.setMessage("Currently not available");
+
+            bDialog.setClickListener(new ButtonClickListener() {
+
+                @Override
+                public void click(int button) {
+                    // handle button click here
+                }
+            });
+
+            bDialog.addButton("Ok");
+
+            bDialog.build().show();
+        }
     }
 
     @Override

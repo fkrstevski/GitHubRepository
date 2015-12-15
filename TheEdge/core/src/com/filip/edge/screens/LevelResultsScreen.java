@@ -1,6 +1,5 @@
 package com.filip.edge.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
@@ -242,12 +241,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     }
 
     public void btnTweetClicked() {
-        TwitterManager.instance.uploadPhoto("Results Screen Tweet #lookslikeitsworking", Constants.SCREENSHOT_LEVEL_RESULT);
-
-        // TODO need to be moved to when the tweet is successful
-        addScoreUpdate(Constants.TWEET_REWARD);
-        GamePreferences.instance.completedLevelTweet = true;
-        GamePreferences.instance.save();
+        game.showTweetSheet("From Results Screen #deosthisevenwork #theedge", Constants.SCREENSHOT_LEVEL_RESULT);
     }
 
     public void btnVideoClicked() {
@@ -257,7 +251,31 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     public void giveVideoReward(){
         addScoreUpdate(Constants.VIDEO_REWARD);
         GamePreferences.instance.completedLevelVideoReward = true;
+        GamePreferences.instance.currentScore += Constants.VIDEO_REWARD;
         GamePreferences.instance.save();
+        GamePreferences.instance.currentScore -= Constants.VIDEO_REWARD;
+
+        for(Actor actor : stage.getActors()) {
+            if(actor.equals(btnVideo)) {
+                actor.addAction(Actions.removeActor());
+                break;
+            }
+        }
+    }
+
+    public void giveTweetReward(){
+        addScoreUpdate(Constants.TWEET_REWARD);
+        GamePreferences.instance.completedLevelTweet = true;
+        GamePreferences.instance.currentScore += Constants.TWEET_REWARD;
+        GamePreferences.instance.save();
+        GamePreferences.instance.currentScore -= Constants.TWEET_REWARD;
+
+        for(Actor actor : stage.getActors()) {
+            if(actor.equals(btnTweet)) {
+                actor.addAction(Actions.removeActor());
+                break;
+            }
+        }
     }
 
     public void addScoreUpdate(int score) {
@@ -271,24 +289,6 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     public void scoreUpdateObjectFinished(int score) {
         GamePreferences.instance.currentScore += score;
         GamePreferences.instance.save();
-
-        if(GamePreferences.instance.completedLevelTweet) {
-            for(Actor actor : stage.getActors()) {
-                if(actor.equals(btnTweet)) {
-                    actor.addAction(Actions.removeActor());
-                    break;
-                }
-            }
-        }
-
-        if(GamePreferences.instance.completedLevelVideoReward) {
-            for(Actor actor : stage.getActors()) {
-                if(actor.equals(btnVideo)) {
-                    actor.addAction(Actions.removeActor());
-                    break;
-                }
-            }
-        }
     }
 
     @Override

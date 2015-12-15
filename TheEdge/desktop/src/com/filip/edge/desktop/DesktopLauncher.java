@@ -33,6 +33,11 @@ public class DesktopLauncher implements IActivityRequestHandler {
     }
 
     @Override
+    public void showTweetSheet(String message, String png){
+
+    }
+
+    @Override
     public void showBannerAds(boolean show) {
 
     }

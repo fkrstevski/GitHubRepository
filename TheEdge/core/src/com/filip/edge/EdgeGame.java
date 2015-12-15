@@ -10,6 +10,7 @@ import com.filip.edge.screens.LevelResultsScreen;
 import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.*;
+import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
 
 public class EdgeGame extends DirectedGame {
     private static final String TAG = EdgeGame.class.getName();
@@ -45,6 +46,8 @@ public class EdgeGame extends DirectedGame {
 
         TwitterManager.instance.load();
 
+        dialogs = GDXDialogsSystem.install();
+
         if (GamePreferences.instance.scoreNeedsToBeSubmitted) {
             setScreen(new ResultsScreen(this));
         } else {
@@ -57,6 +60,13 @@ public class EdgeGame extends DirectedGame {
         Gdx.app.log(TAG, "onCompleteRewardVideoAd " + tag);
         if(getCurrScreen() instanceof LevelResultsScreen){
             ((LevelResultsScreen) getCurrScreen()).giveVideoReward();
+        }
+    }
+
+    public void onCompleteTweet() {
+        Gdx.app.log(TAG, "onCompleteTweet");
+        if(getCurrScreen() instanceof LevelResultsScreen){
+            ((LevelResultsScreen) getCurrScreen()).giveTweetReward();
         }
     }
 

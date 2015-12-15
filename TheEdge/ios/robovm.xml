@@ -32,6 +32,7 @@
     <pattern>org.apache.harmony.security.provider.cert.DRLCertFactory</pattern>
     <pattern>org.apache.harmony.security.provider.crypto.CryptoProvider</pattern>
     <pattern>de.tomgrill.gdxtwitter.ios.IOSTwitterAPI</pattern>
+    <pattern>de.tomgrill.gdxdialogs.ios.IOSGDXDialogs</pattern>
   </forceLinkClasses>
   <libs>
       <lib>z</lib>   

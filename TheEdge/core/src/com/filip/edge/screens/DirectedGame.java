@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.util.IActivityRequestHandler;
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
 
 public abstract class DirectedGame implements ApplicationListener {
     private static final String TAG = DirectedGame.class.getName();
@@ -12,6 +13,8 @@ public abstract class DirectedGame implements ApplicationListener {
     private boolean init;
     private AbstractGameScreen currScreen;
     private AbstractGameScreen nextScreen;
+
+    public GDXDialogs dialogs;
 
     public DirectedGame(IActivityRequestHandler activityRequestHandler) {
         this.activityRequestHandler = activityRequestHandler;
@@ -47,6 +50,12 @@ public abstract class DirectedGame implements ApplicationListener {
         this.currScreen = nextScreen;
 
         Gdx.input.setInputProcessor(currScreen.getInputProcessor());
+    }
+
+    public void showTweetSheet(String message, String png) {
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.showTweetSheet(message, png);
+        }
     }
 
     public void showBannerAds(boolean show) {

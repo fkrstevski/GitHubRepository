@@ -231,6 +231,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }*/
 
     @Override
+    public void showTweetSheet(String message, String png){
+
+    }
+
+    @Override
     public void showBannerAds(boolean show) {
         System.out.println("AndroidLauncher: showBannerAds");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {

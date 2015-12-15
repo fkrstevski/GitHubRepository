@@ -4,6 +4,9 @@ public interface IActivityRequestHandler {
     //for google analytcis
     //public void setTrackerScreenName(String path);
 
+    // Twitter
+    void showTweetSheet(String message, String png);
+
     // Ads
     void showBannerAds(boolean show);
     void showInterstitialAd();

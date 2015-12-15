@@ -23,7 +23,10 @@ import com.google.example.games.basegameutils.GameHelper;
 import com.heyzap.sdk.ads.HeyzapAds;
 import com.heyzap.sdk.ads.IncentivizedAd;
 import com.heyzap.sdk.ads.VideoAd;
-
+import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
+import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
 
@@ -202,8 +205,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
         gameHelper.setup(this);
-
-
     }
 
     private void requestNewInterstitialAd() {
@@ -215,7 +216,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             interstitialAd.loadAd(adRequest);
         }
     }
-
 
     private void startAdvertising() {
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
@@ -232,7 +232,42 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showTweetSheet(String message, String png){
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("v9oEbCGwR7aCa5OkNG62rF3Jv")
+                .setOAuthConsumerSecret("X44MjB19yRvXM0oBLeWTDU3fdNj8Rj0TicsF5KvmFssyaN6b6e")
+                .setOAuthAccessToken("1213562396-xqtnrInv9YW1d0jU9nqe3UIIUDPJmaUgMfgVW5A")
+                .setOAuthAccessTokenSecret("7d2BSsX1bS7Rzg7epZk9J6YxyP9oQS2WBriWRiJ5ANXkZ");
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
 
+        try {
+            StatusUpdate status = new StatusUpdate(message);
+            status.setMedia(Gdx.files.local(png).file());
+            twitter.updateStatus(status);
+
+            System.out.println("Successfully updated the status to [" + status.getStatus() + "].");
+            game.onCompleteTweet();
+        }
+        catch (TwitterException e){
+            Gdx.app.error(TAG, "Twitter Exception: " + e);
+
+            GDXButtonDialog bDialog = game.dialogs.newDialog(GDXButtonDialog.class);
+            bDialog.setTitle("Twitter");
+            bDialog.setMessage("Currently not available");
+
+            bDialog.setClickListener(new ButtonClickListener() {
+
+                @Override
+                public void click(int button) {
+                    // handle button click here
+                }
+            });
+
+            bDialog.addButton("Ok");
+
+            bDialog.build().show();
+        }
     }
 
     @Override

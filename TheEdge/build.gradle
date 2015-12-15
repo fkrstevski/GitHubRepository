@@ -89,6 +89,7 @@ project(":ios") {
         compile "de.tomgrill.gdxtwitter:gdx-twitter-ios:0.1.0-SNAPSHOT"
         compile "org.robovm:robopods-chartboost-ios:1.9.0"
         compile "org.robovm:robopods-heyzap-ios:1.9.1-SNAPSHOT"
+        compile "org.twitter4j:twitter4j-core:4.0.4"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-ios:1.0.0"
         compile fileTree(dir: 'libs', include: '*.jar')
     }

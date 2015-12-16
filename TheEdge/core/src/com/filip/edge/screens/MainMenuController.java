@@ -85,7 +85,6 @@ public class MainMenuController extends InputAdapter implements Disposable {
             this.game.submitScore(GamePreferences.instance.currentScore);
             game.setScreen(new ResultsScreen(game));
 
-            //TwitterManager.instance.uploadPhoto();
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
             if (this.game.activityRequestHandler != null) {
                 this.game.activityRequestHandler.showScores();

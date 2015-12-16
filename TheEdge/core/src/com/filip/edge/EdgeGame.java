@@ -44,8 +44,6 @@ public class EdgeGame extends DirectedGame {
             this.activityRequestHandler.login();
         }
 
-        TwitterManager.instance.load();
-
         dialogs = GDXDialogsSystem.install();
 
         if (GamePreferences.instance.scoreNeedsToBeSubmitted) {

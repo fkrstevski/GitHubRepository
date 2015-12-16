@@ -42,7 +42,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        compile "de.tomgrill.gdxtwitter:gdx-twitter-desktop:0.1.0-SNAPSHOT"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-desktop:1.0.0"
     }
 }
@@ -69,7 +68,6 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         compile "com.google.android.gms:play-services-ads:8.1.0"
-        compile "de.tomgrill.gdxtwitter:gdx-twitter-android:0.1.0-SNAPSHOT"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-android:1.0.0"
         compile fileTree(dir: 'libs', include: '*.jar')
         compile ('com.twitter.sdk.android:twitter:1.11.0@aar') {
@@ -96,7 +94,6 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         compile "org.robovm:robopods-google-mobile-ads-ios:1.9.0"
-        compile "de.tomgrill.gdxtwitter:gdx-twitter-ios:0.1.0-SNAPSHOT"
         compile "org.robovm:robopods-chartboost-ios:1.9.0"
         compile "org.robovm:robopods-heyzap-ios:1.9.1-SNAPSHOT"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-ios:1.0.0"
@@ -112,7 +109,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "de.tomgrill.gdxtwitter:gdx-twitter-core:0.1.0-SNAPSHOT"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-core:1.0.0"
     }
 }

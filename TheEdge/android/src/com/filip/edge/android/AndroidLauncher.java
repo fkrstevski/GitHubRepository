@@ -2,6 +2,7 @@ package com.filip.edge.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,9 @@ import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.filip.edge.EdgeGame;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
@@ -23,12 +27,24 @@ import com.google.example.games.basegameutils.GameHelper;
 import com.heyzap.sdk.ads.HeyzapAds;
 import com.heyzap.sdk.ads.IncentivizedAd;
 import com.heyzap.sdk.ads.VideoAd;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
 import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
-import twitter4j.*;
-import twitter4j.conf.ConfigurationBuilder;
+import io.fabric.sdk.android.Fabric;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "vi3rGOvBhnCkSHLj4AGNJLUh3";
+    private static final String TWITTER_SECRET = "ymkKGfN8gMh2p5Mv3FnqTlcKacHSWOEmu3KTKaBgqY21Qr57XF";
+
+    private static final int TWEET_COMPOSER_REQUEST_CODE = 100;
 
     public static final String TAG = AndroidLauncher.class.getName();
     private GameHelper gameHelper;
@@ -72,6 +88,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig), new TweetComposer());
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.numSamples = 4;
         //initialize(new EdgeGame(this), config);
@@ -232,24 +250,30 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showTweetSheet(String message, String png){
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("v9oEbCGwR7aCa5OkNG62rF3Jv")
-                .setOAuthConsumerSecret("X44MjB19yRvXM0oBLeWTDU3fdNj8Rj0TicsF5KvmFssyaN6b6e")
-                .setOAuthAccessToken("1213562396-xqtnrInv9YW1d0jU9nqe3UIIUDPJmaUgMfgVW5A")
-                .setOAuthAccessTokenSecret("7d2BSsX1bS7Rzg7epZk9J6YxyP9oQS2WBriWRiJ5ANXkZ");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        Twitter twitter = tf.getInstance();
+        // We need to copy the screenshot over from local storage
+        // to external storage
+        Gdx.files.external(png).delete();
+        FileHandle external = Gdx.files.external(png);
+
+        FileHandle local = Gdx.files.local(png);
+        Pixmap localPixmap = new Pixmap(local);
+        PixmapIO.writePNG(external, localPixmap);
+        localPixmap.dispose();
+
+        File myimageFile = external.file();
+        Uri myImageUri = Uri.fromFile(myimageFile);
 
         try {
-            StatusUpdate status = new StatusUpdate(message);
-            status.setMedia(Gdx.files.local(png).file());
-            twitter.updateStatus(status);
+            Intent intent = new TweetComposer.Builder(this)
+                    .text(message)
+                    .image(myImageUri)
+                    .url(new URL("http://www.theedgecontest.com"))
+                    .createIntent();
 
-            System.out.println("Successfully updated the status to [" + status.getStatus() + "].");
-            game.onCompleteTweet();
+            startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
+
         }
-        catch (TwitterException e){
+        catch (MalformedURLException e) {
             Gdx.app.error(TAG, "Twitter Exception: " + e);
 
             GDXButtonDialog bDialog = game.dialogs.newDialog(GDXButtonDialog.class);
@@ -346,6 +370,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         gameHelper.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == TWEET_COMPOSER_REQUEST_CODE) {
+            if(resultCode == RESULT_OK){
+                Gdx.app.debug(TAG, "SUCESS!!!!!");
+                game.onCompleteTweet();
+            }
+            else {
+                Gdx.app.debug(TAG, "CANCEL!!!!!");
+            }
+        }
     }
 
     @Override

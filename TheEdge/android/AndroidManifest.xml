@@ -60,6 +60,9 @@
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="39ea435ba21a66e21ed8c120ef3f25e0f0e4f629" />
     </application>
 
 </manifest>

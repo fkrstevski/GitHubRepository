@@ -11,6 +11,8 @@ import com.filip.edge.screens.MenuScreen;
 import com.filip.edge.screens.ResultsScreen;
 import com.filip.edge.util.*;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
+import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 
 public class EdgeGame extends DirectedGame {
     private static final String TAG = EdgeGame.class.getName();
@@ -70,6 +72,25 @@ public class EdgeGame extends DirectedGame {
 
     public void onIncompleteRewardVideoAd(String tag) {
         Gdx.app.log(TAG, "onIncompleteRewardVideoAd " + tag);
+        showGenericOkDialog("Reward Video", "Failed to complete");
+    }
+
+    public void showGenericOkDialog(String title, String message) {
+        GDXButtonDialog bDialog = dialogs.newDialog(GDXButtonDialog.class);
+        bDialog.setTitle(title);
+        bDialog.setMessage(message);
+
+        bDialog.setClickListener(new ButtonClickListener() {
+
+            @Override
+            public void click(int button) {
+                // handle button click here
+            }
+        });
+
+        bDialog.addButton("Ok");
+
+        bDialog.build().show();
     }
 
     public void onShowAd(String tag) {

@@ -368,22 +368,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         }
         else {
             Gdx.app.error("IOSLAUNCGER", "NO   SLComposeViewController.isAvailable(SLServiceType.Twitter) ");
-
-            GDXButtonDialog bDialog = game.dialogs.newDialog(GDXButtonDialog.class);
-            bDialog.setTitle("Twitter");
-            bDialog.setMessage("Currently not available");
-
-            bDialog.setClickListener(new ButtonClickListener() {
-
-                @Override
-                public void click(int button) {
-                    // handle button click here
-                }
-            });
-
-            bDialog.addButton("Ok");
-
-            bDialog.build().show();
+            game.showGenericOkDialog("Twitter", "Account not added");
         }
     }
 
@@ -429,6 +414,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 HZIncentivizedAd.show();
             } else {
                 System.out.println("IOSLauncher: showRewardVideoAd - NO AD AVAILABLE");
+                game.showGenericOkDialog("Reward Video", "Not Available");
             }
         }
     }

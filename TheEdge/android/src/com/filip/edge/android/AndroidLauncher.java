@@ -2,6 +2,8 @@ package com.filip.edge.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -248,49 +250,42 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         // globalTracker.send(new HitBuilders.AppViewBuilder().build());
     }*/
 
+    public boolean isTwitterInstalled(){
+        try{
+            ApplicationInfo info = getPackageManager().
+                    getApplicationInfo("com.twitter.android", 0 );
+            return true;
+        } catch( PackageManager.NameNotFoundException e ){
+            return false;
+        }
+    }
+
     @Override
-    public void showTweetSheet(String message, String png){
-        // We need to copy the screenshot over from local storage
-        // to external storage
-        Gdx.files.external(png).delete();
-        FileHandle external = Gdx.files.external(png);
+    public void showTweetSheet(String message, String png) {
 
-        FileHandle local = Gdx.files.local(png);
-        Pixmap localPixmap = new Pixmap(local);
-        PixmapIO.writePNG(external, localPixmap);
-        localPixmap.dispose();
+        if (isTwitterInstalled()) {
+            // We need to copy the screenshot over from local storage
+            // to external storage
+            Gdx.files.external(png).delete();
+            FileHandle external = Gdx.files.external(png);
 
-        File myimageFile = external.file();
-        Uri myImageUri = Uri.fromFile(myimageFile);
+            FileHandle local = Gdx.files.local(png);
+            Pixmap localPixmap = new Pixmap(local);
+            PixmapIO.writePNG(external, localPixmap);
+            localPixmap.dispose();
 
-        try {
+            File myimageFile = external.file();
+            Uri myImageUri = Uri.fromFile(myimageFile);
+
             Intent intent = new TweetComposer.Builder(this)
                     .text(message)
                     .image(myImageUri)
-                    .url(new URL("http://www.theedgecontest.com"))
                     .createIntent();
 
             startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
-
         }
-        catch (MalformedURLException e) {
-            Gdx.app.error(TAG, "Twitter Exception: " + e);
-
-            GDXButtonDialog bDialog = game.dialogs.newDialog(GDXButtonDialog.class);
-            bDialog.setTitle("Twitter");
-            bDialog.setMessage("Currently not available");
-
-            bDialog.setClickListener(new ButtonClickListener() {
-
-                @Override
-                public void click(int button) {
-                    // handle button click here
-                }
-            });
-
-            bDialog.addButton("Ok");
-
-            bDialog.build().show();
+        else {
+            game.showGenericOkDialog("Twitter", "Not Installed");
         }
     }
 
@@ -337,7 +332,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             if (IncentivizedAd.isAvailable()) {
                 IncentivizedAd.display(this);
             } else {
-                System.out.println("AndroidLauncher: showRewardVideoAd - NO AD AVAILABLE");
+                game.showGenericOkDialog("Reward Video", "Not Available");
             }
         }
     }
@@ -379,6 +374,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             else {
                 Gdx.app.debug(TAG, "CANCEL!!!!!");
             }
+        }
+        else {
+            Gdx.app.debug(TAG, "ELSE!!!!!");
         }
     }
 

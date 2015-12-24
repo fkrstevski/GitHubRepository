@@ -43,8 +43,18 @@ public class DesktopLauncher implements IActivityRequestHandler {
     }
 
     @Override
+    public boolean hasBannerAd() {
+        return false;
+    }
+
+    @Override
     public void showInterstitialAd() {
 
+    }
+
+    @Override
+    public boolean hasInterstitialAd() {
+        return false;
     }
 
     @Override
@@ -53,8 +63,18 @@ public class DesktopLauncher implements IActivityRequestHandler {
     }
 
     @Override
+    public boolean hasVideoAd() {
+        return false;
+    }
+
+    @Override
     public void showRewardVideoAd() {
 
+    }
+
+    @Override
+    public boolean hasRewardAd() {
+        return false;
     }
 
     // for google play services

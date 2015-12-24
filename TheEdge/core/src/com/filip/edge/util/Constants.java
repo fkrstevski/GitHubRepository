@@ -97,6 +97,10 @@ public class Constants {
     public static final int NUMBER_OF_CREDITS = 4;
 
     public static String[][] CREDIT_ARRAY = new String[NUMBER_OF_CREDITS][2];
+    
+    // POTENTIAL AB DATA
+    public static final int LEVEL_FOR_ADS = 4;
+    public static final int DEATHS_FOR_ADS = 10;
 
     static {
         CREDIT_ARRAY[0][0] = "ARTISTIC DIRECTION";  CREDIT_ARRAY[0][1] = "MATTHEW SECRIST";

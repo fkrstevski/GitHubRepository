@@ -59,6 +59,8 @@ public class GamePreferences {
 
     private Preferences prefs;
 
+    public int playSessionDeaths;
+
     // singleton: prevent instantiation from other classes
     private GamePreferences() {
         prefs = Gdx.app.getPreferences(Constants.PREFERENCES);
@@ -70,6 +72,8 @@ public class GamePreferences {
             prefs.clear();
             prefs.flush();
         }
+
+        playSessionDeaths = 0;
     }
 
     public void reset() {

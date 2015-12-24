@@ -555,11 +555,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (GamePreferences.instance.currentScore <= 0) {
                     GameOver();
                 } else {
-                    this.state = LevelState.Countdown;
-                    this.level.startCircle = this.level.startCircleRedIcon;
-                    this.level.finishCircle = this.level.finishCircleRedIcon;
-                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                    this.resetLevel();
+                    GamePreferences.instance.playSessionDeaths++;
+                    boolean hasAd = this.game.hasInterstitialAd() || this.game.hasVideoAd();
+                    int level = GamePreferences.instance.getCurrentLevel();
+                    if(hasAd && level > Constants.LEVEL_FOR_ADS && GamePreferences.instance.playSessionDeaths % Constants.DEATHS_FOR_ADS == 0) {
+                        game.setScreen(new InterstitialScreen(game));
+                    }
+                    else {
+                        this.state = LevelState.Countdown;
+                        this.level.startCircle = this.level.startCircleRedIcon;
+                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                        AudioManager.instance.play(Assets.instance.sounds.tickSound);
+                        this.resetLevel();
+                    }
                 }
             }
         } else if (state == LevelState.Gameplay) {

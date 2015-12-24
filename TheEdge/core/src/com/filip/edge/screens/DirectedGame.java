@@ -64,10 +64,24 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
+    public boolean hasBannerAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasBannerAd();
+        }
+        return false;
+    }
+
     public void showInterstitialAd() {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showInterstitialAd();
         }
+    }
+
+    public boolean hasInterstitialAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasInterstitialAd();
+        }
+        return false;
     }
 
     public void showVideoAd() {
@@ -76,10 +90,24 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
+    public boolean hasVideoAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasVideoAd();
+        }
+        return false;
+    }
+
     public void showRewardVideoAd() {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showRewardVideoAd();
         }
+    }
+
+    public boolean hasRewardAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasRewardAd();
+        }
+        return false;
     }
 
     public void submitScore(long score) {

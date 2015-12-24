@@ -300,6 +300,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public boolean hasBannerAd() {
+        return false;
+    }
+
+    @Override
     public void showInterstitialAd() {
         System.out.println("AndroidLauncher: showInterstitialAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
@@ -309,6 +314,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 com.heyzap.sdk.ads.InterstitialAd.display(this);
             }
         }
+    }
+
+    @Override
+    public boolean hasInterstitialAd() {
+        return com.heyzap.sdk.ads.InterstitialAd.isAvailable();
     }
 
     @Override
@@ -326,6 +336,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public boolean hasVideoAd() {
+        return com.heyzap.sdk.ads.VideoAd.isAvailable();
+    }
+
+    @Override
     public void showRewardVideoAd() {
         System.out.println("AndroidLauncher: showRewardVideoAd");
         if (EdgeGame.adType != GamePreferences.AdType.ADMOB) {
@@ -335,6 +350,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 game.showGenericOkDialog("Reward Video", "Not Available");
             }
         }
+    }
+
+    @Override
+    public boolean hasRewardAd() {
+        return com.heyzap.sdk.ads.IncentivizedAd.isAvailable();
     }
 
     @Override

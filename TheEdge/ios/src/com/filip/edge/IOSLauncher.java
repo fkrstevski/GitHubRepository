@@ -383,14 +383,27 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
+    public boolean hasBannerAd() {
+        return false;
+    }
+
+    @Override
     public void showInterstitialAd() {
         System.out.println("IOSLauncher: showInterstitialAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
         } else {
-            HZInterstitialAd.show();
+            if(HZInterstitialAd.isAvailable()) {
+                HZInterstitialAd.show();
+            }
         }
     }
+
+    @Override
+    public boolean hasInterstitialAd() {
+        return HZInterstitialAd.isAvailable();
+    }
+
 
     @Override
     public void showVideoAd() {
@@ -407,6 +420,11 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     @Override
+    public boolean hasVideoAd() {
+        return HZVideoAd.isAvailable();
+    }
+
+    @Override
     public void showRewardVideoAd() {
         System.out.println("IOSLauncher: showRewardVideoAd");
         if (EdgeGame.adType != GamePreferences.AdType.ADMOB) {
@@ -419,6 +437,10 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
         }
     }
 
+    @Override
+    public boolean hasRewardAd() {
+        return HZIncentivizedAd.isAvailable();
+    }
 
     @Override
     public void startMethodTracing(String name) {

@@ -9,9 +9,13 @@ public interface IActivityRequestHandler {
 
     // Ads
     void showBannerAds(boolean show);
+    boolean hasBannerAd();
     void showInterstitialAd();
+    boolean hasInterstitialAd();
     void showVideoAd();
+    boolean hasVideoAd();
     void showRewardVideoAd();
+    boolean hasRewardAd();
 
     // for google play services
     void login();

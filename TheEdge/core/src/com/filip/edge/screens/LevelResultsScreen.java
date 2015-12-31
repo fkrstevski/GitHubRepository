@@ -241,7 +241,8 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     }
 
     public void btnTweetClicked() {
-        game.showTweetSheet("From Results Screen #deosthisevenwork #theedge", Constants.SCREENSHOT_LEVEL_RESULT);
+        String tweet = "Just beat level "  + GamePreferences.instance.getCurrentLevel() + " #theedgegamechallenge";
+        game.showTweetSheet(tweet, Constants.SCREENSHOT_LEVEL_RESULT);
     }
 
     public void btnVideoClicked() {
@@ -250,6 +251,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
     public void giveVideoReward(){
         addScoreUpdate(Constants.VIDEO_REWARD);
+        GamePreferences.instance.adsSuccessfullyWatched++;
         GamePreferences.instance.completedLevelVideoReward = true;
         GamePreferences.instance.currentScore += Constants.VIDEO_REWARD;
         GamePreferences.instance.save();
@@ -265,6 +267,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
     public void giveTweetReward(){
         addScoreUpdate(Constants.TWEET_REWARD);
+        GamePreferences.instance.tweetsMade++;
         GamePreferences.instance.completedLevelTweet = true;
         GamePreferences.instance.currentScore += Constants.TWEET_REWARD;
         GamePreferences.instance.save();

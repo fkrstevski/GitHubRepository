@@ -51,6 +51,8 @@ public class GamePreferences {
     public int level;
     public int stage;
     public int zone;
+    public int adsSuccessfullyWatched;
+    public int tweetsMade;
     // ---------------END----------------
 
     // Used to help store info, need to be reset
@@ -86,6 +88,8 @@ public class GamePreferences {
         zone = 0;
         levelTries.clear();
         levelTimes.clear();
+        tweetsMade = 0;
+        adsSuccessfullyWatched = 0;
     }
 
     public void load() {
@@ -101,6 +105,8 @@ public class GamePreferences {
         email = prefs.getString("email", "");
         tries = prefs.getString("tries", "");
         times = prefs.getString("times", "");
+        adsSuccessfullyWatched = prefs.getInteger("ads", 0);
+        tweetsMade = prefs.getInteger("tweets", 0);
         showingLevelResults = prefs.getBoolean("lr", false);
         completedLevelTweet = prefs.getBoolean("tweet", false);
         completedLevelVideoReward = prefs.getBoolean("video", false);
@@ -154,6 +160,8 @@ public class GamePreferences {
         prefs.putInteger("level", level);
         prefs.putInteger("stage", stage);
         prefs.putInteger("zone", zone);
+        prefs.putInteger("ads", adsSuccessfullyWatched);
+        prefs.putInteger("tweets", tweetsMade);
         prefs.putLong("currentScore", currentScore);
         prefs.flush();
     }
@@ -166,6 +174,8 @@ public class GamePreferences {
             parameters.put("score", "" + GamePreferences.instance.currentScore);
             parameters.put("tries", GamePreferences.instance.tries);
             parameters.put("times", GamePreferences.instance.times);
+            parameters.put("tweets", "" + GamePreferences.instance.tweetsMade);
+            parameters.put("ads", "" + GamePreferences.instance.adsSuccessfullyWatched);
             parameters.put("extraData", "data from game");
             parameters.put("version", "" + Constants.GAME_VERSION);
             parameters.put("isProduction", "" + Constants.PRODUCTION);

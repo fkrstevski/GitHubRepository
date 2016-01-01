@@ -27,6 +27,7 @@ public class GameOverScreen extends AbstractGameScreen {
     public GameOverScreen(DirectedGame game) {
         super(game);
         this.game = game;
+        GamePreferences.instance.submitGameOverData();
         GamePreferences.instance.reset();
         GamePreferences.instance.save();
     }

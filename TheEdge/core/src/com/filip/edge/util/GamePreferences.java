@@ -166,6 +166,43 @@ public class GamePreferences {
         prefs.flush();
     }
 
+    public void submitGameOverData() {
+        GamePreferences.instance.getUserID();
+        if (!GamePreferences.instance.userID.isEmpty()) {
+            Map<String, String> parameters = new HashMap<String, String>();
+            parameters.put("userID", "" + GamePreferences.instance.userID);
+            parameters.put("tries", GamePreferences.instance.tries);
+            parameters.put("times", GamePreferences.instance.times);
+            parameters.put("tweets", "" + GamePreferences.instance.tweetsMade);
+            parameters.put("ads", "" + GamePreferences.instance.adsSuccessfullyWatched);
+            parameters.put("extraData", "data from game");
+            parameters.put("version", "" + Constants.GAME_VERSION);
+            parameters.put("isProduction", "" + Constants.PRODUCTION);
+            Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+            request.setUrl("https://secure.bluehost.com/~alimalim/absolutegames/TheEdgeSubmitGameOverData.php");
+
+            request.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
+                @Override
+                public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
+                    Gdx.app.log("Result ", httpResponse.getResultAsString());
+                }
+
+                @Override
+                public void failed(Throwable t) {
+                    Gdx.app.error("Failed ", t.getMessage());
+                }
+
+                @Override
+                public void cancelled() {
+                }
+            });
+        }
+    }
+
     public void submitData() {
         GamePreferences.instance.getUserID();
         if (!GamePreferences.instance.userID.isEmpty()) {

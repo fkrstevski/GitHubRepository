@@ -81,7 +81,7 @@ public class Constants {
 
     public static final Color[] ZONE_COLORS = {BLUE, TURQUOISE, PURPLE, GREY};
 
-    public static final long MAX_SCORE = 1000000000000000000L;
+    public static final long MAX_SCORE = 100000000L;
     public static final int SCORE_DECREMENT_FOR_COLLISION = -100000;
     public static final int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
     public static final int EXTRA_ORBITER_WORTH = 10000;

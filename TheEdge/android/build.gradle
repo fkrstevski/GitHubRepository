@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.1"
     compileSdkVersion 23
     sourceSets {
         main {
@@ -14,22 +14,10 @@ android {
 
         instrumentTest.setRoot('tests')
     }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-    }
-
     defaultConfig {
-        // Enabling multidex support.
-        multiDexEnabled true
-    }
-
-    dexOptions {
-        javaMaxHeapSize "4g"
+        applicationId "com.filip.edge.android"
+        minSdkVersion 9
+        targetSdkVersion 23
     }
 }
 
@@ -76,7 +64,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.filip.edge.android/com.filip.edge.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.filip.edge/com.filip.edge.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

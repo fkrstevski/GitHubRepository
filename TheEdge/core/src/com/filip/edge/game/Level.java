@@ -60,8 +60,6 @@ public class Level {
 
     public int numberOfOrbitersFinishedWith;
 
-    public int currentLevel;
-
     public Level() {
         this.creditsIndex = -1;
         this.displayCredits = this.lastStage();
@@ -69,7 +67,7 @@ public class Level {
         init();
     }
 
-    public void reset(){
+    public void reset() {
         // BALL RESET
         ball.reset();
 
@@ -104,12 +102,12 @@ public class Level {
         }
 
         // PACER RESET
-        if(this.hasPacerObject()) {
+        if (this.hasPacerObject()) {
             levelPacer.reset();
         }
 
         // LEVEL FOLLOWER RESET
-        if(this.hasFollowerObject()) {
+        if (this.hasFollowerObject()) {
             levelFollower.reset();
         }
 
@@ -119,7 +117,7 @@ public class Level {
         }
 
         // DISAPPEARING RESET
-        if(this.disappearing) {
+        if (this.disappearing) {
             disappearingTime = 0;
             disappearingIndex = 0;
 
@@ -141,16 +139,11 @@ public class Level {
 
     private void init() {
         Gdx.app.log(TAG, "LEVEL init zone = " + GamePreferences.instance.zone + " stage = " + GamePreferences.instance.stage);
-
-        currentLevel = GamePreferences.instance.stage;
-        for(int i = GamePreferences.instance.zone - 1; i >= 0; --i ){
-            currentLevel += StageLoader.getZone(i).getNumberOfStages();
-        }
-        Gdx.app.log(TAG, "LEVEL init levelNumber = " + currentLevel);
+        Gdx.app.log(TAG, "LEVEL init levelNumber = " + GamePreferences.instance.getCurrentLevel());
         Gdx.app.log(TAG, "LEVEL init GamePreferences.instance.levelTries.size() = " + GamePreferences.instance.levelTries.size());
 
-        if(GamePreferences.instance.levelTries.size() == currentLevel){
-            GamePreferences.instance.levelTries.add(currentLevel, 1);
+        if (GamePreferences.instance.levelTries.size() == GamePreferences.instance.getCurrentLevel()) {
+            GamePreferences.instance.levelTries.add(GamePreferences.instance.getCurrentLevel(), 1);
             GamePreferences.instance.save();
         }
 
@@ -285,23 +278,23 @@ public class Level {
         // Add EndCircle - for target collision
         endCircle = new EmptyCircle(Constants.END_CIRCLE_RADIUS * 2 * Constants.END_CIRCLE_OUTLINE_RADIUS_MULTIPLIER * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.WHITE, Constants.WHITE, false, "CircleEndTarget");
-        endCircle.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
+        endCircle.scale.set(points.get(points.size() - 1).extraCircleScale, points.get(points.size() - 1).extraCircleScale);
 
         // Add EndCircle - for boundary collision
         EndTarget et = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleE");
-        et.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
+        et.scale.set(points.get(points.size() - 1).extraCircleScale, points.get(points.size() - 1).extraCircleScale);
         circleShapes.add(et);
 
         finishCircleGreenIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.GREEN, Constants.WHITE, false, "CircleG");
-        finishCircleGreenIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
+        finishCircleGreenIcon.scale.set(points.get(points.size() - 1).extraCircleScale, points.get(points.size() - 1).extraCircleScale);
         finishCircleYellowIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.YELLOW, Constants.WHITE, false, "CircleY");
-        finishCircleYellowIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
+        finishCircleYellowIcon.scale.set(points.get(points.size() - 1).extraCircleScale, points.get(points.size() - 1).extraCircleScale);
         finishCircleRedIcon = new EndTarget(Constants.END_CIRCLE_RADIUS * 2 * horizontalScale,
                 this.getLastPoint().x, this.getLastPoint().y, Constants.RED, Constants.WHITE, false, "CircleR");
-        finishCircleRedIcon.scale.set(points.get(points.size()-1).extraCircleScale, points.get(points.size()-1).extraCircleScale);
+        finishCircleRedIcon.scale.set(points.get(points.size() - 1).extraCircleScale, points.get(points.size() - 1).extraCircleScale);
 
         finishCircle = finishCircleRedIcon;
 
@@ -310,7 +303,7 @@ public class Level {
             Vector2 p1 = points.get(i);
             Vector2 p2 = points.get(i + 1);
 
-            if(!p1.epsilonEquals(p2, 0.01f)) {
+            if (!p1.epsilonEquals(p2, 0.01f)) {
 
                 Vector2 midpoint = new Vector2((p1.x + p2.x) / 2.0f, (p1.y + p2.y) / 2.0f);
                 float angle = (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
@@ -400,14 +393,15 @@ public class Level {
         }
     }
 
-    private void calculateScaledDisappearingSpeed() {;
+    private void calculateScaledDisappearingSpeed() {
+        ;
         disappearingVectorDirection.set(circleShapes.get(disappearingIndex).position.x - circleShapes.get(disappearingIndex + 1).position.x,
                 circleShapes.get(disappearingIndex).position.y - circleShapes.get(disappearingIndex + 1).position.y);
         disappearingVectorDirection.nor();
         float xPart = Math.abs((disappearingSpeed) * disappearingVectorDirection.x) *
                 (StageLoader.getDistanceBetweenTwoSideBySidePointsInY() / StageLoader.getDistanceBetweenTwoSideBySidePointsInX());
         float yPart = Math.abs((disappearingSpeed) * disappearingVectorDirection.y);
-        scaledDisappearingSpeed =  xPart + yPart;
+        scaledDisappearingSpeed = xPart + yPart;
     }
 
     public void update(float deltaTime) {
@@ -476,18 +470,18 @@ public class Level {
             levelFollower.update(deltaTime);
         }
 
-        if(levelPacer != null) {
+        if (levelPacer != null) {
             levelPacer.update(deltaTime);
         }
     }
 
     public void updateCredits(float deltaTime) {
-        if(this.displayCredits) {
+        if (this.displayCredits) {
             this.creditTime += deltaTime;
-            if(this.creditTime > CREDIT_MAX_TIME + CREDIT_PAUSE_TIME) {
+            if (this.creditTime > CREDIT_MAX_TIME + CREDIT_PAUSE_TIME) {
                 this.creditTime = 0;
                 this.creditsIndex++;
-                if(this.creditsIndex > Constants.NUMBER_OF_CREDITS - 1){
+                if (this.creditsIndex > Constants.NUMBER_OF_CREDITS - 1) {
                     this.displayCredits = false;
                 }
             }
@@ -544,18 +538,18 @@ public class Level {
             levelFollower.render(batch);
         }
 
-        if(levelPacer != null)  {
+        if (levelPacer != null) {
             levelPacer.render(batch);
         }
 
         ball.render(batch);
 
-        if(levelInstructions != ""){
+        if (levelInstructions != "") {
             DigitRenderer.instance.renderStringCentered(levelInstructions, Gdx.graphics.getHeight() -
-                    (int)(DigitRenderer.instance.digitHeight / 2) -
+                    (int) (DigitRenderer.instance.digitHeight / 2) -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, batch, 1);
         }
-        if(this.displayCredits && this.creditsIndex != -1 && creditTime < CREDIT_MAX_TIME){
+        if (this.displayCredits && this.creditsIndex != -1 && creditTime < CREDIT_MAX_TIME) {
             DigitRenderer.instance.renderStringCentered(Constants.CREDIT_ARRAY[this.creditsIndex][0], Gdx.graphics.getHeight() -
                     DigitRenderer.instance.digitHeight / 2 -
                     DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS -
@@ -566,7 +560,7 @@ public class Level {
 
         }
 
-        if(GamePreferences.instance.zone == 0 && GamePreferences.instance.stage == 0) {
+        if (GamePreferences.instance.zone == 0 && GamePreferences.instance.stage == 0) {
             DigitRenderer.instance.renderStringAtCenterXPoint("MEET", (int) this.points.get(0).x, (int) (this.points.get(0).y - this.ball.radius * 6), batch, 0.6f);
             DigitRenderer.instance.renderStringAtCenterXPoint("EDGY", (int) this.points.get(0).x, (int) (this.points.get(0).y - this.ball.radius * 3.7), batch, 0.6f);
         }
@@ -600,7 +594,9 @@ public class Level {
         return ball;
     }
 
-    public boolean hasPacerObject() { return levelPacer != null; }
+    public boolean hasPacerObject() {
+        return levelPacer != null;
+    }
 
     public void tearDownPacer() {
         if (this.levelPacer != null &&
@@ -635,7 +631,7 @@ public class Level {
     }
 
     public void tearDownFollower() {
-        if(this.levelFollower != null &&
+        if (this.levelFollower != null &&
                 (this.levelFollower.followerObjectState != PropertyState.Gone && this.levelFollower.followerObjectState != PropertyState.Inactive)) {
             this.levelFollower.followerObjectTime = 0;
             this.levelFollower.followerObjectState = Level.PropertyState.Teardown;

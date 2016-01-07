@@ -2,10 +2,6 @@ package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
 
 public class MenuScreen extends AbstractGameScreen {
 
@@ -13,39 +9,19 @@ public class MenuScreen extends AbstractGameScreen {
 
     private MainMenuController worldController;
     private MainMenuRenderer worldRenderer;
-    private Color startingColor;
-    private static final float colorLerpTime = 1;
-    private float currentTime;
 
+    private boolean lerpColor;
     private boolean paused;
 
     public MenuScreen(DirectedGame game, boolean lerpColor) {
         super(game);
-        if(lerpColor) {
-            startingColor = new Color(Constants.WHITE);
-        }
-        else {
-            startingColor = Constants.ZONE_COLORS[GamePreferences.instance.zone];
-        }
+        this.lerpColor = lerpColor;
     }
 
     @Override
     public void render(float deltaTime) {
         // Do not update game world when paused.
         if (!paused) {
-            currentTime += deltaTime;
-            if(currentTime < colorLerpTime){
-                startingColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentTime / colorLerpTime);
-            }
-
-            // Sets the clear screen color
-            Gdx.gl.glClearColor(startingColor.r,
-                    startingColor.g,
-                    startingColor.b,
-                    startingColor.a);
-
-            // Clears the screen
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             // Render game world to screen
             worldRenderer.render(game.batch);
 
@@ -64,7 +40,7 @@ public class MenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         //GamePreferences.instance.load();
-        worldController = new MainMenuController(game);
+        worldController = new MainMenuController(game, lerpColor);
         worldRenderer = new MainMenuRenderer(worldController);
         Gdx.input.setCatchBackKey(true);
     }

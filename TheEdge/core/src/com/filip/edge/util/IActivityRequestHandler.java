@@ -4,9 +4,18 @@ public interface IActivityRequestHandler {
     //for google analytcis
     //public void setTrackerScreenName(String path);
 
+    // Twitter
+    void showTweetSheet(String message, String png);
+
     // Ads
-    void showAds(boolean show);
+    void showBannerAds(boolean show);
+    boolean hasBannerAd();
     void showInterstitialAd();
+    boolean hasInterstitialAd();
+    void showVideoAd();
+    boolean hasVideoAd();
+    void showRewardVideoAd();
+    boolean hasRewardAd();
 
     // for google play services
     void login();

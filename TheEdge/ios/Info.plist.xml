@@ -4,6 +4,8 @@
 <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
+    <key>UIRequiresFullScreen</key>
+    <true/>
     <key>CFBundleDisplayName</key>
     <string>${app.name}</string>
     <key>CFBundleExecutable</key>
@@ -50,6 +52,9 @@
             <array>
                 <string>Icon</string>
                 <string>Icon-72</string>
+                <string>Icon-76</string>
+                <string>Icon-120</string>
+                <string>Icon-152</string>
             </array>
         </dict>
     </dict>

@@ -1,11 +1,8 @@
 package com.filip.edge.screens.objects;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
 
 /**
  * Created by fkrstevski on 2015-09-29.
@@ -41,12 +38,12 @@ public class OrbiterPickup extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if(deactivate) {
+        if (deactivate) {
             deactivate = false;
             body.setActive(false);
         }
 
-        if(disappearTime != Integer.MAX_VALUE) {
+        if (disappearTime != Integer.MAX_VALUE) {
             switch (state) {
                 case StartingUp:
                     currentTime += deltaTime;
@@ -61,15 +58,14 @@ public class OrbiterPickup extends EmptyCircle {
                     currentTime += deltaTime;
                     currentDisappearTime += deltaTime;
                     minScale = (currentDisappearTime / disappearTime) / 2;
-                    if(scalingUp) {
+                    if (scalingUp) {
                         this.scale.set(currentTime / scaleTime + minScale, currentTime / scaleTime + minScale);
                         //body.getFixtureList().get(0).getShape().setRadius(((currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                        if(this.scale.epsilonEquals(1, 1, 0.1f)) {
+                        if (this.scale.epsilonEquals(1, 1, 0.1f)) {
                             scalingUp = !scalingUp;
                             currentTime = 0;
                         }
-                    }
-                    else {
+                    } else {
 
                         if (currentDisappearTime > disappearTime) {
                             currentDisappearTime = 0;
@@ -79,7 +75,7 @@ public class OrbiterPickup extends EmptyCircle {
 
                         this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
                         //body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                        if(this.scale.epsilonEquals(minScale, minScale, 0.1f)) {
+                        if (this.scale.epsilonEquals(minScale, minScale, 0.1f)) {
                             scalingUp = !scalingUp;
                             currentTime = 0;
                         }
@@ -90,7 +86,7 @@ public class OrbiterPickup extends EmptyCircle {
                     currentTime += deltaTime;
                     this.scale.set(1 - currentTime / scaleTime, 1 - currentTime / scaleTime);
                     body.getFixtureList().get(0).getShape().setRadius(((1 - currentTime / scaleTime) * originalSize / 2.0f) / Constants.BOX2D_SCALE);
-                    if(this.scale.epsilonEquals(0, 0, 0.1f)) {
+                    if (this.scale.epsilonEquals(0, 0, 0.1f)) {
                         currentTime = 0;
                         state = State.Gone;
                         body.setActive(false);
@@ -100,22 +96,22 @@ public class OrbiterPickup extends EmptyCircle {
         }
     }
 
-    public void pickedUp(){
+    public void pickedUp() {
         this.state = State.Gone;
         deactivate = true;
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        if(state != State.Gone) {
+        if (state != State.Gone) {
             super.render(batch);
         }
     }
 
     @Override
     public void reset() {
-        this.scale.set(0,0);
-        if(disappearTime != Integer.MAX_VALUE) {
+        this.scale.set(0, 0);
+        if (disappearTime != Integer.MAX_VALUE) {
             this.body.getFixtureList().get(0).getShape().setRadius(Constants.ORBITER_PICKUP_BODY_RADIUS / Constants.BOX2D_SCALE);
         }
         this.body.setActive(true);
@@ -123,8 +119,8 @@ public class OrbiterPickup extends EmptyCircle {
         this.minScale = 0;
     }
 
-    public void start(){
-        if(disappearTime == Integer.MAX_VALUE) {
+    public void start() {
+        if (disappearTime == Integer.MAX_VALUE) {
             this.scale.set(0.5f, 0.5f);
         }
 

@@ -28,7 +28,7 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
         dimension.set(width, height);
         position.set(x, y);
 
-        buttonPixmap = TextureManager.instance.getPixmap(width, height, shared, r.substring(0, r.length()-1));
+        buttonPixmap = TextureManager.instance.getPixmap(width, height, shared, r.substring(0, r.length() - 1));
 
         fillPixmap(width, height, outsideColor, insideColor);
 
@@ -49,11 +49,10 @@ public abstract class AbstractButtonObject extends AbstractGameObject {
 
     public void render(SpriteBatch batch) {
         if (visible) {
-            if(this.body != null) {
+            if (this.body != null) {
                 if (this.body.getLinearVelocity().x < -1) {
                     direction = -1;
-                }
-                else if (this.body.getLinearVelocity().x > 1) {
+                } else if (this.body.getLinearVelocity().x > 1) {
                     direction = 1;
                 }
             }

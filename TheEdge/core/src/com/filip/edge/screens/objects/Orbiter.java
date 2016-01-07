@@ -2,12 +2,8 @@ package com.filip.edge.screens.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
-import com.filip.edge.game.Level;
 import com.filip.edge.game.objects.EmptyCircle;
 import com.filip.edge.util.Constants;
-
-import java.util.ArrayList;
 
 /**
  * Created by fkrstevski on 2015-10-10.
@@ -24,10 +20,9 @@ public class Orbiter extends EmptyCircle {
         super(size, x, y, outsideColor, insideColor, shared, region);
         this.ball = ball;
         this.startingAngle = angle;
-        if(vertical) {
+        if (vertical) {
             this.scale.set(1, 0.3f);
-        }
-        else {
+        } else {
             this.scale.set(0.3f, 1);
         }
     }
@@ -36,7 +31,7 @@ public class Orbiter extends EmptyCircle {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if(deactivate) {
+        if (deactivate) {
             this.body.setActive(false);
             deactivate = false;
             this.visible = false;

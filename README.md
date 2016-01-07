@@ -41,3 +41,51 @@ To Change iOS simulator
 
 Try this for iOS simulators
 "./gradlew -Probovm.arch=x86_64 -Probovm.device.name=iPhone-5s launchIPhoneSimulator"
+
+
+Testing for iOS
+--------------------------
+
+1. Need to create a distribution certificate
+2. Need to create a distribution mobile provision
+3. Need to create IPA
+- Open RoboVM
+- Update Info.plist.xml
+  - add (for iPad multitasking)
+        <key>UIRequiresFullScreen</key>
+        <true/>
+  - add (for icons)
+        <string>Icon-76</string>
+        <string>Icon-120</string>
+        <string>Icon-152</string>
+- from the main menu "Build" --> "Create IPA"
+- make sure you use the distribution certificate and distribution provision (develop will not work)
+4. Open "Application Loader"
+- Double click on "Deliver Your App"
+- Select the generated IPA, and follow the prompts
+5. Add the app on iTunes Connect
+- In the TestFlight tab, select the build to test and add testers
+
+New version
+- Update version number in iTunesConnect (from 1.0 to 1.1 for example)
+- Update robovm.properties version number (from 1.0 to 1.1 for example) 
+
+Testing for Android
+--------------------------
+
+1. Generate signed APK
+- Open RoobVM, from the main menu select "Build" --> "Generate Signed APK"
+- Create a keystore or use one from before
+- Specify the location of the apk, and generate
+2. Add new app to Android developer console
+- Fill in Store listing
+- Add Aplha testing apk
+- Add testers
+- Publish app
+3. Email testers with the opt-in URL
+- https://play.google.com/apps/testing/com.filip.edge.android
+4. Old Internet Browser does not work (it canot open the google play store link)
+- had to use chrome
+
+
+

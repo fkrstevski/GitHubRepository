@@ -2,7 +2,9 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.filip.edge.game.StageLoader;
 import com.filip.edge.screens.objects.AbstractRectangleButtonObject;
+import com.filip.edge.screens.objects.MiddlePart;
 
 import java.util.ArrayList;
 
@@ -16,10 +18,11 @@ public class DigitRenderer {
 
     public ArrayList<AbstractRectangleButtonObject> digits;
     public ArrayList<AbstractRectangleButtonObject> letters;
+    public ArrayList<AbstractRectangleButtonObject> symbols;
 
     public int digitWidth;
     public int digitHeight;
-    private static final float EXTRA_SPACING = 1.1f;
+    public static final float EXTRA_SPACING = 1.1f;
 
     private DigitRenderer() {
 
@@ -28,6 +31,7 @@ public class DigitRenderer {
     public void load() {
         digits = new ArrayList<AbstractRectangleButtonObject>();
         letters = new ArrayList<AbstractRectangleButtonObject>();
+        symbols = new ArrayList<AbstractRectangleButtonObject>();
 
         digitHeight = (int) (Gdx.graphics.getWidth() * 0.044);
         digitWidth = (int) (digitHeight / Constants.DIGIT_ASPECT_RATIO);
@@ -70,17 +74,52 @@ public class DigitRenderer {
         letters.add(new LetterY(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
         letters.add(new LetterZ(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
 
+        symbols.add(new Period(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        symbols.add(new Plus(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
+        symbols.add(new Minus(digitWidth, digitHeight, 0, 0, Constants.TRANSPARENT, Constants.WHITE));
     }
 
     public void renderNumber(long number, int x, int y, SpriteBatch batch) {
         int count = 0;
-        while (number > 0){
-            int digit = (int)(number % 10);
+        while (number > 0) {
+            int digit = (int) (number % 10);
             AbstractRectangleButtonObject digitObject = digits.get(digit);
             digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
             digitObject.render(batch);
             number /= 10;
             ++count;
+        }
+    }
+
+    public void renderTime(long number, int x, int y, SpriteBatch batch) {
+        int count = 0;
+
+        x = x + (int) ((digitWidth * EXTRA_SPACING) * 1.5f);
+
+        while (number > 0) {
+            if (count == 1) {
+                AbstractRectangleButtonObject digitObject = symbols.get(0); // Period
+                digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
+                digitObject.render(batch);
+                ++count;
+            }
+            int digit = (int) (number % 10);
+            AbstractRectangleButtonObject digitObject = digits.get(digit);
+            digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
+            digitObject.render(batch);
+            number /= 10;
+            ++count;
+        }
+
+        if (count == 1) {
+            AbstractRectangleButtonObject digitObject = symbols.get(0); // Period
+            digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
+            digitObject.render(batch);
+            ++count;
+
+            digitObject = digits.get(0);
+            digitObject.position.set(x - count * digitWidth * EXTRA_SPACING, y);
+            digitObject.render(batch);
         }
     }
 
@@ -96,17 +135,15 @@ public class DigitRenderer {
         }
     }
 
-    public void renderString(String str, int x, int y, SpriteBatch batch) {
-        renderString(str, x, y, batch, 1);
-    }
-
     public void renderString(String str, int x, int y, SpriteBatch batch, float scale) {
         int count = 0;
         for (int i = str.length() - 1; i >= 0; --i, ++count) {
             // not space
             if (str.charAt(i) != ' ') {
+                AbstractRectangleButtonObject digitObject;
                 int index = str.charAt(i) - 'A';
-                AbstractRectangleButtonObject digitObject = letters.get(index);
+                digitObject = letters.get(index);
+
                 digitObject.position.set(x - count * digitWidth * EXTRA_SPACING * scale, y);
                 digitObject.scale.set(scale, scale);
                 digitObject.render(batch);
@@ -115,11 +152,10 @@ public class DigitRenderer {
     }
 
     public void renderStringAtCenterXPoint(String str, int x, int y, SpriteBatch batch, float scale) {
-        this.renderString(str, (int)(x - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+        this.renderString(str, (int) (x - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 
-
     public void renderStringCentered(String str, int y, SpriteBatch batch, float scale) {
-        this.renderString(str, (int)(Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale +  str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
+        this.renderString(str, (int) (Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.filip.edge.util.IActivityRequestHandler;
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
 
 public abstract class DirectedGame implements ApplicationListener {
     private static final String TAG = DirectedGame.class.getName();
@@ -12,6 +13,8 @@ public abstract class DirectedGame implements ApplicationListener {
     private boolean init;
     private AbstractGameScreen currScreen;
     private AbstractGameScreen nextScreen;
+
+    public GDXDialogs dialogs;
 
     public DirectedGame(IActivityRequestHandler activityRequestHandler) {
         this.activityRequestHandler = activityRequestHandler;
@@ -49,16 +52,62 @@ public abstract class DirectedGame implements ApplicationListener {
         Gdx.input.setInputProcessor(currScreen.getInputProcessor());
     }
 
-    public void showAds(boolean show) {
+    public void showTweetSheet(String message, String png) {
         if (this.activityRequestHandler != null) {
-            this.activityRequestHandler.showAds(show);
+            this.activityRequestHandler.showTweetSheet(message, png);
         }
     }
 
+    public void showBannerAds(boolean show) {
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.showBannerAds(show);
+        }
+    }
+
+    public boolean hasBannerAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasBannerAd();
+        }
+        return false;
+    }
+
     public void showInterstitialAd() {
-        if(this.activityRequestHandler != null) {
+        if (this.activityRequestHandler != null) {
             this.activityRequestHandler.showInterstitialAd();
         }
+    }
+
+    public boolean hasInterstitialAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasInterstitialAd();
+        }
+        return false;
+    }
+
+    public void showVideoAd() {
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.showVideoAd();
+        }
+    }
+
+    public boolean hasVideoAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasVideoAd();
+        }
+        return false;
+    }
+
+    public void showRewardVideoAd() {
+        if (this.activityRequestHandler != null) {
+            this.activityRequestHandler.showRewardVideoAd();
+        }
+    }
+
+    public boolean hasRewardAd() {
+        if (this.activityRequestHandler != null) {
+            return this.activityRequestHandler.hasRewardAd();
+        }
+        return false;
     }
 
     public void submitScore(long score) {
@@ -67,13 +116,13 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
-    public void startMethodTracing(String name){
+    public void startMethodTracing(String name) {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.startMethodTracing(name);
         }
     }
 
-    public void stopMethodTracing(){
+    public void stopMethodTracing() {
         if (this.activityRequestHandler != null) {
             this.activityRequestHandler.stopMethodTracing();
         }

@@ -5,11 +5,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 enum LevelProperties {
@@ -55,18 +51,16 @@ public class StageLoader {
     private static final int SHEET_HEIGHT = 29;
 
     public static boolean isInteger(String s) {
-        boolean isValidInteger = false;
         try {
             Integer.parseInt(s);
 
             // s is a valid integer
 
-            isValidInteger = true;
+            return true;
         } catch (NumberFormatException ex) {
             // s is not an integer
+            return false;
         }
-
-        return isValidInteger;
     }
 
     public static void init() {
@@ -101,7 +95,7 @@ public class StageLoader {
 
                         br = new BufferedReader(new FileReader(filename));
                         int y = 0;
-                        Gdx.app.log(TAG, "ZONE = " + currentZone + " Stage = " + currentStage);
+                        //Gdx.app.log(TAG, "ZONE = " + currentZone + " Stage = " + currentStage);
                         while ((line = br.readLine()) != null) {
 
                             // use comma as separator
@@ -116,18 +110,17 @@ public class StageLoader {
                                             // do nothing
                                         }
                                         // Instruction
-                                        else if(cell.charAt(0) == '#') {
+                                        else if (cell.charAt(0) == '#') {
                                             levelInstructions = cell.substring(1, cell.length());
                                         }
                                         // if the first char in the cell is not an int, it means we are setting the level properties
                                         else if (!isInteger("" + cell.charAt(0))) {
-                                            if(cell.charAt(0) == 'L') {
+                                            if (cell.charAt(0) == 'L') {
                                                 levelProperties.add(new LevelProperty(LevelProperties.Looper,
                                                         Integer.parseInt(cell.substring(1, 2)),
                                                         Integer.parseInt(cell.substring(2, 3)),
                                                         currentZone, currentStage, cell.substring(4)));
-                                            }
-                                            else if (cell.charAt(0) == 'F') {
+                                            } else if (cell.charAt(0) == 'F') {
                                                 levelProperties.add(
                                                         new LevelProperty(LevelProperties.Follower,
                                                                 Integer.parseInt(cell.substring(1, 2)),
@@ -143,8 +136,7 @@ public class StageLoader {
                                                                 currentZone, currentStage
                                                         )
                                                 );
-                                            }
-                                            else if (cell.charAt(0) == 'P') {
+                                            } else if (cell.charAt(0) == 'P') {
                                                 levelProperties.add(
                                                         new LevelProperty(LevelProperties.Pacer,
                                                                 Integer.parseInt(cell.substring(1, 2)),
@@ -220,41 +212,34 @@ public class StageLoader {
                                                             points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                             points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
                                                         }
-                                                    }
-                                                    else if (r.charAt(0) == 'A') {
+                                                    } else if (r.charAt(0) == 'A') {
                                                         points[pointIndex].appears = true;
                                                         if (r.length() > 1) {
-                                                            if(r.substring(1, 2).startsWith("-")) {
+                                                            if (r.substring(1, 2).startsWith("-")) {
                                                                 points[pointIndex].disappearsAppearsStartupIndex = -1;
                                                                 points[pointIndex].disappearsAppearsTimeIndex = -1;
-                                                            }
-                                                            else {
+                                                            } else {
                                                                 points[pointIndex].disappearsAppearsStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                                 points[pointIndex].disappearsAppearsTimeIndex = (Integer.parseInt(r.substring(2, 3)));
                                                             }
                                                         }
-                                                    }
-                                                    else if (r.charAt(0) == 'O') {
+                                                    } else if (r.charAt(0) == 'O') {
                                                         points[pointIndex].orbiterPickup = true;
                                                         if (r.length() > 1) {
-                                                            if(r.substring(1, 2).startsWith("-")) {
+                                                            if (r.substring(1, 2).startsWith("-")) {
                                                                 points[pointIndex].orbiterStartupIndex = -1;
                                                                 points[pointIndex].orbiterDisappearIndex = -1;
-                                                            }
-                                                            else {
+                                                            } else {
                                                                 points[pointIndex].orbiterStartupIndex = (Integer.parseInt(r.substring(1, 2)));
                                                                 points[pointIndex].orbiterDisappearIndex = (Integer.parseInt(r.substring(2, 3)));
                                                             }
                                                         }
-                                                    }
-                                                    else if (r.charAt(0) == 'G') {
+                                                    } else if (r.charAt(0) == 'G') {
                                                         points[pointIndex].gold = true;
-                                                    }
-                                                    else if (r.charAt(0) == 'S') {
+                                                    } else if (r.charAt(0) == 'S') {
                                                         if (r.charAt(1) == 'C') {
                                                             points[pointIndex].extraCircleScale = (Float.parseFloat(r.substring(2, r.length())));
-                                                        }
-                                                        else if (r.charAt(1) == 'R') {
+                                                        } else if (r.charAt(1) == 'R') {
                                                             points[pointIndex].extraRectangleScale = (Float.parseFloat(r.substring(2, r.length())));
                                                         }
                                                     }
@@ -307,7 +292,7 @@ public class StageLoader {
                                     (points[i].hasHorizontalOscillator ? 't' : 'f'), (points[i].hasVerticalOscillator ? 't' : 'f'), points[i].oscillatorStartupIndex, points[i].oscillatorSpeedIndex,
                                     (points[i].disappears ? 't' : 'f'), (points[i].appears ? 't' : 'f'), points[i].disappearsAppearsStartupIndex, points[i].disappearsAppearsTimeIndex,
                                     (points[i].orbiterPickup ? 't' : 'f'), points[i].orbiterStartupIndex, points[i].orbiterDisappearIndex,
-                                    points[i].extraCircleScale, points[i].extraRectangleScale ,
+                                    points[i].extraCircleScale, points[i].extraRectangleScale,
                                     (points[i].gold ? 't' : 'f')));
                             points[i] = null;
                         } else {
@@ -319,10 +304,10 @@ public class StageLoader {
                 }
 
                 numberOfStages[currentZone] = currentStage;
-                Gdx.app.log(TAG, "Zone " + currentZone + " has " + numberOfStages[currentZone] + " stages");
+                //Gdx.app.log(TAG, "Zone " + currentZone + " has " + numberOfStages[currentZone] + " stages");
             }
 
-            for(int i = 0; i < numberOfZones; ++i) {
+            for (int i = 0; i < numberOfZones; ++i) {
                 sb.append(numberOfStages[i] + ";");
             }
             sb.append(nl);
@@ -367,7 +352,7 @@ public class StageLoader {
 
         // Stages line - Stored in the last line
         String stagesline = linesInFile[linesInFile.length - 1];
-        Gdx.app.debug(TAG, "Stages line = " + stagesline);
+        //Gdx.app.debug(TAG, "Stages line = " + stagesline);
         if (stagesline.length() > 0) {
             String[] stagesString = stagesline.split(";");
             for (int j = 0; j < stagesString.length; j++) {
@@ -376,53 +361,47 @@ public class StageLoader {
         }
 
         for (int i = 0; i < linesInFile.length - 1; i++) {
-            if(i  < numberOfStages[0] * 3) {
+            if (i < numberOfStages[0] * 3) {
                 currentZone = 0;
                 currentStage = i / 3;
-            }
-            else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3) {
+            } else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3) {
                 currentZone = 1;
                 currentStage = (i - numberOfStages[0] * 3) / 3;
-            }
-            else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3 + numberOfStages[2] * 3) {
+            } else if (i < numberOfStages[0] * 3 + numberOfStages[1] * 3 + numberOfStages[2] * 3) {
                 currentZone = 2;
                 currentStage = (i - numberOfStages[0] * 3 - numberOfStages[1] * 3) / 3;
-            }
-            else {
+            } else {
                 currentZone = 3;
                 currentStage = (i - numberOfStages[0] * 3 - numberOfStages[1] * 3 - numberOfStages[2] * 3) / 3;
             }
 
-            Gdx.app.debug(TAG, "i = " + i);
-            Gdx.app.debug(TAG, "Zone = " + currentZone);
-            Gdx.app.debug(TAG, "Stage = " + currentStage);
+            //Gdx.app.debug(TAG, "i = " + i);
+            //Gdx.app.debug(TAG, "Zone = " + currentZone);
+            //Gdx.app.debug(TAG, "Stage = " + currentStage);
 
             ArrayList<LevelProperty> stageProperties = new ArrayList<LevelProperty>();
 
             // Level line
             String line = linesInFile[i];
-            Gdx.app.debug(TAG, "Level line = " + line);
+            //Gdx.app.debug(TAG, "Level line = " + line);
             if (line.length() > 0) {
                 String[] levelPropertiesString = line.split(";");
                 for (int j = 0; j < levelPropertiesString.length; j++) {
                     String[] propertyValue = levelPropertiesString[j].split(",");
-                    if(propertyValue.length > 1) {
+                    if (propertyValue.length > 1) {
                         if (Boolean.parseBoolean(propertyValue[1])) {
                             LevelProperties type = LevelProperties.None;
-                            if(propertyValue[0].equalsIgnoreCase("f")) {
+                            if (propertyValue[0].equalsIgnoreCase("f")) {
                                 type = LevelProperties.Follower;
-                            }
-                            else if (propertyValue[0].equalsIgnoreCase("d")) {
+                            } else if (propertyValue[0].equalsIgnoreCase("d")) {
                                 type = LevelProperties.Disappears;
-                            }
-                            else if (propertyValue[0].equalsIgnoreCase("l")) {
+                            } else if (propertyValue[0].equalsIgnoreCase("l")) {
                                 type = LevelProperties.Looper;
-                            }
-                            else if (propertyValue[0].equalsIgnoreCase("p")) {
+                            } else if (propertyValue[0].equalsIgnoreCase("p")) {
                                 type = LevelProperties.Pacer;
                             }
 
-                            if(type != LevelProperties.None) {
+                            if (type != LevelProperties.None) {
                                 stageProperties.add(new LevelProperty(type, Integer.parseInt(propertyValue[2]),
                                         Integer.parseInt(propertyValue[3]), currentZone, currentStage, propertyValue[4]));
                             }
@@ -433,11 +412,11 @@ public class StageLoader {
 
             i++; // move to instruction line
             levelInstructions = linesInFile[i];
-            Gdx.app.debug(TAG, "Level instruction = " + levelInstructions);
+            //Gdx.app.debug(TAG, "Level instruction = " + levelInstructions);
 
             i++; // move to points line
             line = linesInFile[i];
-            Gdx.app.debug(TAG, "line = " + line);
+            //Gdx.app.debug(TAG, "line = " + line);
 
             String[] pointsInLine = line.split(";");
 
@@ -445,7 +424,7 @@ public class StageLoader {
 
             for (int j = 0; j < pointsInLine.length; j++) {
                 String[] pointProperty = pointsInLine[j].split(",");
-                if(pointProperty.length > 1) {
+                if (pointProperty.length > 1) {
                     stagePoints.add(
                             new LevelPoint(
                                     Float.parseFloat(pointProperty[0]) * width,
@@ -473,13 +452,11 @@ public class StageLoader {
         return SHEET_HEIGHT * 0.0066f + yIndex / (SHEET_HEIGHT * 1.43f);
     }
 
-    public static float getDistanceBetweenTwoSideBySidePointsInX()
-    {
+    public static float getDistanceBetweenTwoSideBySidePointsInX() {
         return (Math.abs(getXpoint(1) - getXpoint(0))) * Gdx.graphics.getWidth();
     }
 
-    public static float getDistanceBetweenTwoSideBySidePointsInY()
-    {
+    public static float getDistanceBetweenTwoSideBySidePointsInY() {
         return (Math.abs(getYpoint(1) - getYpoint(0))) * Gdx.graphics.getHeight();
     }
 

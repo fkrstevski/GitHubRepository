@@ -1,6 +1,5 @@
 package com.filip.edge.util;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,11 +28,11 @@ public class TextureManager {
     }
 
     public void load() {
-        if(atlas == null) {
+        if (atlas == null) {
             atlas = new TextureAtlas();
         }
 
-        if(pixmapMap == null) {
+        if (pixmapMap == null) {
             pixmapMap = new HashMap();
         }
     }
@@ -41,30 +40,29 @@ public class TextureManager {
     public Pixmap getPixmap(float width, float height, boolean shared, String r) {
         Pixmap buttonPixmap;
 
-        if(pixmapMap.containsKey(r))
-        {
-            buttonPixmap = (Pixmap)pixmapMap.get(r);
-        }
-        else {
+        if (pixmapMap.containsKey(r)) {
+            buttonPixmap = (Pixmap) pixmapMap.get(r);
+        } else {
             buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
             pixmapCount++;
-            Gdx.app.log(TAG, r + " pixmaps = " + pixmapCount);
+            //Gdx.app.log(TAG, r + " pixmaps = " + pixmapCount);
             pixmapMap.put(r, buttonPixmap);
         }
         return buttonPixmap;
     }
 
-    public String getTextureRegion(){
+    public String getTextureRegion() {
         return (textureRegion++) + "";
     }
 
     public Texture addTextureRegion(String atlasRegion, Pixmap buttonPixmap) {
-        if(atlas.findRegion(atlasRegion) == null) {
+        if (atlas.findRegion(atlasRegion) == null) {
             atlas.addRegion(atlasRegion, new TextureRegion(new Texture(buttonPixmap)));
             textureCount++;
-            Gdx.app.log(TAG, atlasRegion + " textures = " + textureCount);
+            //Gdx.app.log(TAG, atlasRegion + " textures = " + textureCount);
         }
 
         return atlas.findRegion(atlasRegion).getTexture();
     }
+
 }

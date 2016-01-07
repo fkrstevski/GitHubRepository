@@ -2,8 +2,6 @@ package com.filip.edge.screens;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.filip.edge.game.Assets;
 
 public abstract class AbstractGameScreen implements Screen {
 
@@ -25,7 +23,9 @@ public abstract class AbstractGameScreen implements Screen {
 
     public abstract InputProcessor getInputProcessor();
 
-    public void resume() {}
+    public void resume() {
+    }
 
-    public void dispose() {}
+    public void dispose() {
+    }
 }

@@ -7,24 +7,14 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Pool;
 import com.filip.edge.screens.*;
-import com.filip.edge.util.AudioManager;
-import com.filip.edge.util.CameraHelper;
-import com.filip.edge.util.Constants;
-import com.filip.edge.util.GamePreferences;
+import com.filip.edge.screens.objects.ScoreUpdateObject;
+import com.filip.edge.util.*;
 
 public class WorldController extends InputAdapter implements Disposable, ContactListener {
     private static final String TAG = WorldController.class.getName();
@@ -51,12 +41,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private boolean startMovement;
 
+    public Color clearColor;
+    public boolean colorChange;
     static final float transitionTime = 0.5f;
     float currentAdTime;
-    boolean adShown;
 
-    public boolean colorChange;
-    public Color clearColor;
+    private boolean gottenScreenshot;
+
+    public final Array<ScoreUpdateObject> activeScoreUpdates = new Array<ScoreUpdateObject>();
+    private final Pool<ScoreUpdateObject> scoreUpdateObjectPool = new Pool<ScoreUpdateObject>() {
+        @Override
+        protected ScoreUpdateObject newObject() {
+            return new ScoreUpdateObject();
+        }
+    };
 
     public WorldController(DirectedGame game) {
         Box2D.init();
@@ -67,10 +65,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         this.greenTime = 0;
         this.readyTimeRatio = this.readyTime / READY_TIME;
         this.state = LevelState.Countdown;
-        this.currentAdTime = 0;
-        this.adShown = false;
-        this.colorChange = false;
         this.clearColor = new Color();
+        this.gottenScreenshot = false;
+
         init();
 
         this.level.startCircle = this.level.startCircleRedIcon;
@@ -95,7 +92,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (GamePreferences.instance.zone > StageLoader.getNumberOfZones() - 1) {
                     state = LevelState.GameBeat;
                     GamePreferences.instance.scoreNeedsToBeSubmitted = true;
-                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
+                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone - 1]);
                     colorChange = true;
                     // Make sure we save the highest score ASAP
                     GamePreferences.instance.save();
@@ -103,23 +100,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                     // Early out
                     return;
-                }
-                else {
+                } else {
+                    GamePreferences.instance.showingLevelResults = true;
+                    GamePreferences.instance.completedLevelTweet = false;
+                    GamePreferences.instance.completedLevelVideoReward = false;
                     GamePreferences.instance.save();
-                    colorChange = true;
-                    state = LevelState.Transition;
-                    clearColor.set(Constants.ZONE_COLORS[GamePreferences.instance.zone -1]);
 
+                    game.setScreen(new LevelResultsScreen(game, true));
                     //Early out
                     return;
                 }
             }
         }
-        colorChange = false;
 
         // Save the scores
+        GamePreferences.instance.showingLevelResults = true;
+        GamePreferences.instance.completedLevelTweet = false;
+        GamePreferences.instance.completedLevelVideoReward = false;
         GamePreferences.instance.save();
-        state = LevelState.Transition;
+        game.setScreen(new LevelResultsScreen(game, false));
     }
 
     private void resetLevel() {
@@ -127,6 +126,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         Orbiter1Visible = false;
         Orbiter2Visible = false;
         startMovement = false;
+        gottenScreenshot = false;
         level.reset();
     }
 
@@ -134,10 +134,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         //this.game.startMethodTracing("initLevel");
 
         levelScore = 0;
-        this.adShown = false;
         Orbiter1Visible = false;
         Orbiter2Visible = false;
         startMovement = false;
+        gottenScreenshot = false;
         level = new Level();
 
         if (b2world != null) {
@@ -189,8 +189,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // Ball Physics Body
-        if(level.ball.body == null)
-        {
+        if (level.ball.body == null) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyType.DynamicBody;
             bodyDef.position.set(new Vector2(level.ball.position.x / Constants.BOX2D_SCALE, level.ball.position.y / Constants.BOX2D_SCALE));
@@ -207,7 +206,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Orbiter Physics Body
         for (int i = 0; i < MAX_NUMBER_ORBITERS; ++i) {
-            if(level.ball.orbiters.get(i).body == null) {
+            if (level.ball.orbiters.get(i).body == null) {
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.type = BodyType.DynamicBody;
                 bodyDef.position.set(new Vector2(level.ball.orbiters.get(i).position.x / Constants.BOX2D_SCALE, level.ball.orbiters.get(i).position.y / Constants.BOX2D_SCALE));
@@ -226,7 +225,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Orbiter Pickup Physics Bodies
         for (int i = 0; i < level.orbiterPickups.size(); ++i) {
-            if(level.orbiterPickups.get(i).body == null) {
+            if (level.orbiterPickups.get(i).body == null) {
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.type = BodyType.StaticBody;
                 bodyDef.position.set(new Vector2(level.orbiterPickups.get(i).position.x / Constants.BOX2D_SCALE, level.orbiterPickups.get(i).position.y / Constants.BOX2D_SCALE));
@@ -244,7 +243,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Gold Physics Bodies
         for (int i = 0; i < level.goldPickups.size(); ++i) {
-            if(level.goldPickups.get(i).body == null) {
+            if (level.goldPickups.get(i).body == null) {
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.type = BodyType.StaticBody;
                 bodyDef.position.set(new Vector2(level.goldPickups.get(i).position.x / Constants.BOX2D_SCALE, level.goldPickups.get(i).position.y / Constants.BOX2D_SCALE));
@@ -262,7 +261,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Hole Physics Bodies
         for (int i = 0; i < level.holes.size(); ++i) {
-            if(level.holes.get(i).body == null) {
+            if (level.holes.get(i).body == null) {
                 BodyDef holeBodyDef = new BodyDef();
                 holeBodyDef.type = BodyType.StaticBody;
                 holeBodyDef.position.set(new Vector2(level.holes.get(i).position.x / Constants.BOX2D_SCALE, level.holes.get(i).position.y / Constants.BOX2D_SCALE));
@@ -280,7 +279,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Followers Physics Bodies
         for (int i = 0; i < level.followers.size(); ++i) {
-            if(level.followers.get(i).followerObject.body == null) {
+            if (level.followers.get(i).followerObject.body == null) {
                 BodyDef followerBodyDef = new BodyDef();
                 followerBodyDef.type = BodyType.KinematicBody;
                 followerBodyDef.position.set(new Vector2(level.followers.get(i).followerObject.position.x / Constants.BOX2D_SCALE, level.followers.get(i).followerObject.position.y / Constants.BOX2D_SCALE));
@@ -299,7 +298,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Loopers Physics Bodies
         for (int i = 0; i < level.loopers.size(); ++i) {
-            if(level.loopers.get(i).followerObject.body == null) {
+            if (level.loopers.get(i).followerObject.body == null) {
                 BodyDef followerBodyDef = new BodyDef();
                 followerBodyDef.type = BodyType.KinematicBody;
                 followerBodyDef.position.set(new Vector2(level.loopers.get(i).followerObject.position.x / Constants.BOX2D_SCALE, level.loopers.get(i).followerObject.position.y / Constants.BOX2D_SCALE));
@@ -318,7 +317,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Oscillators Physics Bodies
         for (int i = 0; i < level.oscillators.size(); ++i) {
-            if(level.oscillators.get(i).followerObject.body == null) {
+            if (level.oscillators.get(i).followerObject.body == null) {
                 BodyDef followerBodyDef = new BodyDef();
                 followerBodyDef.type = BodyType.KinematicBody;
                 followerBodyDef.position.set(new Vector2(level.oscillators.get(i).followerObject.position.x / Constants.BOX2D_SCALE, level.oscillators.get(i).followerObject.position.y / Constants.BOX2D_SCALE));
@@ -336,8 +335,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         }
 
         // EndTarget Physics Body
-        if(level.endCircle.body == null)
-        {
+        if (level.endCircle.body == null) {
             BodyDef bodyDef2 = new BodyDef();
             bodyDef2.type = BodyType.StaticBody;
             bodyDef2.position.set(new Vector2(level.endCircle.position.x / Constants.BOX2D_SCALE, level.endCircle.position.y / Constants.BOX2D_SCALE));
@@ -354,7 +352,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Middle Circles Physics Bodies
         for (int i = 0; i < level.circleShapes.size(); ++i) {
-            if(level.circleShapes.get(i).body == null) {
+            if (level.circleShapes.get(i).body == null) {
                 BodyDef bodyDef1 = new BodyDef();
                 bodyDef1.type = BodyType.StaticBody;
                 bodyDef1.position.set(new Vector2(level.circleShapes.get(i).position.x / Constants.BOX2D_SCALE, level.circleShapes.get(i).position.y / Constants.BOX2D_SCALE));
@@ -372,7 +370,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         // Rectangles Physics Bodies
         for (int i = 0; i < level.rectangleShapes.size(); ++i) {
-            if(level.rectangleShapes.get(i).body == null) {
+            if (level.rectangleShapes.get(i).body == null) {
                 BodyDef bodyDef1 = new BodyDef();
                 bodyDef1.type = BodyType.StaticBody;
                 bodyDef1.position.set(new Vector2(level.rectangleShapes.get(i).position.x / Constants.BOX2D_SCALE, level.rectangleShapes.get(i).position.y / Constants.BOX2D_SCALE));
@@ -400,6 +398,17 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         level.updateCredits(deltaTime);
 
+        ScoreUpdateObject item;
+        for (int i = activeScoreUpdates.size; --i >= 0; ) {
+            item = activeScoreUpdates.get(i);
+            if (item.isAlive == false) {
+                activeScoreUpdates.removeIndex(i);
+                scoreUpdateObjectPool.free(item);
+            } else {
+                item.update(deltaTime);
+            }
+        }
+
         if (state == LevelState.Countdown) {
             this.readyTime += deltaTime;
             this.readyTimeRatio = this.readyTime / READY_TIME;
@@ -426,18 +435,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 this.greenTime = 0;
                 AudioManager.instance.play(Assets.instance.sounds.tickSound, 1, 2);
                 this.state = LevelState.Gameplay;
-                adShown = false;
-                this.game.showAds(false);
 
                 levelTime = 0;
 
                 // RESET STATE FOR PACER
-                if(this.level.hasPacerObject()) {
+                if (this.level.hasPacerObject()) {
                     this.level.levelPacer.start();
                 }
 
                 // RESET STATE FOR FOLLOWER
-                if(this.level.hasFollowerObject()) {
+                if (this.level.hasFollowerObject()) {
                     this.level.levelFollower.start();
                 }
 
@@ -472,7 +479,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 }
 
                 // RESET STATE FOR DISAPPEARING
-                if(level.disappearing) {
+                if (level.disappearing) {
                     level.disappearingState = Level.PropertyState.Inactive;
                 }
 
@@ -480,8 +487,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 for (int i = 0; i < level.rectangleShapes.size(); ++i) {
                     level.rectangleShapes.get(i).start();
                 }
-
-                //this.game.showAds(true);
             }
 
         } else if (state == LevelState.LevelComplete) {
@@ -489,13 +494,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
             // Move the ball and orbiters into the end point
             this.level.ball.position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
-            if((int)((endTime / Constants.END_TIME) * 10) % 2 == 0) {
+            if ((int) ((endTime / Constants.END_TIME) * 10) % 2 == 0) {
                 this.level.ball.direction = 1;
-            }
-            else {
+            } else {
                 this.level.ball.direction = -1;
             }
-            for(int i = 0; i < this.level.ball.orbiters.size(); ++i) {
+            for (int i = 0; i < this.level.ball.orbiters.size(); ++i) {
                 this.level.ball.orbiters.get(i).position.lerp(this.level.getLastPoint(), endTime / Constants.END_TIME);
             }
 
@@ -519,13 +523,19 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 level.oscillators.get(i).scale((1 - endTime / Constants.END_TIME));
             }
 
-            if(this.endTime / Constants.END_TIME > 0.5f) {
-                //System.gc();
-                if(level.numberOfOrbitersFinishedWith > 0) {
-                    GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
-                    level.numberOfOrbitersFinishedWith = 0;
-                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            if (level.numberOfOrbitersFinishedWith > 0) {
+                GamePreferences.instance.currentScore += Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith;
+                addScoreUpdate(Constants.SCORE_INCREMENT_FOR_SAVED_ORBITER * level.numberOfOrbitersFinishedWith);
+                level.numberOfOrbitersFinishedWith = 0;
+                AudioManager.instance.play(Assets.instance.sounds.tickSound);
+            }
+
+            if (this.endTime / Constants.END_TIME > 0.5f) {
+                if (!gottenScreenshot) {
+                    ScreenshotFactory.getScreenShot(false, Constants.SCREENSHOT_LEVEL);
+                    gottenScreenshot = true;
                 }
+                //System.gc();
             }
 
             if (endTime > Constants.END_TIME) {
@@ -542,25 +552,32 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             level.ball.scale.set(level.ball.scale.x * (1 - endTime / Constants.END_TIME), level.ball.scale.y * (1 - endTime / Constants.END_TIME));
             if (endTime > Constants.END_TIME) {
                 endTime = 0;
-                GamePreferences.instance.currentScore -= Constants.SCORE_DECREMENT_FOR_COLLISION;
                 if (GamePreferences.instance.currentScore <= 0) {
                     GameOver();
                 } else {
-                    this.state = LevelState.Countdown;
-                    this.level.startCircle = this.level.startCircleRedIcon;
-                    this.level.finishCircle = this.level.finishCircleRedIcon;
-                    AudioManager.instance.play(Assets.instance.sounds.tickSound);
-                    this.resetLevel();
+                    GamePreferences.instance.playSessionDeaths++;
+                    boolean hasAd = this.game.hasInterstitialAd() || this.game.hasVideoAd();
+                    int level = GamePreferences.instance.getCurrentLevel();
+                    if(hasAd && level > Constants.LEVEL_FOR_ADS && GamePreferences.instance.playSessionDeaths % Constants.DEATHS_FOR_ADS == 0) {
+                        game.setScreen(new InterstitialScreen(game));
+                    }
+                    else {
+                        this.state = LevelState.Countdown;
+                        this.level.startCircle = this.level.startCircleRedIcon;
+                        this.level.finishCircle = this.level.finishCircleRedIcon;
+                        AudioManager.instance.play(Assets.instance.sounds.tickSound);
+                        this.resetLevel();
+                    }
                 }
             }
         } else if (state == LevelState.Gameplay) {
 
-            levelTime+=deltaTime;
+            levelTime += deltaTime;
 
             // Update the score
             // need to do something fishy since current score is a long and subtracting
             // a small float might not update the actual value
-            levelScore += deltaTime * 400 ;
+            levelScore += deltaTime * 400;
             if (levelScore > 1) {
                 GamePreferences.instance.currentScore -= (int) levelScore;
                 levelScore = levelScore % 1;
@@ -575,16 +592,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
                 // We can only set the orbit's body active outside of the
                 // step for the physics world
-                if(Orbiter1Visible) {
+                if (Orbiter1Visible) {
                     this.level.ball.orbiters.get(0).visible = true;
-                    if(!this.level.ball.orbiters.get(1).body.isActive()) {
+                    if (!this.level.ball.orbiters.get(1).body.isActive()) {
                         this.level.ball.orbiters.get(0).body.setActive(true);
                     }
                 }
 
-                if(Orbiter2Visible) {
+                if (Orbiter2Visible) {
                     this.level.ball.orbiters.get(1).visible = true;
-                    if(!this.level.ball.orbiters.get(0).body.isActive()) {
+                    if (!this.level.ball.orbiters.get(0).body.isActive()) {
                         this.level.ball.orbiters.get(1).body.setActive(true);
                     }
                 }
@@ -600,38 +617,12 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                     fallOff();
                 }
             }
-        }
-        else if (state == LevelState.Transition) {
-
-            if(colorChange) {
-                if(GamePreferences.instance.zone >= 0) {
-                    clearColor.lerp(Constants.ZONE_COLORS[GamePreferences.instance.zone], currentAdTime / transitionTime);
-                }
-            }
-
-            if(!adShown) {
-                currentAdTime+=deltaTime;
-                if(currentAdTime > transitionTime / 2.0f) {
-                    adShown = true;
-                    game.showInterstitialAd();
-                }
-            }
-            else {
-                currentAdTime+=deltaTime;
-                if(currentAdTime > transitionTime) {
-                    currentAdTime = 0;
-                    adShown = false;
-                    state = LevelState.Countdown;
-                    this.initLevel();
-                }
-            }
-        }
-        else if (state == LevelState.GameBeat) {
+        } else if (state == LevelState.GameBeat) {
 
             clearColor.lerp(Constants.ZONE_COLORS[0], currentAdTime / transitionTime);
 
-            currentAdTime+=deltaTime;
-            if(currentAdTime > transitionTime) {
+            currentAdTime += deltaTime;
+            if (currentAdTime > transitionTime) {
                 currentAdTime = 0;
                 GamePreferences.instance.zone = 0;
                 game.setScreen(new ResultsScreen(game));
@@ -699,11 +690,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
             y = -Gdx.input.getAccelerometerY();
 
             if (startMovement == false) {
-                if( x > 1 || x < -1 || y > 1 || y < -1) {
+                if (x > 1 || x < -1 || y > 1 || y < -1) {
                     startMovement = true;
                 }
-            }
-            else {
+            } else {
                 moveBall(y * Constants.BALL_SPEED[GamePreferences.instance.zone] * horizontalScale * deltaTime,
                         x * Constants.BALL_SPEED[GamePreferences.instance.zone] * verticalScale * deltaTime);
 
@@ -738,7 +728,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void backToMenu() {
-        game.showAds(false);
         // switch to menu screen
         game.setScreen(new MenuScreen(game, false));
     }
@@ -769,15 +758,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     @Override
     public void endContact(Contact contact) {
         if (contact.getFixtureB().getBody() == level.ball.body) {
-            for(int j = 0; j < level.ball.orbiters.size(); ++j){
+            for (int j = 0; j < level.ball.orbiters.size(); ++j) {
                 if (contact.getFixtureA().getBody() == level.ball.orbiters.get(j).body) {
                     return;
                 }
             }
             numberOfContacts--;
-        }
-        else if (contact.getFixtureA().getBody() == level.ball.body) {
-            for(int j = 0; j < level.ball.orbiters.size(); ++j){
+        } else if (contact.getFixtureA().getBody() == level.ball.body) {
+            for (int j = 0; j < level.ball.orbiters.size(); ++j) {
                 if (contact.getFixtureB().getBody() == level.ball.orbiters.get(j).body) {
                     return;
                 }
@@ -794,13 +782,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (level.hasFollowerObject() && contact.getFixtureA().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
                     doOrbiterCollision(i);
-                }
-                else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
+                } else if (level.hasPacerObject() && contact.getFixtureA().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
                     doOrbiterCollision(i);
-                }
-
-                else {
+                } else {
                     for (j = 0; j < level.followers.size(); ++j) {
                         if (contact.getFixtureA().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
@@ -828,13 +813,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                     level.levelFollower.destroy();
                     doOrbiterCollision(i);
-                }
-                else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
+                } else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                     level.levelPacer.destroy();
                     doOrbiterCollision(i);
-                }
-
-                else {
+                } else {
                     for (j = 0; j < level.followers.size(); ++j) {
                         if (contact.getFixtureB().getBody() == level.followers.get(j).followerObject.body) {
                             level.followers.get(j).destroy();
@@ -863,7 +845,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         // Ball collision -> fixture B
         if (contact.getFixtureB().getBody() == level.ball.body) {
             // early out if we contact our orbiters
-            for(j = 0; j < level.ball.orbiters.size(); ++j){
+            for (j = 0; j < level.ball.orbiters.size(); ++j) {
                 if (contact.getFixtureA().getBody() == level.ball.orbiters.get(j).body) {
                     return;
                 }
@@ -924,7 +906,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         // Ball collision -> fixture A
         else if (contact.getFixtureA().getBody() == level.ball.body) {
             // early out if we contact our orbiters
-            for(j = 0; j < level.ball.orbiters.size(); ++j){
+            for (j = 0; j < level.ball.orbiters.size(); ++j) {
                 if (contact.getFixtureB().getBody() == level.ball.orbiters.get(j).body) {
                     return;
                 }
@@ -934,7 +916,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
                 levelComplete();
             } else if (level.hasFollowerObject() && contact.getFixtureB().getBody() == level.getFollowerBody()) {
                 fallOff();
-            }  else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
+            } else if (level.hasPacerObject() && contact.getFixtureB().getBody() == level.getPacerBody()) {
                 fallOff();
             } else {
                 for (j = 0; j < level.holes.size(); ++j) {
@@ -988,15 +970,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void doOrbiterCollision(int i) {
         level.ball.orbiters.get(i).destroy();
-        if(i == 0) {
+        if (i == 0) {
             Orbiter1Visible = false;
-            if(level.ball.orbiters.get(1).visible){
+            if (level.ball.orbiters.get(1).visible) {
                 Orbiter2Visible = true;
             }
-        }
-        else if (i == 1) {
+        } else if (i == 1) {
             Orbiter2Visible = false;
-            if(level.ball.orbiters.get(0).visible){
+            if (level.ball.orbiters.get(0).visible) {
                 Orbiter1Visible = true;
             }
         }
@@ -1004,49 +985,59 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
     private void levelComplete() {
         this.state = LevelState.LevelComplete;
-        this.level.ball.body.setLinearVelocity(0,0);
+        this.level.ball.body.setLinearVelocity(0, 0);
         this.level.startCircle = this.level.startCircleGreenIcon;
         this.level.finishCircle = this.level.finishCircleGreenIcon;
         this.level.numberOfOrbitersFinishedWith = 0;
         for (int i = 0; i < this.level.ball.orbiters.size(); ++i) {
-            if(this.level.ball.orbiters.get(i).body.isActive()) {
+            if (this.level.ball.orbiters.get(i).visible) {
                 this.level.numberOfOrbitersFinishedWith++;
             }
         }
 
-        if(level.currentLevel == GamePreferences.instance.levelTimes.size()) {
-            GamePreferences.instance.levelTimes.add(level.currentLevel, (int) (levelTime * 10));
+        if (GamePreferences.instance.getCurrentLevel() == GamePreferences.instance.levelTimes.size()) {
+            GamePreferences.instance.levelTimes.add(GamePreferences.instance.getCurrentLevel(), (int) (levelTime * 10));
         }
         GamePreferences.instance.save();
         GamePreferences.instance.submitData();
     }
 
     private void addOrbiters() {
-        if(!Orbiter1Visible){
+        if (!Orbiter1Visible) {
             Orbiter1Visible = true;
-        }
-        else if(!Orbiter2Visible) {
+        } else if (!Orbiter2Visible) {
             Orbiter2Visible = true;
-        }
-        else {
+        } else {
             GamePreferences.instance.currentScore += Constants.EXTRA_ORBITER_WORTH;
+            addScoreUpdate(Constants.EXTRA_ORBITER_WORTH);
         }
     }
 
     private void pickupGold() {
-        GamePreferences.instance.currentScore += Constants.GOLD_WORTH;
+        if (this.state == LevelState.Gameplay) {
+            GamePreferences.instance.currentScore += Constants.GOLD_WORTH;
+            addScoreUpdate(Constants.GOLD_WORTH);
+        }
     }
 
     private void fallOff() {
-        if(Constants.DEBUG_BUILD)
-        {
+        if (Constants.DEBUG_BUILD) {
             return;
         }
-        this.game.showAds(true);
-        int thisTry = GamePreferences.instance.levelTries.get(level.currentLevel);
-        GamePreferences.instance.levelTries.set(level.currentLevel, thisTry+1);
-        GamePreferences.instance.save();
-        GamePreferences.instance.submitData();
+        GamePreferences.instance.currentScore += Constants.SCORE_DECREMENT_FOR_COLLISION;
+        if (GamePreferences.instance.currentScore < 0) {
+            GamePreferences.instance.currentScore = 0;
+        }
+        int currentLevel = GamePreferences.instance.getCurrentLevel();
+
+        if (currentLevel == GamePreferences.instance.levelTries.size() - 1) {
+            int thisTry = GamePreferences.instance.levelTries.get(currentLevel);
+            GamePreferences.instance.levelTries.set(currentLevel, thisTry + 1);
+            GamePreferences.instance.save();
+            GamePreferences.instance.submitData();
+        }
+
+        addScoreUpdate(Constants.SCORE_DECREMENT_FOR_COLLISION);
 
         this.state = LevelState.OffTheEdge;
         if (this.level.hasFollowerObject()) {
@@ -1058,6 +1049,16 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
         this.level.startCircle = this.level.startCircleRedIcon;
         this.level.finishCircle = this.level.finishCircleRedIcon;
+    }
+
+    public void addScoreUpdate(int score) {
+        // SCORE UPDATES
+        ScoreUpdateObject scoreUpdateObject = scoreUpdateObjectPool.obtain();
+        int y = (int) (DigitRenderer.instance.digitHeight / 2) +
+                DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS;
+        int x = (int) (Gdx.graphics.getWidth() - DigitRenderer.instance.digitWidth / 2 - DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        scoreUpdateObject.init(score, x, y + 50, x, y);
+        activeScoreUpdates.add(scoreUpdateObject);
     }
 
     @Override
@@ -1076,7 +1077,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
         LevelComplete,
         OffTheEdge,
         GameOver,
-        GameBeat,
-        Transition
+        GameBeat
     }
 }

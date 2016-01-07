@@ -2,9 +2,6 @@ package com.filip.edge.util;
 
 import com.badlogic.gdx.graphics.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants {
     // Game preferences file
     public static final String PREFERENCES = "theedge.prefs";
@@ -68,7 +65,7 @@ public class Constants {
     public static final float[] ORBITER_STARTUP_TIME = {0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5};
     public static final float[] ORBITER_DISAPPEAR_TIME = {45, 40, 35, 30, 25, 20, 15, 10, 8, 6};
 
-    public static final int[] BALL_SPEED = { 300, 400, 500, 600 };
+    public static final int[] BALL_SPEED = {300, 400, 500, 600};
 
     public static final Color BLUE = new Color(0x00 / 255.0f, 0xa0 / 255.0f, 0xda / 255.0f, 0xff / 255.0f);
     public static final Color GREEN = new Color(20 / 255.0f, 201 / 255.0f, 113 / 255.0f, 0xff / 255.0f);
@@ -84,17 +81,27 @@ public class Constants {
 
     public static final Color[] ZONE_COLORS = {BLUE, TURQUOISE, PURPLE, GREY};
 
-    public static final long MAX_SCORE = 1000000000000000000L;
-    public static final int SCORE_DECREMENT_FOR_COLLISION = 100000;
+    public static final long MAX_SCORE = 100000000L;
+    public static final int SCORE_DECREMENT_FOR_COLLISION = -100000;
     public static final int SCORE_INCREMENT_FOR_SAVED_ORBITER = 10000;
     public static final int EXTRA_ORBITER_WORTH = 10000;
     public static final int GOLD_WORTH = 100;
+    public static final int VIDEO_REWARD = 10000;
+    public static final int TWEET_REWARD = 1000;
+
+    public static final String SCREENSHOT_LEVEL = "level.png";
+    public static final String SCREENSHOT_LEVEL_RESULT = "levelResult.png";
 
     public static final int WIDTH_IN_PIXELS = 3;
 
     public static final int NUMBER_OF_CREDITS = 4;
 
-    public static String [][] CREDIT_ARRAY = new String[NUMBER_OF_CREDITS][2];
+    public static String[][] CREDIT_ARRAY = new String[NUMBER_OF_CREDITS][2];
+    
+    // POTENTIAL AB DATA
+    public static final int LEVEL_FOR_ADS = 4;
+    public static final int DEATHS_FOR_ADS = 10;
+
     static {
         CREDIT_ARRAY[0][0] = "ARTISTIC DIRECTION";  CREDIT_ARRAY[0][1] = "MATTHEW SECRIST";
         CREDIT_ARRAY[1][0] = "EVERYTHINGER";        CREDIT_ARRAY[1][1] = "ALIMA RAHMAN";

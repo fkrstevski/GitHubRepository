@@ -37,8 +37,8 @@ class Digit1 extends AbstractRectangleButtonObject {
 
     @Override
     public void fillInside(float width) {
-        fillTopRightRect(Constants.WIDTH_IN_PIXELS);
-        fillBottomRightRect(Constants.WIDTH_IN_PIXELS);
+        fillCenterTop(Constants.WIDTH_IN_PIXELS);
+        fillCenterBottom(Constants.WIDTH_IN_PIXELS);
     }
 }
 

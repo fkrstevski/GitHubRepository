@@ -43,21 +43,19 @@ public class Stage {
                     disappearsStartupTimeIndex = properties.get(i).startupTime;
                     disappearSpeedIndex = properties.get(i).speed;
                 } else if (properties.get(i).property == LevelProperties.Follower) {
-                    if(follower == null) {
+                    if (follower == null) {
                         ArrayList<LevelPoint> followerPoints = parsePoints(properties.get(i).points);
                         follower = new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, followerPoints);
                     }
-                }
-                else if (properties.get(i).property == LevelProperties.Looper) {
-                    if(loopers == null) {
+                } else if (properties.get(i).property == LevelProperties.Looper) {
+                    if (loopers == null) {
                         loopers = new ArrayList<FollowerProperties>();
                     }
 
                     ArrayList<LevelPoint> looperPoints = parsePoints(properties.get(i).points);
                     loopers.add(new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, looperPoints));
-                }
-                else if (properties.get(i).property == LevelProperties.Pacer) {
-                    if(pacer == null) {
+                } else if (properties.get(i).property == LevelProperties.Pacer) {
+                    if (pacer == null) {
                         ArrayList<LevelPoint> pacerPoints = parsePoints(properties.get(i).points);
                         pacer = new FollowerProperties(properties.get(i).startupTime, properties.get(i).speed, pacerPoints);
                     }
@@ -71,12 +69,11 @@ public class Stage {
         String[] allPoints = points.split("@");
         for (int pointIndex = 0; pointIndex < allPoints.length; ++pointIndex) {
             String[] continuousPoints = allPoints[pointIndex].split("-");
-            if(continuousPoints.length == 1) {
+            if (continuousPoints.length == 1) {
                 pointsList.add(stagePoints.get(Integer.parseInt(allPoints[pointIndex])));
-            }
-            else {
-                for(int continuousIndex = Integer.parseInt(continuousPoints[0]);
-                    continuousIndex <= Integer.parseInt(continuousPoints[1]); ++continuousIndex) {
+            } else {
+                for (int continuousIndex = Integer.parseInt(continuousPoints[0]);
+                     continuousIndex <= Integer.parseInt(continuousPoints[1]); ++continuousIndex) {
                     pointsList.add(stagePoints.get(continuousIndex));
                 }
             }

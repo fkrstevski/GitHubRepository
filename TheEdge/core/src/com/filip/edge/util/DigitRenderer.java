@@ -22,7 +22,7 @@ public class DigitRenderer {
 
     public int digitWidth;
     public int digitHeight;
-    private static final float EXTRA_SPACING = 1.1f;
+    public static final float EXTRA_SPACING = 1.1f;
 
     private DigitRenderer() {
 
@@ -135,33 +135,14 @@ public class DigitRenderer {
         }
     }
 
-    public void renderString(String str, int x, int y, SpriteBatch batch) {
-        renderString(str, x, y, batch, 1);
-    }
-
     public void renderString(String str, int x, int y, SpriteBatch batch, float scale) {
         int count = 0;
         for (int i = str.length() - 1; i >= 0; --i, ++count) {
             // not space
             if (str.charAt(i) != ' ') {
                 AbstractRectangleButtonObject digitObject;
-                if (StageLoader.isInteger(str.charAt(i) + "")) {
-                    int digit = Character.getNumericValue(str.charAt(i));
-                    digitObject = digits.get(digit);
-                }
-                else if (str.charAt(i) == '.') {
-                    digitObject = symbols.get(0);
-                }
-                else if (str.charAt(i) == '+') {
-                    digitObject = symbols.get(1);
-                }
-                else if (str.charAt(i) == '-') {
-                    digitObject = symbols.get(2);
-                }
-                else {
-                    int index = str.charAt(i) - 'A';
-                    digitObject = letters.get(index);
-                }
+                int index = str.charAt(i) - 'A';
+                digitObject = letters.get(index);
 
                 digitObject.position.set(x - count * digitWidth * EXTRA_SPACING * scale, y);
                 digitObject.scale.set(scale, scale);
@@ -173,7 +154,6 @@ public class DigitRenderer {
     public void renderStringAtCenterXPoint(String str, int x, int y, SpriteBatch batch, float scale) {
         this.renderString(str, (int) (x - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);
     }
-
 
     public void renderStringCentered(String str, int y, SpriteBatch batch, float scale) {
         this.renderString(str, (int) (Gdx.graphics.getWidth() * 0.5f - digitWidth * 0.5f * scale + str.length() * digitWidth * EXTRA_SPACING * 0.5f * scale), y, batch, scale);

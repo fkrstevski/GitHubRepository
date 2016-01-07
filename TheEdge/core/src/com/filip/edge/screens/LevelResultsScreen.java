@@ -72,6 +72,11 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
     private ScoreUpdateObject scoreUpdateObject;
 
+    // Custom Strings
+    public CustomString customString_levelName;
+    public CustomString customString_videoReward;
+    public CustomString customString_tweetReward;
+
     public LevelResultsScreen(DirectedGame game, boolean colorChange) {
         super(game);
         this.game = game;
@@ -97,6 +102,13 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
         scoreUpdateObject = new ScoreUpdateObject();
         scoreUpdateObject.setListener(this);
+
+        float scale = 1;
+        String level = "LEVEL " + GamePreferences.instance.getCurrentLevel();
+        this.customString_levelName = new CustomString(level,
+                Gdx.graphics.getWidth() * 0.25f - DigitRenderer.instance.digitWidth * 0.5f * scale + level.length() * DigitRenderer.instance.digitWidth * DigitRenderer.instance.EXTRA_SPACING * 0.5f * scale,
+                Gdx.graphics.getHeight() * 0.29f,
+                1);
     }
 
     @Override
@@ -237,6 +249,19 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
                 Constants.WHITE,
                 false, "CircleBack" + GamePreferences.instance.zone);      // inside color
 
+        float scale = 1;
+        String videoReward = "+" + Constants.VIDEO_REWARD;
+        this.customString_videoReward = new CustomString(videoReward,
+                btnVideo.getX() + btnVideoWidth / 2 - DigitRenderer.instance.digitWidth * 0.5f * scale + videoReward.length() * DigitRenderer.instance.digitWidth * DigitRenderer.instance.EXTRA_SPACING * 0.5f * scale,
+                Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight * 1.3),
+                1);
+
+        String tweetReward = "+" + Constants.TWEET_REWARD;
+        this.customString_tweetReward = new CustomString(tweetReward,
+                btnTweet.getX() + btnTweetWidth / 2 - DigitRenderer.instance.digitWidth * 0.5f * scale + tweetReward.length() * DigitRenderer.instance.digitWidth * DigitRenderer.instance.EXTRA_SPACING * 0.5f * scale,
+                Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3),
+                1);
+
         Gdx.input.setCatchBackKey(true);
     }
 
@@ -361,10 +386,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
         DigitRenderer.instance.renderNumber(GamePreferences.instance.currentScore, x, y, game.batch);
 
-        DigitRenderer.instance.renderStringAtCenterXPoint("LEVEL " + GamePreferences.instance.getCurrentLevel(),
-                (int) (Gdx.graphics.getWidth() * 0.25),
-                (int) (Gdx.graphics.getHeight() * 0.29f),
-                game.batch, 1);
+        this.customString_levelName.render(game.batch);
 
         DigitRenderer.instance.renderStringAtCenterXPoint("TRIES",
                 (int) (btnVideo.getX() + btnVideoWidth / 2),
@@ -397,11 +419,11 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         if (!ScreenshotFactory.needsToGetScreenshot()) {
             backButton.render(game.batch);
             if(!GamePreferences.instance.completedLevelVideoReward) {
-                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.VIDEO_REWARD, (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight * 1.3), game.batch, 1);
+                customString_videoReward.render(game.batch);
             }
 
             if(!GamePreferences.instance.completedLevelTweet) {
-                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.TWEET_REWARD, (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3), game.batch, 1);
+                customString_tweetReward.render(game.batch);
             }
         }
 
@@ -428,11 +450,11 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
             game.batch.draw(buffer.getColorBufferTexture(), 0, 0);
             backButton.render(game.batch);
             if(!GamePreferences.instance.completedLevelVideoReward) {
-                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.VIDEO_REWARD, (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight * 1.3), game.batch, 1);
+                customString_videoReward.render(game.batch);
             }
 
             if(!GamePreferences.instance.completedLevelTweet) {
-                DigitRenderer.instance.renderStringAtCenterXPoint("+" + Constants.TWEET_REWARD, (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3), game.batch, 1);
+                customString_tweetReward.render(game.batch);
             }
             game.batch.end();
         }

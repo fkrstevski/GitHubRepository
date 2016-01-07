@@ -68,7 +68,7 @@ public class MainMenu {
             infoButton.render(batch);
             leaderboardButton.render(batch);
 
-            DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2, batch);
+            DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2, batch, 1);
         } else if (this.state == MainMenuState.ZoomInToPlay) {
             playButton.render(batch);
         }

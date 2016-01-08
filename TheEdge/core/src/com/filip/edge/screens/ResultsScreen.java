@@ -271,7 +271,7 @@ public class ResultsScreen extends AbstractGameScreen {
             btnSubmit.setStyle(textOutsideButtonStyleRed);
             error = "PLEASE ENTER YOUR EMAIL";
         } else {
-
+            btnSubmit.setTouchable(Touchable.disabled);
             displayError = false;
             btnSubmitOutside.setStyle(textOutsideButtonStyle);
             btnSubmit.setStyle(textInsideButtonStyle);
@@ -300,6 +300,8 @@ public class ResultsScreen extends AbstractGameScreen {
                         Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
                         Gdx.app.log("Result ", httpResponse.getResultAsString());
 
+                        btnSubmit.setTouchable(Touchable.enabled);
+
                         if (httpResponse.getStatus().getStatusCode() == 200) {
                             scoreSubmitted = true;
                             GamePreferences.instance.email = txtEmail.getText();
@@ -315,6 +317,7 @@ public class ResultsScreen extends AbstractGameScreen {
                     @Override
                     public void failed(Throwable t) {
                         Gdx.app.error("Failed ", t.getMessage());
+                        btnSubmit.setTouchable(Touchable.enabled);
                         displayError = true;
                         btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
                         btnSubmit.setStyle(textOutsideButtonStyleRed);
@@ -323,6 +326,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
                     @Override
                     public void cancelled() {
+                        btnSubmit.setTouchable(Touchable.enabled);
                         displayError = true;
                         btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
                         btnSubmit.setStyle(textOutsideButtonStyleRed);
@@ -330,6 +334,7 @@ public class ResultsScreen extends AbstractGameScreen {
                     }
                 });
             } else {
+                btnSubmit.setTouchable(Touchable.enabled);
                 displayError = true;
                 btnSubmitOutside.setStyle(textOutsideButtonStyleRed);
                 btnSubmit.setStyle(textOutsideButtonStyleRed);

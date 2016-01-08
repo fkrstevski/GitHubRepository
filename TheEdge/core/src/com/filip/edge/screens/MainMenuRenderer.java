@@ -80,9 +80,7 @@ public class MainMenuRenderer implements Disposable {
     }
 
     private void renderGui(SpriteBatch batch) {
-        if (Constants.DEBUG_BUILD) {
-            renderGuiFpsCounter(batch);
-        }
+        //renderGuiFpsCounter(batch);
     }
 
     private void renderGuiFpsCounter(SpriteBatch batch) {

@@ -7,8 +7,7 @@ public class Constants {
     public static final String PREFERENCES = "theedge.prefs";
 
     public static final int GAME_VERSION = 1;
-    public static final boolean PRODUCTION = false;
-    public static boolean DEBUG_BUILD = false;
+    public static final boolean PRODUCTION = true;
 
     // iOS Leaderboard
     public static final String IOS_LEADERBOARD_ID = "1212";

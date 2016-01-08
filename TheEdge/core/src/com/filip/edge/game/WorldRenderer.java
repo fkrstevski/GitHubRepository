@@ -129,11 +129,6 @@ public class WorldRenderer implements Disposable {
             renderScoreUpdates(batch);
             renderGuiScore(batch);
         }
-
-        if (Constants.DEBUG_BUILD) {
-            renderGuiLevel(batch);
-            renderGuiFpsCounter(batch);
-        }
     }
 
     private void renderGuiFpsCounter(SpriteBatch batch) {

@@ -736,15 +736,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (level.backButton.isTouched(screenX, screenY)) {
             backToMenu();
-        } else if (level.endCircle.isTouched(screenX, screenY)) {
-            levelComplete();
-        } else if (level.startCircleGreenIcon.isTouched(screenX, screenY)) {
-            Constants.DEBUG_BUILD = !Constants.DEBUG_BUILD;
-        } else {
-            if (Constants.DEBUG_BUILD) {
-                this.renderPhysics = !this.renderPhysics;
-            }
         }
+
         return false;
     }
 
@@ -1021,9 +1014,6 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     private void fallOff() {
-        if (Constants.DEBUG_BUILD) {
-            return;
-        }
         GamePreferences.instance.currentScore += Constants.SCORE_DECREMENT_FOR_COLLISION;
         if (GamePreferences.instance.currentScore < 0) {
             GamePreferences.instance.currentScore = 0;

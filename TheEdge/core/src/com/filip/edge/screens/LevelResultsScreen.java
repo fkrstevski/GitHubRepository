@@ -1,6 +1,7 @@
 package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
@@ -118,7 +119,17 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         camera.setToOrtho(true); // flip y-axis
         camera.update();
 
-        this.stage = new Stage();
+        this.stage = new Stage() {
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Input.Keys.BACK) {
+                    game.setScreen(new MenuScreen(game, false));
+                    return true;
+                }
+                return super.keyDown(keyCode);
+            }
+        };
+
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
@@ -261,8 +272,6 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
                 btnTweet.getX() + btnTweetWidth / 2 - DigitRenderer.instance.digitWidth * 0.5f * scale + tweetReward.length() * DigitRenderer.instance.digitWidth * DigitRenderer.instance.EXTRA_SPACING * 0.5f * scale,
                 Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight * 1.3),
                 1);
-
-        Gdx.input.setCatchBackKey(true);
     }
 
     public void btnTweetClicked() {
@@ -463,7 +472,6 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     @Override
     public void hide() {
         stage.dispose();
-        Gdx.input.setCatchBackKey(false);
     }
 
     @Override

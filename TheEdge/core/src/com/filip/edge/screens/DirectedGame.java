@@ -175,4 +175,8 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
+    public void showConfirmExitDialog(String title, String message) {
+
+    }
+
 }

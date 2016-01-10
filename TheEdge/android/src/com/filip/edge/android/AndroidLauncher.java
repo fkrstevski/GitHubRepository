@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -93,12 +94,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig), new TweetComposer());
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.numSamples = 4;
-        //initialize(new EdgeGame(this), config);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        //config.useImmersiveMode=true;
+        //config.numSamples = 4;
 
         RelativeLayout layout = new RelativeLayout(this);
         game = new EdgeGame(this);
@@ -460,7 +457,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void submitScore(long score) {
         if (isSignedIn()) {
-            Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);
+            Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_all_time), score);
         } else {
             // Maybe sign in here then redirect to submitting score?
         }
@@ -478,7 +475,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void showScores() {
         if (isSignedIn() == true) {
-            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), 9002);
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_all_time)), 9002);
         } else {
             // Maybe sign in here then redirect to showing scores?
         }

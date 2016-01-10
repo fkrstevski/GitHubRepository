@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_id">53370080718</string>
-    <string name="leaderboard_id">CgkIzpvr6MYBEAIQBg</string>
+    <string name="package_name">com.filip.edge.android</string>
+    <string name="achievement_1">CgkIzpvr6MYBEAIQAQ</string>
+    <string name="achievement_2">CgkIzpvr6MYBEAIQAg</string>
+    <string name="achievement_3">CgkIzpvr6MYBEAIQAw</string>
+    <string name="achievement_4">CgkIzpvr6MYBEAIQBA</string>
+    <string name="achievement_5">CgkIzpvr6MYBEAIQBQ</string>
+    <string name="leaderboard_all_time">CgkIzpvr6MYBEAIQBg</string>
     <string name="banner_ad_unit_id">ca-app-pub-0265459346558615/3497574820</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-0265459346558615/4974308028</string>
 </resources>

@@ -95,9 +95,10 @@ public class MainMenuController extends InputAdapter implements Disposable {
     }
 
     @Override
-    public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
-            Gdx.app.exit();
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.BACK) {
+            game.showConfirmExitDialog("The Edge" , "Are you sure you want to exit?");
+            return true;
         }
 
         return false;

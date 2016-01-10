@@ -41,15 +41,12 @@ public class GameScreen extends AbstractGameScreen {
         //GamePreferences.instance.load();
         worldController = new WorldController(game);
         worldRenderer = new WorldRenderer(worldController);
-        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
     public void hide() {
-
         worldRenderer.dispose();
         worldController.dispose();
-        Gdx.input.setCatchBackKey(false);
     }
 
     @Override

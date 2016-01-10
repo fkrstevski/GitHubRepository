@@ -706,22 +706,11 @@ public class WorldController extends InputAdapter implements Disposable, Contact
     }
 
     @Override
-    public boolean keyUp(int keycode) {
-        // Reset game world
-        if (keycode == Keys.R) {
-            init();
-            Gdx.app.debug(TAG, "Game world resetted");
-        }
-        // Toggle camera follow
-        else if (keycode == Keys.ENTER) {
-            //this.nextLevel();
-            levelComplete();
-        }
+    public boolean keyDown(int keycode) {
         // Back to Menu
-        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+        if (keycode == Keys.BACK) {
             backToMenu();
-        } else if (keycode == Keys.SPACE) {
-            this.renderPhysics = !this.renderPhysics;
+            return true;
         }
 
         return false;

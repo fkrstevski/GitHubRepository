@@ -1,6 +1,7 @@
 package com.filip.edge.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.*;
@@ -131,7 +132,17 @@ public class ResultsScreen extends AbstractGameScreen {
 
         //GamePreferences.instance.load();
 
-        this.stage = new Stage();
+        this.stage = new Stage() {
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Input.Keys.BACK) {
+                    game.setScreen(new MenuScreen(game, false));
+                    return true;
+                }
+                return super.keyDown(keyCode);
+            }
+        };
+
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
@@ -259,8 +270,6 @@ public class ResultsScreen extends AbstractGameScreen {
         this.stage.addActor(txtEmail);
         this.stage.addActor(btnSubmitOutside);
         this.stage.addActor(btnSubmit);
-
-        Gdx.input.setCatchBackKey(true);
     }
 
     public void btnSubmitClicked() {
@@ -346,7 +355,6 @@ public class ResultsScreen extends AbstractGameScreen {
     @Override
     public void hide() {
         stage.dispose();
-        Gdx.input.setCatchBackKey(false);
     }
 
     @Override

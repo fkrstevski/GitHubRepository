@@ -54,6 +54,17 @@ public class EdgeGame extends DirectedGame {
             // Start game at menu screen
             setScreen(new MenuScreen(this, true));
         }
+
+        Gdx.input.setCatchBackKey(true);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        TextureManager.instance.dispose();
+
+        Gdx.input.setCatchBackKey(false);
     }
 
     public void onCompleteRewardVideoAd(String tag) {
@@ -79,9 +90,7 @@ public class EdgeGame extends DirectedGame {
         GDXButtonDialog bDialog = dialogs.newDialog(GDXButtonDialog.class);
         bDialog.setTitle(title);
         bDialog.setMessage(message);
-
         bDialog.setClickListener(new ButtonClickListener() {
-
             @Override
             public void click(int button) {
                 // handle button click here
@@ -89,6 +98,26 @@ public class EdgeGame extends DirectedGame {
         });
 
         bDialog.addButton("Ok");
+
+        bDialog.build().show();
+    }
+
+    @Override
+    public void showConfirmExitDialog(String title, String message) {
+        GDXButtonDialog bDialog = dialogs.newDialog(GDXButtonDialog.class);
+        bDialog.setTitle(title);
+        bDialog.setMessage(message);
+        bDialog.setClickListener(new ButtonClickListener() {
+            @Override
+            public void click(int button) {
+                if(button == 0) {
+                    Gdx.app.exit();
+                }
+            }
+        });
+
+        bDialog.addButton("Yes");
+        bDialog.addButton("No");
 
         bDialog.build().show();
     }

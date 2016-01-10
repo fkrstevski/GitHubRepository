@@ -42,14 +42,12 @@ public class MenuScreen extends AbstractGameScreen {
         //GamePreferences.instance.load();
         worldController = new MainMenuController(game, lerpColor);
         worldRenderer = new MainMenuRenderer(worldController);
-        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
     public void hide() {
         worldRenderer.dispose();
         worldController.dispose();
-        Gdx.input.setCatchBackKey(false);
     }
 
     @Override

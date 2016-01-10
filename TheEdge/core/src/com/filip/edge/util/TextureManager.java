@@ -21,7 +21,7 @@ public class TextureManager {
     public TextureAtlas atlas;
     protected int textureRegion = 0;
 
-    protected Map pixmapMap;
+    protected Map<String, Pixmap> pixmapMap;
 
     private TextureManager() {
 
@@ -33,7 +33,7 @@ public class TextureManager {
         }
 
         if (pixmapMap == null) {
-            pixmapMap = new HashMap();
+            pixmapMap = new HashMap<String, Pixmap>();
         }
     }
 
@@ -65,4 +65,13 @@ public class TextureManager {
         return atlas.findRegion(atlasRegion).getTexture();
     }
 
+    public void dispose() {
+        for (Pixmap value : pixmapMap.values()) {
+            value.dispose();
+        }
+        pixmapMap = null;
+
+        atlas.dispose();
+        atlas = null;
+    }
 }

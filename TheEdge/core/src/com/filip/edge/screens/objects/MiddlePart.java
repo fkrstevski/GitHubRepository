@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.filip.edge.game.Level;
 
-import java.util.Objects;
+//import java.util.Objects;
 
 /**
  * Created by fkrstevski on 2015-02-12.
@@ -24,30 +24,37 @@ public class MiddlePart extends AbstractRectangleButtonObject {
 
     private Level.PropertyState disappearingState;
 
+    // Objects implementation of equals (since java 1.6 does not have the class Objects)
+    public static boolean equals(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         MiddlePart that = (MiddlePart) o;
-        return Objects.equals(disappears, that.disappears) &&
-                Objects.equals(appears, that.appears) &&
-                Objects.equals(disappearsAppearsStartupTime, that.disappearsAppearsStartupTime) &&
-                Objects.equals(disappearsAppearsTime, that.disappearsAppearsTime) &&
-                Objects.equals(currentTime, that.currentTime) &&
-                Objects.equals(hx, that.hx) &&
-                Objects.equals(hy, that.hy) &&
-                Objects.equals(angle, that.angle) &&
-                Objects.equals(position, that.position) &&
-                (Objects.equals(rotation, that.rotation) || Objects.equals(rotation + 180, that.rotation) || Objects.equals(rotation - 180, that.rotation)) &&
-                Objects.equals(center, that.center) &&
-                Objects.equals(disappearingState, that.disappearingState);
+        return equals(disappears, that.disappears) &&
+                equals(appears, that.appears) &&
+                equals(disappearsAppearsStartupTime, that.disappearsAppearsStartupTime) &&
+                equals(disappearsAppearsTime, that.disappearsAppearsTime) &&
+                equals(currentTime, that.currentTime) &&
+                equals(hx, that.hx) &&
+                equals(hy, that.hy) &&
+                equals(angle, that.angle) &&
+                equals(position, that.position) &&
+                (equals(rotation, that.rotation) || equals(rotation + 180, that.rotation) || equals(rotation - 180, that.rotation)) &&
+                equals(center, that.center) &&
+                equals(disappearingState, that.disappearingState);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(disappears, appears, disappearsAppearsStartupTime, disappearsAppearsTime, currentTime, hx, hy, angle, position, rotation, center, disappearingState);
-    }
+    // Don't need this unless we are using objects to insert them into a HashTable, HashMap or HashSet.
+    // Objects is not supported on older versions of Android
+    //@Override
+    //public int hashCode() {
+    //    return Objects.hash(disappears, appears, disappearsAppearsStartupTime, disappearsAppearsTime, currentTime, hx, hy, angle, position, rotation, center, disappearingState);
+    //}
 
     public MiddlePart(float width, float height, float x, float y, Color outsideColor, Color insideColor, boolean shared, String region) {
         super(width, height, x, y, outsideColor, insideColor, shared, region);

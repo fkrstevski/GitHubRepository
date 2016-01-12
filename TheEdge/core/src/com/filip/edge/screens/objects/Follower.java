@@ -92,9 +92,9 @@ public class Follower {
                 }
                 break;
             case Active:
-                float xDirection = vectorDirection.x / ((vectorDirection.x + vectorDirection.y));
-                float yDirection = vectorDirection.y / ((vectorDirection.x + vectorDirection.y));
-                float finalVelocity = xDirection * this.followerObjectSpeed.x + yDirection * this.followerObjectSpeed.y;
+                float xDirection = vectorDirection.x / ((Math.abs(vectorDirection.x) + Math.abs(vectorDirection.y)));
+                float yDirection = vectorDirection.y / ((Math.abs(vectorDirection.x) + Math.abs(vectorDirection.y)));
+                float finalVelocity = Math.abs(xDirection) * this.followerObjectSpeed.x + Math.abs(yDirection) * this.followerObjectSpeed.y;
                 this.followerObject.body.setLinearVelocity(vectorDirection.x * finalVelocity, vectorDirection.y * finalVelocity);
                 if (this.followerObject.position.epsilonEquals(this.followObjectTo, this.followerObjectSpeed.len() / 7f)) {
                     this.followerObject.body.setLinearVelocity(0, 0);

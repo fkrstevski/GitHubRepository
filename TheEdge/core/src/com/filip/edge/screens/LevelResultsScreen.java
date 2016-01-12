@@ -275,7 +275,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     }
 
     public void btnTweetClicked() {
-        String tweet = "Just beat level "  + GamePreferences.instance.getCurrentLevel() + " #theedgegamechallenge";
+        String tweet = "Just beat level "  + GamePreferences.instance.getCurrentLevel() + " #theedgegameALPHA";
         game.showTweetSheet(tweet, Constants.SCREENSHOT_LEVEL_RESULT);
     }
 

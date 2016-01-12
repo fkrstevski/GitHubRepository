@@ -94,7 +94,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         String fontFragmentShader = Gdx.files.internal("shaders/fontPixelShader.glsl").readString();
         fontShader = new ShaderProgram(vertexShader, fontFragmentShader);
 
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
         FileHandle file = new FileHandle(Gdx.files.getLocalStoragePath() + Constants.SCREENSHOT_LEVEL);
 
@@ -472,6 +472,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
     @Override
     public void hide() {
         stage.dispose();
+        buffer.dispose();
     }
 
     @Override

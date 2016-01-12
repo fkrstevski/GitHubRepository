@@ -41,7 +41,7 @@ public class MainMenuRenderer implements Disposable {
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
 
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
     public void render(SpriteBatch batch) {
@@ -110,6 +110,7 @@ public class MainMenuRenderer implements Disposable {
 
     @Override
     public void dispose() {
+        buffer.dispose();
 
     }
 }

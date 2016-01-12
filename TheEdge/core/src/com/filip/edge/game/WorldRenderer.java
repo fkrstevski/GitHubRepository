@@ -65,7 +65,7 @@ public class WorldRenderer implements Disposable {
         camera.setToOrtho(true); // flip y-axis
         camera.update();
 
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
         b2debugRenderer = new Box2DDebugRenderer();
     }
@@ -205,7 +205,7 @@ public class WorldRenderer implements Disposable {
 
     @Override
     public void dispose() {
-
+        buffer.dispose();
     }
 
 }

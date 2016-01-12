@@ -62,7 +62,7 @@ public class ResultsScreen extends AbstractGameScreen {
         this.game = game;
         this.email = ENTER_EMAIL;
         this.displayError = false;
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
     @Override
@@ -355,6 +355,7 @@ public class ResultsScreen extends AbstractGameScreen {
     @Override
     public void hide() {
         stage.dispose();
+        buffer.dispose();
     }
 
     @Override

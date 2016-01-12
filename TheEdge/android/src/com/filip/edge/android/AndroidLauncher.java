@@ -94,7 +94,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig), new TweetComposer());
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        //config.useImmersiveMode=true;
+        config.useImmersiveMode=true;
         //config.numSamples = 4;
 
         RelativeLayout layout = new RelativeLayout(this);

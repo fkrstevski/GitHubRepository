@@ -162,7 +162,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         btnTweet = new TextButton("", skin, "defaultOutside");
         btnTweetWidth = (int) (Gdx.graphics.getWidth() * 0.32);
         btnTweetHeight = (int) (Gdx.graphics.getHeight() * 0.16);
-        btnTweet.setPosition(Gdx.graphics.getWidth() * 0.5f - btnTweetWidth / 2, DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        btnTweet.setPosition(DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
         btnTweet.setSize(btnTweetWidth, btnTweetHeight);
         btnTweet.addListener(new ClickListener() {
             @Override
@@ -179,7 +179,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         btnVideo = new TextButton("", skin, "defaultOutside");
         btnVideoWidth = (int) (Gdx.graphics.getWidth() * 0.32);
         btnVideoHeight = (int) (Gdx.graphics.getHeight() * 0.16);
-        btnVideo.setPosition(DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS, DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
+        btnVideo.setPosition(Gdx.graphics.getWidth() * 0.5f - btnVideoWidth / 2, DigitRenderer.instance.digitWidth / Constants.WIDTH_IN_PIXELS);
         btnVideo.setSize(btnVideoWidth, btnVideoHeight);
         btnVideo.addListener(new ClickListener() {
             @Override
@@ -248,7 +248,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         if(!GamePreferences.instance.completedLevelTweet) {
             this.stage.addActor(btnTweet);
         }
-        if(!GamePreferences.instance.completedLevelVideoReward) {
+        if(!GamePreferences.instance.completedLevelVideoReward && GamePreferences.instance.getCurrentLevel() % 3 == 0) {
             this.stage.addActor(btnVideo);
         }
 
@@ -398,11 +398,11 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         this.customString_levelName.render(game.batch);
 
         DigitRenderer.instance.renderStringAtCenterXPoint("TRIES",
-                (int) (btnVideo.getX() + btnVideoWidth / 2),
+                (int) (btnTweet.getX() + btnTweetWidth / 2),
                 (int) (Gdx.graphics.getHeight() * 0.45f),
                 game.batch, 1);
         DigitRenderer.instance.renderNumber(GamePreferences.instance.levelTries.get(GamePreferences.instance.getCurrentLevel() - 1),
-                (int) (btnVideo.getX() + btnVideoWidth / 2),
+                (int) (btnTweet.getX() + btnTweetWidth / 2),
                 (int) (Gdx.graphics.getHeight() * 0.55f),
                 game.batch);
 
@@ -415,19 +415,29 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
                 (int) (Gdx.graphics.getHeight() * 0.55f),
                 game.batch);
 
-        game.batch.setShader(fontShader);
-        fontShader.setUniformf("u_alpha", 1);
-        fontShader.setUniformf("u_red", clearColor.r);
-        fontShader.setUniformf("u_green", clearColor.g);
-        fontShader.setUniformf("u_blue", clearColor.b);
-        DigitRenderer.instance.renderStringAtCenterXPoint("VIDEO", (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight / 2), game.batch, 1);
-        DigitRenderer.instance.renderStringAtCenterXPoint("TWEET", (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight / 2), game.batch, 1);
-        DigitRenderer.instance.renderStringAtCenterXPoint("NEXT LEVEL", (int) (btnNext.getX() + btnNextWidth / 2), Gdx.graphics.getHeight() - (int) (btnNext.getY() + btnNextHeight / 2), game.batch, 1);
-        game.batch.setShader(null);
-
         if (!ScreenshotFactory.needsToGetScreenshot()) {
             backButton.render(game.batch);
-            if(!GamePreferences.instance.completedLevelVideoReward) {
+
+            game.batch.setShader(fontShader);
+            fontShader.setUniformf("u_alpha", 1);
+            fontShader.setUniformf("u_red", clearColor.r);
+            fontShader.setUniformf("u_green", clearColor.g);
+            fontShader.setUniformf("u_blue", clearColor.b);
+            DigitRenderer.instance.renderStringAtCenterXPoint("TWEET", (int) (btnTweet.getX() + btnTweetWidth / 2), Gdx.graphics.getHeight() - (int) (btnTweet.getY() + btnTweetHeight / 2), game.batch, 1);
+            DigitRenderer.instance.renderStringAtCenterXPoint("NEXT LEVEL", (int) (btnNext.getX() + btnNextWidth / 2), Gdx.graphics.getHeight() - (int) (btnNext.getY() + btnNextHeight / 2), game.batch, 1);
+            game.batch.setShader(null);
+
+            if(!GamePreferences.instance.completedLevelVideoReward && GamePreferences.instance.getCurrentLevel() % 3 == 0) {
+                game.batch.setShader(fontShader);
+                fontShader.setUniformf("u_alpha", 1);
+                fontShader.setUniformf("u_red", Constants.RED.r);
+                fontShader.setUniformf("u_green", Constants.RED.g);
+                fontShader.setUniformf("u_blue", Constants.RED.b);
+                DigitRenderer.instance.renderStringAtCenterXPoint("VIDEO", (int) (btnVideo.getX() + btnVideoWidth / 2), Gdx.graphics.getHeight() - (int) (btnVideo.getY() + btnVideoHeight / 2), game.batch, 1);
+                game.batch.setShader(null);
+            }
+
+            if(!GamePreferences.instance.completedLevelVideoReward && GamePreferences.instance.getCurrentLevel() % 3 == 0) {
                 customString_videoReward.render(game.batch);
             }
 
@@ -458,7 +468,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
             game.batch.begin();
             game.batch.draw(buffer.getColorBufferTexture(), 0, 0);
             backButton.render(game.batch);
-            if(!GamePreferences.instance.completedLevelVideoReward) {
+            if(!GamePreferences.instance.completedLevelVideoReward && GamePreferences.instance.getCurrentLevel() % 3 == 0) {
                 customString_videoReward.render(game.batch);
             }
 

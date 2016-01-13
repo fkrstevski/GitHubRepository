@@ -45,7 +45,6 @@ public class TextureManager {
         } else {
             buttonPixmap = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
             pixmapCount++;
-            //Gdx.app.log(TAG, r + " pixmaps = " + pixmapCount);
             pixmapMap.put(r, buttonPixmap);
         }
         return buttonPixmap;
@@ -59,7 +58,6 @@ public class TextureManager {
         if (atlas.findRegion(atlasRegion) == null) {
             atlas.addRegion(atlasRegion, new TextureRegion(new Texture(buttonPixmap)));
             textureCount++;
-            //Gdx.app.log(TAG, atlasRegion + " textures = " + textureCount);
         }
 
         return atlas.findRegion(atlasRegion).getTexture();

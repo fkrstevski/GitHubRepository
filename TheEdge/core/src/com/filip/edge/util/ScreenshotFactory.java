@@ -22,8 +22,6 @@ public class ScreenshotFactory {
         needToGetScreenshot = true;
         flipY = y;
         fileName = fn;
-
-        Gdx.app.log(TAG, "Get Screenshot");
     }
 
     public static boolean needsToGetScreenshot() {
@@ -31,7 +29,6 @@ public class ScreenshotFactory {
     }
 
     public static void saveScreenshot() {
-        Gdx.app.log(TAG, "Save Screenshot");
         needToGetScreenshot = false;
         //Then retrieve the Pixmap from the buffer.
         Pixmap pm = ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

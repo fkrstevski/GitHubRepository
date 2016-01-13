@@ -95,7 +95,7 @@ public class StageLoader {
 
                         br = new BufferedReader(new FileReader(filename));
                         int y = 0;
-                        //Gdx.app.log(TAG, "ZONE = " + currentZone + " Stage = " + currentStage);
+
                         while ((line = br.readLine()) != null) {
 
                             // use comma as separator
@@ -164,14 +164,11 @@ public class StageLoader {
                                                 }
 
                                                 pointIndex = Integer.parseInt(cell.substring(0, digitLength));
-
-                                                System.out.println("pointIndex = " + pointIndex);
                                                 points[pointIndex] = new LevelPoint(getXpoint(x), getYpoint(y));
 
                                                 String resultsArray[] = cell.split("^[0-9]{1,2}");
 
                                                 String s = resultsArray[1]; //Ignore first empty result
-                                                System.out.println(s);
                                                 String results[] = s.split("(?<=[0-9])(?=[a-zA-Z])");
 
                                                 for (String r : results) {
@@ -304,7 +301,6 @@ public class StageLoader {
                 }
 
                 numberOfStages[currentZone] = currentStage;
-                //Gdx.app.log(TAG, "Zone " + currentZone + " has " + numberOfStages[currentZone] + " stages");
             }
 
             for (int i = 0; i < numberOfZones; ++i) {
@@ -352,7 +348,6 @@ public class StageLoader {
 
         // Stages line - Stored in the last line
         String stagesline = linesInFile[linesInFile.length - 1];
-        //Gdx.app.debug(TAG, "Stages line = " + stagesline);
         if (stagesline.length() > 0) {
             String[] stagesString = stagesline.split(";");
             for (int j = 0; j < stagesString.length; j++) {
@@ -375,15 +370,10 @@ public class StageLoader {
                 currentStage = (i - numberOfStages[0] * 3 - numberOfStages[1] * 3 - numberOfStages[2] * 3) / 3;
             }
 
-            //Gdx.app.debug(TAG, "i = " + i);
-            //Gdx.app.debug(TAG, "Zone = " + currentZone);
-            //Gdx.app.debug(TAG, "Stage = " + currentStage);
-
             ArrayList<LevelProperty> stageProperties = new ArrayList<LevelProperty>();
 
             // Level line
             String line = linesInFile[i];
-            //Gdx.app.debug(TAG, "Level line = " + line);
             if (line.length() > 0) {
                 String[] levelPropertiesString = line.split(";");
                 for (int j = 0; j < levelPropertiesString.length; j++) {
@@ -412,11 +402,9 @@ public class StageLoader {
 
             i++; // move to instruction line
             levelInstructions = linesInFile[i];
-            //Gdx.app.debug(TAG, "Level instruction = " + levelInstructions);
 
             i++; // move to points line
             line = linesInFile[i];
-            //Gdx.app.debug(TAG, "line = " + line);
 
             String[] pointsInLine = line.split(";");
 

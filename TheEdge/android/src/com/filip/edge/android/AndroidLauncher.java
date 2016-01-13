@@ -33,13 +33,9 @@ import com.heyzap.sdk.ads.VideoAd;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
-import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
-import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 import io.fabric.sdk.android.Fabric;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
 
@@ -66,20 +62,17 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_ADS: {
-                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! SHOW AD!");
                     adView.setVisibility(View.VISIBLE);
                     adView.startAnimation(bannerSlideDownAnimation);
                     //startAdvertising();
                     break;
                 }
                 case HIDE_ADS: {
-                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! HIDE AD!");
                     adView.setVisibility(View.GONE);
                     adView.startAnimation(bannerSlideUpAnimation);
                     break;
                 }
                 case SHOW_INTERSTITIAL_AD: {
-                    Gdx.app.debug(TAG, "!!!!!!!!!!!!!!!!!!! SHOW INTERSTITIAL AD!");
                     if (interstitialAd.isLoaded()) {
                         interstitialAd.show();
                     }
@@ -220,7 +213,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         globalTracker=analytics.newTracker(R.xml.global_tracker)**/
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
-        gameHelper.enableDebugLog(true);
+        //gameHelper.enableDebugLog(true);
         gameHelper.setup(this);
     }
 
@@ -288,11 +281,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showBannerAds(boolean show) {
-        System.out.println("AndroidLauncher: showBannerAds");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
-        } else {
-
         }
     }
 
@@ -303,7 +293,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showInterstitialAd() {
-        System.out.println("AndroidLauncher: showInterstitialAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
         } else {
@@ -320,14 +309,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showVideoAd() {
-        System.out.println("AndroidLauncher: showVideoAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             handler.sendEmptyMessage(SHOW_INTERSTITIAL_AD);
         } else {
             if (VideoAd.isAvailable()) {
                 VideoAd.display(this);
-            } else {
-                System.out.println("AndroidLauncher: showVideoAd - NO AD AVAILABLE");
             }
         }
     }
@@ -339,7 +325,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showRewardVideoAd() {
-        System.out.println("AndroidLauncher: showRewardVideoAd");
         if (EdgeGame.adType != GamePreferences.AdType.ADMOB) {
             if (IncentivizedAd.isAvailable()) {
                 IncentivizedAd.display(this);
@@ -385,15 +370,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
         if(requestCode == TWEET_COMPOSER_REQUEST_CODE) {
             if(resultCode == RESULT_OK){
-                Gdx.app.debug(TAG, "SUCESS!!!!!");
                 game.onCompleteTweet();
             }
             else {
-                Gdx.app.debug(TAG, "CANCEL!!!!!");
             }
         }
         else {
-            Gdx.app.debug(TAG, "ELSE!!!!!");
         }
     }
 
@@ -431,7 +413,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 }
             });
         } catch (Exception e) {
-            Gdx.app.log("The Edge", "Log in failed: " + e.getMessage() + ".");
+            Gdx.app.error(TAG, "Log in failed: " + e.getMessage() + ".");
         }
     }
 
@@ -445,7 +427,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 }
             });
         } catch (Exception e) {
-            Gdx.app.log("The Edge", "Log out failed: " + e.getMessage() + ".");
+            Gdx.app.error(TAG, "Log out failed: " + e.getMessage() + ".");
         }
     }
 
@@ -492,12 +474,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void onSignInFailed() {
-        Gdx.app.log("The Edge", "Sign in fail");
+
     }
 
     @Override
     public void onSignInSucceeded() {
-        Gdx.app.log("The Edge", "SignedIn");
+
     }
     /*
     @Override

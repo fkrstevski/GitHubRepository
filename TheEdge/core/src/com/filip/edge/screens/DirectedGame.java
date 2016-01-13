@@ -168,9 +168,7 @@ public abstract class DirectedGame implements ApplicationListener {
         }
         if (init) {
             currScreen = null;
-            Gdx.app.log(TAG, " dispose Sprite Batch 1");
             batch.dispose();
-            Gdx.app.log(TAG, " dispose Sprite Batch 2");
             init = false;
         }
     }

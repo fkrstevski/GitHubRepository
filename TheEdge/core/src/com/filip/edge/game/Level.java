@@ -138,10 +138,6 @@ public class Level {
     }
 
     private void init() {
-        Gdx.app.log(TAG, "LEVEL init zone = " + GamePreferences.instance.zone + " stage = " + GamePreferences.instance.stage);
-        Gdx.app.log(TAG, "LEVEL init levelNumber = " + GamePreferences.instance.getCurrentLevel());
-        Gdx.app.log(TAG, "LEVEL init GamePreferences.instance.levelTries.size() = " + GamePreferences.instance.levelTries.size());
-
         if (GamePreferences.instance.levelTries.size() == GamePreferences.instance.getCurrentLevel()) {
             GamePreferences.instance.levelTries.add(GamePreferences.instance.getCurrentLevel(), 1);
             GamePreferences.instance.save();

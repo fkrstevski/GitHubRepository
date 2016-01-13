@@ -38,7 +38,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     private IOSApplication app;
     private boolean adsInitialized = false;
 
-    private static final boolean USE_TEST_DEVICES = true;
+    private static final boolean USE_TEST_DEVICES = false;
     private GADBannerView adview;
     private GADInterstitial interstitial;
 
@@ -66,7 +66,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
             try {
                 GGLContextMobileAds.getSharedInstance().configure();
             } catch (NSErrorException e) {
-                System.out.println("IOSLauncher: didFinishLaunching" + e.toString());
+                Gdx.app.error("IOSLauncher:",  "didFinishLaunching" + e.toString());
             }
         } else {
             HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c");
@@ -93,7 +93,6 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 GADRequest request = new GADRequest();
                 if (USE_TEST_DEVICES) {
                     request.setTestDevices(Arrays.asList("ab618865a1c907a38d04edf1b6516624"));
-                    System.out.println("Test devices: " + request.getTestDevices());
                 }
 
                 adview.setDelegate(new GADBannerViewDelegateAdapter() {
@@ -117,7 +116,6 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
                 float bannerHeight = (float) (screenSize.getHeight() * 0.15);
                 adview.setFrame(new CGRect(0, 0, bannerWidth, bannerHeight));
 
-                System.out.println("didBecomeActive !adsInitialized");
                 initializeInterstitialAd();
             }
         } else {
@@ -132,7 +130,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
                 @Override
                 public void didFailToShowAd(String tag, NSError error) {
-                    System.out.print(error);
+
                     HZVideoAd.fetch();
                     HZIncentivizedAd.fetch();
                     game.onFailedToShowAd(tag);
@@ -233,24 +231,20 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     }
 
     public void initializeInterstitialAd() {
-        System.out.println("initialize Interstitial Ad");
         interstitial = new GADInterstitial("ca-app-pub-0265459346558615/3563123625");
         interstitial.setDelegate(new GADInterstitialDelegateAdapter() {
             @Override
             public void didReceiveAd(GADInterstitial ad) {
-                System.out.println("Did receive ad.");
             }
 
             @Override
             public void didDismissScreen(GADInterstitial ad) {
-                System.out.println("did Dismiss Screen");
                 initializeInterstitialAd();
             }
 
             @Override
             public void didFailToReceiveAd(GADInterstitial ad, GADRequestError error) {
-                System.out.println(error.description());
-                System.out.println(error.getErrorCode());
+                Gdx.app.error("IOSLauncher", "didFailToReceiveAd " + error.description() + " " + error.getErrorCode());
             }
         });
 
@@ -263,75 +257,69 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void playerLoginFailed(NSError error) {
-        System.out.println("playerLoginFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "playerLoginFailed error: " + error);
         this.isSignedIn = false;
     }
 
     @Override
     public void playerLoginCompleted() {
-        System.out.println("playerLoginCompleted");
         this.isSignedIn = true;
         gcManager.loadLeaderboards();
     }
 
     @Override
     public void achievementReportCompleted() {
-        System.out.println("achievementReportCompleted");
     }
 
     @Override
     public void achievementReportFailed(NSError error) {
-        System.out.println("achievementReportFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "achievementReportFailed error: " + error);
     }
 
     @Override
     public void achievementsLoadCompleted(ArrayList<GKAchievement> achievements) {
-        System.out.println("achievementsLoadCompleted: " + achievements.size());
     }
 
     @Override
     public void achievementsLoadFailed(NSError error) {
-        System.out.println("achievementsLoadFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "achievementsLoadFailed error: " + error);
     }
 
     @Override
     public void achievementsResetCompleted() {
-        System.out.println("achievementsResetCompleted");
     }
 
     @Override
     public void achievementsResetFailed(NSError error) {
-        System.out.println("achievementsResetFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "achievementsResetFailed error: " + error);
     }
 
     @Override
     public void scoreReportCompleted() {
-        System.out.println("scoreReportCompleted");
     }
 
     @Override
     public void scoreReportFailed(NSError error) {
-        System.out.println("scoreReportFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "scoreReportFailed error: " + error);
     }
 
     @Override
     public void leaderboardsLoadCompleted(ArrayList<GKLeaderboard> scores) {
-        System.out.println("scoresLoadCompleted: " + scores.size());
     }
 
     @Override
     public void leaderboardsLoadFailed(NSError error) {
-        System.out.println("scoresLoadFailed. error: " + error);
+        Gdx.app.error("IOSLauncher", "scoresLoadFailed error: " + error);
     }
 
     @Override
     public void leaderboardViewDismissed() {
-        System.out.println("leaderboardViewDismissed");
+
     }
 
     @Override
     public void achievementViewDismissed() {
-        System.out.println("achievementViewDismissed");
+
     }
 
     @Override
@@ -367,14 +355,12 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
             app.getUIViewController().presentViewController(twitterPostVC, true, null);
         }
         else {
-            Gdx.app.error("IOSLAUNCGER", "NO   SLComposeViewController.isAvailable(SLServiceType.Twitter) ");
             game.showGenericOkDialog("Twitter", "Account not added");
         }
     }
 
     @Override
     public void showBannerAds(boolean show) {
-        System.out.println("IOSLauncher: showBannerAds " + show);
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             adview.setHidden(!show);
         } else {
@@ -389,7 +375,6 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showInterstitialAd() {
-        System.out.println("IOSLauncher: showInterstitialAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
         } else {
@@ -407,14 +392,11 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showVideoAd() {
-        System.out.println("IOSLauncher: showVideoAd");
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
             interstitial.present(app.getUIViewController());
         } else {
             if (HZVideoAd.isAvailable()) {
                 HZVideoAd.show();
-            } else {
-                System.out.println("IOSLauncher: showVideoAd - NO AD AVAILABLE");
             }
         }
     }
@@ -426,12 +408,10 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
 
     @Override
     public void showRewardVideoAd() {
-        System.out.println("IOSLauncher: showRewardVideoAd");
         if (EdgeGame.adType != GamePreferences.AdType.ADMOB) {
             if (HZIncentivizedAd.isAvailable()) {
                 HZIncentivizedAd.show();
             } else {
-                System.out.println("IOSLauncher: showRewardVideoAd - NO AD AVAILABLE");
                 game.showGenericOkDialog("Reward Video", "Not Available");
             }
         }
@@ -481,7 +461,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     @Override
     public void unlockAchievement(String achievementID) {
         if (this.isSignedIn) {
-            System.out.println("unlockAchievement " + achievementID);
+
         }
     }
 }

@@ -111,8 +111,6 @@ public class GamePreferences {
         completedLevelTweet = prefs.getBoolean("tweet", false);
         completedLevelVideoReward = prefs.getBoolean("video", false);
 
-        Gdx.app.log(TAG, "LOAD Times = " + times);
-
         if (!tries.isEmpty()) {
             String[] triesPerLevelArray = tries.split(",");
             for (int x = 0; x < triesPerLevelArray.length; ++x) {
@@ -137,14 +135,12 @@ public class GamePreferences {
         String levelTriesAsString = levelTries.toString().replaceAll(" ", "");
 
         tries = levelTriesAsString.substring(1, levelTriesAsString.length() - 1);
-        Gdx.app.log(TAG, "SAVE TRIES = " + tries);
 
         prefs.putString("tries", tries);
 
         String levelTimesAsString = levelTimes.toString().replaceAll(" ", "");
 
         times = levelTimesAsString.substring(1, levelTimesAsString.length() - 1);
-        Gdx.app.log(TAG, "SAVE TIMES = " + times);
 
         prefs.putString("times", times);
 
@@ -187,13 +183,12 @@ public class GamePreferences {
             Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
                 @Override
                 public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
-                    Gdx.app.log("Result ", httpResponse.getResultAsString());
+
                 }
 
                 @Override
                 public void failed(Throwable t) {
-                    Gdx.app.error("Failed ", t.getMessage());
+                    Gdx.app.error("GamePreferences submitGameOverData sendHttpRequest Failed", t.getMessage());
                 }
 
                 @Override
@@ -225,13 +220,12 @@ public class GamePreferences {
             Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
                 @Override
                 public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
-                    Gdx.app.log("Result ", httpResponse.getResultAsString());
+
                 }
 
                 @Override
                 public void failed(Throwable t) {
-                    Gdx.app.error("Failed ", t.getMessage());
+                    Gdx.app.error("GamePreferences submitData sendHttpRequest Failed", t.getMessage());
                 }
 
                 @Override
@@ -255,15 +249,13 @@ public class GamePreferences {
             Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
                 @Override
                 public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                    Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
                     userID = httpResponse.getResultAsString();
-                    Gdx.app.log("UserID", userID);
                     save();
                 }
 
                 @Override
                 public void failed(Throwable t) {
-                    Gdx.app.error("Failed ", t.getMessage());
+                    Gdx.app.error("GamePreferences getUserID sendHttpRequest Failed", t.getMessage());
                 }
 
                 @Override

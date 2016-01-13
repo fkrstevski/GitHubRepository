@@ -306,9 +306,6 @@ public class ResultsScreen extends AbstractGameScreen {
                 Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
                     @Override
                     public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                        Gdx.app.log("Status code ", "" + httpResponse.getStatus().getStatusCode());
-                        Gdx.app.log("Result ", httpResponse.getResultAsString());
-
                         btnSubmit.setTouchable(Touchable.enabled);
 
                         if (httpResponse.getStatus().getStatusCode() == 200) {
@@ -325,7 +322,7 @@ public class ResultsScreen extends AbstractGameScreen {
 
                     @Override
                     public void failed(Throwable t) {
-                        Gdx.app.error("Failed ", t.getMessage());
+                        Gdx.app.error("Results Screen: sendHttpRequest Failed ", t.getMessage());
                         btnSubmit.setTouchable(Touchable.enabled);
                         displayError = true;
                         btnSubmitOutside.setStyle(textOutsideButtonStyleRed);

@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
@@ -25,8 +22,6 @@ import com.filip.edge.EdgeGame;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
 import com.google.android.gms.ads.*;
-import com.google.android.gms.games.Games;
-import com.google.example.games.basegameutils.GameHelper;
 import com.heyzap.sdk.ads.HeyzapAds;
 import com.heyzap.sdk.ads.IncentivizedAd;
 import com.heyzap.sdk.ads.VideoAd;
@@ -37,7 +32,7 @@ import io.fabric.sdk.android.Fabric;
 
 import java.io.File;
 
-public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler, GameHelper.GameHelperListener {
+public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler{
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "vi3rGOvBhnCkSHLj4AGNJLUh3";
@@ -46,7 +41,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private static final int TWEET_COMPOSER_REQUEST_CODE = 100;
 
     public static final String TAG = AndroidLauncher.class.getName();
-    private GameHelper gameHelper;
     private AdView adView;
     private InterstitialAd interstitialAd;
     private EdgeGame game;
@@ -96,7 +90,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         layout.addView(gameView);
 
         if (EdgeGame.adType == GamePreferences.AdType.ADMOB) {
-            // Add the AdMob view
+        /*    // Add the AdMob view
             RelativeLayout.LayoutParams adParams =
                     new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -133,6 +127,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             });
 
             requestNewInterstitialAd();
+            */
         } else {
             Activity activity = this; // must be an Activity
             HeyzapAds.start("7a7e1ff2afbec7f965b0d0a9a16f650c", activity);
@@ -211,10 +206,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
         /*GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         globalTracker=analytics.newTracker(R.xml.global_tracker)**/
-
-        gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
-        //gameHelper.enableDebugLog(true);
-        gameHelper.setup(this);
     }
 
     private void requestNewInterstitialAd() {
@@ -350,23 +341,20 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    protected void onStart() { // TODO: call gameHelper.OnStart from the main menu
+    protected void onStart() {
         super.onStart();
         //GoogleAnalytics.getInstance(this).reportActivityStart(this);
-        gameHelper.onStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         //GoogleAnalytics.getInstance(this).reportActivityStop(this);
-        gameHelper.onStop();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        gameHelper.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == TWEET_COMPOSER_REQUEST_CODE) {
             if(resultCode == RESULT_OK){
@@ -409,7 +397,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    gameHelper.beginUserInitiatedSignIn();
+
                 }
             });
         } catch (Exception e) {
@@ -423,7 +411,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    gameHelper.signOut();
+
                 }
             });
         } catch (Exception e) {
@@ -433,13 +421,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public boolean isSignedIn() {
-        return gameHelper.isSignedIn();
+        return false;
     }
 
     @Override
     public void submitScore(long score) {
         if (isSignedIn()) {
-            Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_all_time), score);
+
         } else {
             // Maybe sign in here then redirect to submitting score?
         }
@@ -448,7 +436,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void unlockAchievement(String achievementID) {
         if (isSignedIn()) {
-            Games.Achievements.unlock(gameHelper.getApiClient(), achievementID);
+
         } else {
             // Maybe sign in here
         }
@@ -457,7 +445,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void showScores() {
         if (isSignedIn() == true) {
-            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_all_time)), 9002);
+
         } else {
             // Maybe sign in here then redirect to showing scores?
         }
@@ -466,13 +454,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void showAchievements() {
         if (isSignedIn() == true) {
-            startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), 9003);
+
         } else {
             // Maybe sign in here
         }
     }
 
-    @Override
+/*    @Override
     public void onSignInFailed() {
 
     }
@@ -480,7 +468,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public void onSignInSucceeded() {
 
-    }
+    }*/
     /*
     @Override
     public void rateGame()

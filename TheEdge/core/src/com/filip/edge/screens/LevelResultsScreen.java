@@ -401,7 +401,15 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
                 (int) (btnTweet.getX() + btnTweetWidth / 2),
                 (int) (Gdx.graphics.getHeight() * 0.45f),
                 game.batch, 1);
-        DigitRenderer.instance.renderNumber(GamePreferences.instance.levelTries.get(GamePreferences.instance.getCurrentLevel() - 1),
+
+        int currentLevel = GamePreferences.instance.getCurrentLevel();
+        long tries = 1;
+
+        if (currentLevel == GamePreferences.instance.levelTries.size() - 1) {
+            tries = GamePreferences.instance.levelTries.get(currentLevel - 1);
+        }
+
+        DigitRenderer.instance.renderNumber(tries,
                 (int) (btnTweet.getX() + btnTweetWidth / 2),
                 (int) (Gdx.graphics.getHeight() * 0.55f),
                 game.batch);
@@ -410,7 +418,14 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
                 (int) (Gdx.graphics.getWidth() * 0.35f),
                 (int) (Gdx.graphics.getHeight() * 0.45f),
                 game.batch, 1);
-        DigitRenderer.instance.renderTime(GamePreferences.instance.levelTimes.get(GamePreferences.instance.getCurrentLevel() - 1),
+
+        long time = 1;
+
+        if (currentLevel == GamePreferences.instance.levelTimes.size() - 1) {
+            time = GamePreferences.instance.levelTimes.get(currentLevel - 1);
+        }
+
+        DigitRenderer.instance.renderTime(time,
                 (int) (Gdx.graphics.getWidth() * 0.35f),
                 (int) (Gdx.graphics.getHeight() * 0.55f),
                 game.batch);

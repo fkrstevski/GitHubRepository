@@ -52,6 +52,8 @@ public class IOSLauncher extends IOSApplication.Delegate implements IActivityReq
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.multisample = GLKViewDrawableMultisample._4X;
+        config.orientationLandscape = true;
+        config.orientationPortrait = false;
         game = new EdgeGame(this);
         app = new IOSApplication(game, config);
         return app;

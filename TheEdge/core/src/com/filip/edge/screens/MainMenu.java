@@ -65,6 +65,7 @@ public class MainMenu {
             int height = Gdx.graphics.getHeight();
 
             playButton.render(batch);
+            infoButton.render(batch);
 
             DigitRenderer.instance.renderString("THE EDGE", (int) (width * .3), height / 2, batch, 1);
         } else if (this.state == MainMenuState.ZoomInToPlay) {

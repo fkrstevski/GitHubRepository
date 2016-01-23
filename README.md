@@ -84,7 +84,7 @@ Testing for Android
 - Publish app
 3. Email testers with the opt-in URL
 - https://play.google.com/apps/testing/com.filip.edge.android
-4. Old Internet Browser does not work (it canot open the google play store link)
+4. Old Internet Browser does not work (it cannot open the google play store link)
 - had to use chrome
 
 

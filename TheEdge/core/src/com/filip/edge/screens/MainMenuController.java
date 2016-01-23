@@ -74,9 +74,9 @@ public class MainMenuController extends InputAdapter implements Disposable {
         if (mainMenu.playButton.isTouched(screenX, screenY)) {
             this.mainMenu.state = MainMenu.MainMenuState.ZoomInToPlay;
         } else if (mainMenu.infoButton.isTouched(screenX, screenY)) {
-            //Gdx.net.openURI("http://www.absolutegames.ca/TheEdgeShowScores.php");
+            Gdx.net.openURI("http://www.absolutegames.ca/TheEdgeStats.html");
 
-            // Used to beat the game early
+            /*// Used to beat the game early
             GamePreferences.instance.zone = 0;
             GamePreferences.instance.stage = 0;
             GamePreferences.instance.scoreNeedsToBeSubmitted = true;
@@ -84,6 +84,7 @@ public class MainMenuController extends InputAdapter implements Disposable {
             GamePreferences.instance.save();
             this.game.submitScore(GamePreferences.instance.currentScore);
             game.setScreen(new ResultsScreen(game));
+            */
 
         } else if (mainMenu.leaderboardButton.isTouched(screenX, screenY)) {
             if (this.game.activityRequestHandler != null) {

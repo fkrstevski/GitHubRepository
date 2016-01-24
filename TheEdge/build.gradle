@@ -92,9 +92,9 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-        compile "org.robovm:robopods-google-mobile-ads-ios:1.9.0"
-        compile "org.robovm:robopods-chartboost-ios:1.9.0"
-        compile "org.robovm:robopods-heyzap-ios:1.9.1-SNAPSHOT"
+        compile "org.robovm:robopods-google-mobile-ads-ios:1.12.0"
+        compile "org.robovm:robopods-chartboost-ios:1.12.0"
+        compile "org.robovm:robopods-heyzap-ios:1.12.0"
         compile "de.tomgrill.gdxdialogs:gdx-dialogs-ios:1.0.0"
         compile fileTree(dir: 'libs', include: '*.jar')
     }

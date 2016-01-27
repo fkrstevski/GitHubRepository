@@ -1,10 +1,14 @@
 package com.filip.edge.android;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,12 +16,14 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.filip.edge.EdgeGame;
 import com.filip.edge.util.GamePreferences;
 import com.filip.edge.util.IActivityRequestHandler;
@@ -39,6 +45,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private static final String TWITTER_SECRET = "ymkKGfN8gMh2p5Mv3FnqTlcKacHSWOEmu3KTKaBgqY21Qr57XF";
 
     private static final int TWEET_COMPOSER_REQUEST_CODE = 100;
+    private static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     public static final String TAG = AndroidLauncher.class.getName();
     private AdView adView;
@@ -50,6 +57,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private final int SHOW_INTERSTITIAL_AD = 2;
     private Animation bannerSlideDownAnimation;
     private Animation bannerSlideUpAnimation;
+
+    private String tweetMessage;
+    private String tweetImage;
 
     protected Handler handler = new Handler() {
         @Override
@@ -242,32 +252,103 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    showTweet(this.tweetMessage, this.tweetImage);
+                } else {
+                    // Permission Denied
+                    Toast.makeText(this, "WRITE_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this).setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null);
+
+        this.runOnUiThread(new Runnable() {
+
+            public void run() {
+                AlertDialog d = dialog.create();
+                d.show();
+            }
+        });
+
+    }
+
+    @Override
     public void showTweetSheet(String message, String png) {
+        this.tweetMessage = message;
+        this.tweetImage = png;
 
         if (isTwitterInstalled()) {
-            // We need to copy the screenshot over from local storage
-            // to external storage
-            Gdx.files.external(png).delete();
-            FileHandle external = Gdx.files.external(png);
 
-            FileHandle local = Gdx.files.local(png);
-            Pixmap localPixmap = new Pixmap(local);
-            PixmapIO.writePNG(external, localPixmap);
-            localPixmap.dispose();
+            if (Build.VERSION.SDK_INT >= 23) {
+                int hasWriteExternalPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (hasWriteExternalPermission != PackageManager.PERMISSION_GRANTED) {
+                    if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        showMessageOKCancel("You need to allow access to External Storage",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (Build.VERSION.SDK_INT >= 23) {
+                                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                    REQUEST_CODE_ASK_PERMISSIONS);
+                                        }
+                                    }
+                                });
+                        return;
+                    }
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_CODE_ASK_PERMISSIONS);
+                    return;
+                }
+            }
 
-            File myimageFile = external.file();
-            Uri myImageUri = Uri.fromFile(myimageFile);
-
-            Intent intent = new TweetComposer.Builder(this)
-                    .text(message)
-                    .image(myImageUri)
-                    .createIntent();
-
-            startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
+            showTweet(this.tweetMessage, this.tweetImage);
         }
         else {
             game.showGenericOkDialog("Twitter", "Not Installed");
         }
+    }
+
+    private void showTweet(String message, String png) {
+        Intent intent;
+        // We need to copy the screenshot over from local storage
+        // to external storage
+        Gdx.files.external(png).delete();
+        FileHandle external = Gdx.files.external(png);
+
+        FileHandle local = Gdx.files.local(png);
+        Pixmap localPixmap = new Pixmap(local);
+
+        try{
+            PixmapIO.writePNG(external, localPixmap);
+            File myimageFile = external.file();
+            Uri myImageUri = Uri.fromFile(myimageFile);
+            intent = new TweetComposer.Builder(this)
+                    .text(message)
+                    .image(myImageUri)
+                    .createIntent();
+        }
+        catch (GdxRuntimeException e){
+            intent = new TweetComposer.Builder(this)
+                    .text(message)
+                    .createIntent();
+        }
+
+        localPixmap.dispose();
+
+        startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
     }
 
     @Override

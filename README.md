@@ -45,6 +45,9 @@ Try this for iOS simulators
 
 Testing for iOS
 --------------------------
+New version
+- Update version number in iTunesConnect (from 1.0 to 1.1 for example)
+- Update robovm.properties version number (from 1.0 to 1.1 for example) 
 
 1. Need to create a distribution certificate
 2. Need to create a distribution mobile provision
@@ -66,12 +69,12 @@ Testing for iOS
 5. Add the app on iTunes Connect
 - In the TestFlight tab, select the build to test and add testers
 
-New version
-- Update version number in iTunesConnect (from 1.0 to 1.1 for example)
-- Update robovm.properties version number (from 1.0 to 1.1 for example) 
+
 
 Testing for Android
 --------------------------
+New version
+- Update version in manifest file
 
 1. Generate signed APK
 - Open RoobVM, from the main menu select "Build" --> "Generate Signed APK"

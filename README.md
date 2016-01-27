@@ -68,6 +68,7 @@ New version
 - Select the generated IPA, and follow the prompts
 5. Add the app on iTunes Connect
 - In the TestFlight tab, select the build to test and add testers
+- Once you save, the testers will be notified
 
 
 

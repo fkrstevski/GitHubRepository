@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.filip.edge.android"
-        minSdkVersion 9
+        minSdkVersion 11
         targetSdkVersion 23
     }
 }

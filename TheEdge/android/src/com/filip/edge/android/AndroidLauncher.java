@@ -93,7 +93,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.hideStatusBar = true;
         config.useWakelock = true;
-        config.useImmersiveMode = true;
+        //config.useImmersiveMode = true;
         //config.numSamples = 4;
 
         RelativeLayout layout = new RelativeLayout(this);

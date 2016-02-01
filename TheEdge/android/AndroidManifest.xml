@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
     package="com.filip.edge.android"
-    android:versionCode="6"
-    android:versionName="6" >
+    android:versionCode="7"
+    android:versionName="7" >
 
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="23" />
 

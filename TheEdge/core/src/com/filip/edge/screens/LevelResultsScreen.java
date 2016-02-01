@@ -405,7 +405,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
         int currentLevel = GamePreferences.instance.getCurrentLevel();
         long tries = 1;
 
-        if (currentLevel == GamePreferences.instance.levelTries.size() - 1) {
+        if (currentLevel == GamePreferences.instance.levelTries.size()) {
             tries = GamePreferences.instance.levelTries.get(currentLevel - 1);
         }
 
@@ -421,7 +421,7 @@ public class LevelResultsScreen extends AbstractGameScreen implements ScoreUpdat
 
         long time = 1;
 
-        if (currentLevel == GamePreferences.instance.levelTimes.size() - 1) {
+        if (currentLevel == GamePreferences.instance.levelTimes.size()) {
             time = GamePreferences.instance.levelTimes.get(currentLevel - 1);
         }
 
